@@ -231,7 +231,7 @@ describe("min", () => {
     });
 
     test("undefined when list is empty", () => {
-        expect(list.min()).not.toBeDefined();
+        expect(list.min()).toBeUndefined();
     });
 
     test("defined when list is nonempty", () => {
@@ -279,7 +279,7 @@ describe("max", () => {
     });
 
     test("undefined when list is empty", () => {
-        expect(list.max()).not.toBeDefined();
+        expect(list.max()).toBeUndefined();
     });
 
     test("defined when list is nonempty", () => {
