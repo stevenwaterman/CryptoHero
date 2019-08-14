@@ -3,9 +3,9 @@ export default class SortedList {
     #values = [];
 
     /**
-     * @param comparator A function which accepts two variables and returns a number indicating the ordering.
+     * @param comparator A __pure__ function which accepts two variables and returns a number indicating the ordering.
      * A return value less than zero indicates that the first parameter comes before the second
-     * A return value indicates that the two variables are __THE SAME OBJECT__
+     * A return value indicates that the two variables are equal and are identical as far as the list cares.
      * A return value greater than zero indicates that the first parameter comes after the second
      *
      * @throws if comparator is null or not a function
@@ -21,6 +21,7 @@ export default class SortedList {
     };
 
     min = () => this.#values[0];
+    max = () => this.#values[this.#values.length - 1];
     isEmpty = () => this.#values.length === 0;
     includes = (data) => this.#binarySearch(data).found;
     push = (...data) => data.forEach((it) => this.#pushOnce(it));
