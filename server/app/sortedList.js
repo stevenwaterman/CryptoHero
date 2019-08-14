@@ -2,20 +2,31 @@ export default class SortedList {
     #comparator;
     #values = [];
 
+    /**
+     * @param comparator A function which accepts two variables and returns a number indicating the ordering.
+     * A return value less than zero indicates that the first parameter is smaller than the second
+     * A return value indicates that the two variables are __THE SAME OBJECT__
+     * A return value greater than zero indicates that the second parameter is larger than the first.
+     *
+     * @throws if comparator is null or not a function
+     */
     constructor(comparator) {
         if(!comparator){
             throw "SortedList constructor requires a comparator"
         }
-        if(typeof comparator !== "function")
+        if(typeof comparator !== "function"){
+            throw "Comparator must be a function"
+        }
         this.#comparator = comparator;
     };
 
     min = () => this.#values[0];
     isEmpty = () => Boolean(this.#values.length);
     includes = (data) => this.#binarySearch(data).found;
+    push = (...data) => data.forEach((it) => this.#pushOnce(it));
+    delete = (...data) => data.forEach((it) => this.#deleteOnce(it));
 
     /**
-     * Performs a binary search for a specified element
      * @param data The value of the element that we search for
      * @returns {number} The index of the element, or -1 if it is not present
      */
@@ -24,16 +35,16 @@ export default class SortedList {
         return searchResult.found ? searchResult.index : -1;
     }
 
-    add(data){
-        const idx = this.#getInsertIndex(data);
-        this.#insert(data, idx);
-    }
-
-    delete(data){
+    #deleteOnce(data){
         const searchResult = this.#binarySearch(data);
         if(searchResult.found){
             this.#delete(searchResult.index);
         }
+    }
+
+    #pushOnce(data){
+        const idx = this.#getInsertIndex(data);
+        this.#insert(data, idx);
     }
 
     #insert(data, idx){
@@ -49,26 +60,19 @@ export default class SortedList {
     #delete = (idx) => this.#values.splice(idx, 1);
 
     #binarySearch(data){
-        if(this.isEmpty){
-            return {
-                "index": -1,
-                "found": false
-            }
-        }
-
         let lowIdx = 0;
         let highIdx = this.#values.length - 1;
 
-        while(lowIdx !== highIdx){
+        while(lowIdx <= highIdx){
             const midIdx = Math.floor((highIdx + lowIdx) / 2);
             const midData = this.#values[midIdx];
-            const comparison = this.#comparator.compare(midData, data);
+            const comparison = this.#comparator(midData, data);
             if(comparison < 0) {
-                //We are too low
-                lowIdx = midIdx + 1;
-            } else if (comparison > 0) {
-                // We are too high
+                // Data is before midData -> We are too high
                 highIdx = midIdx - 1;
+            } else if (comparison > 0) {
+                // Data is after midData -> We are too low
+                lowIdx = midIdx + 1;
             } else {
                 // Found it!
                 return {
