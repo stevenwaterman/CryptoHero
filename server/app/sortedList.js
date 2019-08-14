@@ -4,9 +4,9 @@ export default class SortedList {
 
     /**
      * @param comparator A function which accepts two variables and returns a number indicating the ordering.
-     * A return value less than zero indicates that the first parameter is smaller than the second
+     * A return value less than zero indicates that the first parameter comes before the second
      * A return value indicates that the two variables are __THE SAME OBJECT__
-     * A return value greater than zero indicates that the second parameter is larger than the first.
+     * A return value greater than zero indicates that the first parameter comes after the second
      *
      * @throws if comparator is null or not a function
      */
@@ -68,11 +68,11 @@ export default class SortedList {
             const midData = this.#values[midIdx];
             const comparison = this.#comparator(midData, data);
             if(comparison < 0) {
-                // Data is before midData -> We are too high
-                highIdx = midIdx - 1;
-            } else if (comparison > 0) {
-                // Data is after midData -> We are too low
+                // midData is before data -> we are too low
                 lowIdx = midIdx + 1;
+            } else if (comparison > 0) {
+                // midDta is after data -> we are too high
+                highIdx = midIdx - 1;
             } else {
                 // Found it!
                 return {

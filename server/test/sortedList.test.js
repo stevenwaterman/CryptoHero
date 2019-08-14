@@ -1,6 +1,6 @@
 import SortedList from "../app/sortedList"
 
-const numberComparator = (a, b) => b - a;
+const numberComparator = (a, b) => a - b;
 
 describe("Constructor", () => {
     const validComparator = numberComparator;
@@ -66,4 +66,18 @@ describe("indexOf", () => {
             expect(list.indexOf(vals[i])).toEqual(i);
         }
     });
+
+    test("work for non-integers", () => {
+        const list = new SortedList((a,b) => a.localeCompare(b));
+        const vals = ["ab", "andy", "internet", "steve"];
+        const shuffled = ["internet", "andy", "steve", "ab"];
+        list.push(...shuffled);
+        for (let i = 0; i < vals.length; i++) {
+            expect(list.indexOf(vals[i])).toEqual(i);
+        }
+    })
+});
+
+describe("delete", () => {
+
 });
