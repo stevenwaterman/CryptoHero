@@ -12,10 +12,10 @@ export default class SortedList {
      */
     constructor(comparator) {
         if(!comparator){
-            throw "SortedList constructor requires a comparator"
+            throw "SortedList constructor requires a comparator";
         }
         if(typeof comparator !== "function"){
-            throw "Comparator must be a function"
+            throw "Comparator must be a function";
         }
         this.#comparator = comparator;
     };

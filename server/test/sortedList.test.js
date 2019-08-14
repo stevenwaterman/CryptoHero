@@ -4,7 +4,7 @@ const numberComparator = (a, b) => a - b;
 
 describe("constructor", () => {
     const validComparator = numberComparator;
-    const invalidComparator = 0;
+    const invalidComparator = 1;
 
     test("constructor should throw error when called without comparator", () => {
         expect(() => {
