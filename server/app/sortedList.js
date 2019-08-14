@@ -6,6 +6,7 @@ export default class SortedList {
         if(!comparator){
             throw "SortedList constructor requires a comparator"
         }
+        if(typeof comparator !== "function")
         this.#comparator = comparator;
     };
 
