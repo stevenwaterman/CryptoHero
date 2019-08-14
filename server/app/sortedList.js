@@ -21,7 +21,7 @@ export default class SortedList {
     };
 
     min = () => this.#values[0];
-    isEmpty = () => Boolean(this.#values.length);
+    isEmpty = () => this.#values.length === 0;
     includes = (data) => this.#binarySearch(data).found;
     push = (...data) => data.forEach((it) => this.#pushOnce(it));
     delete = (...data) => data.forEach((it) => this.#deleteOnce(it));

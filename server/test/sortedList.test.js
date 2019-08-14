@@ -31,7 +31,6 @@ describe("Constructor", () => {
 
 describe("indexOf", () => {
     let list;
-
     beforeEach(() => {
         list = new SortedList(numberComparator);
     });
@@ -79,5 +78,52 @@ describe("indexOf", () => {
 });
 
 describe("delete", () => {
+    let list;
+    beforeEach(() => {
+        list = new SortedList(numberComparator);
+    });
 
+    test("deleting from an empty list does nothing", () => {
+        expect(() => {
+            list.delete(0);
+        }).not.toThrow();
+    });
+
+    test("deleting an element that does not exist does nothing", () => {
+        list.push(1);
+        expect(() => {
+            list.delete(0);
+        }).not.toThrow();
+        expect(list.isEmpty()).toBeFalsy();
+    });
+
+    test("deleting from a list of length 1 works", () => {
+        list.push(1);
+        list.delete(1);
+        expect(list.isEmpty()).toBeTruthy();
+        expect(list.indexOf(1)).toEqual(-1);
+    });
+
+    test("deleting from a longer list works (added in order)", () => {
+        list.push(1,2,3,4,5);
+        list.delete(3);
+        expect(list.indexOf(3)).toEqual(-1);
+    });
+
+    test("deleting does not affect the other elements", () => {
+        list.push(1,2,3,4,5);
+        list.delete(3);
+        expect(list.isEmpty()).toBeFalsy();
+        expect(list.indexOf(1)).toEqual(0);
+        expect(list.indexOf(2)).toEqual(1);
+        expect(list.indexOf(4)).toEqual(2);
+        expect(list.indexOf(5)).toEqual(3);
+    });
+
+    test("an element that has been deleted can be re-added", () => {
+        list.push(1,2,3,4,5);
+        list.delete(3);
+        list.push(3);
+        expect(list.indexOf(3)).toEqual(2)
+    })
 });
