@@ -1,5 +1,11 @@
-function Matcher() {
-    throw new Error("not implemented");
-}
+import SortedList from "./sortedList";
+import {buyComparator, sellComparator} from "./order";
 
-module.exports = Matcher;
+export default class Matcher{
+    #buys = SortedList(buyComparator);
+    #sells = SortedList(sellComparator);
+
+    constructor(){
+
+    };
+}
