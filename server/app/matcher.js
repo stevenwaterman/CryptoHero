@@ -10,8 +10,7 @@ export default class Matcher {
     #sells = new SortedList(sellComparator);
     #trades = [];
 
-    constructor() {
-    };
+    constructor() { };
 
     /**
      * Performs a trade on two matched orders. Adjusts the units of the two orders.
@@ -74,6 +73,9 @@ export default class Matcher {
         }
     };
 
+    /**
+     * Returns the list of all trades involving a given account
+     */
     getTrades = (account) => this.#trades.filter((trade) => trade.buyer === account || trade.seller === account);
 
     /**
