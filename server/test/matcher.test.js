@@ -4,7 +4,9 @@ import Trade from "../app/trade";
 
 describe("constructor", () => {
     test("constructor does not throw an exception", () => {
-        expect(() => {new Matcher()}).not.toThrow();
+        expect(() => {
+            new Matcher()
+        }).not.toThrow();
     });
 
     test("constructor should return a Matcher", () => {
@@ -24,19 +26,27 @@ describe("adding orders", () => {
     });
 
     test("can add sell order", () => {
-        expect(() => {matcher.place(sellOrder)}).not.toThrow();
+        expect(() => {
+            matcher.place(sellOrder)
+        }).not.toThrow();
     });
 
     test("can add sell order with -ve price", () => {
-        expect(() => {matcher.place(sellOrderNegPrice)}).not.toThrow();
+        expect(() => {
+            matcher.place(sellOrderNegPrice)
+        }).not.toThrow();
     });
 
     test("can add buy order", () => {
-        expect(() => {matcher.place(buyOrder)}).not.toThrow();
+        expect(() => {
+            matcher.place(buyOrder)
+        }).not.toThrow();
     });
 
     test("can add buy order with -ve price", () => {
-        expect(() => {matcher.place(buyOrderNegPrice)}).not.toThrow();
+        expect(() => {
+            matcher.place(buyOrderNegPrice)
+        }).not.toThrow();
     });
 });
 
@@ -46,136 +56,205 @@ describe("matching orders", () => {
         matcher = new Matcher();
     });
 
+    const placeBuy = function (account, units, price) {
+        matcher.place(new Order(account, TradeDirection.BUY, units, price));
+    };
+
+    const placeSell = function (account, units, price) {
+        matcher.place(new Order(account, TradeDirection.SELL, units, price));
+    };
+
+    const expectSomeTrades = function (account) {
+        expect(matcher.getTrades(account).length === 0).toBeFalsy();
+    };
+
+    const expectNoTrades = function (account) {
+        expectTradeCount(account, 0);
+    };
+
+    const expectTradeCount = function (account, count) {
+        expect(matcher.getTrades(account).length).toEqual(count);
+    };
+
+    const expectOnlyTrades = function (account, ...trades) {
+        //const found = matcher.getTrades(account);
+        expect(matcher.getTrades(account)).toEqual(trades);
+        //trades.forEach((it) => {
+        //    expect(found).toContainEqual(it);
+        //});
+        //expect(found.length).toEqual(trades.length);
+    };
+
     test("Invalid Direction", () => {
         const direction = "THIS IS INVALID";
         const order = new Order(1, direction, 1, 1);
-        expect(() => {matcher.place(order)}).toThrow();
+        expect(() => {
+            matcher.place(order)
+        }).toThrow();
+    });
+
+    test("Null order", () => {
+        expect(() => {
+            matcher.place(null);
+        }).toThrow();
+    });
+
+    test("Undefined Order", () =>{
+        expect(() => {
+            matcher.place();
+        }).toThrow();
     });
 
     test("No trades by default", () => {
-        expect(matcher.getTrades(1).length === 0).toBeTruthy();
-    });
-
-    test("One trade logged after one trade happened", () => {
-        matcher.place(new Order(1, TradeDirection.BUY, 1, 1));
-        matcher.place(new Order(2, TradeDirection.SELL, 1, 1));
-        expect(matcher.getTrades(1).length).toEqual(1);
-        expect(matcher.getTrades(2).length).toEqual(1);
+        expectNoTrades(1);
     });
 
     test("Simple Trade", () => {
-        matcher.place(new Order(1, TradeDirection.BUY, 1, 1));
-        matcher.place(new Order(2, TradeDirection.SELL, 1, 1));
+        placeBuy(1, 1, 1);
+        placeSell(2, 1, 1);
         const trade = new Trade(1, 2, 1, 1);
-        expect(matcher.getTrades(1)).toContainEqual(trade);
-        expect(matcher.getTrades(2)).toContainEqual(trade);
+        expectOnlyTrades(1, trade);
+        expectOnlyTrades(2, trade);
     });
 
     test("Two Buys", () => {
-        matcher.place(new Order(1, TradeDirection.BUY, 1, 1));
-        matcher.place(new Order(2, TradeDirection.BUY, 1, 1.1));
-        expect(matcher.getTrades(1).length === 0).toBeTruthy();
-        expect(matcher.getTrades(2).length === 0).toBeTruthy();
+        placeBuy(1, 1, 1);
+        placeBuy(2, 1, 1.1);
+        expectNoTrades(1);
+        expectNoTrades(2);
     });
 
     test("Two Sells", () => {
-        matcher.place(new Order(1, TradeDirection.SELL, 1, 1));
-        matcher.place(new Order(2, TradeDirection.SELL, 1, 1.1));
-        expect(matcher.getTrades(1).length === 0).toBeTruthy();
-        expect(matcher.getTrades(2).length === 0).toBeTruthy();
+        placeSell(1, 1, 1);
+        placeSell(1, 1, 1.1);
+        expectNoTrades(1);
+        expectNoTrades(2);
     });
 
     test("Trade happens at best price for second person (buy first)", () => {
-        matcher.place(new Order(1, TradeDirection.BUY, 1, 1.1));
-        matcher.place(new Order(2, TradeDirection.SELL, 1, 1));
+        placeBuy(1, 1, 1.1);
+        placeSell(2, 1, 1);
         const trade = new Trade(1, 2, 1, 1.1);
-        expect(matcher.getTrades(1)).toContainEqual(trade);
-        expect(matcher.getTrades(2)).toContainEqual(trade);
+        expectOnlyTrades(1, trade);
+        expectOnlyTrades(2, trade);
     });
 
     test("Trade happens at best price for second person (sell first)", () => {
-        matcher.place(new Order(1, TradeDirection.SELL, 1, 1));
-        matcher.place(new Order(2, TradeDirection.BUY, 1, 1.1));
-        const trade = new Trade(1, 2, 1, 1);
-        expect(matcher.getTrades(1)).toContainEqual(trade);
-        expect(matcher.getTrades(2)).toContainEqual(trade);
+        placeSell(1, 1, 1);
+        placeBuy(2, 1, 1.1);
+        const trade = new Trade(2, 1, 1, 1);
+        expectOnlyTrades(1, trade);
+        expectOnlyTrades(2, trade);
     });
 
     test("Multiple Trades", () => {
-        matcher.place(new Order(1, TradeDirection.BUY, 1, 1));
-        matcher.place(new Order(2, TradeDirection.SELL, 1, 1));
-        matcher.place(new Order(3, TradeDirection.SELL, 1, 1));
-        matcher.place(new Order(4, TradeDirection.SELL, 1, 1));
+        placeBuy(1, 1, 1);
+        placeSell(2, 1, 1);
+        placeBuy(3, 1, 1);
+        placeSell(4, 1, 1);
         const trade1 = new Trade(1, 2, 1, 1);
         const trade2 = new Trade(3, 4, 1, 1);
-        expect(matcher.getTrades(1)).toContainEqual(trade1);
-        expect(matcher.getTrades(2)).toContainEqual(trade1);
-        expect(matcher.getTrades(3)).toContainEqual(trade2);
-        expect(matcher.getTrades(4)).toContainEqual(trade2);
+        expectOnlyTrades(1, trade1);
+        expectOnlyTrades(2, trade1);
+        expectOnlyTrades(3, trade2);
+        expectOnlyTrades(4, trade2);
     });
 
     test("Multiple Trades on One Account", () => {
-        matcher.place(new Order(1, TradeDirection.BUY, 1, 1));
-        matcher.place(new Order(2, TradeDirection.SELL, 1, 1));
-        matcher.place(new Order(1, TradeDirection.BUY, 1, 1));
-        matcher.place(new Order(3, TradeDirection.SELL, 1, 1));
+        placeBuy(1, 1, 1);
+        placeSell(2, 1, 1);
+        placeBuy(1, 1, 1);
+        placeSell(3, 1, 1);
         const trade1 = new Trade(1, 2, 1, 1);
         const trade2 = new Trade(1, 3, 1, 1);
-        expect(matcher.getTrades(1)).toContainEqual(trade1);
-        expect(matcher.getTrades(1)).toContainEqual(trade2);
-        expect(matcher.getTrades(2)).toContainEqual(trade1);
-        expect(matcher.getTrades(3)).toContainEqual(trade2);
+        expectOnlyTrades(1, trade1, trade2);
+        expectOnlyTrades(2, trade1);
+        expectOnlyTrades(3, trade2);
+    });
+
+    test("Multiple trades on book by one account simultaneously", () => {
+        placeBuy(1, 1, 1);
+        placeBuy(1, 1, 1);
+        placeSell(2, 1, 1);
+        placeSell(3, 1, 1);
+        const trade1 = new Trade(1, 2, 1, 1);
+        const trade2 = new Trade(1, 3, 1, 1);
+        expectOnlyTrades(1, trade1, trade2);
+        expectOnlyTrades(2, trade1);
+        expectOnlyTrades(3, trade2);
     });
 
     test("Partial trade", () => {
-        matcher.place(new Order(1, TradeDirection.BUY, 2, 1));
-        matcher.place(new Order(2, TradeDirection.SELL, 1, 1));
-        const trade1 = new Trade(1, 2, 1, 1);
-        expect(matcher.getTrades(1)).toContainEqual(trade1);
-        expect(matcher.getTrades(2)).toContainEqual(trade1);
+        placeBuy(1, 2, 1);
+        placeSell(2, 1, 1);
+        const trade = new Trade(1, 2, 1, 1);
+        expectOnlyTrades(1, trade);
+        expectOnlyTrades(2, trade);
     });
 
     test("Multiple partial trades (large first)", () => {
-        matcher.place(new Order(1, TradeDirection.BUY, 2, 1));
-        matcher.place(new Order(2, TradeDirection.SELL, 1, 1));
-        matcher.place(new Order(3, TradeDirection.SELL, 1, 1));
+        placeBuy(1, 2, 1);
+        placeSell(2, 1, 1);
+        placeSell(3, 1, 1);
         const trade1 = new Trade(1, 2, 1, 1);
         const trade2 = new Trade(1, 3, 1, 1);
-        expect(matcher.getTrades(1)).toContainEqual(trade1);
-        expect(matcher.getTrades(1)).toContainEqual(trade2);
-        expect(matcher.getTrades(2)).toContainEqual(trade1);
-        expect(matcher.getTrades(3)).toContainEqual(trade2);
+        expectOnlyTrades(1, trade1, trade2);
+        expectOnlyTrades(2, trade1);
+        expectOnlyTrades(3, trade2);
     });
 
     test("Multiple partial trades (small first)", () => {
-        matcher.place(new Order(1, TradeDirection.BUY, 1, 1));
-        matcher.place(new Order(2, TradeDirection.BUY, 1, 1));
-        matcher.place(new Order(3, TradeDirection.SELL, 2, 1));
+        placeBuy(1, 1, 1);
+        placeBuy(2, 1, 1);
+        placeSell(3, 2, 1);
         const trade1 = new Trade(1, 3, 1, 1);
         const trade2 = new Trade(2, 3, 1, 1);
-        expect(matcher.getTrades(1)).toContainEqual(trade1);
-        expect(matcher.getTrades(2)).toContainEqual(trade2);
-        expect(matcher.getTrades(3)).toContainEqual(trade1);
-        expect(matcher.getTrades(3)).toContainEqual(trade2);
+        expectOnlyTrades(1, trade1);
+        expectOnlyTrades(2, trade2);
+        expectOnlyTrades(3, trade1, trade2);
     });
 
-    test("Better buy prices get priority", () => {
-        matcher.place(new Order(1, TradeDirection.BUY, 1, 1));
-        matcher.place(new Order(2, TradeDirection.BUY, 1, 2));
-        matcher.place(new Order(3, TradeDirection.SELL, 1, 1));
+    test("Better buy prices go to front of queue", () => {
+        placeBuy(1, 1, 1);
+        placeBuy(2, 1, 2);
+        placeSell(3, 1, 1);
         const trade = new Trade(2, 3, 1, 2);
-        expect(matcher.getTrades(2)).toContainEqual(trade);
-        expect(matcher.getTrades(3)).toContainEqual(trade);
-        expect(matcher.getTrades(1).length === 0).toBeTruthy();
+        expectNoTrades(1);
+        expectOnlyTrades(2, trade);
+        expectOnlyTrades(3, trade);
     });
 
-    test("Better sell prices get priority", () => {
-        matcher.place(new Order(1, TradeDirection.SELL, 1, 1));
-        matcher.place(new Order(2, TradeDirection.SELL, 1, 2));
-        matcher.place(new Order(3, TradeDirection.BUY, 1, 2));
-        const trade = new Trade(1, 3, 1, 1);
-        expect(matcher.getTrades(1)).toContainEqual(trade);
-        expect(matcher.getTrades(3)).toContainEqual(trade);
-        expect(matcher.getTrades(2).length === 0).toBeTruthy();
+    test("Better sell prices go to front of queue", () => {
+        placeSell(1, 1, 1);
+        placeSell(2, 1, 2);
+        placeBuy(3, 1, 2);
+        const trade = new Trade(3, 1, 1, 1);
+        expectOnlyTrades(1, trade);
+        expectNoTrades(2);
+        expectOnlyTrades(3, trade);
+    });
+
+    test("Earlier buys get priority", () => {
+        placeBuy(1, 1, 1);
+        const earlyBuy = new Order(2, TradeDirection.BUY, 1, 1);
+        earlyBuy.timeStamp.setTime(earlyBuy.timeStamp.getTime() - 1000);
+        matcher.place(earlyBuy);
+        placeSell(3, 1, 1);
+        const trade = new Trade(2, 3, 1, 1);
+        expectNoTrades(1);
+        expectOnlyTrades(2, trade);
+        expectOnlyTrades(3, trade);
+    });
+
+    test("Earlier sells get priority", () => {
+        placeSell(1, 1, 1);
+        const earlySell = new Order(2, TradeDirection.SELL, 1, 1);
+        earlySell.timeStamp.setTime(earlySell.timeStamp.getTime() - 1000);
+        matcher.place(earlySell);
+        placeBuy(3, 1, 1);
+        const trade = new Trade(3, 2, 1, 1);
+        expectNoTrades(1);
+        expectOnlyTrades(2, trade);
+        expectOnlyTrades(3, trade);
     });
 });

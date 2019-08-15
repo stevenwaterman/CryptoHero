@@ -1,6 +1,9 @@
-export default class Trade{
-    constructor(buyer, seller, units, unitPrice){
-        if(units <= 0) throw `Units must be > 0. Actual: ${units}`;
+/**
+ * Stores information about a trade that has been mde in the exchange
+ */
+export default class Trade {
+    constructor(buyer, seller, units, unitPrice) {
+        if (units <= 0) throw `Units must be > 0. Actual: ${units}`;
 
         this.buyer = buyer;
         this.seller = seller;

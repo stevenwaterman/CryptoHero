@@ -11,12 +11,8 @@ export default class SortedList {
      * @throws if comparator is null or not a function
      */
     constructor(comparator) {
-        if(!comparator){
-            throw "SortedList constructor requires a comparator";
-        }
-        if(typeof comparator !== "function"){
-            throw "Comparator must be a function";
-        }
+        if (comparator == null) throw "SortedList constructor requires a comparator";
+        if (typeof comparator !== "function") throw "Comparator must be a function";
         this.#comparator = comparator;
     };
 
@@ -31,24 +27,24 @@ export default class SortedList {
      * @param data The value of the element that we search for
      * @returns {number} The index of the element, or -1 if it is not present
      */
-    indexOf(data){
+    indexOf(data) {
         const searchResult = this.#binarySearch(data);
         return searchResult.found ? searchResult.index : -1;
     }
 
-    #deleteOnce(data){
+    #deleteOnce(data) {
         const searchResult = this.#binarySearch(data);
-        if(searchResult.found){
+        if (searchResult.found) {
             this.#delete(searchResult.index);
         }
     }
 
-    #pushOnce(data){
+    #pushOnce(data) {
         const idx = this.#getInsertIndex(data);
         this.#insert(data, idx);
     }
 
-    #insert(data, idx){
+    #insert(data, idx) {
         this.#values.splice(idx, 0, data);
     }
 
@@ -60,15 +56,15 @@ export default class SortedList {
 
     #delete = (idx) => this.#values.splice(idx, 1);
 
-    #binarySearch(data){
+    #binarySearch(data) {
         let lowIdx = 0;
         let highIdx = this.#values.length - 1;
 
-        while(lowIdx <= highIdx){
+        while (lowIdx <= highIdx) {
             const midIdx = Math.floor((highIdx + lowIdx) / 2);
             const midData = this.#values[midIdx];
             const comparison = this.#comparator(midData, data);
-            if(comparison < 0) {
+            if (comparison < 0) {
                 // midData is before data -> we are too low
                 lowIdx = midIdx + 1;
             } else if (comparison > 0) {

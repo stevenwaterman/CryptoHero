@@ -5,7 +5,7 @@ describe("buyComparator", () => {
     const trade2 = new Order(1, TradeDirection.BUY, 100, 1.20);
 
     const trade3 = new Order(1, TradeDirection.BUY, 100, 1.14);
-    trade3.timeStamp.setTime(trade1.timeStamp.getTime() + 1);
+    trade3.timeStamp.setTime(trade1.timeStamp.getTime() + 1000);
 
     const trade4 = new Order(1, TradeDirection.BUY, 200, 1.14);
     const trade5 = new Order(2, TradeDirection.BUY, 200, 1.14);
@@ -37,7 +37,7 @@ describe("sellComparator", () => {
     const trade2 = new Order(1, TradeDirection.SELL, 100, 1.20);
 
     const trade3 = new Order(1, TradeDirection.SELL, 100, 1.14);
-    trade3.timeStamp.setTime(trade1.timeStamp.getTime() + 1);
+    trade3.timeStamp.setTime(trade1.timeStamp.getTime() + 1000);
 
     const trade4 = new Order(1, TradeDirection.SELL, 200, 1.14);
     const trade5 = new Order(2, TradeDirection.SELL, 200, 1.14);
