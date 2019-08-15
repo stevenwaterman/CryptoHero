@@ -32,7 +32,7 @@ export default class InstrumentBroker {
         buy.units -= units;
         sell.units -= units;
 
-        InstrumentBroker.#updatePosition(instrument, buy, sell, units, unitPrice);
+        InstrumentBroker.#updatePositionOnTrade(instrument, buy, sell, units, unitPrice);
         return new Trade(buy.account, sell.account, units, unitPrice);
     };
 
@@ -63,37 +63,12 @@ export default class InstrumentBroker {
         return Math.min(o1.units, o2.units)
     }
 
-    static #updatePosition(instrument, buyOrder, sellOrder, units, unitPrice) {
-        const buyerGains = instrument.toAsset;
-        const buyerSpends = instrument.fromAsset;
-
-        const buyerGainedAmount = units;
-        const buyerSpentAmount = units * unitPrice;
-
-        const buyer = buyOrder.account;
-        const seller = sellOrder.account;
-
-        buyer.addAssets(buyerGains, buyerGainedAmount);
-        buyer.addAssets(buyerSpends, -buyerSpentAmount);
-        seller.addAssets(buyerSpends, buyerSpentAmount);
-        seller.addAssets(buyerGains, -buyerGainedAmount);
+    static #updatePositionOnPlaceOrder(instrument, order) {
+        const account = order.account;
+        const asset = order.direction === TradeDirection.BUY ? instrument.fromAsset : instrument.toAsset;
+        const amount = order.direction === TradeDirection.BUY ? order.units * order.unitPrice : order.units;
+        account.addAssets(asset, -amount);
     }
-
-    /**
-     * Matches the order param with orders from the book until no more can be made
-     * then adds the order to the book if it has any remaining quantity.
-     * @param order Should be a defined, non-null Order object. Otherwise, will throw error.
-     */
-    place(order) {
-        if (order == null) throw 'Order must be defined and non-null';
-        const validDirections = [TradeDirection.BUY, TradeDirection.SELL];
-        if (!validDirections.includes(order.direction)) throw `Unrecognised TradeDirection: ${order.direction}`;
-
-        this.#makeTrades(order);
-        if (order.units > 0) {
-            this.#pushOrder(order);
-        }
-    };
 
     /**
      * Returns the list of all trades involving a given account
@@ -164,6 +139,59 @@ export default class InstrumentBroker {
 
             this.#clearCompletedOrders();
             match = this.#getPotentialOrderMatch(order);
+        }
+    };
+
+    static #updatePositionOnCancelOrder(instrument, order) {
+        const account = order.account;
+        const asset = order.direction === TradeDirection.BUY ? instrument.fromAsset : instrument.toAsset;
+        const amount = order.direction === TradeDirection.BUY ? order.units * order.unitPrice : order.units;
+        account.addAssets(asset, amount);
+    }
+
+    static #updatePositionOnTrade(instrument, buyOrder, sellOrder, units, unitPrice) {
+        InstrumentBroker.#updatePositionOnBuy(instrument, buyOrder, units, unitPrice);
+        InstrumentBroker.#updatePositionOnSell(instrument, sellOrder, units, unitPrice);
+    }
+
+    static #updatePositionOnBuy(instrument, order, actualUnits, actualUnitPrice) {
+        const account = order.account;
+        const gaining = instrument.toAsset;
+        const spending = instrument.fromAsset;
+
+        // noinspection UnnecessaryLocalVariableJS
+        const gainedAmount = actualUnits;
+        account.addAssets(gaining, gainedAmount);
+
+        const expectedSpend = actualUnits * order.unitPrice;
+        const actuallySpent = actualUnits * actualUnitPrice;
+        const refundDue = expectedSpend - actuallySpent;
+        account.addAssets(spending, refundDue);
+    }
+
+    static #updatePositionOnSell(instrument, order, actualUnits, actualUnitPrice) {
+        const account = order.account;
+        const gaining = instrument.fromAsset;
+
+        // noinspection UnnecessaryLocalVariableJS
+        const gainedAmount = actualUnits * actualUnitPrice;
+        account.addAssets(gaining, gainedAmount);
+    }
+
+    /**
+     * Matches the order param with orders from the book until no more can be made
+     * then adds the order to the book if it has any remaining quantity.
+     * @param order Should be a defined, non-null Order object. Otherwise, will throw error.
+     */
+    place(order) { //TODO check that the account can afford it
+        if (order == null) throw 'Order must be defined and non-null';
+        const validDirections = [TradeDirection.BUY, TradeDirection.SELL];
+        if (!validDirections.includes(order.direction)) throw `Unrecognised TradeDirection: ${order.direction}`;
+
+        InstrumentBroker.#updatePositionOnPlaceOrder(this.instrument, order);
+        this.#makeTrades(order);
+        if (order.units > 0) {
+            this.#pushOrder(order);
         }
     };
 }

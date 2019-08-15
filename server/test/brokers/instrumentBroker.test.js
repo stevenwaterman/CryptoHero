@@ -344,7 +344,33 @@ describe("pending orders", () => {
     });
 });
 
-describe("position updated", () => {
+describe("position updated after order", () => {
+    test("BUY 1x1", () => {
+        placeBuy(acc1, 1, 1);
+        expect(acc1.getAssets(ASSETS.GBP)).toEqual(10);
+        expect(acc1.getAssets(ASSETS.BTC)).toEqual(9);
+    });
+
+    test("SELL 1x1", () => {
+        placeSell(acc1, 1, 1);
+        expect(acc1.getAssets(ASSETS.GBP)).toEqual(9);
+        expect(acc1.getAssets(ASSETS.BTC)).toEqual(10);
+    });
+
+    test("BUY 2.5x2.5", () => {
+        placeBuy(acc1, 2.5, 2.5);
+        expect(acc1.getAssets(ASSETS.GBP)).toEqual(10);
+        expect(acc1.getAssets(ASSETS.BTC)).toEqual(3.75);
+    });
+
+    test("SELL 2.5x2.5", () => {
+        placeSell(acc1, 2.5, 2.5);
+        expect(acc1.getAssets(ASSETS.GBP)).toEqual(7.5);
+        expect(acc1.getAssets(ASSETS.BTC)).toEqual(10);
+    });
+});
+
+describe("position updated after trade", () => {
     test("1x1", () => {
         placeBuy(acc1, 1, 1);
         placeSell(acc2, 1, 1);
