@@ -1,8 +1,8 @@
-import Broker from "./broker";
-import Account from "./account";
+import InstrumentBroker from "./brokers/instrumentBroker";
+import Account from "./trading/account";
 
 console.log("Starting");
-const matcher = new Broker();
+const matcher = new InstrumentBroker();
 
 const account1 = new Account();
 const account2 = new Account();

@@ -1,4 +1,4 @@
-import SortedList from "../app/sortedList"
+import SortedList from "../../app/brokers/sortedList"
 
 const numberComparator = (a, b) => a - b;
 
@@ -28,6 +28,7 @@ describe("constructor", () => {
         }).not.toThrow();
     });
 });
+
 describe("indexOf", () => {
     let list;
     beforeEach(() => {
@@ -82,6 +83,7 @@ describe("indexOf", () => {
         expect(idx).toBeLessThanOrEqual(5);
     })
 });
+
 describe("delete", () => {
     let list;
     beforeEach(() => {
@@ -148,6 +150,7 @@ describe("delete", () => {
         expect(list.includes(5)).toBeFalsy();
     });
 });
+
 describe("isEmpty", () => {
     let list;
     beforeEach(() => {
@@ -169,6 +172,7 @@ describe("isEmpty", () => {
         expect(list.isEmpty()).toBeTruthy();
     });
 });
+
 describe("includes", () => {
     let list;
     beforeEach(() => {
@@ -224,6 +228,7 @@ describe("includes", () => {
         expect(list.includes("cats")).toBeTruthy();
     });
 });
+
 describe("min", () => {
     let list;
     beforeEach(() => {
@@ -272,6 +277,7 @@ describe("min", () => {
         });
     });
 });
+
 describe("max", () => {
     let list;
     beforeEach(() => {

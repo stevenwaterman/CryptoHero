@@ -1,4 +1,4 @@
-import Trade from "../app/trade";
+import Trade from "../../app/trading/trade";
 
 describe("constructor", () => {
     test("constructor does not throw an exception", () => {

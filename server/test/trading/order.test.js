@@ -1,4 +1,4 @@
-import Order, {TradeDirection} from "../app/order";
+import Order, {TradeDirection} from "../../app/trading/order";
 
 describe("construct", () => {
     test("constructor does not throw an exception", () => {

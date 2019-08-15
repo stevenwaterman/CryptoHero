@@ -1,34 +1,39 @@
 import SortedList from "./sortedList";
-import {buyComparator, sellComparator, TradeDirection} from "./order";
-import Trade from "./trade";
+import {TradeDirection} from "../trading/order";
+import Trade from "../trading/trade";
+import {buyComparator, sellComparator} from "./comparators";
 
 /**
  * The matcher accepts orders and matches them to create trades
  */
-export default class Broker {
+export default class InstrumentBroker {
     #buys = new SortedList(buyComparator);
     #sells = new SortedList(sellComparator);
     #trades = [];
 
-    constructor() { };
+    constructor(instrument) {
+        if (instrument == null) throw "Instrument must be defined and not null";
+        this.instrument = instrument;
+    };
 
     /**
      * Performs a trade on two matched orders. Adjusts the units of the two orders.
+     * @param instrument The instrument to trade in
      * @param order The new order. Must be defined + not null
      * @param matched The old order from the book. Must be define + not null
      * @returns {Trade} The trade produced from matching the orders.
      */
-    static #makeTrade(order, matched) {
+    static #makeTrade(instrument, order, matched) {
         const buy = order.direction === TradeDirection.BUY ? order : matched;
         const sell = matched.direction === TradeDirection.SELL ? matched : order;
 
-        const units = Broker.#getUnitsTraded(order, matched);
+        const unitPrice = matched.unitPrice;
+        const units = InstrumentBroker.#getUnitsTraded(order, matched);
         buy.units -= units;
         sell.units -= units;
 
-        const price = matched.unitPrice;
-
-        return new Trade(buy.account, sell.account, units, price);
+        InstrumentBroker.#updatePosition(instrument, buy, sell, units, unitPrice);
+        return new Trade(buy.account, sell.account, units, unitPrice);
     };
 
     /**
@@ -58,8 +63,25 @@ export default class Broker {
         return Math.min(o1.units, o2.units)
     }
 
+    static #updatePosition(instrument, buyOrder, sellOrder, units, unitPrice) {
+        const buyerGains = instrument.toAsset;
+        const buyerSpends = instrument.fromAsset;
+
+        const buyerGainedAmount = units;
+        const buyerSpentAmount = units * unitPrice;
+
+        const buyer = buyOrder.account;
+        const seller = sellOrder.account;
+
+        buyer.addAssets(buyerGains, buyerGainedAmount);
+        buyer.addAssets(buyerSpends, -buyerSpentAmount);
+        seller.addAssets(buyerSpends, buyerSpentAmount);
+        seller.addAssets(buyerGains, -buyerGainedAmount);
+    }
+
     /**
-     * Matches the order param with orders from the book until no more can be made, then adds the order to the book if it has any remaining quantity.
+     * Matches the order param with orders from the book until no more can be made
+     * then adds the order to the book if it has any remaining quantity.
      * @param order Should be a defined, non-null Order object. Otherwise, will throw error.
      */
     place(order) {
@@ -76,22 +98,16 @@ export default class Broker {
     /**
      * Returns the list of all trades involving a given account
      */
-    getTrades = (account) => this.#trades.filter((trade) => trade.buyer === account || trade.seller === account);
+    getTrades = (account) => this.#trades.filter((trade) => trade.buyer.id === account.id || trade.seller.id === account.id);
 
-    /**
-     * Repeatedly match an order with orders form the book, reducing the
-     * @param order Must be
-     */
-    #makeTrades(order) {
-        let match = this.#getPotentialOrderMatch(order);
-        while (Broker.#tradePossible(order, match)) {
-            const trade = Broker.#makeTrade(order, match);
-            this.#trades.push(trade);
+    #getPendingBuys = (account) => this.#buys.underlying().filter((order) => order.account.id === account.id);
 
-            this.#clearCompletedOrders();
-            match = this.#getPotentialOrderMatch(order);
-        }
-    };
+    #getPendingSells = (account) => this.#sells.underlying().filter((order) => order.account.id === account.id);
+
+    getPendingOrders = (account) => new Object({
+        "buy": this.#getPendingBuys(account),
+        "sell": this.#getPendingSells(account)
+    });
 
     /**
      * Checks the first order on the buy and sell lists and removes them if there's no units left
@@ -135,4 +151,19 @@ export default class Broker {
                 break;
         }
     }
+
+    /**
+     * Repeatedly match an order with orders form the book, reducing the
+     * @param order Must be
+     */
+    #makeTrades(order) {
+        let match = this.#getPotentialOrderMatch(order);
+        while (InstrumentBroker.#tradePossible(order, match)) {
+            const trade = InstrumentBroker.#makeTrade(this.instrument, order, match);
+            this.#trades.push(trade);
+
+            this.#clearCompletedOrders();
+            match = this.#getPotentialOrderMatch(order);
+        }
+    };
 }

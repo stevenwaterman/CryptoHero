@@ -22,6 +22,7 @@ export default class SortedList {
     includes = (data) => this.#binarySearch(data).found;
     push = (...data) => data.forEach((it) => this.#pushOnce(it));
     delete = (...data) => data.forEach((it) => this.#deleteOnce(it));
+    underlying = () => this.#values.slice();
 
     /**
      * @param data The value of the element that we search for
