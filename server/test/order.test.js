@@ -16,4 +16,8 @@ describe("construct", () => {
     test("constructor should throw error if called with zero units", () => {
         expect(() => new Order(1, TradeDirection.BUY, 0, 1.14)).toThrow();
     });
+
+    test("id is set and non-zero", () => {
+        expect(new Order(1, TradeDirection.BUY, 1, 1).id).toBeTruthy();
+    });
 });

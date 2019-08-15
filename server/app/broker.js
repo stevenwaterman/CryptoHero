@@ -5,7 +5,7 @@ import Trade from "./trade";
 /**
  * The matcher accepts orders and matches them to create trades
  */
-export default class Matcher {
+export default class Broker {
     #buys = new SortedList(buyComparator);
     #sells = new SortedList(sellComparator);
     #trades = [];
@@ -22,7 +22,7 @@ export default class Matcher {
         const buy = order.direction === TradeDirection.BUY ? order : matched;
         const sell = matched.direction === TradeDirection.SELL ? matched : order;
 
-        const units = Matcher.#getUnitsTraded(order, matched);
+        const units = Broker.#getUnitsTraded(order, matched);
         buy.units -= units;
         sell.units -= units;
 
@@ -84,8 +84,8 @@ export default class Matcher {
      */
     #makeTrades(order) {
         let match = this.#getPotentialOrderMatch(order);
-        while (Matcher.#tradePossible(order, match)) {
-            const trade = Matcher.#makeTrade(order, match);
+        while (Broker.#tradePossible(order, match)) {
+            const trade = Broker.#makeTrade(order, match);
             this.#trades.push(trade);
 
             this.#clearCompletedOrders();

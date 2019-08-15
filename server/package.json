@@ -5,7 +5,8 @@
   "description": "Server-side code for bitcoin exchange",
   "author": "Scott Logic Ltd & Steven Waterman",
   "dependencies": {
-    "@babel/polyfill": "^7.4.4"
+    "@babel/polyfill": "^7.4.4",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",

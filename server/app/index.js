@@ -1,11 +1,14 @@
-import Matcher from "./matcher";
-import Order, {TradeDirection} from "./order";
+import Broker from "./broker";
+import Account from "./account";
 
 console.log("Starting");
-const matcher = new Matcher();
+const matcher = new Broker();
 
-const order1 = new Order(1, TradeDirection.BUY, 1, 1);
-const order2 = new Order(2, TradeDirection.SELL, 1, 1);
+const account1 = new Account();
+const account2 = new Account();
+
+const order1 = account1.createBuy(1, 1);
+const order2 = account2.createSell(1, 1);
 
 matcher.place(order1);
 matcher.place(order2);

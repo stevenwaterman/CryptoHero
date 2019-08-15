@@ -51,10 +51,10 @@ Contains empty matcher and unit test file.
 |   │   ├── README.md - create-react-app README file
 │   ├── server - server-side application
 │   │   ├── app
-│   │   │   ├── matcher.js - placeholder file for the matcher implementation
+│   │   │   ├── broker.js - placeholder file for the matcher implementation
 │   │   ├── node_modules -  server-side dependencies  (e.g. socket.io, jest)
 │   │   ├── test
-│   │   │   ├── matcher.test.js - placeholder file for the matcher unit tests
+│   │   │   ├── broker.test.js - placeholder file for the matcher unit tests
 │   │   ├── package.json - metadata relevant to the server application, used by npm to manage application dependencies
 │   ├── .gitignore - specifies intentionally untracked files that Git should ignore
 │   ├── LICENSE - MIT software license file

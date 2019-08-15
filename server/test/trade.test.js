@@ -24,4 +24,8 @@ describe("constructor", () => {
             new Trade(1, 2, 100, -1.14)
         }).not.toThrow();
     });
+
+    test("id is set and non-zero", () => {
+        expect(new Trade(1, 2, 1, 1).id).toBeTruthy();
+    });
 });
