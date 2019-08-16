@@ -1,6 +1,7 @@
-import Order, {TradeDirection} from "../../app/trading/order";
+import Order from "../../app/trading/order";
 import Account from "../../app/trading/account";
 import {Big} from "big.js";
+import {TradeDirection} from "../../app/trading/tradeDirection";
 
 let account;
 let buy1;

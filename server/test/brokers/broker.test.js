@@ -1,10 +1,11 @@
 import Broker from "../../app/brokers/broker";
 import Account from "../../app/trading/account";
 import {INSTRUMENTS} from "../../app/trading/instrument";
-import Order, {TradeDirection} from "../../app/trading/order";
+import Order from "../../app/trading/order";
 import {expectedOrder, expectedPending, expectedTrade} from "./expected";
 import {ASSETS} from "../../app/trading/asset";
 import {Big} from "big.js";
+import {TradeDirection} from "../../app/trading/tradeDirection";
 
 describe("constructor", () => {
   test("constructor does not throw an exception", () => {

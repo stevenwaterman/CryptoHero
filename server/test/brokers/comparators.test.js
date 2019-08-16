@@ -1,7 +1,8 @@
 import Account from "../../app/trading/account";
 import {buyComparator, sellComparator} from "../../app/brokers/comparators";
-import Order, {TradeDirection} from "../../app/trading/order";
+import Order from "../../app/trading/order";
 import {Big} from "big.js";
+import {TradeDirection} from "../../app/trading/tradeDirection";
 
 let acc1, acc2;
 
