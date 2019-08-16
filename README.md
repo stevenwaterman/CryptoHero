@@ -44,14 +44,14 @@ Contains empty matcher and unit test file.
 │   │   │   ├── store
 |   │   │   │   ├── configure-store.js - code to configure the Redux store
 │   │   │   ├── index.css - application-wide styles
-│   │   │   ├── index.js - JavaScript entry point
+│   │   │   ├── index.ts - JavaScript entry point
 │   │   │   ├── logo.svg - default React logo
 │   |   ├── .gitignore - specifies intentionally untracked files that Git should ignore
 │   │   ├── package.json - metadata relevant to the client application, used by npm to manage application dependencies
 |   │   ├── README.md - create-react-app README file
 │   ├── server - server-side application
 │   │   ├── app
-│   │   │   ├── instrumentBroker.js - placeholder file for the matcher implementation
+│   │   │   ├── instrumentBroker.ts - placeholder file for the matcher implementation
 │   │   ├── node_modules -  server-side dependencies  (e.g. socket.io, jest)
 │   │   ├── test
 │   │   │   ├── instrumentBroker.test.js - placeholder file for the matcher unit tests
