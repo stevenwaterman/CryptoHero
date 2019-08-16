@@ -54,7 +54,7 @@ Contains empty matcher and unit test file.
 │   │   │   ├── instrumentBroker.ts - placeholder file for the matcher implementation
 │   │   ├── node_modules -  server-side dependencies  (e.g. socket.io, jest)
 │   │   ├── test
-│   │   │   ├── instrumentBroker.test.js - placeholder file for the matcher unit tests
+│   │   │   ├── instrumentBroker.test.ts - placeholder file for the matcher unit tests
 │   │   ├── package.json - metadata relevant to the server application, used by npm to manage application dependencies
 │   ├── .gitignore - specifies intentionally untracked files that Git should ignore
 │   ├── LICENSE - MIT software license file

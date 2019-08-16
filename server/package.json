@@ -25,11 +25,12 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-typescript": "^7.3.3",
     "@types/big.js": "^4.0.5",
+    "@types/jest": "^24.0.17",
     "@types/uuid": "^3.4.5",
     "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.6",
     "cross-env": "^5.2.0",
-    "jest": "^24.8.0",
+    "jest": "^24.9.0",
     "nodemon": "^1.19.1",
     "source-map-loader": "^0.2.4",
     "ts-jest": "^24.0.2",
@@ -42,14 +43,16 @@
     "build": "npm run build:types && npm run build:js",
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "babel app --out-dir out --extensions .ts --source-maps inline",
-
-    "test": "jest",
-    "test:watch": "jest --watch",
-
     "postinstall": "typings install --save"
   },
   "jest": {
-    "testURL": "http://localhost/"
+    "testURL": "http://localhost/",
+    "roots": [
+      "<rootDir>/test"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    }
   },
   "babel": {
     "presets": [
