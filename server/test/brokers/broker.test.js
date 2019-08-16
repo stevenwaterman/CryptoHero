@@ -24,9 +24,9 @@ beforeEach(() => {
     acc3 = new Account();
     acc4 = new Account();
     [acc1, acc2, acc3, acc4].forEach((acc) => {
-        acc.addAssets(ASSETS.GBP, 1000);
-        acc.addAssets(ASSETS.BTC, 1000);
-        acc.addAssets(ASSETS.LTC, 1000);
+        acc.adjustAssets(ASSETS.GBP, 1000);
+        acc.adjustAssets(ASSETS.BTC, 1000);
+        acc.adjustAssets(ASSETS.LTC, 1000);
     })
 });
 
@@ -96,16 +96,27 @@ describe("position should update", () => {
         placeSell(INSTRUMENTS.GBPBTC, acc2, 1, 1);
         placeSell(INSTRUMENTS.GBPLTC, acc3, 1, 1);
 
-        expect(acc1.getAssets(ASSETS.GBP)).toEqual(1002);
-        expect(acc1.getAssets(ASSETS.BTC)).toEqual(999);
-        expect(acc1.getAssets(ASSETS.LTC)).toEqual(999);
+        expect(acc1.getAvailableAssets(ASSETS.GBP)).toEqual(1002);
+        expect(acc1.getAvailableAssets(ASSETS.BTC)).toEqual(999);
+        expect(acc1.getAvailableAssets(ASSETS.LTC)).toEqual(999);
 
-        expect(acc2.getAssets(ASSETS.GBP)).toEqual(999);
-        expect(acc2.getAssets(ASSETS.BTC)).toEqual(1001);
-        expect(acc2.getAssets(ASSETS.LTC)).toEqual(1000);
+        expect(acc2.getAvailableAssets(ASSETS.GBP)).toEqual(999);
+        expect(acc2.getAvailableAssets(ASSETS.BTC)).toEqual(1001);
+        expect(acc2.getAvailableAssets(ASSETS.LTC)).toEqual(1000);
 
-        expect(acc3.getAssets(ASSETS.GBP)).toEqual(999);
-        expect(acc3.getAssets(ASSETS.BTC)).toEqual(1000);
-        expect(acc3.getAssets(ASSETS.LTC)).toEqual(1001);
+        expect(acc3.getAvailableAssets(ASSETS.GBP)).toEqual(999);
+        expect(acc3.getAvailableAssets(ASSETS.BTC)).toEqual(1000);
+        expect(acc3.getAvailableAssets(ASSETS.LTC)).toEqual(1001);
     });
+});
+
+describe("locked assets", () => {
+    test("simple test", () => {
+        placeBuy(INSTRUMENTS.GBPBTC, acc1, 100, 2);
+        expect(broker.getLockedAssets(acc1)).toMatchObject({
+            "BTC": 200,
+            "GBP": 0,
+            "LTC": 0
+        });
+    })
 });

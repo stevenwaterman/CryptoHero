@@ -4,22 +4,23 @@ const uuidv4 = require('uuid/v4');
 
 export default class Account {
     id = uuidv4();
+
     /**
      * The amount left to place on new orders
      */
-    position = {};
+    availableAssets = {};
 
     //TODO add ability to see total position if all orders were cancelled
 
     constructor() {
         Object.keys(ASSETS).forEach((asset) => {
-            this.position[asset] = 0;
+            this.availableAssets[asset] = 0;
         });
     }
 
-    addAssets = (asset, addUnits) => this.position[asset.name] += addUnits;
+    adjustAssets = (asset, addUnits) => this.availableAssets[asset.name] += addUnits;
 
-    getAssets = (asset) => {
-        return this.position[asset.name];
+    getAvailableAssets = (asset) => {
+        return this.availableAssets[asset.name];
     };
 }

@@ -38,8 +38,8 @@ beforeEach(() => {
     acc4 = new Account();
     iBroker = new InstrumentBroker(INSTRUMENTS.GBPBTC);
     [acc1, acc2, acc3, acc4].forEach((acc) => {
-        acc.addAssets(ASSETS.GBP, 1000);
-        acc.addAssets(ASSETS.BTC, 1000);
+        acc.adjustAssets(ASSETS.GBP, 1000);
+        acc.adjustAssets(ASSETS.BTC, 1000);
     })
 });
 
@@ -91,14 +91,14 @@ describe("adding orders", () => {
     });
 
     test("can't add a buy order that they can't afford", () => {
-        acc1.addAssets(ASSETS.BTC, -900);
+        acc1.adjustAssets(ASSETS.BTC, -900);
         expect(() => {
             iBroker.place(buyOrder)
         }).toThrow();
     });
 
     test("can't add a sell order that they can't afford", () => {
-        acc1.addAssets(ASSETS.GBP, -950);
+        acc1.adjustAssets(ASSETS.GBP, -950);
         expect(() => {
             iBroker.place(sellOrder)
         }).toThrow();
@@ -361,26 +361,26 @@ describe("pending orders", () => {
 describe("position updated after order", () => {
     test("BUY 1x1", () => {
         placeBuy(acc1, 1, 1);
-        expect(acc1.getAssets(ASSETS.GBP)).toEqual(1000);
-        expect(acc1.getAssets(ASSETS.BTC)).toEqual(999);
+        expect(acc1.getAvailableAssets(ASSETS.GBP)).toEqual(1000);
+        expect(acc1.getAvailableAssets(ASSETS.BTC)).toEqual(999);
     });
 
     test("SELL 1x1", () => {
         placeSell(acc1, 1, 1);
-        expect(acc1.getAssets(ASSETS.GBP)).toEqual(999);
-        expect(acc1.getAssets(ASSETS.BTC)).toEqual(1000);
+        expect(acc1.getAvailableAssets(ASSETS.GBP)).toEqual(999);
+        expect(acc1.getAvailableAssets(ASSETS.BTC)).toEqual(1000);
     });
 
     test("BUY 2.5x2.5", () => {
         placeBuy(acc1, 2.5, 2.5);
-        expect(acc1.getAssets(ASSETS.GBP)).toEqual(1000);
-        expect(acc1.getAssets(ASSETS.BTC)).toEqual(993.75);
+        expect(acc1.getAvailableAssets(ASSETS.GBP)).toEqual(1000);
+        expect(acc1.getAvailableAssets(ASSETS.BTC)).toEqual(993.75);
     });
 
     test("SELL 2.5x2.5", () => {
         placeSell(acc1, 2.5, 2.5);
-        expect(acc1.getAssets(ASSETS.GBP)).toEqual(997.5);
-        expect(acc1.getAssets(ASSETS.BTC)).toEqual(1000);
+        expect(acc1.getAvailableAssets(ASSETS.GBP)).toEqual(997.5);
+        expect(acc1.getAvailableAssets(ASSETS.BTC)).toEqual(1000);
     });
 });
 
@@ -388,63 +388,108 @@ describe("position updated after trade", () => {
     test("1x1", () => {
         placeBuy(acc1, 1, 1);
         placeSell(acc2, 1, 1);
-        expect(acc1.getAssets(ASSETS.GBP)).toEqual(1001);
-        expect(acc1.getAssets(ASSETS.BTC)).toEqual(999);
-        expect(acc2.getAssets(ASSETS.GBP)).toEqual(999);
-        expect(acc2.getAssets(ASSETS.BTC)).toEqual(1001);
+        expect(acc1.getAvailableAssets(ASSETS.GBP)).toEqual(1001);
+        expect(acc1.getAvailableAssets(ASSETS.BTC)).toEqual(999);
+        expect(acc2.getAvailableAssets(ASSETS.GBP)).toEqual(999);
+        expect(acc2.getAvailableAssets(ASSETS.BTC)).toEqual(1001);
     });
 
     test("2x2", () => {
         placeBuy(acc1, 2, 2);
         placeSell(acc2, 2, 2);
-        expect(acc1.getAssets(ASSETS.GBP)).toEqual(1002);
-        expect(acc1.getAssets(ASSETS.BTC)).toEqual(996);
-        expect(acc2.getAssets(ASSETS.GBP)).toEqual(998);
-        expect(acc2.getAssets(ASSETS.BTC)).toEqual(1004);
+        expect(acc1.getAvailableAssets(ASSETS.GBP)).toEqual(1002);
+        expect(acc1.getAvailableAssets(ASSETS.BTC)).toEqual(996);
+        expect(acc2.getAvailableAssets(ASSETS.GBP)).toEqual(998);
+        expect(acc2.getAvailableAssets(ASSETS.BTC)).toEqual(1004);
     });
 
     test("2.5x2", () => {
         placeBuy(acc1, 2.5, 2);
         placeSell(acc2, 2.5, 2);
-        expect(acc1.getAssets(ASSETS.GBP)).toEqual(1002.5);
-        expect(acc1.getAssets(ASSETS.BTC)).toEqual(995);
-        expect(acc2.getAssets(ASSETS.GBP)).toEqual(997.5);
-        expect(acc2.getAssets(ASSETS.BTC)).toEqual(1005);
+        expect(acc1.getAvailableAssets(ASSETS.GBP)).toEqual(1002.5);
+        expect(acc1.getAvailableAssets(ASSETS.BTC)).toEqual(995);
+        expect(acc2.getAvailableAssets(ASSETS.GBP)).toEqual(997.5);
+        expect(acc2.getAvailableAssets(ASSETS.BTC)).toEqual(1005);
     });
 
     test("2x2.5", () => {
         placeBuy(acc1, 2, 2.5);
         placeSell(acc2, 2, 2.5);
-        expect(acc1.getAssets(ASSETS.GBP)).toEqual(1002);
-        expect(acc1.getAssets(ASSETS.BTC)).toEqual(995);
-        expect(acc2.getAssets(ASSETS.GBP)).toEqual(998);
-        expect(acc2.getAssets(ASSETS.BTC)).toEqual(1005);
+        expect(acc1.getAvailableAssets(ASSETS.GBP)).toEqual(1002);
+        expect(acc1.getAvailableAssets(ASSETS.BTC)).toEqual(995);
+        expect(acc2.getAvailableAssets(ASSETS.GBP)).toEqual(998);
+        expect(acc2.getAvailableAssets(ASSETS.BTC)).toEqual(1005);
     });
 
     test("2.5x2.5", () => {
         placeBuy(acc1, 2.5, 2.5);
         placeSell(acc2, 2.5, 2.5);
-        expect(acc1.getAssets(ASSETS.GBP)).toEqual(1002.5);
-        expect(acc1.getAssets(ASSETS.BTC)).toEqual(993.75);
-        expect(acc2.getAssets(ASSETS.GBP)).toEqual(997.5);
-        expect(acc2.getAssets(ASSETS.BTC)).toEqual(1006.25);
+        expect(acc1.getAvailableAssets(ASSETS.GBP)).toEqual(1002.5);
+        expect(acc1.getAvailableAssets(ASSETS.BTC)).toEqual(993.75);
+        expect(acc2.getAvailableAssets(ASSETS.GBP)).toEqual(997.5);
+        expect(acc2.getAvailableAssets(ASSETS.BTC)).toEqual(1006.25);
     });
 
     test("2x-1.5", () => {
         placeBuy(acc1, 2, -1.5);
         placeSell(acc2, 2, -1.5);
-        expect(acc1.getAssets(ASSETS.GBP)).toEqual(1002);
-        expect(acc1.getAssets(ASSETS.BTC)).toEqual(1003);
-        expect(acc2.getAssets(ASSETS.GBP)).toEqual(998);
-        expect(acc2.getAssets(ASSETS.BTC)).toEqual(997);
+        expect(acc1.getAvailableAssets(ASSETS.GBP)).toEqual(1002);
+        expect(acc1.getAvailableAssets(ASSETS.BTC)).toEqual(1003);
+        expect(acc2.getAvailableAssets(ASSETS.GBP)).toEqual(998);
+        expect(acc2.getAvailableAssets(ASSETS.BTC)).toEqual(997);
     });
 
     test("different prices", () => {
         placeBuy(acc1, 1, 2);
         placeSell(acc2, 1, 1);
-        expect(acc1.getAssets(ASSETS.GBP)).toEqual(1001);
-        expect(acc1.getAssets(ASSETS.BTC)).toEqual(998);
-        expect(acc2.getAssets(ASSETS.GBP)).toEqual(999);
-        expect(acc2.getAssets(ASSETS.BTC)).toEqual(1002);
+        expect(acc1.getAvailableAssets(ASSETS.GBP)).toEqual(1001);
+        expect(acc1.getAvailableAssets(ASSETS.BTC)).toEqual(998);
+        expect(acc2.getAvailableAssets(ASSETS.GBP)).toEqual(999);
+        expect(acc2.getAvailableAssets(ASSETS.BTC)).toEqual(1002);
     })
+});
+
+describe("locked assets", () => {
+    test("One Buy", () => {
+        placeBuy(acc1, 1, 1);
+        expect(iBroker.getLockedAssets(acc1)).toEqual([0, 1]);
+    });
+
+    test("One Sell", () => {
+        placeSell(acc1, 1, 1);
+        expect(iBroker.getLockedAssets(acc1)).toEqual([1, 0]);
+    });
+
+    test("Complex orders", () => {
+        placeBuy(acc1, 2, 1.2);
+        placeSell(acc1, 3, 1.8);
+        expect(iBroker.getLockedAssets(acc1)).toEqual([3, 2.4])
+    });
+
+    test("Multiple buys", () => {
+        placeBuy(acc1, 2, 3);
+        placeBuy(acc1, 10, 1);
+        expect(iBroker.getLockedAssets(acc1)).toEqual([0, 16]);
+    });
+
+    test("Multiple sells", () => {
+        placeSell(acc1, 2, 3);
+        placeSell(acc1, 10, 10);
+        expect(iBroker.getLockedAssets(acc1)).toEqual([12, 0]);
+    });
+
+    test("Multiple accounts", () => {
+        placeBuy(acc1, 1, 1);
+        placeBuy(acc2, 1, 1);
+        expect(iBroker.getLockedAssets(acc1)).toEqual([0, 1]);
+        expect(iBroker.getLockedAssets(acc2)).toEqual([0, 1]);
+    });
+
+    test("Decreases after trade", () => {
+        placeBuy(acc1, 1, 1);
+        expect(iBroker.getLockedAssets(acc1)).toEqual([0, 1]);
+        placeSell(acc2, 1, 1);
+        expect(iBroker.getLockedAssets(acc1)).toEqual([0, 0]);
+        expect(iBroker.getLockedAssets(acc2)).toEqual([0, 0]);
+    });
 });

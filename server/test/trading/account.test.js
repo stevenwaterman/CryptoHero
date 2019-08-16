@@ -15,7 +15,7 @@ describe("construct", () => {
     });
 
     test("Assets are zero by default", () => {
-        expect(new Account().getAssets(ASSETS.GBP)).toEqual(0);
+        expect(new Account().getAvailableAssets(ASSETS.GBP)).toEqual(0);
     });
 });
 
@@ -26,34 +26,34 @@ beforeEach(() => {
 
 describe("Editing Assets", () => {
     test("Add positive amount", () => {
-        account.addAssets(ASSETS.GBP, 1);
-        expect(account.getAssets(ASSETS.GBP)).toEqual(1);
+        account.adjustAssets(ASSETS.GBP, 1);
+        expect(account.getAvailableAssets(ASSETS.GBP)).toEqual(1);
     });
 
     test("Add decimal amount", () => {
-        account.addAssets(ASSETS.GBP, 1.5);
-        expect(account.getAssets(ASSETS.GBP)).toBeCloseTo(1.5, 5);
+        account.adjustAssets(ASSETS.GBP, 1.5);
+        expect(account.getAvailableAssets(ASSETS.GBP)).toBeCloseTo(1.5, 5);
     });
 
     test("Add nothing", () => {
-        account.addAssets(ASSETS.GBP, 0);
-        expect(account.getAssets(ASSETS.GBP)).toEqual(0);
+        account.adjustAssets(ASSETS.GBP, 0);
+        expect(account.getAvailableAssets(ASSETS.GBP)).toEqual(0);
     });
 
     test("Subtract amount", () => {
-        account.addAssets(ASSETS.GBP, -1);
-        expect(account.getAssets(ASSETS.GBP)).toEqual(-1);
+        account.adjustAssets(ASSETS.GBP, -1);
+        expect(account.getAvailableAssets(ASSETS.GBP)).toEqual(-1);
     });
 
     test("Works for multiple assets", () => {
-        account.addAssets(ASSETS.BTC, 1);
-        expect(account.getAssets(ASSETS.GBP)).toEqual(0);
-        expect(account.getAssets(ASSETS.BTC)).toEqual(1);
+        account.adjustAssets(ASSETS.BTC, 1);
+        expect(account.getAvailableAssets(ASSETS.GBP)).toEqual(0);
+        expect(account.getAvailableAssets(ASSETS.BTC)).toEqual(1);
     });
 
     test("Can be called multiple times", () => {
-        account.addAssets(ASSETS.GBP, 1);
-        account.addAssets(ASSETS.GBP, 2);
-        expect(account.getAssets(ASSETS.GBP)).toEqual(3);
+        account.adjustAssets(ASSETS.GBP, 1);
+        account.adjustAssets(ASSETS.GBP, 2);
+        expect(account.getAvailableAssets(ASSETS.GBP)).toEqual(3);
     });
 });

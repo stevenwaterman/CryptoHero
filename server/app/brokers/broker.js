@@ -24,12 +24,37 @@ export default class Broker {
 
     getPendingOrders(account) {
         const orders = {};
-        Object.entries(this.instrumentBrokers).forEach((arr) => {
-            const instrumentName = arr[0];
-            const iBroker = arr[1];
-            orders[instrumentName] = iBroker.getPendingOrders(account);
+        this.#forEachInstrumentBroker((name, iBroker) => {
+            orders[name] = iBroker.getPendingOrders(account);
         });
         return orders;
+    }
+
+    /**
+     * Return a list of the assets that are locked due to a pending order for a given account
+     */
+    getLockedAssets(account) {
+        const lockedAssets = {};
+        this.#forEachInstrumentBroker((_, iBroker) => {
+            const iLockedAssets = iBroker.getLockedAssets(account);
+
+            const a1 = iBroker.instrument.toAsset;
+            const a1Units = iLockedAssets[0];
+            const a1Current = lockedAssets[a1.name] ?? 0;
+            lockedAssets[a1.name] = a1Current + a1Units;
+
+            const a2 = iBroker.instrument.fromAsset;
+            const a2Units = iLockedAssets[1];
+            const a2Current = lockedAssets[a2.name] ?? 0;
+            lockedAssets[a2.name] = a2Current + a2Units;
+        });
+        return lockedAssets;
+    }
+
+    #forEachInstrumentBroker(func) {
+        Object.entries(this.instrumentBrokers).forEach((arr) => {
+            func(arr[0], arr[1]);
+        });
     }
 
     /**

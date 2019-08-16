@@ -68,10 +68,10 @@ export default class InstrumentBroker {
         const asset = order.direction === TradeDirection.BUY ? instrument.buyerSpends : instrument.sellerSpends;
         const amount = order.spendAmount;
 
-        const position = account.getAssets(asset);
+        const position = account.getAvailableAssets(asset);
         if (position < amount) throw `Account cannot afford ${amount}${asset.name}, only has ${position}`;
 
-        account.addAssets(asset, -amount);
+        account.adjustAssets(asset, -amount);
     }
 
     /**
@@ -87,6 +87,13 @@ export default class InstrumentBroker {
         "buy": this.#getPendingBuys(account),
         "sell": this.#getPendingSells(account)
     });
+
+    static #updatePositionOnCancelOrder(instrument, order) {
+        const account = order.account;
+        const asset = order.direction === TradeDirection.BUY ? instrument.buyerSpends : instrument.sellerSpends;
+        const amount = order.spendAmount;
+        account.adjustAssets(asset, amount);
+    }
 
     /**
      * Checks the first order on the buy and sell lists and removes them if there's no units left
@@ -146,18 +153,6 @@ export default class InstrumentBroker {
         }
     };
 
-    static #updatePositionOnCancelOrder(instrument, order) {
-        const account = order.account;
-        const asset = order.direction === TradeDirection.BUY ? instrument.buyerSpends : instrument.sellerSpends;
-        const amount = order.spendAmount;
-        account.addAssets(asset, amount);
-    }
-
-    static #updatePositionOnTrade(instrument, buyOrder, sellOrder, units, unitPrice) {
-        InstrumentBroker.#updatePositionOnBuy(instrument, buyOrder, units, unitPrice);
-        InstrumentBroker.#updatePositionOnSell(instrument, sellOrder, units, unitPrice);
-    }
-
     static #updatePositionOnBuy(instrument, order, actualUnits, actualUnitPrice) {
         const account = order.account;
         const gaining = instrument.buyerGains;
@@ -165,12 +160,17 @@ export default class InstrumentBroker {
 
         // noinspection UnnecessaryLocalVariableJS
         const gainedAmount = actualUnits;
-        account.addAssets(gaining, gainedAmount);
+        account.adjustAssets(gaining, gainedAmount);
 
         const expectedSpend = actualUnits * order.unitPrice;
         const actuallySpent = actualUnits * actualUnitPrice;
         const refundDue = expectedSpend - actuallySpent;
-        account.addAssets(spending, refundDue);
+        account.adjustAssets(spending, refundDue);
+    }
+
+    static #updatePositionOnTrade(instrument, buyOrder, sellOrder, units, unitPrice) {
+        InstrumentBroker.#updatePositionOnBuy(instrument, buyOrder, units, unitPrice);
+        InstrumentBroker.#updatePositionOnSell(instrument, sellOrder, units, unitPrice);
     }
 
     static #updatePositionOnSell(instrument, order, actualUnits, actualUnitPrice) {
@@ -179,7 +179,17 @@ export default class InstrumentBroker {
 
         // noinspection UnnecessaryLocalVariableJS
         const gainedAmount = actualUnits * actualUnitPrice;
-        account.addAssets(gaining, gainedAmount);
+        account.adjustAssets(gaining, gainedAmount);
+    }
+
+    getLockedAssets(account) {
+        const pendingOrders = this.getPendingOrders(account);
+        const buy = pendingOrders.buy;
+        const sell = pendingOrders.sell;
+
+        const a1 = sell.map((it) => it.spendAmount).reduce((a, b) => a + b, 0);
+        const a2 = buy.map((it) => it.spendAmount).reduce((a, b) => a + b, 0);
+        return [a1, a2];
     }
 
     /**
