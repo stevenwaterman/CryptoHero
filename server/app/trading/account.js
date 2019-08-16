@@ -1,26 +1,25 @@
 import {ASSETS} from "./asset";
 
-const uuidv4 = require('uuid/v4');
+const uuidv4 = require("uuid/v4");
 
 export default class Account {
-    id = uuidv4();
+  id = uuidv4();
 
-    /**
-     * The amount left to place on new orders
-     */
-    availableAssets = {};
+  /**
+   * The amount left to place on new orders
+   */
+  availableAssets = {};
 
-    //TODO add ability to see total position if all orders were cancelled
+  constructor() {
+    Object.keys(ASSETS).forEach(asset => {
+      this.availableAssets[asset] = 0;
+    });
+  }
 
-    constructor() {
-        Object.keys(ASSETS).forEach((asset) => {
-            this.availableAssets[asset] = 0;
-        });
-    }
+  adjustAssets = (asset, addUnits) =>
+    (this.availableAssets[asset.name] += addUnits);
 
-    adjustAssets = (asset, addUnits) => this.availableAssets[asset.name] += addUnits;
-
-    getAvailableAssets = (asset) => {
-        return this.availableAssets[asset.name];
-    };
+  getAvailableAssets = asset => {
+    return this.availableAssets[asset.name];
+  };
 }

@@ -1,33 +1,35 @@
 export const expectedPending = (buys, sells) => {
-    const pending = new Object({
-        "buy": [],
-        "sell": []
-    });
+  const pending = new Object({
+    buy: [],
+    sell: []
+  });
 
-    pending.buy.push(...buys);
-    pending.sell.push(...sells);
-    return pending;
+  pending.buy.push(...buys);
+  pending.sell.push(...sells);
+  return pending;
 };
 
-export const expectedOrder = (account, direction, units, unitPrice) => new Object({
-    "account": {
-        "id": account.id
+export const expectedOrder = (account, direction, units, unitPrice) =>
+  new Object({
+    account: {
+      id: account.id
     },
-    "direction": direction,
-    "units": units,
-    "unitPrice": unitPrice
-});
+    direction: direction,
+    units: units,
+    unitPrice: unitPrice
+  });
 
 /**
  * Allows for partial matching - so we don't match on IDs because they are UUIDs
  */
-export const expectedTrade = (buyer, seller, units, unitPrice) => new Object({
-    "buyer": {
-        "id": buyer.id
+export const expectedTrade = (buyer, seller, units, unitPrice) =>
+  new Object({
+    buyer: {
+      id: buyer.id
     },
-    "seller": {
-        "id": seller.id
+    seller: {
+      id: seller.id
     },
-    "units": units,
-    "unitPrice": unitPrice
-});
+    units: units,
+    unitPrice: unitPrice
+  });
