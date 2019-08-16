@@ -197,15 +197,60 @@ export default class InstrumentBroker {
      * then adds the order to the book if it has any remaining quantity.
      * @param order Should be a defined, non-null Order object. Otherwise, will throw error.
      */
-    place(order) { //TODO check that the account can afford it
+    place(order) {
         if (order == null) throw 'Order must be defined and non-null';
         const validDirections = [TradeDirection.BUY, TradeDirection.SELL];
         if (!validDirections.includes(order.direction)) throw `Unrecognised TradeDirection: ${order.direction}`;
 
+        this.#selfTradeGuard(order);
         InstrumentBroker.#updatePositionOnPlaceOrder(this.instrument, order);
         this.#makeTrades(order);
         if (order.units > 0) {
             this.#pushOrder(order);
         }
     };
+
+    cancel(order) {
+        switch (order.direction) {
+            case TradeDirection.BUY:
+                return this.#cancelBuy(order);
+            case TradeDirection.SELL:
+                return this.#cancelSell(order);
+        }
+    }
+
+    #cancelBuy(order) {
+        if (!this.#buys.includes(order)) throw "Order was not pending";
+        this.#buys.delete(order);
+        InstrumentBroker.#updatePositionOnCancelOrder(this.instrument, order);
+    }
+
+    #cancelSell(order) {
+        if (!this.#sells.includes(order)) throw "Order was not pending";
+        this.#sells.delete(order);
+        InstrumentBroker.#updatePositionOnCancelOrder(this.instrument, order);
+    }
+
+    #selfTradeGuard(order) {
+        switch (order.direction) {
+            case TradeDirection.BUY:
+                return this.#selfTradeBuyingGuard(order);
+            case TradeDirection.SELL:
+                return this.#selfTradeSellingGuard(order);
+        }
+    }
+
+    #selfTradeBuyingGuard(buy) {
+        const bestSell = this.#sells.underlying().find((sell) => buy.account.id === sell.account.id);
+        if (bestSell != null && buy.unitPrice >= bestSell.unitPrice) {
+            throw `Would cause self-trade. Buy order placed @ ${buy.unitPrice}, sell exists @ ${bestSell.unitPrice}`;
+        }
+    }
+
+    #selfTradeSellingGuard(sell) {
+        const bestBuy = this.#buys.underlying().find((buy) => buy.account.id === sell.account.id);
+        if (bestBuy != null && bestBuy.unitPrice >= sell.unitPrice) {
+            throw `Would cause self-trade. Sell order placed @ ${sell.unitPrice}, buy exists @ ${bestBuy.unitPrice}`;
+        }
+    }
 }

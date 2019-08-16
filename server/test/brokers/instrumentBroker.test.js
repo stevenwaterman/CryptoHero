@@ -493,3 +493,59 @@ describe("locked assets", () => {
         expect(iBroker.getLockedAssets(acc2)).toEqual([0, 0]);
     });
 });
+
+describe("Cancel order", () => {
+    test("Throws if cancelling order that hasn't been placed", () => {
+        expect(() => {
+            iBroker.cancel(new Order(acc1, TradeDirection.BUY, 1, 1))
+        }).toThrow();
+    });
+
+    test("Does not throw on valid call", () => {
+        const order = new Order(acc1, TradeDirection.BUY, 1, 1);
+        iBroker.place(order);
+        expect(() => {
+            iBroker.cancel(order)
+        }).not.toThrow();
+    });
+
+    test("Prevents trades from being made with the cancelled order", () => {
+        const order = new Order(acc1, TradeDirection.BUY, 1, 1);
+        iBroker.place(order);
+        iBroker.cancel(order);
+        iBroker.place(new Order(acc2, TradeDirection.SELL, 1, 1));
+        expect(iBroker.getTrades(acc1)).toHaveLength(0);
+    });
+
+    test("Removes the order from pending orders", () => {
+        const order = new Order(acc1, TradeDirection.BUY, 1, 1);
+        iBroker.place(order);
+        iBroker.cancel(order);
+        expect(iBroker.getPendingOrders(acc1)).toMatchObject(expectedPending([], []));
+    });
+
+    test("Unlocks the assets", () => {
+        const order = new Order(acc1, TradeDirection.BUY, 1, 1);
+        iBroker.place(order);
+        iBroker.cancel(order);
+        expect(iBroker.getLockedAssets(acc1)).toEqual([0, 0]);
+    });
+});
+
+describe("Self-Trade prevention", () => {
+    test("Buy first", () => {
+        placeBuy(acc1, 1, 1);
+        const sell = new Order(acc1, TradeDirection.SELL, 1, 1);
+        expect(() => {
+            iBroker.place(sell)
+        }).toThrow();
+    });
+
+    test("Sell first", () => {
+        placeSell(acc1, 1, 1);
+        const buy = new Order(acc1, TradeDirection.BUY, 1, 1);
+        expect(() => {
+            iBroker.place(buy)
+        }).toThrow();
+    });
+});

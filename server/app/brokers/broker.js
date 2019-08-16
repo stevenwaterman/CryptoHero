@@ -10,7 +10,7 @@ export default class Broker {
         });
     };
 
-    #getBroker = (instrument) => this.instrumentBrokers[instrument.name];
+    #getIBroker = (instrument) => this.instrumentBrokers[instrument.name];
 
     getTrades(account) {
         const trades = {};
@@ -62,9 +62,12 @@ export default class Broker {
      * If you sell 100 units of the instrument GBPBTC at a unit price of 1.1, you will spend 100GBP to get 110BTC.
      */
     placeOrder(instrument, order) {
-        const broker = this.#getBroker(instrument);
-        broker.place(order);
+        const iBroker = this.#getIBroker(instrument);
+        iBroker.place(order);
     };
 
-    //TODO cancel order.
+    cancelOrder(instrument, order) {
+        const iBroker = this.#getIBroker(instrument);
+        iBroker.cancel(order);
+    }
 }
