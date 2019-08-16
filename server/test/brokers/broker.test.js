@@ -23,6 +23,11 @@ beforeEach(() => {
     acc2 = new Account();
     acc3 = new Account();
     acc4 = new Account();
+    [acc1, acc2, acc3, acc4].forEach((acc) => {
+        acc.addAssets(ASSETS.GBP, 1000);
+        acc.addAssets(ASSETS.BTC, 1000);
+        acc.addAssets(ASSETS.LTC, 1000);
+    })
 });
 
 const placeBuy = (instrument, account, units, price) => {
@@ -85,30 +90,22 @@ describe("completing trades", () => {
 });
 
 describe("position should update", () => {
-    beforeEach(() => {
-        [acc1, acc2, acc3, acc4].forEach((acc) => {
-            acc.addAssets(ASSETS.GBP, 10);
-            acc.addAssets(ASSETS.BTC, 10);
-            acc.addAssets(ASSETS.LTC, 10);
-        });
-    });
-
     test("Works with trades in multiple instruments", () => {
         placeBuy(INSTRUMENTS.GBPBTC, acc1, 1, 1);
         placeBuy(INSTRUMENTS.GBPLTC, acc1, 1, 1);
         placeSell(INSTRUMENTS.GBPBTC, acc2, 1, 1);
         placeSell(INSTRUMENTS.GBPLTC, acc3, 1, 1);
 
-        expect(acc1.getAssets(ASSETS.GBP)).toEqual(12);
-        expect(acc1.getAssets(ASSETS.BTC)).toEqual(9);
-        expect(acc1.getAssets(ASSETS.LTC)).toEqual(9);
+        expect(acc1.getAssets(ASSETS.GBP)).toEqual(1002);
+        expect(acc1.getAssets(ASSETS.BTC)).toEqual(999);
+        expect(acc1.getAssets(ASSETS.LTC)).toEqual(999);
 
-        expect(acc2.getAssets(ASSETS.GBP)).toEqual(9);
-        expect(acc2.getAssets(ASSETS.BTC)).toEqual(11);
-        expect(acc2.getAssets(ASSETS.LTC)).toEqual(10);
+        expect(acc2.getAssets(ASSETS.GBP)).toEqual(999);
+        expect(acc2.getAssets(ASSETS.BTC)).toEqual(1001);
+        expect(acc2.getAssets(ASSETS.LTC)).toEqual(1000);
 
-        expect(acc3.getAssets(ASSETS.GBP)).toEqual(9);
-        expect(acc3.getAssets(ASSETS.BTC)).toEqual(10);
-        expect(acc3.getAssets(ASSETS.LTC)).toEqual(11);
+        expect(acc3.getAssets(ASSETS.GBP)).toEqual(999);
+        expect(acc3.getAssets(ASSETS.BTC)).toEqual(1000);
+        expect(acc3.getAssets(ASSETS.LTC)).toEqual(1001);
     });
 });

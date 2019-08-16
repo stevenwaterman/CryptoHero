@@ -65,8 +65,12 @@ export default class InstrumentBroker {
 
     static #updatePositionOnPlaceOrder(instrument, order) {
         const account = order.account;
-        const asset = order.direction === TradeDirection.BUY ? instrument.fromAsset : instrument.toAsset;
-        const amount = order.direction === TradeDirection.BUY ? order.units * order.unitPrice : order.units;
+        const asset = order.direction === TradeDirection.BUY ? instrument.buyerSpends : instrument.sellerSpends;
+        const amount = order.spendAmount;
+
+        const position = account.getAssets(asset);
+        if (position < amount) throw `Account cannot afford ${amount}${asset.name}, only has ${position}`;
+
         account.addAssets(asset, -amount);
     }
 
@@ -144,8 +148,8 @@ export default class InstrumentBroker {
 
     static #updatePositionOnCancelOrder(instrument, order) {
         const account = order.account;
-        const asset = order.direction === TradeDirection.BUY ? instrument.fromAsset : instrument.toAsset;
-        const amount = order.direction === TradeDirection.BUY ? order.units * order.unitPrice : order.units;
+        const asset = order.direction === TradeDirection.BUY ? instrument.buyerSpends : instrument.sellerSpends;
+        const amount = order.spendAmount;
         account.addAssets(asset, amount);
     }
 
@@ -156,8 +160,8 @@ export default class InstrumentBroker {
 
     static #updatePositionOnBuy(instrument, order, actualUnits, actualUnitPrice) {
         const account = order.account;
-        const gaining = instrument.toAsset;
-        const spending = instrument.fromAsset;
+        const gaining = instrument.buyerGains;
+        const spending = instrument.buyerSpends;
 
         // noinspection UnnecessaryLocalVariableJS
         const gainedAmount = actualUnits;
@@ -171,7 +175,7 @@ export default class InstrumentBroker {
 
     static #updatePositionOnSell(instrument, order, actualUnits, actualUnitPrice) {
         const account = order.account;
-        const gaining = instrument.fromAsset;
+        const gaining = instrument.sellerGains;
 
         // noinspection UnnecessaryLocalVariableJS
         const gainedAmount = actualUnits * actualUnitPrice;

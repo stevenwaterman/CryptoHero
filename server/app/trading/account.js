@@ -20,7 +20,6 @@ export default class Account {
     addAssets = (asset, addUnits) => this.position[asset.name] += addUnits;
 
     getAssets = (asset) => {
-        console.log(this.position);
         return this.position[asset.name];
     };
 }

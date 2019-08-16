@@ -4,7 +4,7 @@ import Order, {TradeDirection} from "../../app/trading/order";
 
 let acc1, acc2;
 
-beforeAll(() => {
+beforeEach(() => {
     acc1 = new Account();
     acc2 = new Account();
 });
@@ -12,18 +12,19 @@ beforeAll(() => {
 describe("buyComparator", () => {
     let order1, order2, order3, order4, order5;
 
-    beforeAll(() => {
+    beforeEach(() => {
         order1 = new Order(acc1, TradeDirection.BUY, 100, 1.14);
         order2 = new Order(acc1, TradeDirection.BUY, 100, 1.20);
 
         order3 = new Order(acc1, TradeDirection.BUY, 100, 1.14);
-        order3.timeStamp.setTime(order1.timeStamp.getTime() + 1000);
+        order3.timestamp.setTime(order1.timestamp.getTime() + 1000);
 
         order4 = new Order(acc1, TradeDirection.BUY, 200, 1.14);
-        order4.timestamp = order1.timestamp;
+        order4.timestamp.setTime(order1.timestamp.getTime());
+        order4.id = order1.id;
 
-        order5 = new Order(acc2, TradeDirection.BUY, 200, 1.14);
-        order5.timestamp = order1.timestamp;
+        order5 = new Order(acc1, TradeDirection.BUY, 200, 1.14);
+        order5.timestamp.setTime(order1.timestamp.getTime());
     });
 
     test("different prices, higher price comes first", () => {
@@ -32,11 +33,13 @@ describe("buyComparator", () => {
     });
 
     test("same prices, lower timestamp comes first", () => {
+        console.log(order1);
+        console.log(order3);
         expect(buyComparator(order1, order3)).toBeLessThan(0);
         expect(buyComparator(order3, order1)).toBeGreaterThan(0);
     });
 
-    test("same price, timestamp, and account returns 0", () => {
+    test("same price, timestamp, and id returns 0", () => {
         expect(buyComparator(order1, order1)).toEqual(0);
         expect(buyComparator(order1, order4)).toEqual(0);
     });
@@ -49,18 +52,19 @@ describe("buyComparator", () => {
 describe("sellComparator", () => {
     let order1, order2, order3, order4, order5;
 
-    beforeAll(() => {
+    beforeEach(() => {
         order1 = new Order(acc1, TradeDirection.SELL, 100, 1.14);
         order2 = new Order(acc1, TradeDirection.SELL, 100, 1.20);
 
         order3 = new Order(acc1, TradeDirection.SELL, 100, 1.14);
-        order3.timeStamp.setTime(order1.timeStamp.getTime() + 1000);
+        order3.timestamp.setTime(order1.timestamp.getTime() + 1000);
 
         order4 = new Order(acc1, TradeDirection.SELL, 200, 1.14);
-        order4.timestamp = order1.timestamp;
+        order4.timestamp.setTime(order1.timestamp.getTime());
+        order4.id = order1.id;
 
-        order5 = new Order(acc2, TradeDirection.SELL, 200, 1.14);
-        order5.timestamp = order1.timestamp;
+        order5 = new Order(acc1, TradeDirection.SELL, 200, 1.14);
+        order5.timestamp.setTime(order1.timestamp.getTime());
     });
 
     test("different prices, lower price comes first", () => {
@@ -73,12 +77,12 @@ describe("sellComparator", () => {
         expect(sellComparator(order3, order1)).toBeGreaterThan(0);
     });
 
-    test("same price, timestamp, and account returns 0", () => {
+    test("same price, timestamp, and id returns 0", () => {
         expect(sellComparator(order1, order1)).toEqual(0);
         expect(sellComparator(order1, order4)).toEqual(0);
     });
 
-    test("same price and timestamp, different account, does not return 0", () => {
+    test("same price and timestamp, different id, does not return 0", () => {
         expect(sellComparator(order4, order5)).not.toEqual(0);
     });
 });
