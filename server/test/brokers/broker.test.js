@@ -1,7 +1,7 @@
 import Broker from "../../app/brokers/broker";
 import Account from "../../app/trading/account";
 import {INSTRUMENTS} from "../../app/trading/instrument";
-import {TradeDirection} from "../../app/trading/order";
+import Order, {TradeDirection} from "../../app/trading/order";
 import {expectedOrder, expectedPending, expectedTrade} from "./expected";
 import {ASSETS} from "../../app/trading/asset";
 
@@ -26,13 +26,13 @@ beforeEach(() => {
 });
 
 const placeBuy = (instrument, account, units, price) => {
-    const order = account.createBuy(units, price);
+    const order = new Order(account, TradeDirection.BUY, units, price);
     broker.placeOrder(instrument, order);
     return expectedOrder(account, TradeDirection.BUY, units, price);
 };
 
 const placeSell = (instrument, account, units, price) => {
-    const order = account.createSell(units, price);
+    const order = new Order(account, TradeDirection.SELL, units, price);
     broker.placeOrder(instrument, order);
     return expectedOrder(account, TradeDirection.SELL, units, price);
 };

@@ -44,12 +44,12 @@ beforeEach(() => {
 });
 
 const placeBuy = function (account, units, price) {
-    iBroker.place(account.createBuy(units, price));
+    iBroker.place(new Order(account, TradeDirection.BUY, units, price));
     return expectedOrder(account, TradeDirection.BUY, units, price);
 };
 
 const placeSell = function (account, units, price) {
-    iBroker.place(account.createSell(units, price));
+    iBroker.place(new Order(account, TradeDirection.SELL, units, price));
     return expectedOrder(account, TradeDirection.SELL, units, price);
 };
 
@@ -60,10 +60,10 @@ describe("adding orders", () => {
     let buyOrderNegPrice;
 
     beforeAll(() => {
-        sellOrder = acc1.createSell(100, 1.14);
-        sellOrderNegPrice = acc1.createSell(100, -1.14);
-        buyOrder = acc1.createBuy(100, 1.14);
-        buyOrderNegPrice = acc1.createBuy(100, -1.14);
+        sellOrder = new Order(acc1, TradeDirection.SELL, 100, 1.14);
+        sellOrderNegPrice = new Order(acc1, TradeDirection.SELL, 100, -1.14);
+        buyOrder = new Order(acc1, TradeDirection.BUY, 100, 1.14);
+        buyOrderNegPrice = new Order(acc1, TradeDirection.BUY, 100, -1.14);
     });
 
     test("can add sell order", () => {

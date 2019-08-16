@@ -1,5 +1,6 @@
 import Account from "../../app/trading/account";
 import {buyComparator, sellComparator} from "../../app/brokers/comparators";
+import Order, {TradeDirection} from "../../app/trading/order";
 
 let acc1, acc2;
 
@@ -12,16 +13,16 @@ describe("buyComparator", () => {
     let order1, order2, order3, order4, order5;
 
     beforeAll(() => {
-        order1 = acc1.createBuy(100, 1.14);
-        order2 = acc1.createBuy(100, 1.20);
+        order1 = new Order(acc1, TradeDirection.BUY, 100, 1.14);
+        order2 = new Order(acc1, TradeDirection.BUY, 100, 1.20);
 
-        order3 = acc1.createBuy(100, 1.14);
+        order3 = new Order(acc1, TradeDirection.BUY, 100, 1.14);
         order3.timeStamp.setTime(order1.timeStamp.getTime() + 1000);
 
-        order4 = acc1.createBuy(200, 1.14);
+        order4 = new Order(acc1, TradeDirection.BUY, 200, 1.14);
         order4.timestamp = order1.timestamp;
 
-        order5 = acc2.createBuy(200, 1.14);
+        order5 = new Order(acc2, TradeDirection.BUY, 200, 1.14);
         order5.timestamp = order1.timestamp;
     });
 
@@ -49,16 +50,16 @@ describe("sellComparator", () => {
     let order1, order2, order3, order4, order5;
 
     beforeAll(() => {
-        order1 = acc1.createSell(100, 1.14);
-        order2 = acc1.createSell(100, 1.20);
+        order1 = new Order(acc1, TradeDirection.SELL, 100, 1.14);
+        order2 = new Order(acc1, TradeDirection.SELL, 100, 1.20);
 
-        order3 = acc1.createSell(100, 1.14);
+        order3 = new Order(acc1, TradeDirection.SELL, 100, 1.14);
         order3.timeStamp.setTime(order1.timeStamp.getTime() + 1000);
 
-        order4 = acc1.createSell(200, 1.14);
+        order4 = new Order(acc1, TradeDirection.SELL, 200, 1.14);
         order4.timestamp = order1.timestamp;
 
-        order5 = acc2.createSell(200, 1.14);
+        order5 = new Order(acc2, TradeDirection.SELL, 200, 1.14);
         order5.timestamp = order1.timestamp;
     });
 

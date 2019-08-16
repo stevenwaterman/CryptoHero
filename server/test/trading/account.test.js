@@ -1,4 +1,3 @@
-import {TradeDirection} from "../../app/trading/order";
 import Account from "../../app/trading/account";
 import {ASSETS} from "../../app/trading/asset";
 
@@ -23,64 +22,6 @@ describe("construct", () => {
 let account;
 beforeEach(() => {
     account = new Account();
-});
-
-describe("Create buy", () => {
-    test("Simple Create", () => {
-        expect(account.createBuy(1, 1)).toMatchObject({
-            "account": account,
-            "direction": TradeDirection.BUY,
-            "units": 1,
-            "unitPrice": 1
-        });
-    });
-
-    test("Invalid Units", () => {
-        expect(() => {
-            account.createBuy(0, 1)
-        }).toThrow();
-        expect(() => {
-            account.createBuy(-1, 1)
-        }).toThrow();
-    });
-
-    test("Price <= 0", () => {
-        expect(() => {
-            account.createBuy(1, 0)
-        }).not.toThrow();
-        expect(() => {
-            account.createBuy(1, -1)
-        }).not.toThrow();
-    });
-});
-
-describe("Create sell", () => {
-    test("Simple Create", () => {
-        expect(account.createSell(1, 1)).toMatchObject({
-            "account": account,
-            "direction": TradeDirection.SELL,
-            "units": 1,
-            "unitPrice": 1
-        });
-    });
-
-    test("Invalid Units", () => {
-        expect(() => {
-            account.createSell(0, 1)
-        }).toThrow();
-        expect(() => {
-            account.createSell(-1, 1)
-        }).toThrow();
-    });
-
-    test("Price <= 0", () => {
-        expect(() => {
-            account.createSell(1, 0)
-        }).not.toThrow();
-        expect(() => {
-            account.createSell(1, -1)
-        }).not.toThrow();
-    });
 });
 
 describe("Editing Assets", () => {

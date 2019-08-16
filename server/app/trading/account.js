@@ -1,4 +1,3 @@
-import Order, {TradeDirection} from "./order";
 import {ASSETS} from "./asset";
 
 const uuidv4 = require('uuid/v4');
@@ -24,7 +23,4 @@ export default class Account {
         console.log(this.position);
         return this.position[asset.name];
     };
-
-    createBuy = (units, unitPrice) => new Order(this, TradeDirection.BUY, units, unitPrice);
-    createSell = (units, unitPrice) => new Order(this, TradeDirection.SELL, units, unitPrice);
 }
