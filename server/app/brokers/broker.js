@@ -1,5 +1,6 @@
 import {INSTRUMENTS} from "../trading/instrument";
 import InstrumentBroker from "./instrumentBroker";
+import {Big} from "big.js";
 
 export default class Broker {
   instrumentBrokers = {};
@@ -42,13 +43,13 @@ export default class Broker {
 
       const a1 = iBroker.instrument.toAsset;
       const a1Units = iLockedAssets[0];
-      const a1Current = lockedAssets[a1.name] ?? 0;
-      lockedAssets[a1.name] = a1Current + a1Units;
+      const a1Current = lockedAssets[a1.name] ?? new Big("0");
+      lockedAssets[a1.name] = a1Current.plus(a1Units);
 
       const a2 = iBroker.instrument.fromAsset;
       const a2Units = iLockedAssets[1];
-      const a2Current = lockedAssets[a2.name] ?? 0;
-      lockedAssets[a2.name] = a2Current + a2Units;
+      const a2Current = lockedAssets[a2.name] ?? new Big("0");
+      lockedAssets[a2.name] = a2Current.plus(a2Units);
     });
     return lockedAssets;
   }

@@ -2,6 +2,7 @@ import SortedList from "./sortedList";
 import {TradeDirection} from "../trading/order";
 import Trade from "../trading/trade";
 import {buyComparator, sellComparator} from "./comparators";
+import {Big} from "big.js";
 
 /**
  * The matcher accepts orders and matches them to create trades
@@ -29,8 +30,8 @@ export default class InstrumentBroker {
 
     const unitPrice = matched.unitPrice;
     const units = InstrumentBroker.#getUnitsTraded(order, matched);
-    buy.units -= units;
-    sell.units -= units;
+    buy.units = buy.units.minus(units);
+    sell.units = sell.units.minus(units);
 
     InstrumentBroker.#updatePositionOnTrade(
       instrument,
@@ -49,13 +50,13 @@ export default class InstrumentBroker {
   static #tradePossible(o1, o2) {
     if (o1 == null) return false;
     if (o2 == null) return false;
-    if (o1.units <= 0 || o2.units <= 0) return false;
+    if (o1.units.lte(new Big("0")) || o2.units.lte(new Big("0"))) return false;
 
     switch (o1.direction) {
       case TradeDirection.BUY:
-        return o1.unitPrice >= o2.unitPrice;
+        return o1.unitPrice.gte(o2.unitPrice);
       case TradeDirection.SELL:
-        return o1.unitPrice <= o2.unitPrice;
+        return o1.unitPrice.lte(o2.unitPrice);
     }
   }
 
@@ -66,7 +67,13 @@ export default class InstrumentBroker {
    * @returns {number} The number of units that can be traded between the two orders
    */
   static #getUnitsTraded(o1, o2) {
-    return Math.min(o1.units, o2.units);
+    const o1Units = o1.units;
+    const o2Units = o2.units;
+    if (o1Units.lt(o2Units)) {
+      return o1Units;
+    } else {
+      return o2Units;
+    }
   }
 
   static #updatePositionOnPlaceOrder(instrument, order) {
@@ -78,10 +85,11 @@ export default class InstrumentBroker {
     const amount = order.spendAmount;
 
     const position = account.getAvailableAssets(asset);
-    if (position < amount)
+    if (position.lt(amount))
       throw `Account cannot afford ${amount}${asset.name}, only has ${position}`;
 
-    account.adjustAssets(asset, -amount);
+    const subAmnt = new Big("0").minus(amount);
+    account.adjustAssets(asset, subAmnt);
   }
 
   /**
@@ -119,12 +127,12 @@ export default class InstrumentBroker {
    */
   #clearCompletedOrders() {
     const buy = this.#buys.min();
-    if (buy != null && buy.units <= 0) {
+    if (buy != null && buy.units.lte(new Big("0"))) {
       this.#buys.delete(buy);
     }
 
     const sell = this.#sells.min();
-    if (sell != null && sell.units <= 0) {
+    if (sell != null && sell.units.lte(new Big("0"))) {
       this.#sells.delete(sell);
     }
   }
@@ -181,9 +189,9 @@ export default class InstrumentBroker {
     const gainedAmount = actualUnits;
     account.adjustAssets(gaining, gainedAmount);
 
-    const expectedSpend = actualUnits * order.unitPrice;
-    const actuallySpent = actualUnits * actualUnitPrice;
-    const refundDue = expectedSpend - actuallySpent;
+    const expectedSpend = actualUnits.mul(order.unitPrice);
+    const actuallySpent = actualUnits.mul(actualUnitPrice);
+    const refundDue = expectedSpend.minus(actuallySpent);
     account.adjustAssets(spending, refundDue);
   }
 
@@ -218,7 +226,7 @@ export default class InstrumentBroker {
     const gaining = instrument.sellerGains;
 
     // noinspection UnnecessaryLocalVariableJS
-    const gainedAmount = actualUnits * actualUnitPrice;
+    const gainedAmount = actualUnits.mul(actualUnitPrice);
     account.adjustAssets(gaining, gainedAmount);
   }
 
@@ -227,8 +235,8 @@ export default class InstrumentBroker {
     const buy = pendingOrders.buy;
     const sell = pendingOrders.sell;
 
-    const a1 = sell.map(it => it.spendAmount).reduce((a, b) => a + b, 0);
-    const a2 = buy.map(it => it.spendAmount).reduce((a, b) => a + b, 0);
+    const a1 = sell.map(it => it.spendAmount).reduce((a, b) => a.plus(b), new Big("0"));
+    const a2 = buy.map(it => it.spendAmount).reduce((a, b) => a.plus(b), new Big("0"));
     return [a1, a2];
   }
 
@@ -246,7 +254,7 @@ export default class InstrumentBroker {
     this.#selfTradeGuard(order);
     InstrumentBroker.#updatePositionOnPlaceOrder(this.instrument, order);
     this.#makeTrades(order);
-    if (order.units > 0) {
+    if (order.units.gt(new Big("0"))) {
       this.#pushOrder(order);
     }
   }
@@ -285,7 +293,7 @@ export default class InstrumentBroker {
     const bestSell = this.#sells
       .underlying()
       .find(sell => buy.account.id === sell.account.id);
-    if (bestSell != null && buy.unitPrice >= bestSell.unitPrice) {
+    if (bestSell != null && buy.unitPrice.gte(bestSell.unitPrice)) {
       throw `Would cause self-trade. Buy order placed @ ${buy.unitPrice}, sell exists @ ${bestSell.unitPrice}`;
     }
   }
@@ -294,7 +302,7 @@ export default class InstrumentBroker {
     const bestBuy = this.#buys
       .underlying()
       .find(buy => buy.account.id === sell.account.id);
-    if (bestBuy != null && bestBuy.unitPrice >= sell.unitPrice) {
+    if (bestBuy != null && bestBuy.unitPrice.gte(sell.unitPrice)) {
       throw `Would cause self-trade. Sell order placed @ ${sell.unitPrice}, buy exists @ ${bestBuy.unitPrice}`;
     }
   }

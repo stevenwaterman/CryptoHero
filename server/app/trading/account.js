@@ -1,4 +1,5 @@
 import {ASSETS} from "./asset";
+import {Big} from "big.js";
 
 const uuidv4 = require("uuid/v4");
 
@@ -12,12 +13,12 @@ export default class Account {
 
   constructor() {
     Object.keys(ASSETS).forEach(asset => {
-      this.availableAssets[asset] = 0;
+      this.availableAssets[asset] = new Big("0");
     });
   }
 
   adjustAssets = (asset, addUnits) =>
-    (this.availableAssets[asset.name] += addUnits);
+    (this.availableAssets[asset.name] = this.availableAssets[asset.name].plus(addUnits));
 
   getAvailableAssets = asset => {
     return this.availableAssets[asset.name];

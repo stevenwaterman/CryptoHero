@@ -1,3 +1,5 @@
+import {Big} from "big.js";
+
 const uuidv4 = require("uuid/v4");
 
 /**
@@ -12,17 +14,17 @@ export default class Order {
 
     this.account = account;
     this.direction = direction;
-    this.units = units;
-    this.unitPrice = unitPrice;
+    this.units = new Big(units);
+    this.unitPrice = new Big(unitPrice);
 
     this.spendAmount =
       this.direction === TradeDirection.BUY
-        ? this.units * this.unitPrice
+        ? this.units.mul(this.unitPrice)
         : this.units;
     this.gainAmount =
       this.direction === TradeDirection.BUY
         ? this.units
-        : this.units * this.unitPrice;
+        : this.units.mul(this.unitPrice);
   }
 }
 

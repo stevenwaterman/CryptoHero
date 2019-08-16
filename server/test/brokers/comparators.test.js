@@ -1,6 +1,7 @@
 import Account from "../../app/trading/account";
 import {buyComparator, sellComparator} from "../../app/brokers/comparators";
 import Order, {TradeDirection} from "../../app/trading/order";
+import {Big} from "big.js";
 
 let acc1, acc2;
 
@@ -13,17 +14,17 @@ describe("buyComparator", () => {
   let order1, order2, order3, order4, order5;
 
   beforeEach(() => {
-    order1 = new Order(acc1, TradeDirection.BUY, 100, 1.14);
-    order2 = new Order(acc1, TradeDirection.BUY, 100, 1.2);
+    order1 = new Order(acc1, TradeDirection.BUY, new Big("100"), new Big("1.14"));
+    order2 = new Order(acc1, TradeDirection.BUY, new Big("100"), new Big("1.2"));
 
-    order3 = new Order(acc1, TradeDirection.BUY, 100, 1.14);
+    order3 = new Order(acc1, TradeDirection.BUY, new Big("100"), new Big("1.14"));
     order3.timestamp.setTime(order1.timestamp.getTime() + 1000);
 
-    order4 = new Order(acc1, TradeDirection.BUY, 200, 1.14);
+    order4 = new Order(acc1, TradeDirection.BUY, new Big("200"), new Big("1.14"));
     order4.timestamp.setTime(order1.timestamp.getTime());
     order4.id = order1.id;
 
-    order5 = new Order(acc1, TradeDirection.BUY, 200, 1.14);
+    order5 = new Order(acc1, TradeDirection.BUY, new Big("200"), new Big("1.14"));
     order5.timestamp.setTime(order1.timestamp.getTime());
   });
 
@@ -33,8 +34,6 @@ describe("buyComparator", () => {
   });
 
   test("same prices, lower timestamp comes first", () => {
-    console.log(order1);
-    console.log(order3);
     expect(buyComparator(order1, order3)).toBeLessThan(0);
     expect(buyComparator(order3, order1)).toBeGreaterThan(0);
   });
@@ -53,17 +52,17 @@ describe("sellComparator", () => {
   let order1, order2, order3, order4, order5;
 
   beforeEach(() => {
-    order1 = new Order(acc1, TradeDirection.SELL, 100, 1.14);
-    order2 = new Order(acc1, TradeDirection.SELL, 100, 1.2);
+    order1 = new Order(acc1, TradeDirection.SELL, new Big("100"), new Big("1.14"));
+    order2 = new Order(acc1, TradeDirection.SELL, new Big("100"), new Big("1.2"));
 
-    order3 = new Order(acc1, TradeDirection.SELL, 100, 1.14);
+    order3 = new Order(acc1, TradeDirection.SELL, new Big("100"), new Big("1.14"));
     order3.timestamp.setTime(order1.timestamp.getTime() + 1000);
 
-    order4 = new Order(acc1, TradeDirection.SELL, 200, 1.14);
+    order4 = new Order(acc1, TradeDirection.SELL, new Big("200"), new Big("1.14"));
     order4.timestamp.setTime(order1.timestamp.getTime());
     order4.id = order1.id;
 
-    order5 = new Order(acc1, TradeDirection.SELL, 200, 1.14);
+    order5 = new Order(acc1, TradeDirection.SELL, new Big("200"), new Big("1.14"));
     order5.timestamp.setTime(order1.timestamp.getTime());
   });
 

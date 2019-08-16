@@ -4,8 +4,8 @@
  * Then return 0 iff account ids are the same
  */
 export const buyComparator = (a, b) => {
-  if (a.unitPrice > b.unitPrice) return -1;
-  if (a.unitPrice < b.unitPrice) return 1;
+  const compPrice = b.unitPrice.cmp(a.unitPrice);
+  if (compPrice !== 0) return compPrice;
   if (a.timestamp.getTime() < b.timestamp.getTime()) return -1;
   if (a.timestamp.getTime() > b.timestamp.getTime()) return 1;
   return a.id.localeCompare(b.id);
@@ -16,8 +16,8 @@ export const buyComparator = (a, b) => {
  * Then return 0 iff account ids are the same
  */
 export const sellComparator = (a, b) => {
-  if (a.unitPrice < b.unitPrice) return -1;
-  if (a.unitPrice > b.unitPrice) return 1;
+  const compPrice = a.unitPrice.cmp(b.unitPrice);
+  if (compPrice !== 0) return compPrice;
   if (a.timestamp.getTime() < b.timestamp.getTime()) return -1;
   if (a.timestamp.getTime() > b.timestamp.getTime()) return 1;
   return a.id.localeCompare(b.id);
