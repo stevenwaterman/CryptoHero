@@ -8,6 +8,7 @@ import TradeDirection from "../../app/trading/tradeDirection";
 import {ExpectedOrder, ExpectedPending, ExpectedTrade} from "./expected";
 import PendingOrders from "../../app/brokers/pendingOrders";
 import PriceAggregate, {PriceAggregateElement} from "../../app/brokers/priceAggregate";
+import {Map} from "immutable";
 
 describe("constructor", () => {
     test("constructor does not throw an exception", () => {
@@ -193,5 +194,31 @@ describe("Aggregate Prices", () => {
         const actual = broker.getAggregatePrices();
         expect(actual.get(Instrument.GBPBTC)).toEqual(expected);
         expect(actual.get(Instrument.GBPLTC)).toEqual(expected);
+    });
+});
+
+describe("Market Prices", () => {
+    test("No trades", () => {
+        const expected = Map().withMutations(map => {
+            map.set(Instrument.GBPBTC, new Big("0"));
+            map.set(Instrument.GBPLTC, new Big("0"));
+        });
+
+        expect(broker.getMarketPrices()).toEqual(expected);
+    });
+
+    test("With trades", () => {
+        placeBuy(Instrument.GBPBTC, acc1, new Big("1"), new Big("1"));
+        placeSell(Instrument.GBPBTC, acc2, new Big("1"), new Big("1"));
+
+        placeBuy(Instrument.GBPLTC, acc1, new Big("2"), new Big("2"));
+        placeSell(Instrument.GBPLTC, acc2, new Big("2"), new Big("2"));
+
+        const expected = Map().withMutations(map => {
+            map.set(Instrument.GBPBTC, new Big("1"));
+            map.set(Instrument.GBPLTC, new Big("2"));
+        });
+
+        expect(broker.getMarketPrices()).toEqual(expected);
     });
 });

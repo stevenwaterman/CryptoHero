@@ -349,6 +349,11 @@ export default class InstrumentBroker {
         return new PriceAggregate(aggregateBuys, aggregateSells)
     }
 
+    getMarketPrice(): Big {
+        if (this.trades.length === 0) return Big("0");
+        return this.trades[this.trades.length - 1].unitPrice;
+    }
+
     private aggregateOrders(orders: Array<Order>): Array<PriceAggregateElement> {
         const reducer = (acc: Array<PriceAggregateElement>, order: Order) => {
             if (acc.length === 0) {
@@ -357,7 +362,7 @@ export default class InstrumentBroker {
             }
 
             const last = acc[acc.length - 1];
-            if (order.unitPrice === last.unitPrice) {
+            if (order.unitPrice.eq(last.unitPrice)) {
                 last.units = last.units.plus(order.units);
                 return acc;
             } else {

@@ -7,7 +7,7 @@ export function setupTradesEndpoints(server: BitcoinExchangeServer): void {
     const app = server.app;
     const broker = server.broker;
 
-    app.post("/trades/list", withBroker(broker, listTrades));
+    app.get("/api/trades/list", withBroker(broker, listTrades));
 }
 
 function listTrades(broker: Broker, req: Request, res: Response): void {

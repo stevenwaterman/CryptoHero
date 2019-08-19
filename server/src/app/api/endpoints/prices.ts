@@ -7,9 +7,14 @@ export function setupPriceEndpoints(server: BitcoinExchangeServer): void {
     const app = server.app;
     const broker = server.broker;
 
-    app.get("/prices", withBroker(broker, aggregatePrices));
+    app.get("/api/prices/aggregate", withBroker(broker, aggregatePrices));
+    app.get("/api/prices/market", withBroker(broker, marketPrices))
 }
 
 function aggregatePrices(broker: Broker, req: Request, res: Response): void {
+    //TODO
+}
+
+function marketPrices(broker: Broker, req: Request, res: Response): void {
     //TODO
 }

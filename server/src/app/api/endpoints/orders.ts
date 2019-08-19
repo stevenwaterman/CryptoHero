@@ -7,10 +7,10 @@ export function setupOrdersEndpoints(server: BitcoinExchangeServer): void {
     const app = server.app;
     const broker = server.broker;
 
-    app.post("/orders/place", withBroker(broker, placeOrder));
-    app.post("/orders/cancel", withBroker(broker, cancelOrder));
+    app.post("/api/orders/place", withBroker(broker, placeOrder));
+    app.post("/api/orders/cancel", withBroker(broker, cancelOrder));
 
-    app.get("/orders/pending", withBroker(broker, pendingOrders));
+    app.get("/api/orders/pending", withBroker(broker, pendingOrders));
 }
 
 function placeOrder(broker: Broker, req: Request, res: Response): void {

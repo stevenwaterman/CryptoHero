@@ -525,7 +525,7 @@ describe("Price aggregate", () => {
     });
 
     test("Simple Sell", () => {
-        placeBuy(acc1, new Big("1"), new Big("1"));
+        placeSell(acc1, new Big("1"), new Big("1"));
         const expected = new PriceAggregate([], [new PriceAggregateElement(new Big("1"), new Big("1"))]);
         expect(iBroker.getAggregatePrices()).toEqual(expected);
     });
@@ -563,7 +563,7 @@ describe("Price aggregate", () => {
         placeSell(acc1, new Big("1"), new Big("1"));
         placeSell(acc1, new Big("2"), new Big("1"));
         const expected = new PriceAggregate([], [
-            new PriceAggregateElement(new Big("3"), new Big("1"))
+            new PriceAggregateElement(new Big("1"), new Big("3"))
         ]);
         expect(iBroker.getAggregatePrices()).toEqual(expected);
     });
@@ -586,5 +586,27 @@ describe("Price aggregate", () => {
             []
         );
         expect(iBroker.getAggregatePrices()).toEqual(expected);
+    })
+});
+
+describe("Market prices", () => {
+    test("After 0 trades", () => {
+        expect(iBroker.getMarketPrice()).toEqual(new Big("0"));
+        placeBuy(acc1, new Big("1"), new Big("2"));
+        expect(iBroker.getMarketPrice()).toEqual(new Big("0"));
+    });
+
+    test("After 1 trade", () => {
+        placeBuy(acc1, new Big("2"), new Big("2"));
+        placeSell(acc2, new Big("3"), new Big("1"));
+        expect(iBroker.getMarketPrice()).toEqual(new Big("2"));
+    });
+
+    test("After 2 trades", () => {
+        placeBuy(acc1, new Big("1"), new Big("3"));
+        placeSell(acc2, new Big("1"), new Big("3"));
+        placeBuy(acc1, new Big("1"), new Big("5"));
+        placeSell(acc2, new Big("1"), new Big("5"));
+        expect(iBroker.getMarketPrice()).toEqual(new Big("5"));
     })
 });

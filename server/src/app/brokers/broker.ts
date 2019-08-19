@@ -36,6 +36,12 @@ export default class Broker {
         return this.instrumentBrokers.mapToMap(keyFunc, valFunc);
     }
 
+    getMarketPrices(): Map<Instrument, Big> {
+        const keyFunc = (i: Instrument) => i;
+        const valFunc = (_: any, iBroker: InstrumentBroker) => iBroker.getMarketPrice();
+        return this.instrumentBrokers.mapToMap(keyFunc, valFunc);
+    }
+
     /**
      * Return a list of the assets that are locked due to a pending order for a given account
      */

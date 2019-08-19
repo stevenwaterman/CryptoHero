@@ -6,10 +6,10 @@ import {withBroker} from "../util/withBroker";
 export function setupAccountsEndpoints(server: BitcoinExchangeServer): void {
     const app = server.app;
     const broker = server.broker;
-    app.get("/account/assets/available", withBroker(broker, getAvailableAssets));
-    app.get("/account/assets/total", withBroker(broker, getTotalAssets));
-    app.post("/account/assets/deposit", withBroker(broker, depositAssets));
-    app.post("/account/assets/withdraw", withBroker(broker, withdrawAssets));
+    app.get("/api/account/assets/available", withBroker(broker, getAvailableAssets));
+    app.get("/api/account/assets/total", withBroker(broker, getTotalAssets));
+    app.post("/api/account/assets/deposit", withBroker(broker, depositAssets));
+    app.post("/api/account/assets/withdraw", withBroker(broker, withdrawAssets));
 }
 
 function getAvailableAssets(broker: Broker, req: Request, res: Response): void {
