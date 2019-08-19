@@ -118,14 +118,6 @@ describe("matching orders", () => {
         expect(iBroker.getTrades(acc1)).toMatchObject([trade2]);
     });
 
-    test("Invalid Direction", () => {
-        const direction = "THIS IS INVALID";
-        const order = new Order(acc1, direction, new Big("1"), new Big("1"));
-        expect(() => {
-            iBroker.place(order);
-        }).toThrow();
-    });
-
     test("No trades by default", () => {
         expectNoTrades(acc1);
     });

@@ -2,6 +2,7 @@ import {Request, Response} from "express";
 import BitcoinExchangeServer from "../bitcoinExchangeServer";
 import Broker from "../../brokers/broker";
 import {withBroker} from "../util/withBroker";
+import Instrument from "../../trading/instrument";
 
 export function setupAccountsEndpoints(server: BitcoinExchangeServer): void {
     const app = server.app;
@@ -10,5 +11,8 @@ export function setupAccountsEndpoints(server: BitcoinExchangeServer): void {
 }
 
 function listInstruments(broker: Broker, req: Request, res: Response): void {
-    //TODO
+    const names = Instrument.NAMES;
+
+    res.status(200);
+    res.json(names);
 }

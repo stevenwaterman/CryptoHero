@@ -1,58 +1,49 @@
 import Instrument from "../trading/instrument";
 import InstrumentBroker from "./instrumentBroker";
 import {Big} from "big.js";
-import {Map} from "immutable";
 import Asset from "../trading/asset";
 import Account from "../trading/account";
 import Order from "../trading/order";
 import PendingOrders from "./pendingOrders";
 import Trade from "../trading/trade";
-import "../util/immutable";
+import * as Immutable from "immutable";
 import PriceAggregate from "./priceAggregate";
 
 export default class Broker {
-    private readonly instrumentBrokers: Map<Instrument, InstrumentBroker> = Map(
+    private readonly instrumentBrokers: Immutable.Map<Instrument, InstrumentBroker> = Immutable.Map(
         Instrument.ALL.map(inst => [inst, new InstrumentBroker(inst)])
     );
 
     constructor() {
     }
 
-    getTrades(account: Account): Map<Instrument, Array<Trade>> {
-        const keyFunc = (i: Instrument) => i;
-        const valFunc = (_: any, iBroker: InstrumentBroker) => iBroker.getTrades(account);
-        return this.instrumentBrokers.mapToMap(keyFunc, valFunc);
+    getTrades(account: Account): Immutable.Map<Instrument, Array<Trade>> {
+        return this.instrumentBrokers.map((iBroker) => iBroker.getTrades(account));
     }
 
-    getPendingOrders(account: Account): Map<Instrument, PendingOrders> {
-        const keyFunc = (i: Instrument) => i;
-        const valFunc = (_: any, iBroker: InstrumentBroker) => iBroker.getPendingOrders(account);
-        return this.instrumentBrokers.mapToMap(keyFunc, valFunc);
+    getPendingOrders(account: Account): Immutable.Map<Instrument, PendingOrders> {
+        return this.instrumentBrokers.map((iBroker) => iBroker.getPendingOrders(account));
     }
 
-    getAggregatePrices(): Map<Instrument, PriceAggregate> {
-        const keyFunc = (i: Instrument) => i;
-        const valFunc = (_: any, iBroker: InstrumentBroker) => iBroker.getAggregatePrices();
-        return this.instrumentBrokers.mapToMap(keyFunc, valFunc);
+    getAggregatePrices(): Immutable.Map<Instrument, PriceAggregate> {
+        return this.instrumentBrokers.map((iBroker) => iBroker.getAggregatePrices());
     }
 
-    getMarketPrices(): Map<Instrument, Big> {
-        const keyFunc = (i: Instrument) => i;
-        const valFunc = (_: any, iBroker: InstrumentBroker) => iBroker.getMarketPrice();
-        return this.instrumentBrokers.mapToMap(keyFunc, valFunc);
+    getMarketPrices(): Immutable.Map<Instrument, Big> {
+        return this.instrumentBrokers.map((iBroker) => iBroker.getMarketPrice());
     }
 
     /**
      * Return a list of the assets that are locked due to a pending order for a given account
      */
-    getLockedAssets(account: Account): Map<Asset, Big> {
-        const addBig = (map: Map<Asset, Big>, asset: Asset, toAdd: Big) => {
+    getLockedAssets(account: Account): Immutable.Map<Asset, Big> {
+        const addBig = (map: Immutable.Map<Asset, Big>, asset: Asset, toAdd: Big) => {
             const current: Big | undefined = map.get(asset);
             const total = (current == null) ? toAdd : toAdd.plus(current);
             map.set(asset, total);
         };
 
-        return Map<Asset, Big>().withMutations((map: Map<Asset, Big>) => {
+        return Immutable.Map<Asset, Big>().withMutations((map: Immutable.Map<Asset, Big>) => {
             this.instrumentBrokers.forEach((broker, instrument) => {
                 const iLockedAssets = broker.getLockedAssets(account);
                 addBig(map, instrument.toAsset, iLockedAssets[0]);
@@ -75,7 +66,7 @@ export default class Broker {
         iBroker.cancel(order);
     }
 
-    private getIBroker(instrument: Instrument): InstrumentBroker {
+    getIBroker(instrument: Instrument): InstrumentBroker {
         const iBroker = this.instrumentBrokers.get(instrument);
         if (iBroker == null) {
             throw "Broker does not exist for instrument. This should never happen";

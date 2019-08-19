@@ -1,19 +1,21 @@
 import {Big} from "big.js";
 import uuidv4 from "uuid/v4";
 import Asset from "./asset";
-import {Map} from "immutable";
+import * as Immutable from "immutable";
+import {REGISTRY} from "../registry";
 
 export default class Account {
-    id = uuidv4();
+    id: string = uuidv4();
 
     /**
      * The amount left to place on new orders
      */
-    private readonly availableAssets = Map(
+    private readonly availableAssets: Map<Asset, Big> = new Map<Asset, Big>(
         Asset.ALL.map((asset: Asset) => [asset, Big("0")])
-    ).asMutable();
+    );
 
     constructor() {
+        REGISTRY.registerAccount(this);
     }
 
     adjustAssets(asset: Asset, addUnits: Big): void {
@@ -21,6 +23,14 @@ export default class Account {
             asset,
             this.getAvailableAssets(asset).plus(addUnits)
         );
+    }
+
+    getAllAvailableAssets(): Immutable.Map<Asset, Big> {
+        return Immutable.Map<Asset, Big>().withMutations(map => {
+            this.availableAssets.forEach((amount, asset) => {
+                map.set(asset, amount);
+            })
+        });
     }
 
     getAvailableAssets(asset: Asset): Big {

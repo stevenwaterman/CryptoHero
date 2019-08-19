@@ -2,6 +2,7 @@ import {Big} from "big.js";
 import TradeDirection from "./tradeDirection";
 import uuidv4 from "uuid/v4";
 import Account from "./account";
+import {REGISTRY} from "../registry";
 
 /**
  * Stores information about an order that should be placed on the exchange
@@ -38,5 +39,7 @@ export default class Order {
             this.direction === TradeDirection.BUY
                 ? this.units
                 : this.units.mul(this.unitPrice);
+
+        REGISTRY.registerOrder(this);
     }
 }

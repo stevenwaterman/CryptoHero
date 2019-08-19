@@ -1,6 +1,7 @@
 import uuidv4 from "uuid/v4";
 import Big from "big.js";
 import Account from "./account";
+import {REGISTRY} from "../registry";
 
 /**
  * Stores information about a trade that has been mde in the exchange
@@ -21,5 +22,7 @@ export default class Trade {
         this.seller = seller;
         this.units = units;
         this.unitPrice = unitPrice;
+
+        REGISTRY.registerTrade(this);
     }
 }
