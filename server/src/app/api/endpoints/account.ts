@@ -3,13 +3,32 @@ import BitcoinExchangeServer from "../bitcoinExchangeServer";
 import Broker from "../../brokers/broker";
 import {withBroker} from "../util/withBroker";
 
+function assetGetAvailable(broker: Broker, req: Request, res: Response): void {
+    //TODO
+}
+
+function assetGetTotal(broker: Broker, req: Request, res: Response): void {
+    //TODO
+}
+
+function assetDeposit(broker: Broker, req: Request, res: Response): void {
+    //TODO
+}
+
+function assetWithdraw(broker: Broker, req: Request, res: Response): void {
+    //TODO
+}
+
 export function setupAccountsEndpoints(server: BitcoinExchangeServer): void {
     const app = server.app;
     const broker = server.broker;
     app.get("/api/account/assets/available", withBroker(broker, getAvailableAssets));
     app.get("/api/account/assets/total", withBroker(broker, getTotalAssets));
-    app.post("/api/account/assets/deposit", withBroker(broker, depositAssets));
-    app.post("/api/account/assets/withdraw", withBroker(broker, withdrawAssets));
+
+    app.get("/api/account/assets/:asset/available", withBroker(broker, assetGetAvailable));
+    app.get("/api/account/assets/:asset/total", withBroker(broker, assetGetTotal));
+    app.post("/api/account/assets/:asset/deposit", withBroker(broker, assetDeposit));
+    app.post("/api/account/assets/:asset/withdraw", withBroker(broker, assetWithdraw));
 }
 
 function getAvailableAssets(broker: Broker, req: Request, res: Response): void {

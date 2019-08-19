@@ -6,9 +6,9 @@ import {withBroker} from "../util/withBroker";
 export function setupAccountsEndpoints(server: BitcoinExchangeServer): void {
     const app = server.app;
     const broker = server.broker;
-    app.get("/api/instruments/list", withBroker(broker, getAvailableAssets));
+    app.get("/api/instruments/list", withBroker(broker, listInstruments));
 }
 
-function getAvailableAssets(broker: Broker, req: Request, res: Response): void {
+function listInstruments(broker: Broker, req: Request, res: Response): void {
     //TODO
 }

@@ -12,6 +12,7 @@ export default class BitcoinExchangeServer {
 
     constructor() {
         this.app.use(cors());
+        this.app.use(express.json());
 
         setupOrdersEndpoints(this);
         setupAccountsEndpoints(this);
