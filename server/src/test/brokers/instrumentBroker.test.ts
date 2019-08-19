@@ -6,6 +6,7 @@ import Instrument from "../../app/trading/instrument";
 import TradeDirection from "../../app/trading/tradeDirection";
 import Asset from "../../app/trading/asset";
 import {ExpectedOrder, ExpectedPending, ExpectedTrade} from "./expected";
+import PriceAggregate, {PriceAggregateElement} from "../../app/brokers/priceAggregate";
 
 let acc1: Account, acc2: Account, acc3: Account, acc4: Account;
 let iBroker: InstrumentBroker;
@@ -514,4 +515,76 @@ describe("Self-Trade prevention", () => {
             iBroker.place(buy);
         }).toThrow();
     });
+});
+
+describe("Price aggregate", () => {
+    test("Simple Buy", () => {
+        placeBuy(acc1, new Big("1"), new Big("1"));
+        const expected = new PriceAggregate([new PriceAggregateElement(new Big("1"), new Big("1"))], []);
+        expect(iBroker.getAggregatePrices()).toEqual(expected);
+    });
+
+    test("Simple Sell", () => {
+        placeBuy(acc1, new Big("1"), new Big("1"));
+        const expected = new PriceAggregate([], [new PriceAggregateElement(new Big("1"), new Big("1"))]);
+        expect(iBroker.getAggregatePrices()).toEqual(expected);
+    });
+
+    test("Two buys at different prices", () => {
+        placeBuy(acc1, new Big("1"), new Big("1"));
+        placeBuy(acc1, new Big("2"), new Big("3"));
+        const expected = new PriceAggregate([
+            new PriceAggregateElement(new Big("3"), new Big("2")),
+            new PriceAggregateElement(new Big("1"), new Big("1"))
+        ], []);
+        expect(iBroker.getAggregatePrices()).toEqual(expected);
+    });
+
+    test("Two buys at same price", () => {
+        placeBuy(acc1, new Big("1"), new Big("1"));
+        placeBuy(acc1, new Big("2"), new Big("1"));
+        const expected = new PriceAggregate([
+            new PriceAggregateElement(new Big("1"), new Big("3"))
+        ], []);
+        expect(iBroker.getAggregatePrices()).toEqual(expected);
+    });
+
+    test("Two Sells at different prices", () => {
+        placeSell(acc1, new Big("1"), new Big("1"));
+        placeSell(acc1, new Big("2"), new Big("3"));
+        const expected = new PriceAggregate([], [
+            new PriceAggregateElement(new Big("1"), new Big("1")),
+            new PriceAggregateElement(new Big("3"), new Big("2"))
+        ]);
+        expect(iBroker.getAggregatePrices()).toEqual(expected);
+    });
+
+    test("Two Sells at same price", () => {
+        placeSell(acc1, new Big("1"), new Big("1"));
+        placeSell(acc1, new Big("2"), new Big("1"));
+        const expected = new PriceAggregate([], [
+            new PriceAggregateElement(new Big("3"), new Big("1"))
+        ]);
+        expect(iBroker.getAggregatePrices()).toEqual(expected);
+    });
+
+    test("One buy one sell (not overlapping)", () => {
+        placeBuy(acc1, new Big("1"), new Big("1"));
+        placeSell(acc2, new Big("1"), new Big("2"));
+        const expected = new PriceAggregate(
+            [new PriceAggregateElement(new Big("1"), new Big("1"))],
+            [new PriceAggregateElement(new Big("2"), new Big("1"))]
+        );
+        expect(iBroker.getAggregatePrices()).toEqual(expected);
+    });
+
+    test("Overlapping", () => {
+        placeBuy(acc1, new Big("2"), new Big("2"));
+        placeSell(acc2, new Big("1"), new Big("1"));
+        const expected = new PriceAggregate(
+            [new PriceAggregateElement(new Big("2"), new Big("1"))],
+            []
+        );
+        expect(iBroker.getAggregatePrices()).toEqual(expected);
+    })
 });

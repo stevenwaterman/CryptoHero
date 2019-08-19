@@ -8,6 +8,7 @@ import TradeDirection from "../trading/tradeDirection";
 import Account from "../trading/account";
 import Asset from "../trading/asset";
 import PendingOrders from "./pendingOrders";
+import PriceAggregate, {PriceAggregateElement} from "./priceAggregate";
 
 /**
  * The matcher accepts orders and matches them to create trades
@@ -340,5 +341,31 @@ export default class InstrumentBroker {
         if (bestBuy != null && bestBuy.unitPrice.gte(sell.unitPrice)) {
             throw `Would cause self-trade. Sell order placed @ ${sell.unitPrice}, buy exists @ ${bestBuy.unitPrice}`;
         }
+    }
+
+    getAggregatePrices(): PriceAggregate {
+        const aggregateBuys: Array<PriceAggregateElement> = this.aggregateOrders(this.buys.underlying());
+        const aggregateSells: Array<PriceAggregateElement> = this.aggregateOrders(this.sells.underlying());
+        return new PriceAggregate(aggregateBuys, aggregateSells)
+    }
+
+    private aggregateOrders(orders: Array<Order>): Array<PriceAggregateElement> {
+        const reducer = (acc: Array<PriceAggregateElement>, order: Order) => {
+            if (acc.length === 0) {
+                acc.push(new PriceAggregateElement(order.unitPrice, order.units));
+                return acc;
+            }
+
+            const last = acc[acc.length - 1];
+            if (order.unitPrice === last.unitPrice) {
+                last.units = last.units.plus(order.units);
+                return acc;
+            } else {
+                acc.push(new PriceAggregateElement(order.unitPrice, order.units));
+                return acc;
+            }
+        };
+
+        return orders.reduce(reducer, []);
     }
 }

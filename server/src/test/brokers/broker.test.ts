@@ -7,6 +7,7 @@ import {Big} from "big.js";
 import TradeDirection from "../../app/trading/tradeDirection";
 import {ExpectedOrder, ExpectedPending, ExpectedTrade} from "./expected";
 import PendingOrders from "../../app/brokers/pendingOrders";
+import PriceAggregate, {PriceAggregateElement} from "../../app/brokers/priceAggregate";
 
 describe("constructor", () => {
     test("constructor does not throw an exception", () => {
@@ -172,5 +173,25 @@ describe("cancelling order", () => {
 
         expect(pending.get(Instrument.GBPBTC)).toMatchObject(new ExpectedPending([], []));
         expect(pending.get(Instrument.GBPLTC)).toMatchObject(new ExpectedPending([o2], []));
+    });
+});
+
+describe("Aggregate Prices", () => {
+    test("Simple test", () => {
+        placeBuy(Instrument.GBPBTC, acc1, new Big("1"), new Big("1"));
+        const expectedBTC = new PriceAggregate([new PriceAggregateElement(new Big("1"), new Big("1"))], []);
+        const expectedLTC = new PriceAggregate([], []);
+        const actual = broker.getAggregatePrices();
+        expect(actual.get(Instrument.GBPBTC)).toEqual(expectedBTC);
+        expect(actual.get(Instrument.GBPLTC)).toEqual(expectedLTC);
+    });
+
+    test("Two instruments", () => {
+        placeBuy(Instrument.GBPBTC, acc1, new Big("1"), new Big("1"));
+        placeBuy(Instrument.GBPLTC, acc1, new Big("1"), new Big("1"));
+        const expected = new PriceAggregate([new PriceAggregateElement(new Big("1"), new Big("1"))], []);
+        const actual = broker.getAggregatePrices();
+        expect(actual.get(Instrument.GBPBTC)).toEqual(expected);
+        expect(actual.get(Instrument.GBPLTC)).toEqual(expected);
     });
 });

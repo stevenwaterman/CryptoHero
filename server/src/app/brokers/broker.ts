@@ -8,6 +8,7 @@ import Order from "../trading/order";
 import PendingOrders from "./pendingOrders";
 import Trade from "../trading/trade";
 import "../util/immutable";
+import PriceAggregate from "./priceAggregate";
 
 export default class Broker {
     private readonly instrumentBrokers: Map<Instrument, InstrumentBroker> = Map(
@@ -26,6 +27,12 @@ export default class Broker {
     getPendingOrders(account: Account): Map<Instrument, PendingOrders> {
         const keyFunc = (i: Instrument) => i;
         const valFunc = (_: any, iBroker: InstrumentBroker) => iBroker.getPendingOrders(account);
+        return this.instrumentBrokers.mapToMap(keyFunc, valFunc);
+    }
+
+    getAggregatePrices(): Map<Instrument, PriceAggregate> {
+        const keyFunc = (i: Instrument) => i;
+        const valFunc = (_: any, iBroker: InstrumentBroker) => iBroker.getAggregatePrices();
         return this.instrumentBrokers.mapToMap(keyFunc, valFunc);
     }
 
