@@ -373,4 +373,10 @@ export default class InstrumentBroker {
 
         return orders.reduce(reducer, []);
     }
+
+    clear(): void {
+        this.buys.underlying().length = 0;
+        this.sells.underlying().length = 0;
+        this.trades.length = 0;
+    }
 }

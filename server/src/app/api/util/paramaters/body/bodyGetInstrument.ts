@@ -1,8 +1,8 @@
 import {Request, Response} from "express";
-import Broker from "../../brokers/broker";
-import Instrument from "../../trading/instrument";
+import Broker from "../../../../brokers/broker";
+import Instrument from "../../../../trading/instrument";
 
-export function getInstrument(broker: Broker, req: Request, res: Response): Instrument | null {
+export function bodyGetInstrument(broker: Broker, req: Request, res: Response): Instrument | null {
     const instrumentString: string | undefined = req.body["intrument"];
 
     if (instrumentString == null) {

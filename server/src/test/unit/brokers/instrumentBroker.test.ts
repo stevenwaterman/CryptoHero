@@ -1,12 +1,12 @@
-import InstrumentBroker from "../../app/brokers/instrumentBroker";
-import Order from "../../app/trading/order";
-import Account from "../../app/trading/account";
+import InstrumentBroker from "../../../app/brokers/instrumentBroker";
+import Order from "../../../app/trading/order";
+import Account from "../../../app/trading/account";
 import {Big} from "big.js";
-import Instrument from "../../app/trading/instrument";
-import TradeDirection from "../../app/trading/tradeDirection";
-import Asset from "../../app/trading/asset";
+import Instrument from "../../../app/trading/instrument";
+import TradeDirection from "../../../app/trading/tradeDirection";
+import Asset from "../../../app/trading/asset";
 import {ExpectedOrder, ExpectedPending, ExpectedTrade} from "./expected";
-import PriceAggregate, {PriceAggregateElement} from "../../app/brokers/priceAggregate";
+import PriceAggregate, {PriceAggregateElement} from "../../../app/brokers/priceAggregate";
 
 let acc1: Account, acc2: Account, acc3: Account, acc4: Account;
 let iBroker: InstrumentBroker;

@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 import BitcoinExchangeServer from "../bitcoinExchangeServer";
 import Broker from "../../brokers/broker";
 import {withBroker} from "../util/withBroker";
-import {getInstrument} from "../util/getInstrument";
+import {bodyGetInstrument} from "../util/paramaters/body/bodyGetInstrument";
 import PriceAggregate from "../../brokers/priceAggregate";
 
 export function setupPriceEndpoints(server: BitcoinExchangeServer): void {
@@ -24,7 +24,7 @@ function aggregatePrices(broker: Broker, req: Request, res: Response): void {
 }
 
 function instrumentAggregatePrice(broker: Broker, req: Request, res: Response): void {
-    const instrument = getInstrument(broker, req, res);
+    const instrument = bodyGetInstrument(broker, req, res);
     if (instrument == null) return;
 
     const iBroker = broker.getIBroker(instrument);
@@ -42,7 +42,7 @@ function marketPrices(broker: Broker, req: Request, res: Response): void {
 }
 
 function instrumentMarketPrice(broker: Broker, req: Request, res: Response): void {
-    const instrument = getInstrument(broker, req, res);
+    const instrument = bodyGetInstrument(broker, req, res);
     if (instrument == null) return;
 
     const iBroker = broker.getIBroker(instrument);

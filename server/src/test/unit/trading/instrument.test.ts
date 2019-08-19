@@ -1,5 +1,5 @@
-import Asset from "../../app/trading/asset";
-import Instrument from "../../app/trading/instrument";
+import Asset from "../../../app/trading/asset";
+import Instrument from "../../../app/trading/instrument";
 
 describe("name", () => {
     test("simple test", () => {

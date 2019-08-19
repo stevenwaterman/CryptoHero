@@ -1,4 +1,4 @@
-import SortedList from "../../app/brokers/sortedList";
+import SortedList from "../../../app/brokers/sortedList";
 
 const numberComparator = (a: number, b: number) => a - b;
 

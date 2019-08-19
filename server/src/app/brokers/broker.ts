@@ -52,6 +52,10 @@ export default class Broker {
         });
     }
 
+    clear(): void {
+        this.instrumentBrokers.valueSeq().forEach((iBroker) => iBroker.clear())
+    }
+
     /**
      * If you buy 100 units of the instrument GBPBTC at a unit price of 1.1, you will spend 110 BTC to get 100 GBP.
      * If you sell 100 units of the instrument GBPBTC at a unit price of 1.1, you will spend 100GBP to get 110BTC.

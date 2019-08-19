@@ -1,8 +1,8 @@
-import Broker from "../../brokers/broker";
+import Broker from "../../../../brokers/broker";
 import {Request, Response} from "express";
-import Asset from "../../trading/asset";
+import Asset from "../../../../trading/asset";
 
-export function getAssetParam(broker: Broker, req: Request, res: Response): Asset | null {
+export function urlGetAsset(broker: Broker, req: Request, res: Response): Asset | null {
     const assetString: string | undefined = req.params["asset"];
     if (assetString == null) {
         res.status(400);

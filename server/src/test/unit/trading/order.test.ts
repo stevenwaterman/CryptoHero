@@ -1,7 +1,7 @@
-import Order from "../../app/trading/order";
-import Account from "../../app/trading/account";
+import Order from "../../../app/trading/order";
+import Account from "../../../app/trading/account";
 import {Big} from "big.js";
-import TradeDirection from "../../app/trading/tradeDirection";
+import TradeDirection from "../../../app/trading/tradeDirection";
 
 let account: Account;
 let buy1: Order;

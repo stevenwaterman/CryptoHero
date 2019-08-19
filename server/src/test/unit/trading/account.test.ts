@@ -1,5 +1,5 @@
-import Account from "../../app/trading/account";
-import Asset from "../../app/trading/asset";
+import Account from "../../../app/trading/account";
+import Asset from "../../../app/trading/asset";
 import {Big} from "big.js";
 
 describe("construct", () => {

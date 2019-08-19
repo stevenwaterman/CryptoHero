@@ -1,13 +1,13 @@
-import Broker from "../../app/brokers/broker";
-import Account from "../../app/trading/account";
-import Instrument from "../../app/trading/instrument";
-import Order from "../../app/trading/order";
-import Asset from "../../app/trading/asset";
+import Broker from "../../../app/brokers/broker";
+import Account from "../../../app/trading/account";
+import Instrument from "../../../app/trading/instrument";
+import Order from "../../../app/trading/order";
+import Asset from "../../../app/trading/asset";
 import {Big} from "big.js";
-import TradeDirection from "../../app/trading/tradeDirection";
+import TradeDirection from "../../../app/trading/tradeDirection";
 import {ExpectedOrder, ExpectedPending, ExpectedTrade} from "./expected";
-import PendingOrders from "../../app/brokers/pendingOrders";
-import PriceAggregate, {PriceAggregateElement} from "../../app/brokers/priceAggregate";
+import PendingOrders from "../../../app/brokers/pendingOrders";
+import PriceAggregate, {PriceAggregateElement} from "../../../app/brokers/priceAggregate";
 import {Map} from "immutable";
 
 describe("constructor", () => {

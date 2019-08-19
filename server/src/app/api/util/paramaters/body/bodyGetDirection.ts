@@ -1,8 +1,8 @@
 import {Request, Response} from "express";
-import Broker from "../../brokers/broker";
-import TradeDirection from "../../trading/tradeDirection";
+import Broker from "../../../../brokers/broker";
+import TradeDirection from "../../../../trading/tradeDirection";
 
-export function getTradeDirection(broker: Broker, req: Request, res: Response): TradeDirection | null {
+export function bodyGetDirection(broker: Broker, req: Request, res: Response): TradeDirection | null {
     const directionString: string | undefined = req.body["direction"];
 
     if (directionString == null) {

@@ -1,6 +1,6 @@
-import Trade from "../../app/trading/trade";
+import Trade from "../../../app/trading/trade";
 import {Big} from "big.js";
-import Account from "../../app/trading/account";
+import Account from "../../../app/trading/account";
 
 describe("constructor", () => {
     let acc1: Account;

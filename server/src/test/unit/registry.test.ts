@@ -1,8 +1,8 @@
-import Account from "../app/trading/account";
-import {REGISTRY} from "../app/registry";
-import Order from "../app/trading/order";
-import TradeDirection from "../app/trading/tradeDirection";
-import Trade from "../app/trading/trade";
+import Account from "../../app/trading/account";
+import {REGISTRY} from "../../app/registry";
+import Order from "../../app/trading/order";
+import TradeDirection from "../../app/trading/tradeDirection";
+import Trade from "../../app/trading/trade";
 import Big from "big.js";
 
 beforeEach(() => {

@@ -1,8 +1,8 @@
 import {Request, Response} from "express";
-import Broker from "../../brokers/broker";
+import Broker from "../../../../brokers/broker";
 import Big from "big.js";
 
-export function getUnitPrice(broker: Broker, req: Request, res: Response): Big | null {
+export function bodyGetUnitPrice(broker: Broker, req: Request, res: Response): Big | null {
     const priceString: string | undefined = req.body["unit price"];
 
     if (priceString == null) {

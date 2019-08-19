@@ -1,9 +1,9 @@
-import Broker from "../../brokers/broker";
+import Broker from "../../../../brokers/broker";
 import {Request, Response} from "express";
-import Trade from "../../trading/trade";
-import {REGISTRY} from "../../registry";
+import Trade from "../../../../trading/trade";
+import {REGISTRY} from "../../../../registry";
 
-export function getTradeParam(broker: Broker, req: Request, res: Response): Trade | null {
+export function urlGetTrade(broker: Broker, req: Request, res: Response): Trade | null {
     const tradeId: string | undefined = req.params["trade"];
     if (tradeId == null) {
         res.status(400);

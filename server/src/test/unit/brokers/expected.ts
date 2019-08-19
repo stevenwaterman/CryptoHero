@@ -1,6 +1,6 @@
-import TradeDirection from "../../app/trading/tradeDirection";
+import TradeDirection from "../../../app/trading/tradeDirection";
 import Big from "big.js";
-import Account from "../../app/trading/account";
+import Account from "../../../app/trading/account";
 
 export class ExpectedPending {
     readonly buy: Array<ExpectedOrder>;
