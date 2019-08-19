@@ -2,7 +2,7 @@ import InstrumentBroker from "./brokers/instrumentBroker";
 import Account from "./trading/account";
 import {Big} from "big.js";
 import Order from "./trading/order";
-import {Instrument} from "./trading/instrument";
+import Instrument from "./trading/instrument";
 import TradeDirection from "./trading/tradeDirection";
 import Asset from "./trading/asset";
 

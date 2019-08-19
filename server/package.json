@@ -34,6 +34,7 @@
     "nodemon": "^1.19.1",
     "source-map-loader": "^0.2.4",
     "ts-jest": "^24.0.2",
+    "tslint": "^5.18.0",
     "typescript": "^3.5.3",
     "typings": "^2.1.1"
   },
@@ -42,13 +43,13 @@
     "start": "node out/index.js",
     "build": "npm run build:types && npm run build:js",
     "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "babel app --out-dir out --extensions .ts --source-maps inline",
+    "build:js": "babel src/app --out-dir out --extensions .ts --source-maps inline",
     "postinstall": "typings install --save"
   },
   "jest": {
     "testURL": "http://localhost/",
     "roots": [
-      "<rootDir>/test"
+      "<rootDir>/src/test"
     ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"

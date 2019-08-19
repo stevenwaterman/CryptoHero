@@ -2,11 +2,10 @@ import InstrumentBroker from "../../app/brokers/instrumentBroker";
 import Order from "../../app/trading/order";
 import Account from "../../app/trading/account";
 import {Big} from "big.js";
-import {Instrument} from "../../app/trading/instrument";
+import Instrument from "../../app/trading/instrument";
 import TradeDirection from "../../app/trading/tradeDirection";
 import Asset from "../../app/trading/asset";
-import {expectedOrder, expectedPending, expectedTrade} from "./expected";
-import Trade from "../../app/trading/trade";
+import {ExpectedOrder, ExpectedPending, ExpectedTrade} from "./expected";
 
 let acc1: Account, acc2: Account, acc3: Account, acc4: Account;
 let iBroker: InstrumentBroker;
@@ -22,14 +21,34 @@ beforeEach(() => {
     });
 });
 
-const placeBuy = function (account: Account, units: Big, price: Big) {
+const placeBuy = function (account: Account, units: Big, price: Big): ExpectedOrder {
     iBroker.place(new Order(account, TradeDirection.BUY, units, price));
-    return expectedOrder(account, TradeDirection.BUY, units, price);
+    return new ExpectedOrder(account, TradeDirection.BUY, units, price);
 };
 
-const placeSell = function (account: Account, units: Big, price: Big) {
+const placeSell = function (account: Account, units: Big, price: Big): ExpectedOrder {
     iBroker.place(new Order(account, TradeDirection.SELL, units, price));
-    return expectedOrder(account, TradeDirection.SELL, units, price);
+    return new ExpectedOrder(account, TradeDirection.SELL, units, price);
+};
+
+const expectPending = (account: Account, buys: Array<ExpectedOrder>, sells: Array<ExpectedOrder>) => {
+    const pending = iBroker.getPendingOrders(account);
+    const expected = new ExpectedPending(buys, sells);
+    expect(pending).toMatchObject(expected);
+    expect(pending.buy).toHaveLength(buys.length);
+    expect(pending.sell).toHaveLength(sells.length);
+};
+
+const expectNoTrades = function (account: Account): void {
+    expectTradeCount(account, 0);
+};
+
+const expectTradeCount = function (account: Account, count: number): void {
+    expect(iBroker.getTrades(account)).toHaveLength(count);
+};
+
+const expectExactly = function (account: Account, ...trades: Array<any>): void {
+    expect(iBroker.getTrades(account)).toMatchObject(trades);
 };
 
 describe("adding orders", () => {
@@ -85,28 +104,16 @@ describe("adding orders", () => {
 });
 
 describe("matching orders", () => {
-    const expectNoTrades = function (account: Account) {
-        expectTradeCount(account, 0);
-    };
-
-    const expectTradeCount = function (account: Account, count: number) {
-        expect(iBroker.getTrades(account)).toHaveLength(count);
-    };
-
-    const expectExactly = function (account: Account, ...trades: Array<Trade>) {
-        expect(iBroker.getTrades(account)).toMatchObject(trades);
-    };
-
     test("Test our expectedTrade helper function", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
         placeSell(acc2, new Big("1"), new Big("1"));
 
         //Check that our expected trade correctly doesn't match
-        const trade1 = expectedTrade(acc2, acc1, new Big("1"), new Big("1"));
+        const trade1 = new ExpectedTrade(acc2, acc1, new Big("1"), new Big("1"));
         expect(iBroker.getTrades(acc1)).not.toMatchObject([trade1]);
 
         //Check that it does match when it should
-        const trade2 = expectedTrade(acc1, acc2, new Big("1"), new Big("1"));
+        const trade2 = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
         expect(iBroker.getTrades(acc1)).toMatchObject([trade2]);
     });
 
@@ -125,7 +132,7 @@ describe("matching orders", () => {
     test("Simple Trade", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
         placeSell(acc2, new Big("1"), new Big("1"));
-        const trade = expectedTrade(acc1, acc2, new Big("1"), new Big("1"));
+        const trade = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
         expectExactly(acc1, trade);
         expectExactly(acc2, trade);
     });
@@ -147,7 +154,7 @@ describe("matching orders", () => {
     test("Trade happens at best price for second person (buy first)", () => {
         placeBuy(acc1, new Big("1"), new Big("1.1"));
         placeSell(acc2, new Big("1"), new Big("1"));
-        const trade = expectedTrade(acc1, acc2, new Big("1"), new Big("1.1"));
+        const trade = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1.1"));
         expectExactly(acc1, trade);
         expectExactly(acc2, trade);
     });
@@ -155,7 +162,7 @@ describe("matching orders", () => {
     test("Trade happens at best price for second person (sell first)", () => {
         placeSell(acc1, new Big("1"), new Big("1"));
         placeBuy(acc2, new Big("1"), new Big("1.1"));
-        const trade = expectedTrade(acc2, acc1, new Big("1"), new Big("1"));
+        const trade = new ExpectedTrade(acc2, acc1, new Big("1"), new Big("1"));
         expectExactly(acc1, trade);
         expectExactly(acc2, trade);
     });
@@ -165,8 +172,8 @@ describe("matching orders", () => {
         placeSell(acc2, new Big("1"), new Big("1"));
         placeBuy(acc3, new Big("1"), new Big("1"));
         placeSell(acc4, new Big("1"), new Big("1"));
-        const trade1 = expectedTrade(acc1, acc2, new Big("1"), new Big("1"));
-        const trade2 = expectedTrade(acc3, acc4, new Big("1"), new Big("1"));
+        const trade1 = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
+        const trade2 = new ExpectedTrade(acc3, acc4, new Big("1"), new Big("1"));
         expectExactly(acc1, trade1);
         expectExactly(acc2, trade1);
         expectExactly(acc3, trade2);
@@ -178,8 +185,8 @@ describe("matching orders", () => {
         placeSell(acc2, new Big("1"), new Big("1"));
         placeBuy(acc1, new Big("1"), new Big("1"));
         placeSell(acc3, new Big("1"), new Big("1"));
-        const trade1 = expectedTrade(acc1, acc2, new Big("1"), new Big("1"));
-        const trade2 = expectedTrade(acc1, acc3, new Big("1"), new Big("1"));
+        const trade1 = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
+        const trade2 = new ExpectedTrade(acc1, acc3, new Big("1"), new Big("1"));
         expectExactly(acc1, trade1, trade2);
         expectExactly(acc2, trade1);
         expectExactly(acc3, trade2);
@@ -190,8 +197,8 @@ describe("matching orders", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
         placeSell(acc2, new Big("1"), new Big("1"));
         placeSell(acc3, new Big("1"), new Big("1"));
-        const trade1 = expectedTrade(acc1, acc2, new Big("1"), new Big("1"));
-        const trade2 = expectedTrade(acc1, acc3, new Big("1"), new Big("1"));
+        const trade1 = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
+        const trade2 = new ExpectedTrade(acc1, acc3, new Big("1"), new Big("1"));
         expectExactly(acc1, trade1, trade2);
         expectExactly(acc2, trade1);
         expectExactly(acc3, trade2);
@@ -200,7 +207,7 @@ describe("matching orders", () => {
     test("Partial trade", () => {
         placeBuy(acc1, new Big("2"), new Big("1"));
         placeSell(acc2, new Big("1"), new Big("1"));
-        const trade = expectedTrade(acc1, acc2, new Big("1"), new Big("1"));
+        const trade = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
         expectExactly(acc1, trade);
         expectExactly(acc2, trade);
     });
@@ -209,8 +216,8 @@ describe("matching orders", () => {
         placeBuy(acc1, new Big("2"), new Big("1.1"));
         placeSell(acc2, new Big("1"), new Big("1"));
         placeSell(acc3, new Big("1"), new Big("1.1"));
-        const trade1 = expectedTrade(acc1, acc2, new Big("1"), new Big("1.1"));
-        const trade2 = expectedTrade(acc1, acc3, new Big("1"), new Big("1.1"));
+        const trade1 = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1.1"));
+        const trade2 = new ExpectedTrade(acc1, acc3, new Big("1"), new Big("1.1"));
         expectExactly(acc1, trade1, trade2);
         expectExactly(acc2, trade1);
         expectExactly(acc3, trade2);
@@ -220,8 +227,8 @@ describe("matching orders", () => {
         placeBuy(acc1, new Big("1"), new Big("1.1"));
         placeBuy(acc2, new Big("2"), new Big("1"));
         placeSell(acc3, new Big("3"), new Big("1"));
-        const trade1 = expectedTrade(acc1, acc3, new Big("1"), new Big("1.1"));
-        const trade2 = expectedTrade(acc2, acc3, new Big("2"), new Big("1"));
+        const trade1 = new ExpectedTrade(acc1, acc3, new Big("1"), new Big("1.1"));
+        const trade2 = new ExpectedTrade(acc2, acc3, new Big("2"), new Big("1"));
         expectExactly(acc1, trade1);
         expectExactly(acc2, trade2);
         expectExactly(acc3, trade1, trade2);
@@ -231,7 +238,7 @@ describe("matching orders", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
         placeBuy(acc2, new Big("1"), new Big("2"));
         placeSell(acc3, new Big("1"), new Big("1"));
-        const trade = expectedTrade(acc2, acc3, new Big("1"), new Big("2"));
+        const trade = new ExpectedTrade(acc2, acc3, new Big("1"), new Big("2"));
         expectNoTrades(acc1);
         expectExactly(acc2, trade);
         expectExactly(acc3, trade);
@@ -241,7 +248,7 @@ describe("matching orders", () => {
         placeSell(acc1, new Big("1"), new Big("1"));
         placeSell(acc2, new Big("1"), new Big("2"));
         placeBuy(acc3, new Big("1"), new Big("2"));
-        const trade = expectedTrade(acc3, acc1, new Big("1"), new Big("1"));
+        const trade = new ExpectedTrade(acc3, acc1, new Big("1"), new Big("1"));
         expectExactly(acc1, trade);
         expectNoTrades(acc2);
         expectExactly(acc3, trade);
@@ -253,7 +260,7 @@ describe("matching orders", () => {
         earlyBuy.timestamp.setTime(earlyBuy.timestamp.getTime() - 1000);
         iBroker.place(earlyBuy);
         placeSell(acc3, new Big("1"), new Big("1"));
-        const trade = expectedTrade(acc2, acc3, new Big("1"), new Big("1"));
+        const trade = new ExpectedTrade(acc2, acc3, new Big("1"), new Big("1"));
         expectNoTrades(acc1);
         expectExactly(acc2, trade);
         expectExactly(acc3, trade);
@@ -265,7 +272,7 @@ describe("matching orders", () => {
         earlySell.timestamp.setTime(earlySell.timestamp.getTime() - 1000);
         iBroker.place(earlySell);
         placeBuy(acc3, new Big("1"), new Big("1"));
-        const trade = expectedTrade(acc3, acc2, new Big("1"), new Big("1"));
+        const trade = new ExpectedTrade(acc3, acc2, new Big("1"), new Big("1"));
         expectNoTrades(acc1);
         expectExactly(acc2, trade);
         expectExactly(acc3, trade);
@@ -273,14 +280,6 @@ describe("matching orders", () => {
 });
 
 describe("pending orders", () => {
-    const expectPending = (account: Account, buys: Array<Order>, sells: Array<Order>) => {
-        const pending = iBroker.getPendingOrders(account);
-        const expected = expectedPending(buys, sells);
-        expect(pending).toMatchObject(expected);
-        expect(pending.buy).toHaveLength(buys.length);
-        expect(pending.sell).toHaveLength(sells.length);
-    };
-
     test("at first, no orders", () => {
         expectPending(acc1, [], []);
     });
@@ -318,9 +317,9 @@ describe("pending orders", () => {
     });
 
     test("pending orders update after partial trades", () => {
-        let order = placeBuy(acc1, new Big("2"), new Big("1"));
+        placeBuy(acc1, new Big("2"), new Big("1"));
         placeSell(acc2, new Big("1"), new Big("1"));
-        order.units = new Big("1");
+        const order = new ExpectedOrder(acc1, TradeDirection.BUY, new Big("1"), new Big("1"));
         expectPending(acc1, [order], []);
     });
 });
@@ -488,9 +487,7 @@ describe("Cancel order", () => {
         const order = new Order(acc1, TradeDirection.BUY, new Big("1"), new Big("1"));
         iBroker.place(order);
         iBroker.cancel(order);
-        expect(iBroker.getPendingOrders(acc1)).toMatchObject(
-            expectedPending([], [])
-        );
+        expectPending(acc1, [], []);
     });
 
     test("Unlocks the assets", () => {

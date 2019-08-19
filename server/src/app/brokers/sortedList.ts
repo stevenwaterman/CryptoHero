@@ -30,19 +30,19 @@ export default class SortedList<T> {
         return this.values.length === 0;
     }
 
-    includes(elem: T) {
+    includes(elem: T): boolean {
         return this.binarySearch(elem).found;
     }
 
-    push(...data: Array<T>) {
+    push(...data: Array<T>): void {
         data.forEach(it => this.pushOnce(it));
     }
 
-    delete(...data: Array<T>) {
+    delete(...data: Array<T>): void {
         data.forEach(it => this.deleteOnce(it));
     }
 
-    underlying() {
+    underlying(): Array<T> {
         return this.values.slice();
     }
 
@@ -50,12 +50,12 @@ export default class SortedList<T> {
      * @param elem The value of the element that we search for
      * @returns {number} The index of the element, or -1 if it is not present
      */
-    indexOf(elem: T) {
+    indexOf(elem: T): number {
         const searchResult = this.binarySearch(elem);
         return searchResult.found ? searchResult.index : -1;
     }
 
-    binarySearch(elem: T) {
+    binarySearch(elem: T): BinarySearchResult {
         let lowIdx = 0;
         let highIdx = this.values.length - 1;
 
@@ -77,19 +77,19 @@ export default class SortedList<T> {
         return new BinarySearchResult(lowIdx, false);
     }
 
-    private deleteOnce(elem: T) {
+    private deleteOnce(elem: T): void {
         const searchResult = this.binarySearch(elem);
         if (searchResult.found) {
             this.deleteAt(searchResult.index);
         }
     }
 
-    private pushOnce(elem: T) {
+    private pushOnce(elem: T): void {
         const idx = this.getInsertIndex(elem);
         this.insert(elem, idx);
     }
 
-    private insert(elem: T, idx: number) {
+    private insert(elem: T, idx: number): void {
         this.values.splice(idx, 0, elem);
     }
 
@@ -97,11 +97,11 @@ export default class SortedList<T> {
      * Does a binary search to find the index that some data should be inserted at
      * @param elem The data to be inserted
      */
-    private getInsertIndex(elem: T) {
+    private getInsertIndex(elem: T): number {
         return this.binarySearch(elem).index;
     }
 
-    private deleteAt(idx: number) {
+    private deleteAt(idx: number): void {
         this.values.splice(idx, 1);
     }
 }

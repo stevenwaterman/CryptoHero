@@ -16,7 +16,7 @@ export default class Account {
     constructor() {
     }
 
-    adjustAssets(asset: Asset, addUnits: Big) {
+    adjustAssets(asset: Asset, addUnits: Big): void {
         this.availableAssets.set(
             asset,
             this.getAvailableAssets(asset).plus(addUnits)

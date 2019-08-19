@@ -2,7 +2,7 @@ import SortedList from "./sortedList";
 import Trade from "../trading/trade";
 import {buyComparator, sellComparator} from "./comparators";
 import {Big} from "big.js";
-import {Instrument} from "../trading/instrument";
+import Instrument from "../trading/instrument";
 import Order from "../trading/order";
 import TradeDirection from "../trading/tradeDirection";
 import Account from "../trading/account";
@@ -88,7 +88,7 @@ export default class InstrumentBroker {
     private static updatePositionOnPlaceOrder(
         instrument: Instrument,
         order: Order
-    ) {
+    ): void {
         const account: Account = order.account;
         const asset: Asset =
             order.direction === TradeDirection.BUY
@@ -109,7 +109,7 @@ export default class InstrumentBroker {
     private static updatePositionOnCancelOrder(
         instrument: Instrument,
         order: Order
-    ) {
+    ): void {
         const account = order.account;
         const asset =
             order.direction === TradeDirection.BUY
@@ -124,7 +124,7 @@ export default class InstrumentBroker {
         order: Order,
         actualUnits: Big,
         actualUnitPrice: Big
-    ) {
+    ): void {
         const account = order.account;
         const gaining: Asset = instrument.buyerGains;
         const spending: Asset = instrument.buyerSpends;
@@ -145,7 +145,7 @@ export default class InstrumentBroker {
         sellOrder: Order,
         units: Big,
         unitPrice: Big
-    ) {
+    ): void {
         InstrumentBroker.updatePositionOnBuy(
             instrument,
             buyOrder,
@@ -165,7 +165,7 @@ export default class InstrumentBroker {
         order: Order,
         actualUnits: Big,
         actualUnitPrice: Big
-    ) {
+    ): void {
         const account = order.account;
         const gaining = instrument.sellerGains;
 
@@ -177,7 +177,7 @@ export default class InstrumentBroker {
     /**
      * Returns the list of all trades involving a given account
      */
-    getTrades(account: Account) {
+    getTrades(account: Account): Array<Trade> {
         return this.trades.filter(
             trade => trade.buyer.id === account.id || trade.seller.id === account.id
         );
@@ -194,7 +194,7 @@ export default class InstrumentBroker {
      * Places an order on the book
      * @param order A non-null, defined Order object to add
      */
-    pushOrder(order: Order) {
+    pushOrder(order: Order): void {
         switch (order.direction) {
             case TradeDirection.BUY:
                 this.buys.push(order);
@@ -205,7 +205,7 @@ export default class InstrumentBroker {
         }
     }
 
-    getLockedAssets(account: Account) {
+    getLockedAssets(account: Account): [Big, Big] {
         const pendingOrders = this.getPendingOrders(account);
         const buy = pendingOrders.buy;
         const sell = pendingOrders.sell;
@@ -224,7 +224,7 @@ export default class InstrumentBroker {
      * then adds the order to the book if it has any remaining quantity.
      * @param order Should be a defined, non-null Order object. Otherwise, will throw error.
      */
-    place(order: Order) {
+    place(order: Order): void {
         const validDirections = [TradeDirection.BUY, TradeDirection.SELL];
         if (!validDirections.includes(order.direction))
             throw `Unrecognised TradeDirection: ${order.direction}`;
@@ -237,7 +237,7 @@ export default class InstrumentBroker {
         }
     }
 
-    cancel(order: Order) {
+    cancel(order: Order): void {
         switch (order.direction) {
             case TradeDirection.BUY:
                 return this.cancelBuy(order);
@@ -246,13 +246,13 @@ export default class InstrumentBroker {
         }
     }
 
-    private getPendingBuys(account: Account) {
+    private getPendingBuys(account: Account): Array<Order> {
         return this.buys
             .underlying()
             .filter(order => order.account.id === account.id);
     }
 
-    private getPendingSells(account: Account) {
+    private getPendingSells(account: Account): Array<Order> {
         return this.sells
             .underlying()
             .filter(order => order.account.id === account.id);
@@ -261,7 +261,7 @@ export default class InstrumentBroker {
     /**
      * Checks the first order on the buy and sell lists and removes them if there's no units left
      */
-    private clearCompletedOrders() {
+    private clearCompletedOrders(): void {
         const buy = this.buys.min();
         if (buy != null && buy.units.lte(new Big("0"))) {
             this.buys.delete(buy);
@@ -277,7 +277,7 @@ export default class InstrumentBroker {
      * @param order A non-null, defined Order object that we want to find a match for
      * @returns {Order} The best-priced, oldest buy/sell order (opposite direction to order parameter)
      */
-    private getPotentialOrderMatch(order: Order) {
+    private getPotentialOrderMatch(order: Order): Order | undefined {
         switch (order.direction) {
             case TradeDirection.BUY:
                 return this.sells.min();
@@ -290,7 +290,7 @@ export default class InstrumentBroker {
      * Repeatedly match an order with orders form the book, reducing the
      * @param order Must be
      */
-    private makeTrades(order: Order) {
+    private makeTrades(order: Order): void {
         let match = this.getPotentialOrderMatch(order);
         while (match != null && InstrumentBroker.tradePossible(order, match)) {
             const trade = InstrumentBroker.makeTrade(this.instrument, order, match);
@@ -301,19 +301,19 @@ export default class InstrumentBroker {
         }
     }
 
-    private cancelBuy(order: Order) {
+    private cancelBuy(order: Order): void {
         if (!this.buys.includes(order)) throw "Order was not pending";
         this.buys.delete(order);
         InstrumentBroker.updatePositionOnCancelOrder(this.instrument, order);
     }
 
-    private cancelSell(order: Order) {
+    private cancelSell(order: Order): void {
         if (!this.sells.includes(order)) throw "Order was not pending";
         this.sells.delete(order);
         InstrumentBroker.updatePositionOnCancelOrder(this.instrument, order);
     }
 
-    private selfTradeGuard(order: Order) {
+    private selfTradeGuard(order: Order): void {
         switch (order.direction) {
             case TradeDirection.BUY:
                 return this.selfTradeBuyingGuard(order);
@@ -322,7 +322,7 @@ export default class InstrumentBroker {
         }
     }
 
-    private selfTradeBuyingGuard(buy: Order) {
+    private selfTradeBuyingGuard(buy: Order): void {
         const bestSell = this.sells
             .underlying()
             .find(sell => buy.account.id === sell.account.id);
@@ -332,7 +332,7 @@ export default class InstrumentBroker {
         }
     }
 
-    private selfTradeSellingGuard(sell: Order) {
+    private selfTradeSellingGuard(sell: Order): void {
         const bestBuy = this.buys
             .underlying()
             .find(buy => buy.account.id === sell.account.id);

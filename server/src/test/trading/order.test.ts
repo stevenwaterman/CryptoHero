@@ -1,19 +1,19 @@
 import Order from "../../app/trading/order";
 import Account from "../../app/trading/account";
 import {Big} from "big.js";
-import {TradeDirection} from "../../app/trading/tradeDirection";
+import TradeDirection from "../../app/trading/tradeDirection";
 
-let account;
-let buy1;
-let buy2;
-let buy3;
-let buy4;
-let buy5;
-let sell1;
-let sell2;
-let sell3;
-let sell4;
-let sell5;
+let account: Account;
+let buy1: Order;
+let buy2: Order;
+let buy3: Order;
+let buy4: Order;
+let buy5: Order;
+let sell1: Order;
+let sell2: Order;
+let sell3: Order;
+let sell4: Order;
+let sell5: Order;
 
 beforeEach(() => {
     account = new Account();
@@ -30,14 +30,6 @@ beforeEach(() => {
 });
 
 describe("construct", () => {
-    test("constructor does not throw an exception", () => {
-        expect(() => new Order(account, TradeDirection.BUY, new Big("100"), new Big("1.14"))).not.toThrow();
-    });
-
-    test("constructor should return an Order", () => {
-        expect(new Order(account, TradeDirection.BUY, new Big("100"), new Big("1.14"))).toBeInstanceOf(Order);
-    });
-
     test("constructor should throw error if called with negative units", () => {
         expect(() => new Order(account, TradeDirection.BUY, new Big("-100"), new Big("1.14"))).toThrow();
     });

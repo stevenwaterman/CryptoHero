@@ -5,7 +5,7 @@
  */
 import Order from "../trading/order";
 
-function compareTime(a: Order, b: Order) {
+function compareTime(a: Order, b: Order): number {
     if (a.timestamp.getTime() < b.timestamp.getTime()) return -1;
     if (a.timestamp.getTime() > b.timestamp.getTime()) return 1;
     return a.id.localeCompare(b.id);
