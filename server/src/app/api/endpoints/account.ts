@@ -123,11 +123,6 @@ function assetWithdraw(broker: Broker, req: Request, res: Response): void {
 
     const units = bodyGetUnits(broker, req, res);
     if (units == null) return;
-    if (units.lte(new Big("0"))) {
-        res.status(400);
-        res.send(`Amount must be positive, was ${units}`);
-        return;
-    }
 
     const available = account.getAvailableAssets(asset);
     if (available.lt(units)) {
