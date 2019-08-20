@@ -1,7 +1,7 @@
 {
   "testURL": "http://localhost/",
   "roots": [
-    "<rootDir>/src/test"
+    "<rootDir>/src/test/unit"
   ],
   "transform": {
     "^.+\\.tsx?$": "ts-jest"

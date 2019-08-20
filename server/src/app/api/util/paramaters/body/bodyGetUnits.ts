@@ -7,7 +7,7 @@ export function bodyGetUnits(broker: Broker, req: Request, res: Response): Big |
 
     if (unitString == null) {
         res.status(400);
-        res.send("missing body parameter: amount");
+        res.send("missing body parameter: units");
         return null
     }
 

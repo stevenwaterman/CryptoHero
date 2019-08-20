@@ -9,6 +9,7 @@ import {Map} from "immutable";
 import {urlGetAsset} from "../util/paramaters/url/urlGetAsset";
 import {bodyGetUnits} from "../util/paramaters/body/bodyGetUnits";
 import Account from "../../trading/account";
+import SER from "../util/serialisation/SER";
 
 export function setupAccountsEndpoints(server: BitcoinExchangeServer): void {
     const app = server.app;
@@ -29,7 +30,7 @@ function createAccount(broker: Broker, req: Request, res: Response): void {
     const account = new Account();
 
     const out = {
-        "account": account.id
+        "id": account.id
     };
     res.status(200);
     res.json(out);
@@ -40,10 +41,7 @@ function getAvailableAssets(broker: Broker, req: Request, res: Response): void {
     if (account == null) return;
     const assets: Map<Asset, Big> = account.getAllAvailableAssets();
 
-    const serialisable = assets
-        .mapKeys((key) => key.name)
-        .map((val) => val.toString())
-        .toObject();
+    const serialisable = SER.MAP(assets, SER.ASSET, SER.BIG);
     res.status(200);
     res.json(serialisable);
 }
@@ -55,10 +53,7 @@ function getTotalAssets(broker: Broker, req: Request, res: Response): void {
     const locked: Map<Asset, Big> = broker.getLockedAssets(account);
     const total: Map<Asset, Big> = available.mergeWith((oldVal, newVal) => oldVal.plus(newVal), locked);
 
-    const serialisable = total
-        .mapKeys(key => key.name)
-        .map(val => val.toString())
-        .toObject();
+    const serialisable = SER.MAP(total, SER.ASSET, SER.BIG);
     res.status(200);
     res.json(serialisable);
 }
@@ -72,9 +67,11 @@ function assetGetAvailable(broker: Broker, req: Request, res: Response): void {
 
     const amount: Big = account.getAvailableAssets(asset);
 
-    const serialisable = amount.toString();
+    const serialisable = {
+        "amount": SER.BIG(amount)
+    };
     res.status(200);
-    res.send(serialisable);
+    res.json(serialisable);
 }
 
 function assetGetTotal(broker: Broker, req: Request, res: Response): void {
@@ -89,9 +86,11 @@ function assetGetTotal(broker: Broker, req: Request, res: Response): void {
     const locked = <Big>lockedAssets.get(asset);
     const total: Big = available.plus(locked);
 
-    const serialisable = total.toString();
+    const serialisable = {
+        "amount": SER.BIG(total)
+    };
     res.status(200);
-    res.send(serialisable);
+    res.json(serialisable);
 }
 
 function assetDeposit(broker: Broker, req: Request, res: Response): void {

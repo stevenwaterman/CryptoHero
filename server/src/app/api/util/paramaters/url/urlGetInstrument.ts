@@ -2,12 +2,12 @@ import {Request, Response} from "express";
 import Broker from "../../../../brokers/broker";
 import Instrument from "../../../../trading/instrument";
 
-export function bodyGetInstrument(broker: Broker, req: Request, res: Response): Instrument | null {
-    const instrumentString: string | undefined = req.body["instrument"];
+export function urlGetInstrument(broker: Broker, req: Request, res: Response): Instrument | null {
+    const instrumentString: string | undefined = req.params["instrument"];
 
     if (instrumentString == null) {
         res.status(400);
-        res.send("missing body parameter: instrument");
+        res.send("missing url parameter: instrument");
         return null
     }
 

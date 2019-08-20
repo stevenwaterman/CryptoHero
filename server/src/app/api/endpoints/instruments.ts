@@ -11,7 +11,7 @@ export function setupInstrumentEndpoints(server: BitcoinExchangeServer): void {
 }
 
 function listInstruments(broker: Broker, req: Request, res: Response): void {
-    const names = Instrument.NAMES;
+    const names: Array<string> = Instrument.NAMES.toArray();
 
     res.status(200);
     res.json(names);

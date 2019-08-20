@@ -3,12 +3,12 @@ import Broker from "../../../../brokers/broker";
 import Account from "../../../../trading/account";
 import {REGISTRY} from "../../../../registry";
 
-export function urlGetAccount(broker: Broker, req: Request, res: Response): Account | null {
-    const accountId: string | undefined = req.params["account"];
+export function bodyGetAccount(broker: Broker, req: Request, res: Response): Account | null {
+    const accountId: string | undefined = req.body["account"];
 
     if (accountId == null) {
         res.status(400);
-        res.send("missing url parameter: account");
+        res.send("missing body parameter: account");
         return null
     }
 

@@ -9,20 +9,26 @@ import {bodyGetDirection} from "../util/paramaters/body/bodyGetDirection";
 import {bodyGetInstrument} from "../util/paramaters/body/bodyGetInstrument";
 import {bodyGetUnitPrice} from "../util/paramaters/body/bodyGetUnitPrice";
 import {urlGetOrder} from "../util/paramaters/url/urlGetOrder";
+import SER from "../util/serialisation/SER";
+import Instrument from "../../trading/instrument";
+import PendingOrders from "../../brokers/pendingOrders";
+import {Map} from "immutable";
+import {bodyGetOrder} from "../util/paramaters/body/bodyGetOrder";
+import {bodyGetAccount} from "../util/paramaters/body/bodyGetAccount";
 
 export function setupOrdersEndpoints(server: BitcoinExchangeServer): void {
     const app = server.app;
     const broker = server.broker;
 
     app.post("/api/orders/place", withBroker(broker, placeOrder));
-    app.get("/api/orders/pending", withBroker(broker, pendingOrders));
-
-    app.get("/api/orders/:order/view", withBroker(broker, viewOrder));
     app.post("/api/orders/:order/cancel", withBroker(broker, cancelOrder));
+
+    app.get("/api/orders/pending/account/:account", withBroker(broker, pendingOrders));
+    app.get("/api/orders/:order/view", withBroker(broker, viewOrder));
 }
 
 function placeOrder(broker: Broker, req: Request, res: Response): void {
-    const account = urlGetAccount(broker, req, res);
+    const account = bodyGetAccount(broker, req, res);
     if (account == null) return;
 
     const direction = bodyGetDirection(broker, req, res);
@@ -47,16 +53,8 @@ function placeOrder(broker: Broker, req: Request, res: Response): void {
     res.json(out);
 }
 
-function viewOrder(broker: Broker, req: Request, res: Response): void {
-    const order = urlGetOrder(broker, req, res);
-    if (order == null) return;
-
-    res.status(200);
-    res.json(order);
-}
-
 function cancelOrder(broker: Broker, req: Request, res: Response): void {
-    const order = urlGetOrder(broker, req, res);
+    const order = bodyGetOrder(broker, req, res);
     if (order == null) return;
 
     const instrument = bodyGetInstrument(broker, req, res);
@@ -68,12 +66,21 @@ function cancelOrder(broker: Broker, req: Request, res: Response): void {
     res.send("Successful");
 }
 
+function viewOrder(broker: Broker, req: Request, res: Response): void {
+    const order = urlGetOrder(broker, req, res);
+    if (order == null) return;
+
+    const serialisable = SER.ORDER(order);
+    res.status(200);
+    res.json(serialisable);
+}
+
 function pendingOrders(broker: Broker, req: Request, res: Response): void {
     const account = urlGetAccount(broker, req, res);
     if (account == null) return;
 
-    const pending = broker.getPendingOrders(account);
-
+    const pending: Map<Instrument, PendingOrders> = broker.getPendingOrders(account);
+    const serialisable = SER.MAP(pending, SER.INSTRUMENT, SER.PENDING_ORDERS);
     res.status(200);
-    res.json(pending);
+    res.json(serialisable);
 }

@@ -1,18 +1,22 @@
-import {API, setup} from "../util/setup";
 import * as request from "request";
+import {REGISTRY} from "../../../app/registry";
+import {G, setup} from "../setup/global";
 
 setup();
-const endpoint = API + "account/create";
+const url = G.API + "account/create";
 
-test("Can create an account", done => {
-    request.post(endpoint, (error, response, body) => {
+test("Happy Path", done => {
+    request.post(url, (error, response, body) => {
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(200);
         const json = JSON.parse(body);
 
-        const account = json["account"];
-        expect(account).toBeTruthy();
-        expect(typeof account).toEqual("string");
+        const newAccountId = json["id"];
+        expect(newAccountId).toBeTruthy();
+        expect(typeof newAccountId).toEqual("string");
+
+        const retrieved = REGISTRY.getAccount(newAccountId);
+        expect(retrieved).toBeTruthy();
         done();
     });
 });

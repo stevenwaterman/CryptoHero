@@ -9,14 +9,9 @@ import {G, setup} from "../setup/global";
 
 setup();
 
-const endpointPrefix = G.API + "account/";
-const endpointPostfix = "/assets/total";
-
-function getUrl(account: Account): string {
-    return endpointPrefix + account.id + endpointPostfix;
+function getUrl(account: Account, asset: Asset): string {
+    return `${G.API}account/${account.id}/assets/${asset.name}/available`;
 }
-
-//TODO not working - issue with multiple brokers existing?
 
 test("Happy Path", done => {
     const account = new Account();
@@ -25,15 +20,15 @@ test("Happy Path", done => {
     const order = new Order(account, TradeDirection.BUY, new Big("20"), new Big("2"));
     G.BROKER.placeOrder(Instrument.GBPBTC, order);
 
-    request.get(getUrl(account), (error, response, body) => {
+    request.get(getUrl(account, Asset.BTC), (error, response, body) => {
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(200);
         const json = JSON.parse(body);
-        expect(json).toMatchObject({
-            "BTC": new Big("100").toString(),
-            "GBP": new Big("0").toString(),
-            "LTC": new Big("0").toString()
-        });
+
+        const expected = {
+            "amount": new Big("60").toString()
+        };
+        expect(json).toEqual(expected);
         done();
     });
 });
