@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bitcoin Exchange</title>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <link href="mobile-container.css" rel="stylesheet">
+    <script crossorigin="anonymous"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-primary mb-sm-4 justify-content-md-center">
+    <a class="navbar-brand" href="#"><h2>CryptoHero</h2></a>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-4" id="left bar">
+            <div class="card" id="position">
+                <div class="card-header my-auto">
+                    <h5 class="card-title text-center my-0"><b>Available Funds</b></h5>
+                </div>
+                <div class="row py-2 px-2">
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-6 pr-1">
+                                <b>GBP:</b>
+                            </div>
+                            <div class="col-6 pl-1 text-right">
+                                125.123
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-6 pr-1">
+                                <b>LTC:</b>
+                            </div>
+                            <div class="col-6 pl-1 text-right">
+                                0.164
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-6 pr-1">
+                                <b>LTC:</b>
+                            </div>
+                            <div class="col-6 pl-1 text-right">
+                                135.456
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-6 pr-1">
+                                <b>ETH:</b>
+                            </div>
+                            <div class="col-6 pl-1 text-right">
+                                94.175
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-6 pr-1">
+                                <b>DASH:</b>
+                            </div>
+                            <div class="col-6 pl-1 text-right">
+                                352.126
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" type="button">
+                    Total Funds
+                </button>
+            </div>
+            <div class="row mt-3" id="instruments">
+                <div class="col-md-6 pr-md-0">
+                    <div class="card pt-1">
+                        <h5 class="card-title text-center"><b>GBP/BTC</b></h5>
+                        <p class="card-text text-center">1.31425</p>
+                        <div class="row">
+                            <div class="col-6 pr-0">
+                                <button class="btn btn-success btn-block btn-sm" type="button">Buy</button>
+                            </div>
+                            <div class="col-6 pl-0">
+                                <button class="btn btn-danger btn-block btn-sm" type="button">Sell</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 pl-md-0">
+                    <div class="card pt-1">
+                        <h5 class="card-title text-center"><b>GBP/LTC</b></h5>
+                        <p class="card-text text-center">1.12512</p>
+                        <div class="row">
+                            <div class="col-6 pr-0">
+                                <button class="btn btn-success btn-block btn-sm" type="button">Buy</button>
+                            </div>
+                            <div class="col-6 pl-0">
+                                <button class="btn btn-danger btn-block btn-sm" type="button">Sell</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 pr-md-0">
+                    <div class="card pt-1">
+                        <h5 class="card-title text-center"><b>GBP/ETH</b></h5>
+                        <p class="card-text text-center">12.13512</p>
+                        <div class="row">
+                            <div class="col-6 pr-0">
+                                <button class="btn btn-success btn-block btn-sm" type="button">Buy</button>
+                            </div>
+                            <div class="col-6 pl-0">
+                                <button class="btn btn-danger btn-block btn-sm" type="button">Sell</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 pl-md-0">
+                    <div class="card pt-1">
+                        <h5 class="card-title text-center"><b>GBP/DASH</b></h5>
+                        <p class="card-text text-center">0.12572</p>
+                        <div class="row">
+                            <div class="col-6 pr-0">
+                                <button class="btn btn-success btn-block btn-sm" type="button">Buy</button>
+                            </div>
+                            <div class="col-6 pl-0">
+                                <button class="btn btn-danger btn-block btn-sm" type="button">Sell</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8" id="right bar">
+            <div class="card" id="graph">
+                <div class="card-header">
+                    <div class="row justify-content-md-center">
+                        <div class="col-sm-auto my-auto">
+                            <h5 class="card-title text-center my-0"><b>Explore</b></h5>
+                        </div>
+                        <div class="col-sm-auto">
+                            <div class="dropdown">
+                                <button aria-expanded="false" aria-haspopup="true"
+                                        class="btn btn-primary dropdown-toggle"
+                                        data-toggle="dropdown" type="button">
+                                    GBP/BTC
+                                </button>
+                                <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
+                                    <a class="dropdown-item active" href="#">GBP/BTC</a>
+                                    <a class="dropdown-item" href="#">GBP/LTC</a>
+                                    <a class="dropdown-item" href="#">GBP/ETH</a>
+                                    <a class="dropdown-item" href="#">GBP/DASH</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-auto">
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-primary active">
+                                    <input autocomplete="off" checked name="options" type="radio">
+                                    Depth
+                                </label>
+                                <label class="btn btn-primary">
+                                    <input autocomplete="off" name="options" type="radio">
+                                    Price
+                                </label>
+                                <label class="btn btn-primary">
+                                    <input autocomplete="off" name="options" type="radio">
+                                    Volume
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <img alt="order depth chart" class="img-fluid" src="graph.png"/>
+                </div>
+            </div>
+            <div class="card mt-3" id="trades">
+                <div class="card-header">
+                    <div class="row justify-content-md-center">
+                        <div class="col-sm-auto my-auto">
+                            <h5 class="card-title text-center my-0"><b>Blotter</b></h5>
+                        </div>
+                        <div class="col-sm-auto">
+                            <div class="dropdown">
+                                <button aria-expanded="false" aria-haspopup="true"
+                                        class="btn btn-primary dropdown-toggle"
+                                        data-toggle="dropdown" type="button">
+                                    All Pairs
+                                </button>
+                                <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
+                                    <a class="dropdown-item active" href="#">All Pairs</a>
+                                    <a class="dropdown-item" href="#">GBP/BTC</a>
+                                    <a class="dropdown-item" href="#">GBP/LTC</a>
+                                    <a class="dropdown-item" href="#">GBP/ETH</a>
+                                    <a class="dropdown-item" href="#">GBP/DASH</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-auto">
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-primary">
+                                    <input autocomplete="off" name="options" type="radio">
+                                    Pending
+                                </label>
+                                <label class="btn btn-primary active">
+                                    <input autocomplete="off" name="options" type="radio">
+                                    Completed
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Action</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Units</th>
+                            <th scope="col">Unit Price</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-striped table-hover">
+                        <tr class="table-success">
+                            <th scope="row">BUY GBP/BTC</th>
+                            <td>11:30:15</td>
+                            <td>112,874.57</td>
+                            <td>0.98725</td>
+                        </tr>
+                        <tr class="table-danger">
+                            <th scope="row">SELL GBP/LTC</th>
+                            <td>11:29:52</td>
+                            <td>52,573.31</td>
+                            <td>1.59781</td>
+                        </tr>
+                        <tr class="table-success">
+                            <th scope="row">BUY GBP/DASH</th>
+                            <td>11:25:15</td>
+                            <td>51.36</td>
+                            <td>5.97821</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
