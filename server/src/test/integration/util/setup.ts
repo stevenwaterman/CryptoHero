@@ -1,12 +1,5 @@
-import BitcoinExchangeServer from "../../../app/api/bitcoinExchangeServer";
 import {REGISTRY} from "../../../app/registry";
-
-export class G {
-    static readonly PORT = 3000;
-    static readonly API = `http://localhost:${G.PORT}/api/`;
-    static readonly SERVER = new BitcoinExchangeServer();
-    static readonly BROKER = G.SERVER.broker;
-}
+import {G} from "./global";
 
 export function setup(): void {
     resetBeforeEach();

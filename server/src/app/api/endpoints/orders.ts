@@ -13,7 +13,6 @@ import SER from "../util/serialisation/SER";
 import Instrument from "../../trading/instrument";
 import PendingOrders from "../../brokers/pendingOrders";
 import {Map} from "immutable";
-import {bodyGetOrder} from "../util/paramaters/body/bodyGetOrder";
 import {bodyGetAccount} from "../util/paramaters/body/bodyGetAccount";
 
 export function setupOrdersEndpoints(server: BitcoinExchangeServer): void {
@@ -44,7 +43,13 @@ function placeOrder(broker: Broker, req: Request, res: Response): void {
     if (unitPrice == null) return;
 
     const order = new Order(account, direction, units, unitPrice);
-    broker.placeOrder(instrument, order);
+    try {
+        broker.placeOrder(instrument, order);
+    } catch (error) {
+        res.status(400);
+        res.send(error.message);
+        return;
+    }
 
     const out = {
         "id": order.id
@@ -54,7 +59,7 @@ function placeOrder(broker: Broker, req: Request, res: Response): void {
 }
 
 function cancelOrder(broker: Broker, req: Request, res: Response): void {
-    const order = bodyGetOrder(broker, req, res);
+    const order = urlGetOrder(broker, req, res);
     if (order == null) return;
 
     const instrument = bodyGetInstrument(broker, req, res);

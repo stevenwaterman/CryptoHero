@@ -5,15 +5,14 @@ import Big from "big.js";
 import Order from "../../../app/trading/order";
 import TradeDirection from "../../../app/trading/tradeDirection";
 import Instrument from "../../../app/trading/instrument";
-import {G, setup} from "../setup/global";
+import {setup} from "../util/setup";
+import {G} from "../util/global";
+import Requirements from "../util/requirements";
 
 setup();
 
-const endpointPrefix = G.API + "account/";
-const endpointPostfix = "/assets/total";
-
-function getUrl(account: Account): string {
-    return endpointPrefix + account.id + endpointPostfix;
+function getUrl(accountId: string): string {
+    return `${G.API}account/${accountId}/assets/total`;
 }
 
 //TODO not working - issue with multiple brokers existing?
@@ -25,7 +24,7 @@ test("Happy Path", done => {
     const order = new Order(account, TradeDirection.BUY, new Big("20"), new Big("2"));
     G.BROKER.placeOrder(Instrument.GBPBTC, order);
 
-    request.get(getUrl(account), (error, response, body) => {
+    request.get(getUrl(account.id), (error, response, body) => {
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(200);
         const json = JSON.parse(body);
@@ -37,3 +36,27 @@ test("Happy Path", done => {
         done();
     });
 });
+
+const testRunner = (name: string, params: any, expectedStatus: number) => {
+    test(name, done => {
+        const account = new Account();
+        if (params.account == null) {
+            params.account = account.id;
+        }
+
+        request.get(getUrl(params.account), (error, response) => {
+            expect(error).toBeFalsy();
+            expect(response.statusCode).toEqual(expectedStatus);
+            done();
+        });
+    })
+};
+
+const defaultParams = {
+    "asset": Asset.BTC.name,
+    "units": new Big("100").toString()
+};
+
+new Requirements(defaultParams, testRunner)
+    .invalidWhen("account", "1", 404)
+    .execute();

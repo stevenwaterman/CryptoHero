@@ -7,12 +7,14 @@ import TradeDirection from "../../../app/trading/tradeDirection";
 import Instrument from "../../../app/trading/instrument";
 import Trade from "../../../app/trading/trade";
 import {Map} from "immutable"
-import {G, setup} from "../setup/global";
+import {setup} from "../util/setup";
+import {G} from "../util/global";
+import Requirements from "../util/requirements";
 
 setup();
 
-function getUrl(trade: Trade): string {
-    return `${G.API}trades/${trade.id}/view`;
+function getUrl(tradeId: string): string {
+    return `${G.API}trades/${tradeId}/view`;
 }
 
 test("Happy Path", done => {
@@ -38,7 +40,7 @@ test("Happy Path", done => {
         "unit price": trade.unitPrice.toString()
     };
 
-    request.get(getUrl(trade), (error, response, body) => {
+    request.get(getUrl(trade.id), (error, response, body) => {
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(200);
         const json = JSON.parse(body);
@@ -46,3 +48,36 @@ test("Happy Path", done => {
         done();
     });
 });
+
+const testRunner = (name: string, params: any, expectedStatus: number) => {
+    test(name, done => {
+        const acc1 = new Account();
+        const acc2 = new Account();
+        acc1.adjustAssets(Asset.BTC, new Big("100"));
+        acc2.adjustAssets(Asset.GBP, new Big("100"));
+
+        const buy = new Order(acc1, TradeDirection.BUY, new Big("50"), new Big("1.5"));
+        const sell = new Order(acc2, TradeDirection.SELL, new Big("50"), new Big("1.5"));
+        G.BROKER.placeOrder(Instrument.GBPBTC, buy);
+        G.BROKER.placeOrder(Instrument.GBPBTC, sell);
+
+        const allTrades: Map<Instrument, Array<Trade>> = G.BROKER.getTrades(acc1);
+        const iTrades = <Array<Trade>>allTrades.get(Instrument.GBPBTC);
+        const trade: Trade = iTrades[0];
+        if (params.trade == null) {
+            params.trade = trade.id;
+        }
+
+        request.get(getUrl(params.trade), (error, response) => {
+            expect(error).toBeFalsy();
+            expect(response.statusCode).toEqual(expectedStatus);
+            done();
+        });
+    })
+};
+
+const defaultParams = {};
+
+new Requirements(defaultParams, testRunner)
+    .invalidWhen("trade", "1", 404)
+    .execute();

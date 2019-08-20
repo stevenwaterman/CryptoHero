@@ -5,12 +5,14 @@ import Big from "big.js";
 import Order from "../../../app/trading/order";
 import TradeDirection from "../../../app/trading/tradeDirection";
 import Instrument from "../../../app/trading/instrument";
-import {G, setup} from "../setup/global";
+import {setup} from "../util/setup";
+import {G} from "../util/global";
+import Requirements from "../util/requirements";
 
 setup();
 
-function getUrl(instrument: Instrument): string {
-    return `${G.API}prices/${instrument.name}/aggregate`;
+function getUrl(instrumentName: string): string {
+    return `${G.API}prices/${instrumentName}/aggregate`;
 }
 
 test("Happy Path", done => {
@@ -32,7 +34,7 @@ test("Happy Path", done => {
         "sell": []
     };
 
-    request.get(getUrl(Instrument.GBPBTC), (error, response, body) => {
+    request.get(getUrl(Instrument.GBPBTC.name), (error, response, body) => {
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(200);
         const json = JSON.parse(body);
@@ -40,3 +42,21 @@ test("Happy Path", done => {
         done();
     });
 });
+
+const testRunner = (name: string, params: any, expectedStatus: number) => {
+    test(name, done => {
+        request.get(getUrl(params.instrument), (error, response) => {
+            expect(error).toBeFalsy();
+            expect(response.statusCode).toEqual(expectedStatus);
+            done();
+        });
+    })
+};
+
+const defaultParams = {
+    "instrument": Instrument.GBPBTC.name
+};
+
+new Requirements(defaultParams, testRunner)
+    .invalidWhen("instrument", "abc", 404)
+    .execute();

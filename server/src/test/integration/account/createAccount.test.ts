@@ -1,6 +1,7 @@
 import * as request from "request";
 import {REGISTRY} from "../../../app/registry";
-import {G, setup} from "../setup/global";
+import {setup} from "../util/setup";
+import {G} from "../util/global";
 
 setup();
 const url = G.API + "account/create";

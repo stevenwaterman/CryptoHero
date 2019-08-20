@@ -5,7 +5,8 @@ import Big from "big.js";
 import Order from "../../../app/trading/order";
 import TradeDirection from "../../../app/trading/tradeDirection";
 import Instrument from "../../../app/trading/instrument";
-import {G, setup} from "../setup/global";
+import {setup} from "../util/setup";
+import {G} from "../util/global";
 
 setup();
 

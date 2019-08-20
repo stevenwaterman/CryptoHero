@@ -4,8 +4,10 @@ import Asset from "../../../app/trading/asset";
 import TradeDirection from "../../../app/trading/tradeDirection";
 import Instrument from "../../../app/trading/instrument";
 import Order from "../../../app/trading/order";
-import {G, setup} from "../setup/global";
+import {setup} from "../util/setup";
 import Big from "big.js";
+import {G} from "../util/global";
+import Requirements from "../util/requirements";
 
 setup();
 
@@ -37,3 +39,28 @@ test("Happy Path", done => {
         done();
     });
 });
+
+const testRunner = (name: string, params: any, expectedStatus: number) => {
+    test(name, done => {
+        const account = new Account();
+        account.adjustAssets(Asset.BTC, new Big("100"));
+
+        const order = new Order(account, TradeDirection.BUY, new Big("20"), new Big("1"));
+        G.BROKER.placeOrder(Instrument.GBPBTC, order);
+        if (params.order == null) {
+            params.order = order.id;
+        }
+
+        request.get(getUrl(params.order), (error, response) => {
+            expect(error).toBeFalsy();
+            expect(response.statusCode).toEqual(expectedStatus);
+            done();
+        });
+    })
+};
+
+const defaultParams = {};
+
+new Requirements(defaultParams, testRunner)
+    .invalidWhen("order", "1", 404)
+    .execute();

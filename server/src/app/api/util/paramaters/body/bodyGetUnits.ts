@@ -11,11 +11,19 @@ export function bodyGetUnits(broker: Broker, req: Request, res: Response): Big |
         return null
     }
 
+    let units: Big;
     try {
-        return new Big(unitString);
+        units = new Big(unitString);
     } catch {
         res.status(400);
         res.send(`units ${unitString} is not a number`);
         return null;
     }
+
+    if (units.lte(new Big("0"))) {
+        res.status(400);
+        res.send(`units must be positive, was ${units.toString()}`);
+        return null;
+    }
+    return units;
 }

@@ -2,12 +2,14 @@ import Account from "../../../app/trading/account";
 import Asset from "../../../app/trading/asset";
 import * as request from "request";
 import Big from "big.js";
-import {G, setup} from "../setup/global";
+import {setup} from "../util/setup";
+import {G} from "../util/global";
+import Requirements from "../util/requirements";
 
 setup();
 
-function getUrl(account: Account, asset: Asset): string {
-    return `${G.API}account/${account.id}/assets/${asset.name}/withdraw`;
+function getUrl(accountId: string, assetName: string): string {
+    return `${G.API}account/${accountId}/assets/${assetName}/withdraw`;
 }
 
 //TODO when not enough money
@@ -19,12 +21,11 @@ test("Happy Path", done => {
     const options = {
         "json": true,
         "body": {
-            "asset": Asset.BTC.name,
-            "units": new Big("100").toString()
+            "units": new Big("100")
         }
     };
 
-    request.post(getUrl(account, Asset.BTC), options, (error, response, body) => {
+    request.post(getUrl(account.id, Asset.BTC.name), options, (error, response, body) => {
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(200);
         const expected = "Successful";
@@ -34,3 +35,57 @@ test("Happy Path", done => {
         done();
     });
 });
+
+test("Not enough funds", done => {
+    const account = new Account();
+    account.adjustAssets(Asset.BTC, new Big("20"));
+    const options = {
+        "json": true,
+        "body": {
+            "units": new Big("100")
+        }
+    };
+
+    request.post(getUrl(account.id, Asset.BTC.name), options, (error, response) => {
+        expect(error).toBeFalsy();
+        expect(response.statusCode).toEqual(400);
+        expect(account.getAvailableAssets(Asset.BTC)).toEqual(new Big("20"));
+        done();
+    });
+});
+
+const testRunner = (name: string, params: any, expectedStatus: number) => {
+    test(name, done => {
+        const account = new Account();
+        account.adjustAssets(Asset.BTC, new Big("120"));
+        if (params.account == null) {
+            params.account = account.id;
+        }
+
+        const options = {
+            "json": true,
+            "body": {
+                "units": params.units,
+            }
+        };
+
+        request.post(getUrl(params.account, params.asset), options, (error, response) => {
+            expect(error).toBeFalsy();
+            expect(response.statusCode).toEqual(expectedStatus);
+            done();
+        });
+    })
+};
+
+const defaultParams = {
+    "asset": Asset.BTC.name,
+    "units": new Big("100").toString()
+};
+
+new Requirements(defaultParams, testRunner)
+    .invalidWhen("asset", "ABC", 404)
+    .invalidWhen("units", "-1", 400)
+    .invalidWhen("units", "0", 400)
+    .invalidWhen("units", "abc", 400)
+    .invalidWhen("account", "1", 404)
+    .execute();

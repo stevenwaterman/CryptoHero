@@ -7,12 +7,14 @@ import TradeDirection from "../../../app/trading/tradeDirection";
 import Instrument from "../../../app/trading/instrument";
 import Trade from "../../../app/trading/trade";
 import {Map} from "immutable"
-import {G, setup} from "../setup/global";
+import {setup} from "../util/setup";
+import {G} from "../util/global";
+import Requirements from "../util/requirements";
 
 setup();
 
-function getUrl(account: Account): string {
-    return `${G.API}trades/list/account/${account.id}`;
+function getUrl(accountId: string): string {
+    return `${G.API}trades/list/account/${accountId}`;
 }
 
 test("Happy Path", done => {
@@ -43,7 +45,7 @@ test("Happy Path", done => {
         "GBPLTC": []
     };
 
-    request.get(getUrl(acc1), (error, response, body) => {
+    request.get(getUrl(acc1.id), (error, response, body) => {
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(200);
         const json = JSON.parse(body);
@@ -51,3 +53,24 @@ test("Happy Path", done => {
         done();
     });
 });
+
+const testRunner = (name: string, params: any, expectedStatus: number) => {
+    test(name, done => {
+        const account = new Account();
+        if (params.account == null) {
+            params.account = account.id;
+        }
+
+        request.get(getUrl(params.account), (error, response) => {
+            expect(error).toBeFalsy();
+            expect(response.statusCode).toEqual(expectedStatus);
+            done();
+        });
+    })
+};
+
+const defaultParams = {};
+
+new Requirements(defaultParams, testRunner)
+    .invalidWhen("account", "1", 404)
+    .execute();

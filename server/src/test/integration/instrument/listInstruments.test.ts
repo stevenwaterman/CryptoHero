@@ -1,6 +1,7 @@
 import * as request from "request";
 import Instrument from "../../../app/trading/instrument";
-import {G, setup} from "../setup/global";
+import {setup} from "../util/setup";
+import {G} from "../util/global";
 
 setup();
 
