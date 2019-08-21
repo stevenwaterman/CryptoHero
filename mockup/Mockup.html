@@ -17,8 +17,21 @@
             src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-dark bg-primary mb-sm-4 justify-content-md-center">
-    <a class="navbar-brand" href="#"><h2>CryptoHero</h2></a>
+<nav class="navbar navbar-dark bg-primary mb-4">
+    <a class="navbar-brand" href="#"><h4 class="display-4">CryptoHero</h4></a>
+    <form class="form-inline">
+        <!--suppress HtmlFormInputWithoutLabel -->
+        <select class="custom-select" id="accountSelector">
+            <option selected>Account 1</option>
+            <option>Account 2</option>
+            <option>Account 3</option>
+            <option>Account 4</option>
+            <option>Account 5</option>
+        </select>
+        <button class="btn" id="addAccount" type="button">
+            <span class="text-light" style="font-size:24px;">+</span>
+        </button>
+    </form>
 </nav>
 <div class="container-fluid">
     <div class="row">
@@ -27,6 +40,250 @@
                 <div class="card-header my-auto">
                     <h5 class="card-title text-center my-0"><b>Available Funds</b></h5>
                 </div>
+                <div class="row py-2 px-2">
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-6 pr-1">
+                                <b>GBP:</b>
+                            </div>
+                            <div class="col-6 pl-1 text-right">
+                                125.123
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-6 pr-1">
+                                <b>LTC:</b>
+                            </div>
+                            <div class="col-6 pl-1 text-right">
+                                0.164
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-6 pr-1">
+                                <b>BTC:</b>
+                            </div>
+                            <div class="col-6 pl-1 text-right">
+                                135.456
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-6 pr-1">
+                                <b>ETH:</b>
+                            </div>
+                            <div class="col-6 pl-1 text-right">
+                                94.175
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-6 pr-1">
+                                <b>DASH:</b>
+                            </div>
+                            <div class="col-6 pl-1 text-right">
+                                352.126
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" data-target="#totalFunds" data-toggle="modal" type="button">
+                    Total Funds
+                </button>
+                <div class="row pt-2">
+                    <div class="col-sm-6">
+                        <button class="btn btn-primary btn-block pr-sm-1" data-target="#withdrawModal"
+                                data-toggle="modal"
+                                type="button">
+                            Withdraw
+                        </button>
+                    </div>
+                    <div class="col-sm-6">
+                        <button class="btn btn-primary btn-block pl-sm-1" data-target="#depositModal"
+                                data-toggle="modal"
+                                type="button">
+                            Deposit
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3" id="instruments">
+                <div class="col-md-6 pr-md-0">
+                    <div class="card border-primary pt-1">
+                        <h5 class="card-title text-center text-primary"><b>GBP/BTC</b></h5>
+                        <p class="card-text text-center text-primary">1.31425</p>
+                        <div class="row mb-1 mx-0">
+                            <div class="col-6 px-1">
+                                <button class="btn btn-success btn-block btn-sm pl-1 pb-1" data-target="#tradeModal"
+                                        data-toggle="modal" type="button">Buy
+                                </button>
+                            </div>
+                            <div class="col-6 px-1">
+                                <button class="btn btn-danger btn-block btn-sm pr-1 pb-1" data-target="#tradeModal"
+                                        data-toggle="modal" type="button">Sell
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 pl-md-0">
+                    <div class="card pt-1">
+                        <h5 class="card-title text-center"><b>GBP/LTC</b></h5>
+                        <p class="card-text text-center">1.12512</p>
+                        <div class="row mb-1 mx-0">
+                            <div class="col-6 px-1">
+                                <button class="btn btn-success btn-block btn-sm" data-target="#tradeModal"
+                                        data-toggle="modal"
+                                        type="button">Buy
+                                </button>
+                            </div>
+                            <div class="col-6 px-1">
+                                <button class="btn btn-danger btn-block btn-sm" data-target="#tradeModal"
+                                        data-toggle="modal"
+                                        type="button">Sell
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 pr-md-0">
+                    <div class="card pt-1">
+                        <h5 class="card-title text-center"><b>GBP/ETH</b></h5>
+                        <p class="card-text text-center">12.13512</p>
+                        <div class="row mb-1 mx-0">
+                            <div class="col-6 px-1">
+                                <button class="btn btn-success btn-block btn-sm" data-target="#tradeModal"
+                                        data-toggle="modal"
+                                        type="button">Buy
+                                </button>
+                            </div>
+                            <div class="col-6 px-1">
+                                <button class="btn btn-danger btn-block btn-sm" data-target="#tradeModal"
+                                        data-toggle="modal"
+                                        type="button">Sell
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 pl-md-0">
+                    <div class="card pt-1">
+                        <h5 class="card-title text-center"><b>GBP/DASH</b></h5>
+                        <p class="card-text text-center">0.12572</p>
+                        <div class="row mb-1 mx-0">
+                            <div class="col-6 px-1">
+                                <button class="btn btn-success btn-block btn-sm" data-target="#tradeModal"
+                                        data-toggle="modal"
+                                        type="button">Buy
+                                </button>
+                            </div>
+                            <div class="col-6 px-1">
+                                <button class="btn btn-danger btn-block btn-sm" data-target="#tradeModal"
+                                        data-toggle="modal"
+                                        type="button">Sell
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8 my-3 my-sm-0" id="right bar">
+            <div class="text-center pb-2">
+                <h4 class="display-4"><b>GBP/BTC</b></h4>
+            </div>
+            <div class="card" id="graph">
+                <div class="card-header">
+                    <div class="row justify-content-center">
+                        <div class="col-auto my-auto">
+                            <h5 class="card-title text-center my-0"><b>Graphs</b></h5>
+                        </div>
+                        <div class="col-auto">
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-primary active">
+                                    <input autocomplete="off" checked name="options" type="radio">
+                                    Historical
+                                </label>
+                                <label class="btn btn-primary">
+                                    <input autocomplete="off" name="options" type="radio">
+                                    Current
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <img alt="order depth chart" class="img-fluid" src="graph.png"/>
+                </div>
+            </div>
+            <div class="card mt-3" id="trades">
+                <div class="card-header">
+                    <div class="row justify-content-center">
+                        <div class="col-auto my-auto">
+                            <h5 class="card-title text-center my-0"><b>Trades</b></h5>
+                        </div>
+                        <div class="col-auto">
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-primary active">
+                                    <input autocomplete="off" name="options" type="radio">
+                                    Pending
+                                </label>
+                                <label class="btn btn-primary">
+                                    <input autocomplete="off" name="options" type="radio">
+                                    Completed
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p- pt-0">
+                    <table class="table table-borderless mb-0">
+                        <thead>
+                        <tr>
+                            <th scope="col">Time</th>
+                            <th scope="col">Units</th>
+                            <th scope="col">Unit Price</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-striped table-hover">
+                        <tr class="table-success" onclick="$('#orderModal').modal('show')">
+                            <td>11:30:15</td>
+                            <td>112,874.57</td>
+                            <td>0.98725</td>
+                        </tr>
+                        <tr class="table-danger" onclick="$('#orderModal').modal('show')">
+                            <td>11:29:52</td>
+                            <td>52,573.31</td>
+                            <td>1.59781</td>
+                        </tr>
+                        <tr class="table-success" onclick="$('#orderModal').modal('show')">
+                            <td>11:25:15</td>
+                            <td>51.36</td>
+                            <td>5.97821</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="totalFunds" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Total Funds</b></h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>If you cancelled all pending orders, you would have:</p>
                 <div class="row py-2 px-2">
                     <div class="col-lg-6">
                         <div class="row">
@@ -79,183 +336,214 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-primary" type="button">
-                    Total Funds
-                </button>
-            </div>
-            <div class="row mt-3" id="instruments">
-                <div class="col-md-6 pr-md-0">
-                    <div class="card pt-1">
-                        <h5 class="card-title text-center"><b>GBP/BTC</b></h5>
-                        <p class="card-text text-center">1.31425</p>
-                        <div class="row">
-                            <div class="col-6 pr-0">
-                                <button class="btn btn-success btn-block btn-sm" type="button">Buy</button>
-                            </div>
-                            <div class="col-6 pl-0">
-                                <button class="btn btn-danger btn-block btn-sm" type="button">Sell</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 pl-md-0">
-                    <div class="card pt-1">
-                        <h5 class="card-title text-center"><b>GBP/LTC</b></h5>
-                        <p class="card-text text-center">1.12512</p>
-                        <div class="row">
-                            <div class="col-6 pr-0">
-                                <button class="btn btn-success btn-block btn-sm" type="button">Buy</button>
-                            </div>
-                            <div class="col-6 pl-0">
-                                <button class="btn btn-danger btn-block btn-sm" type="button">Sell</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 pr-md-0">
-                    <div class="card pt-1">
-                        <h5 class="card-title text-center"><b>GBP/ETH</b></h5>
-                        <p class="card-text text-center">12.13512</p>
-                        <div class="row">
-                            <div class="col-6 pr-0">
-                                <button class="btn btn-success btn-block btn-sm" type="button">Buy</button>
-                            </div>
-                            <div class="col-6 pl-0">
-                                <button class="btn btn-danger btn-block btn-sm" type="button">Sell</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 pl-md-0">
-                    <div class="card pt-1">
-                        <h5 class="card-title text-center"><b>GBP/DASH</b></h5>
-                        <p class="card-text text-center">0.12572</p>
-                        <div class="row">
-                            <div class="col-6 pr-0">
-                                <button class="btn btn-success btn-block btn-sm" type="button">Buy</button>
-                            </div>
-                            <div class="col-6 pl-0">
-                                <button class="btn btn-danger btn-block btn-sm" type="button">Sell</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
-        <div class="col-sm-8" id="right bar">
-            <div class="card" id="graph">
-                <div class="card-header">
-                    <div class="row justify-content-md-center">
-                        <div class="col-sm-auto my-auto">
-                            <h5 class="card-title text-center my-0"><b>Explore</b></h5>
-                        </div>
-                        <div class="col-sm-auto">
-                            <div class="dropdown">
-                                <button aria-expanded="false" aria-haspopup="true"
-                                        class="btn btn-primary dropdown-toggle"
-                                        data-toggle="dropdown" type="button">
-                                    GBP/BTC
-                                </button>
-                                <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
-                                    <a class="dropdown-item active" href="#">GBP/BTC</a>
-                                    <a class="dropdown-item" href="#">GBP/LTC</a>
-                                    <a class="dropdown-item" href="#">GBP/ETH</a>
-                                    <a class="dropdown-item" href="#">GBP/DASH</a>
+    </div>
+</div>
+<div class="modal fade" id="orderModal" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Order Info</b></h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <b>ID:</b> 1b8a9438-f566-4106-8f36-770ce68a6469
+                </div>
+                <div>
+                    <b>Time:</b> 2019-08-20 11:30:15
+                </div>
+                <div>
+                    <b>Action:</b> BUY GBP/BTC
+                </div>
+                <div>
+                    <b>Units:</b> 150,000.00
+                </div>
+                <div>
+                    <b>Unit Price:</b> 0.98725
+                </div>
+                <div>
+                    <b>Allocated:</b> 148,087.5 BTC
+                </div>
+                <hr class="col-xs-12">
+                <div>
+                    <b>Remaining Units:</b> 112,874.57
+                </div>
+                <div>
+                    <b>Locked:</b> 111,435.41923 BTC
+                </div>
+                <div>
+                    <b>Progress:</b> 24.75%
+                </div>
+                <div>
+                    <b>Average Price:</b> 0.98623
+                </div>
+                <div>
+                    <b>Spent:</b> 36,614.21283 BTC
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal" type="button">Cancel Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="tradeModal" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>BTC &rarr; GBP</b></h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="unitPrice">Max price per BTC</label>
+                        <input class="form-control" id="unitPrice" type="number" value="1.31425">
+                    </div>
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div class="col-sm-6">
+                                <label for="unitsNumber">Units to Buy</label>
+                                <div class="input-group">
+                                    <input class="form-control" id="unitsNumber" max="95.2" min="0"
+                                           placeholder="12.68" type="number">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">BTC</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="unitsPercent">GBP to Spend</label>
+                                <div class="input-group">
+                                    <input class="form-control" id="unitsPercent" max="100" min="0"
+                                           placeholder="25.0" type="number">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">%</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-auto">
-                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                <label class="btn btn-primary active">
-                                    <input autocomplete="off" checked name="options" type="radio">
-                                    Depth
-                                </label>
-                                <label class="btn btn-primary">
-                                    <input autocomplete="off" name="options" type="radio">
-                                    Price
-                                </label>
-                                <label class="btn btn-primary">
-                                    <input autocomplete="off" name="options" type="radio">
-                                    Volume
-                                </label>
+                    </div>
+                </form>
+                <hr class="col-xs-12">
+                <p class="text-center">Buying <b>12.68 BTC</b>, spending up to <b>16.66469 GBP</b></p>
+                <p>This amount will be immediately deducted from your available funds and may be partially refunded if
+                    trades happen at under the max price. The order can be cancelled at any time, refunding the GBP that
+                    was allocated to be spent.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal" type="button">Confirm Trade</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="withdrawModal" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Withdraw Funds</b></h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-auto">
+                                <label for="withdrawAsset">Asset:</label>
+                            </div>
+                            <div class="col-sm-auto">
+                                <select class="custom-select" id="withdrawAsset">
+                                    <option selected>GBP</option>
+                                    <option>LTC</option>
+                                    <option>BTC</option>
+                                    <option>ETH</option>
+                                    <option>DASH</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-body">
-                    <img alt="order depth chart" class="img-fluid" src="graph.png"/>
-                </div>
-            </div>
-            <div class="card mt-3" id="trades">
-                <div class="card-header">
-                    <div class="row justify-content-md-center">
-                        <div class="col-sm-auto my-auto">
-                            <h5 class="card-title text-center my-0"><b>Blotter</b></h5>
-                        </div>
-                        <div class="col-sm-auto">
-                            <div class="dropdown">
-                                <button aria-expanded="false" aria-haspopup="true"
-                                        class="btn btn-primary dropdown-toggle"
-                                        data-toggle="dropdown" type="button">
-                                    All Pairs
-                                </button>
-                                <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
-                                    <a class="dropdown-item active" href="#">All Pairs</a>
-                                    <a class="dropdown-item" href="#">GBP/BTC</a>
-                                    <a class="dropdown-item" href="#">GBP/LTC</a>
-                                    <a class="dropdown-item" href="#">GBP/ETH</a>
-                                    <a class="dropdown-item" href="#">GBP/DASH</a>
+                    <div class="form-group">
+                        <label for="withdrawNumber">Amount To Withdraw</label>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input class="form-control" id="withdrawNumber" max="95.2" min="0"
+                                           placeholder="12.68" type="number">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">GBP</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <!--suppress HtmlFormInputWithoutLabel -->
+                                    <input class="form-control" id="withdrawPercent" max="100" min="0"
+                                           placeholder="25.0" type="number">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">%</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-auto">
-                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                <label class="btn btn-primary">
-                                    <input autocomplete="off" name="options" type="radio">
-                                    Pending
-                                </label>
-                                <label class="btn btn-primary active">
-                                    <input autocomplete="off" name="options" type="radio">
-                                    Completed
-                                </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal" type="button">Confirm Withdrawal</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="depositModal" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Deposit Funds</b></h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-auto">
+                                <label for="depositAsset">Asset:</label>
+                            </div>
+                            <div class="col-sm-auto">
+                                <select class="custom-select" id="depositAsset">
+                                    <option selected>GBP</option>
+                                    <option>LTC</option>
+                                    <option>BTC</option>
+                                    <option>ETH</option>
+                                    <option>DASH</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">Action</th>
-                            <th scope="col">Time</th>
-                            <th scope="col">Units</th>
-                            <th scope="col">Unit Price</th>
-                        </tr>
-                        </thead>
-                        <tbody class="table-striped table-hover">
-                        <tr class="table-success">
-                            <th scope="row">BUY GBP/BTC</th>
-                            <td>11:30:15</td>
-                            <td>112,874.57</td>
-                            <td>0.98725</td>
-                        </tr>
-                        <tr class="table-danger">
-                            <th scope="row">SELL GBP/LTC</th>
-                            <td>11:29:52</td>
-                            <td>52,573.31</td>
-                            <td>1.59781</td>
-                        </tr>
-                        <tr class="table-success">
-                            <th scope="row">BUY GBP/DASH</th>
-                            <td>11:25:15</td>
-                            <td>51.36</td>
-                            <td>5.97821</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <div class="form-group">
+                        <label for="depositNumber">Amount To deposit</label>
+                        <div class="input-group">
+                            <input class="form-control" id="depositNumber" max="95.2" min="0"
+                                   placeholder="12.68" type="number">
+                            <div class="input-group-append">
+                                <div class="input-group-text">GBP</div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal" type="button">Confirm Deposit</button>
+            </div>
         </div>
     </div>
 </div>
