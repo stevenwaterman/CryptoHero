@@ -39,7 +39,7 @@ test("Happy Path", done => {
         done();
     });
 });
-
+//TODO test against self-trading
 test("Not enough funds", done => {
     const account = new Account();
     account.adjustAssets(Asset.BTC, new Big("5"));

@@ -35,16 +35,16 @@ Contains empty matcher and unit test file.
 │   │   ├── src
 │   │   │   ├── components
 |   │   │   │   ├── App.css - CSS specific to the App component
-|   │   │   │   ├── App.js - main component for the app
-|   │   │   │   ├── App.test.js - tests specific to the App component
+|   │   │   │   ├── App.tsx - main component for the app
+|   │   │   │   ├── App.test.ts - tests specific to the App component
 │   │   │   ├── reducers
 |   │   │   │   ├── ducks
-|   |   │   │   │   ├── example.js - an example 'duck' which contains a related action type, reducer and action creator
-|   │   │   │   ├── root.js - root reducer that is a combination of all the other reducers
+|   |   │   │   │   ├── example.ts - an example 'duck' which contains a related action type, reducer and action creator
+|   │   │   │   ├── root.ts - root reducer that is a combination of all the other reducers
 │   │   │   ├── store
-|   │   │   │   ├── configure-store.js - code to configure the Redux store
+|   │   │   │   ├── configure-store.ts - code to configure the Redux store
 │   │   │   ├── index.css - application-wide styles
-│   │   │   ├── index.ts - JavaScript entry point
+│   │   │   ├── index.tsx - JavaScript entry point
 │   │   │   ├── logo.svg - default React logo
 │   |   ├── .gitignore - specifies intentionally untracked files that Git should ignore
 │   │   ├── package.json - metadata relevant to the client application, used by npm to manage application dependencies
