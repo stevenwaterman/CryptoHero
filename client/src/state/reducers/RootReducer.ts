@@ -1,5 +1,5 @@
 import {combineReducers} from "redux";
-import {instrumentReducer} from "./InstrumentReducer";
+import {instrumentReducer} from "./instrument/InstrumentReducer";
 
 export default combineReducers({
     instruments: instrumentReducer

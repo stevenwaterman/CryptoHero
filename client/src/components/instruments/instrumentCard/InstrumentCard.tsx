@@ -1,11 +1,6 @@
 import React from "react";
-import {ELEMENT} from "../../state/store";
-
-export interface InstrumentCardProps {
-    instrument: string,
-    price: string,
-    selected: boolean
-}
+import {ELEMENT, State} from "../../../state/store/RootStore";
+import {InstrumentCardProps} from "./InstrumentCardContainer";
 
 function borderColor(selected: boolean): string {
     if (selected) {
@@ -23,12 +18,12 @@ function textColor(selected: boolean): string {
     }
 }
 
-export default class InstrumentCard extends React.Component<InstrumentCardProps> {
+export default class InstrumentCard extends React.PureComponent<InstrumentCardProps, State> {
     render(): ELEMENT {
         return (
-            <div className={`card ${borderColor(this.props.selected)} pt-1`}>
+            <div className={`card ${borderColor(this.props.selected)} pt-1`} onClick={this.props.onCardClick}>
                 <h5 className={`card-title text-center ${textColor(this.props.selected)}`}>
-                    <b>{this.props.instrument}</b></h5>
+                    <b>{this.props.instrument.name}</b></h5>
                 <p className={`card-text text-center ${textColor(this.props.selected)}`}>{this.props.price}</p>
                 <div className="row mb-1 mx-0">
                     <div className="col-6 px-1">
