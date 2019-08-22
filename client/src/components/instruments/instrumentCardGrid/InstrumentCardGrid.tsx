@@ -11,9 +11,9 @@ function generateColumns({instrumentPrices, selectedInstrument}: InstrumentCardG
     })
 }
 
-function generateOneColumn(instrument: Instrument, price: string, selected: boolean): ELEMENT {
+function generateOneColumn(instrument: Instrument, price: number, selected: boolean): ELEMENT {
     return (
-        <div className="col-md-6 pr-md-0">
+        <div key={instrument.name} className="col-md-6 pr-md-0">
             <InstrumentCardContainer instrument={instrument} price={price} selected={selected}/>
         </div>
     )

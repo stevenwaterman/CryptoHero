@@ -316,7 +316,7 @@ describe("pending orders", () => {
         expectPending(acc1, [order], []);
     });
 });
-
+//TODO funds from both asses should get locked when selling at negative price
 describe("position updated after order", () => {
     test("BUY 1x1", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));

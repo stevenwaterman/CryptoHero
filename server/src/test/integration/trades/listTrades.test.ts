@@ -39,7 +39,7 @@ test("Happy Path", done => {
                 "buyer": trade.buyer.id,
                 "seller": trade.seller.id,
                 "units": trade.units.toString(),
-                "unit price": trade.unitPrice.toString()
+                "unit price": trade.showUnitPrice.toString()
             }
         ],
         "GBPLTC": []

@@ -47,7 +47,7 @@ export default class SER {
             "buyer": SER.ACCOUNT(trade.buyer),
             "seller": SER.ACCOUNT(trade.seller),
             "units": SER.BIG(trade.units),
-            "unit price": SER.BIG(trade.unitPrice)
+            "unit price": SER.BIG(trade.showUnitPrice)
         };
     }
 
@@ -66,7 +66,7 @@ export default class SER {
             "timestamp": order.timestamp.getTime(),
             "direction": SER.DIRECTION(order.direction),
             "units": SER.BIG(order.units),
-            "unit price": SER.BIG(order.unitPrice)
+            "unit price": SER.BIG(order.showUnitPrice)
         }
     }
 
@@ -86,7 +86,7 @@ export default class SER {
 
     private static PRICE_AGGREGATE_ELEMENT(element: PriceAggregateElement): any {
         return {
-            "unit price": SER.BIG(element.unitPrice),
+            "unit price": SER.BIG(element.showUnitPrice),
             "units": SER.BIG(element.units)
         }
     }

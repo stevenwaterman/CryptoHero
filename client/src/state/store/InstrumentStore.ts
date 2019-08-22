@@ -3,14 +3,14 @@ import IInstrumentPricesAction from "../reducers/instrument/IInstrumentPricesAct
 import Instrument from "../../models/Instrument";
 
 export default interface InstrumentStore {
-    readonly prices: Array<[Instrument, string]>;
+    readonly prices: Array<[Instrument, number]>;
     readonly selectedInstrument: Instrument;
 }
 
 export const initialInstrumentStore: InstrumentStore = {
     prices: [
-        [new Instrument("GBP", "BTC"), "1.3"],
-        [new Instrument("GBP", "LTC"), "1.2"]
+        [new Instrument("GBP", "BTC"), 1.3],
+        [new Instrument("GBP", "LTC"), 1.2]
     ],
     selectedInstrument: new Instrument("GBP", "BTC")
 };

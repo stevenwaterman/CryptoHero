@@ -33,12 +33,12 @@ export default class Order {
 
         this.spendAmount =
             this.direction === TradeDirection.BUY
-                ? this.units.mul(this.unitPrice)
+                ? this.units.mul(this.showUnitPrice)
                 : this.units;
         this.gainAmount =
             this.direction === TradeDirection.BUY
                 ? this.units
-                : this.units.mul(this.unitPrice);
+                : this.units.mul(this.showUnitPrice);
 
         REGISTRY.registerOrder(this);
     }

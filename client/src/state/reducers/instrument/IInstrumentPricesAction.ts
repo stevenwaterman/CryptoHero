@@ -1,7 +1,7 @@
 import Instrument from "../../../models/Instrument";
 
 interface IPayload {
-    newPrices: Array<[Instrument, string]>
+    newPrices: Array<[Instrument, number]>
 }
 
 export const InstrumentPricesType: string = "INSTRUMENT_PRICES_UPDATE";
@@ -12,14 +12,14 @@ export default interface IInstrumentPricesAction {
 }
 
 export class InstrumentPricesAction {
-    static create(newPrices: Array<[Instrument, string]>): IInstrumentPricesAction {
+    static create(newPrices: Array<[Instrument, number]>): IInstrumentPricesAction {
         return {
             type: InstrumentPricesType,
             payload: this.createPayload(newPrices)
         }
     }
 
-    static createPayload(newPrices: Array<[Instrument, string]>): IPayload {
+    static createPayload(newPrices: Array<[Instrument, number]>): IPayload {
         return {
             newPrices: newPrices
         }

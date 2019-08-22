@@ -38,7 +38,7 @@ export default class InstrumentBroker {
         const buy = order.direction === TradeDirection.BUY ? order : matched;
         const sell = matched.direction === TradeDirection.SELL ? matched : order;
 
-        const unitPrice = matched.unitPrice;
+        const unitPrice = matched.showUnitPrice;
         const units = InstrumentBroker.getUnitsTraded(order, matched);
         buy.units = buy.units.minus(units);
         sell.units = sell.units.minus(units);
@@ -62,9 +62,9 @@ export default class InstrumentBroker {
 
         switch (o1.direction) {
             case TradeDirection.BUY:
-                return o1.unitPrice.gte(o2.unitPrice);
+                return o1.showUnitPrice.gte(o2.showUnitPrice);
             case TradeDirection.SELL:
-                return o1.unitPrice.lte(o2.unitPrice);
+                return o1.showUnitPrice.lte(o2.showUnitPrice);
             default:
                 throw `Unrecognised trade direction: ${o1.direction}`;
         }
@@ -134,7 +134,7 @@ export default class InstrumentBroker {
         const gainedAmount = actualUnits;
         account.adjustAssets(gaining, gainedAmount);
 
-        const expectedSpend = actualUnits.mul(order.unitPrice);
+        const expectedSpend = actualUnits.mul(order.showUnitPrice);
         const actuallySpent = actualUnits.mul(actualUnitPrice);
         const refundDue = expectedSpend.minus(actuallySpent);
         account.adjustAssets(spending, refundDue);
@@ -323,23 +323,18 @@ export default class InstrumentBroker {
         }
     }
 
+    getMarketPrice(): Big {
+        if (this.trades.length === 0) return Big("0");
+        return this.trades[this.trades.length - 1].showUnitPrice;
+    }
+
     private selfTradeBuyingGuard(buy: Order): void {
         const bestSell = this.sells
             .underlying()
             .find(sell => buy.account.id === sell.account.id);
 
-        if (bestSell != null && buy.unitPrice.gte(bestSell.unitPrice)) {
-            throw `Would cause self-trade. Buy order placed @ ${buy.unitPrice}, sell exists @ ${bestSell.unitPrice}`;
-        }
-    }
-
-    private selfTradeSellingGuard(sell: Order): void {
-        const bestBuy = this.buys
-            .underlying()
-            .find(buy => buy.account.id === sell.account.id);
-
-        if (bestBuy != null && bestBuy.unitPrice.gte(sell.unitPrice)) {
-            throw `Would cause self-trade. Sell order placed @ ${sell.unitPrice}, buy exists @ ${bestBuy.unitPrice}`;
+        if (bestSell != null && buy.showUnitPrice.gte(bestSell.showUnitPrice)) {
+            throw `Would cause self-trade. Buy order placed @ ${buy.showUnitPrice}, sell exists @ ${bestSell.showUnitPrice}`;
         }
     }
 
@@ -349,24 +344,29 @@ export default class InstrumentBroker {
         return new PriceAggregate(aggregateBuys, aggregateSells)
     }
 
-    getMarketPrice(): Big {
-        if (this.trades.length === 0) return Big("0");
-        return this.trades[this.trades.length - 1].unitPrice;
+    private selfTradeSellingGuard(sell: Order): void {
+        const bestBuy = this.buys
+            .underlying()
+            .find(buy => buy.account.id === sell.account.id);
+
+        if (bestBuy != null && bestBuy.showUnitPrice.gte(sell.showUnitPrice)) {
+            throw `Would cause self-trade. Sell order placed @ ${sell.showUnitPrice}, buy exists @ ${bestBuy.showUnitPrice}`;
+        }
     }
 
     private aggregateOrders(orders: Array<Order>): Array<PriceAggregateElement> {
         const reducer = (acc: Array<PriceAggregateElement>, order: Order) => {
             if (acc.length === 0) {
-                acc.push(new PriceAggregateElement(order.unitPrice, order.units));
+                acc.push(new PriceAggregateElement(order.showUnitPrice, order.units));
                 return acc;
             }
 
             const last = acc[acc.length - 1];
-            if (order.unitPrice.eq(last.unitPrice)) {
+            if (order.showUnitPrice.eq(last.showUnitPrice)) {
                 last.units = last.units.plus(order.units);
                 return acc;
             } else {
-                acc.push(new PriceAggregateElement(order.unitPrice, order.units));
+                acc.push(new PriceAggregateElement(order.showUnitPrice, order.units));
                 return acc;
             }
         };

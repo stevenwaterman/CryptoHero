@@ -11,9 +11,9 @@ export function instrumentReducer(
 ): State {
     switch (action.type) {
         case InstrumentSelectionType:
-            return instrumentSelection(state, <IInstrumentSelectionAction>action);
+            return instrumentSelection(state, action as IInstrumentSelectionAction);
         case InstrumentPricesType:
-            return instrumentPrices(state, <IInstrumentPricesAction>action);
+            return instrumentPrices(state, action as IInstrumentPricesAction);
         default:
             return state;
     }

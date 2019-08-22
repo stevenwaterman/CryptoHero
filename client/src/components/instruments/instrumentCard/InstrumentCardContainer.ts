@@ -20,7 +20,7 @@ interface StateProps {
 
 interface OwnProps {
     instrument: Instrument,
-    price: string,
+    price: number,
     selected: boolean,
 }
 
