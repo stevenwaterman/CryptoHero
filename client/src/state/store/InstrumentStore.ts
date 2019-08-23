@@ -9,8 +9,10 @@ export default interface InstrumentStore {
 
 export const initialInstrumentStore: InstrumentStore = {
     prices: [
-        [new Instrument("GBP", "BTC"), 1.3],
-        [new Instrument("GBP", "LTC"), 1.2]
+        [new Instrument("BTC", "GBP"), 8611.82157],
+        [new Instrument("LTC", "GBP"), 62.38872],
+        [new Instrument("ETH", "GBP"), 161.39427],
+        [new Instrument("DASH", "GBP"), 78.07013],
     ],
     selectedInstrument: new Instrument("GBP", "BTC")
 };

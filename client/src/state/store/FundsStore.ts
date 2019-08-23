@@ -9,7 +9,9 @@ export const initialFundsStore: FundsStore = {
     availableFunds: [
         ["GBP", 1123.34],
         ["BTC", 185.27],
-        ["LTC", 1123.62]
+        ["LTC", 1123.62],
+        ["ETH", 94.175],
+        ["DASH", 352.126]
     ],
 };
 
