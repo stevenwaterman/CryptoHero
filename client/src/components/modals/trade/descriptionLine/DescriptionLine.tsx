@@ -21,7 +21,7 @@ export default class DescriptionLine extends React.PureComponent<DescriptionLine
     }
 
     private getAmount1(): ELEMENT{
-        return <b>{formatMoney(Math.abs(this.props.asset1Amount), 5, true)} {this.props.asset1}</b>
+        return <b>{formatMoney(Math.abs(this.props.asset1Amount), 5, true, true)} {this.props.asset1}</b>
     }
 
     private getAction2(): ELEMENT{
@@ -38,7 +38,7 @@ export default class DescriptionLine extends React.PureComponent<DescriptionLine
 
     private getAmount2(): ELEMENT{
         if(this.props.price === 0) return "";
-        return <b>{formatMoney(Math.abs(this.props.asset2Amount), 5, true)} {this.props.asset2}</b>;
+        return <b>{formatMoney(Math.abs(this.props.asset2Amount), 5, true, true)} {this.props.asset2}</b>;
     }
 
     render() {

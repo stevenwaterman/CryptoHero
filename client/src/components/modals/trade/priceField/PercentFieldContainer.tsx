@@ -1,22 +1,26 @@
 import {connect} from "react-redux";
 import {State} from "../../../../state/store/RootStore";
 import NumberField from "./NumberField";
-import ISetAmountAction, {SetAmountAction} from "../../../../state/reducers/trade/value/ISetAmountAction";
+import ISetPercentAction, {
+    SetPercentAction
+} from "../../../../state/reducers/trade/value/ISetPercentAction";
 import {ThunkDispatch} from "redux-thunk"
 import ISetPercentTextAction, {SetPercentTextAction} from "../../../../state/reducers/trade/text/ISetPercentTextAction";
+import {formatMoney} from "../../../../util/FormatMoney";
+import IResetPercentTextAction, {ResetPercentTextAction} from "../../../../state/reducers/trade/resetText/IResetPercentTextAction";
 
-type Actions = ISetAmountAction | ISetPercentTextAction
+type Actions = ISetPercentAction | ISetPercentTextAction | IResetPercentTextAction
 
 interface DispatchProps {
     onValueChange: (newPercent: number) => void,
     onTextChange: (newText: string) => void,
+    onDone: () => void,
 }
 
 interface StateProps {
     text: string,
-    value: number,
+    value: number | null,
     append: string,
-    enable: boolean,
 }
 
 interface OwnProps {
@@ -25,8 +29,9 @@ interface OwnProps {
 
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onValueChange: (newPercent) => dispatch(SetAmountAction.fireWithPercent(newPercent)),
-        onTextChange: (newText) => dispatch(SetPercentTextAction.fire(newText))
+        onValueChange: (newPercent) => dispatch(SetPercentAction.fire(newPercent)),
+        onTextChange: (newText) => dispatch(SetPercentTextAction.fire(newText)),
+        onDone: () => dispatch(ResetPercentTextAction.fire()),
     }
 }
 
@@ -36,7 +41,6 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
         text: state.trade.percentText,
         value: state.trade.percent,
         append: `% ${state.trade.instrument.asset2}`,
-        enable: state.trade.price > 0
     }
 }
 

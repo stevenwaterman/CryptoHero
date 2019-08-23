@@ -40,20 +40,18 @@ export default class TradeModal extends React.PureComponent<TradeModalProps, Tra
                             <form>
                                 <div className="form-group">
                                     <div className="form-row">
-                                        <div className="col-sm-4 my-auto px-0">
-                                            <label className="text-center my-0"
-                                                   htmlFor="unitPrice">{maxMinPriceString(this.props.buying)} price per {this.props.asset1}</label>
+                                        <div className="col-sm-3 my-auto px-0">
+                                            {maxMinPriceString(this.props.buying)} price
                                         </div>
-                                        <div className="col-sm-8 mt-2 mt-sm-0">
+                                        <div className="col-sm-9 mt-2 mt-sm-0">
                                             <PriceFieldContainer step={0.00001}/>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="form-group">
                                     <div className="form-row">
-                                        <div className="col-sm-2 my-auto px-0">
-                                            <label className="text-center my-0"
-                                                   htmlFor="unitsNumber">{buySellString(this.props.buying)}ing</label>
+                                        <div className="col-sm-1 my-auto px-0">
+                                            {buySellString(this.props.buying)}
                                         </div>
                                         <div className="col-sm-5 mt-2 mt-sm-0">
                                             <div className="input-group">
@@ -63,7 +61,7 @@ export default class TradeModal extends React.PureComponent<TradeModalProps, Tra
                                         <div className="col-sm-1 my-auto px-0">
                                             for
                                         </div>
-                                        <div className="col-sm-4 mt-2 mt-sm-0">
+                                        <div className="col-sm-5 mt-2 mt-sm-0">
                                             <PercentFieldContainer step={0.01}/>
                                         </div>
                                     </div>
