@@ -1,7 +1,8 @@
 import Instrument from "../../../models/Instrument";
+import {FuncToThunk} from "../../../util/FuncToThunk";
 
 interface IPayload {
-    newInstrument: Instrument
+    selected: Instrument
 }
 
 export const InstrumentSelectionType: string = "INSTRUMENT_SELECTION_CHANGE";
@@ -12,16 +13,14 @@ export default interface IInstrumentSelectionAction {
 }
 
 export class InstrumentSelectionAction {
-    static create(newInstrument: Instrument): IInstrumentSelectionAction {
+    static fire = (selected: Instrument) => FuncToThunk(() => InstrumentSelectionAction.create(selected));
+
+    static create(selected: Instrument): IInstrumentSelectionAction {
         return {
             type: InstrumentSelectionType,
-            payload: this.createPayload(newInstrument)
-        }
-    }
-
-    private static createPayload(newInstrument: Instrument): IPayload {
-        return {
-            newInstrument: newInstrument
+            payload: {
+                selected: selected
+            }
         }
     }
 }

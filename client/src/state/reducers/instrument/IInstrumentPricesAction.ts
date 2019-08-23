@@ -1,4 +1,5 @@
 import Instrument from "../../../models/Instrument";
+import {FuncToThunk} from "../../../util/FuncToThunk";
 
 interface IPayload {
     newPrices: Array<[Instrument, number]>
@@ -12,16 +13,14 @@ export default interface IInstrumentPricesAction {
 }
 
 export class InstrumentPricesAction {
-    static create(newPrices: Array<[Instrument, number]>): IInstrumentPricesAction {
+    static fire = (newPrices: Array<[Instrument, number]>) => FuncToThunk(() => InstrumentPricesAction.create(newPrices));
+
+    private static create(newPrices: Array<[Instrument, number]>): IInstrumentPricesAction {
         return {
             type: InstrumentPricesType,
-            payload: this.createPayload(newPrices)
-        }
-    }
-
-    static createPayload(newPrices: Array<[Instrument, number]>): IPayload {
-        return {
-            newPrices: newPrices
+            payload: {
+                newPrices: newPrices
+            }
         }
     }
 }

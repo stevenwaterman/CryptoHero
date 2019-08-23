@@ -1,3 +1,5 @@
+import {FuncToThunk} from "../../../util/FuncToThunk";
+
 interface IPayload {
     asset: string,
     amount: number,
@@ -11,17 +13,15 @@ export default interface IDepositFundsAction {
 }
 
 export class DepositFundsAction {
-    static create(asset: string, amount: number): IDepositFundsAction {
+    static fire = (asset: string, amount: number) => FuncToThunk(() => DepositFundsAction.create(asset, amount));
+
+    private static create(asset: string, amount: number): IDepositFundsAction {
         return {
             type: DepositFundsType,
-            payload: this.createPayload(asset, amount)
-        }
-    }
-
-    static createPayload(asset: string, amount: number): IPayload {
-        return {
-            asset: asset,
-            amount: amount
+            payload: {
+                asset: asset,
+                amount: amount
+            }
         }
     }
 }

@@ -1,3 +1,5 @@
+import {FuncToThunk} from "../../../util/FuncToThunk";
+
 interface IPayload {
 }
 
@@ -9,14 +11,11 @@ export default interface IConfirmTradeAction {
 }
 
 export class ConfirmTradeAction {
-    static create(): IConfirmTradeAction {
+    static fire = FuncToThunk(() => ConfirmTradeAction.create());
+    private static create(): IConfirmTradeAction {
         return {
             type: ConfirmTradeType,
-            payload: this.createPayload()
+            payload: {}
         }
-    }
-
-    static createPayload(): IPayload {
-        return {}
     }
 }

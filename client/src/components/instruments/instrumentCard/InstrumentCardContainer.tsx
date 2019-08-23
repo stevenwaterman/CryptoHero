@@ -1,11 +1,12 @@
 import {connect} from "react-redux";
 import InstrumentCard from "./InstrumentCard";
-import {Dispatch} from "redux"
+import {Store} from "redux"
 import {InstrumentActions} from "../../../state/store/InstrumentStore";
 import {InstrumentSelectionAction} from "../../../state/reducers/instrument/IInstrumentSelectionAction";
 import {State} from "../../../state/store/RootStore";
 import Instrument from "../../../models/Instrument";
 import IStartTradeAction, {StartTradeAction} from "../../../state/reducers/trade/IStartTradeAction";
+import {ThunkDispatch} from "redux-thunk"
 
 type Actions = InstrumentActions | IStartTradeAction
 
@@ -26,11 +27,11 @@ interface OwnProps {
 
 export type InstrumentCardProps = StateProps & DispatchProps & OwnProps
 
-function mapDispatchToProps(dispatch: Dispatch<Actions>, ownProps: OwnProps): DispatchProps {
+function mapDispatchToProps(dispatch: ThunkDispatch<Store, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onCardClick: () => dispatch(InstrumentSelectionAction.create(ownProps.instrument)),
-        onBuyClick: () => dispatch(StartTradeAction.create(true, ownProps.instrument, ownProps.price)),
-        onSellClick: () => dispatch(StartTradeAction.create(false, ownProps.instrument, ownProps.price))
+        onCardClick: () => dispatch(InstrumentSelectionAction.fire(ownProps.instrument)),
+        onBuyClick: () => dispatch(StartTradeAction.fire(true, ownProps.instrument)),
+        onSellClick: () => dispatch(StartTradeAction.fire(false, ownProps.instrument))
     }
 }
 

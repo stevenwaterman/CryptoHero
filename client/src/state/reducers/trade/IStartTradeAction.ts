@@ -1,9 +1,9 @@
 import Instrument from "../../../models/Instrument";
+import {FuncToThunk} from "../../../util/FuncToThunk";
 
 interface IPayload {
     buying: boolean,
     instrument: Instrument,
-    price: number
 }
 
 export const StartTradeType: string = "TRADE_START";
@@ -14,18 +14,15 @@ export default interface IStartTradeAction {
 }
 
 export class StartTradeAction {
-    static create(buying: boolean, instrument: Instrument, price: number): IStartTradeAction {
+    static fire = (buying: boolean, instrument: Instrument) => FuncToThunk(() => StartTradeAction.create(buying, instrument));
+
+    private static create(buying: boolean, instrument: Instrument): IStartTradeAction {
         return {
             type: StartTradeType,
-            payload: this.createPayload(buying, instrument, price)
-        }
-    }
-
-    static createPayload(buying: boolean, instrument: Instrument, price: number): IPayload {
-        return {
-            buying: buying,
-            instrument: instrument,
-            price: price
+            payload: {
+                buying: buying,
+                instrument: instrument,
+            }
         }
     }
 }

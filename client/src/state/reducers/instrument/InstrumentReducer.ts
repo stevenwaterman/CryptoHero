@@ -20,10 +20,10 @@ export function instrumentReducer(
 }
 
 function instrumentSelection(state: State, action: IInstrumentSelectionAction): State {
-    const {newInstrument} = action.payload;
+    const {selected} = action.payload;
     return {
         prices: state.prices,
-        selectedInstrument: newInstrument
+        selectedInstrument: selected
     }
 }
 
