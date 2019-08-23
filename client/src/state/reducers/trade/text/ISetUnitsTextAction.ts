@@ -14,7 +14,7 @@ export default interface ISetUnitsTextAction {
 export class SetUnitsTextAction {
     static fire = (newText: string) => FuncToThunk(() => SetUnitsTextAction.create(newText));
 
-    private static create(newText: string): ISetUnitsTextAction{
+    private static create(newText: string): ISetUnitsTextAction {
         return {
             type: SetUnitsTextType,
             payload: {

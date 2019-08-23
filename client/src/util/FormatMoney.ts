@@ -1,7 +1,7 @@
 export function formatMoney(num: number | null, decimals: number = 5, withCommas: boolean = true, stripTrailingZeros: boolean = false): string {
     if (num == null) return "";
     let str = num.toFixed(decimals);
-    if(withCommas){
+    if (withCommas) {
         str = str.replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
     if (stripTrailingZeros) {

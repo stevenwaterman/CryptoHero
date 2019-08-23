@@ -9,7 +9,7 @@ export default interface IResetPriceTextAction {
 export class ResetPriceTextAction {
     static fire = () => FuncToThunk(() => ResetPriceTextAction.create());
 
-    private static create(): IResetPriceTextAction{
+    private static create(): IResetPriceTextAction {
         return {
             type: ResetPriceTextType,
         }

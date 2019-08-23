@@ -14,7 +14,7 @@ export default interface ISetPriceTextAction {
 export class SetPriceTextAction {
     static fire = (newText: string) => FuncToThunk(() => SetPriceTextAction.create(newText));
 
-    private static create(newText: string): ISetPriceTextAction{
+    private static create(newText: string): ISetPriceTextAction {
         return {
             type: SetPriceTextType,
             payload: {

@@ -9,7 +9,7 @@ export default interface IResetUnitsTextAction {
 export class ResetUnitsTextAction {
     static fire = () => FuncToThunk(() => ResetUnitsTextAction.create());
 
-    private static create(): IResetUnitsTextAction{
+    private static create(): IResetUnitsTextAction {
         return {
             type: ResetUnitsTextType,
         }

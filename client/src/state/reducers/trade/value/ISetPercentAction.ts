@@ -20,7 +20,7 @@ export class SetPercentAction {
         return SetPercentAction.create(newPercent, maxUnits);
     });
 
-    private static create(newPercent: number, maxUnits: number): ISetPercentAction{
+    private static create(newPercent: number, maxUnits: number): ISetPercentAction {
         return {
             type: SetPercentType,
             payload: {

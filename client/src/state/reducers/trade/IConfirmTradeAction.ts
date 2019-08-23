@@ -12,6 +12,7 @@ export default interface IConfirmTradeAction {
 
 export class ConfirmTradeAction {
     static fire = FuncToThunk(() => ConfirmTradeAction.create());
+
     private static create(): IConfirmTradeAction {
         return {
             type: ConfirmTradeType,

@@ -5,7 +5,6 @@ import {ELEMENT} from "../../state/store/RootStore";
 import TradeModalContainer from "../modals/trade/TradeModalContainer";
 import AvailableFundsContainer from "../funds/AvailableFundsContainer";
 import NavBar from "../nav/NavBar";
-import TotalFundsModal from "../modals/funds/TotalFundsModalContainer";
 import TotalFundsModalContainer from "../modals/funds/TotalFundsModalContainer";
 import SelectedInstrument from "../selectedInstrument/SelectedInstrumentContainer";
 

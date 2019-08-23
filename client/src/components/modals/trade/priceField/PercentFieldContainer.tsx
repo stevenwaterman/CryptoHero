@@ -1,12 +1,9 @@
 import {connect} from "react-redux";
 import {State} from "../../../../state/store/RootStore";
 import NumberField from "./NumberField";
-import ISetPercentAction, {
-    SetPercentAction
-} from "../../../../state/reducers/trade/value/ISetPercentAction";
+import ISetPercentAction, {SetPercentAction} from "../../../../state/reducers/trade/value/ISetPercentAction";
 import {ThunkDispatch} from "redux-thunk"
 import ISetPercentTextAction, {SetPercentTextAction} from "../../../../state/reducers/trade/text/ISetPercentTextAction";
-import {formatMoney} from "../../../../util/FormatMoney";
 import IResetPercentTextAction, {ResetPercentTextAction} from "../../../../state/reducers/trade/resetText/IResetPercentTextAction";
 
 type Actions = ISetPercentAction | ISetPercentTextAction | IResetPercentTextAction

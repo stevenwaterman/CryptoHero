@@ -19,7 +19,7 @@ export class SetUnitsAction {
         return SetUnitsAction.create(newUnits, maxUnits);
     });
 
-    private static create(newUnits: number, maxUnits: number | null){
+    private static create(newUnits: number, maxUnits: number | null) {
         return {
             type: SetUnitsType,
             payload: {

@@ -1,8 +1,5 @@
-
 import {connect} from "react-redux";
-import {Dispatch} from "redux"
 import {State} from "../../../state/store/RootStore";
-import IConfirmTradeAction, {ConfirmTradeAction} from "../../../state/reducers/trade/IConfirmTradeAction";
 import TotalFundsModal from "./TotalFundsModal";
 
 
@@ -13,7 +10,8 @@ interface StateProps {
     totalFunds: Array<[string, number]>
 }
 
-interface OwnProps { }
+interface OwnProps {
+}
 
 export type TotalFundsModalProps = StateProps & DispatchProps & OwnProps
 

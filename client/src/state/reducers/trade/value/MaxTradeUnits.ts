@@ -2,7 +2,7 @@ import {State} from "../../../store/RootStore";
 
 export function maxTradeUnits(state: State, price: number | undefined = undefined): number | null {
     const buying = state.trade.buying;
-    if(price == null){
+    if (price == null) {
         price = state.trade.price
     }
     const sourceAsset = source(state);

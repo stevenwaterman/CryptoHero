@@ -22,7 +22,7 @@ function generateOneColumn([asset, price]: [string, number]): ELEMENT {
     )
 }
 
-export default class TotalFundsModal extends React.Component<TotalFundsModalProps>{
+export default class TotalFundsModal extends React.Component<TotalFundsModalProps> {
     render(): ELEMENT {
         return (
             <div className="modal fade" id="totalFunds" role="dialog">

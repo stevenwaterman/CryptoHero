@@ -9,7 +9,7 @@ export default interface IResetPercentTextAction {
 export class ResetPercentTextAction {
     static fire = () => FuncToThunk(() => ResetPercentTextAction.create());
 
-    private static create(): IResetPercentTextAction{
+    private static create(): IResetPercentTextAction {
         return {
             type: ResetPercentTextType,
         }

@@ -19,7 +19,7 @@ export class SetPriceAction {
         return SetPriceAction.create(price, maxUnits);
     });
 
-    private static create(price: number, maxUnits: number | null): ISetPriceAction{
+    private static create(price: number, maxUnits: number | null): ISetPriceAction {
         return {
             type: SetPriceType,
             payload: {

@@ -20,8 +20,7 @@ interface TradeModalState {
 export default class TradeModal extends React.PureComponent<TradeModalProps, TradeModalState> {
     constructor(props: TradeModalProps) {
         super(props);
-        this.state = {
-        };
+        this.state = {};
     }
 
     render(): ELEMENT {

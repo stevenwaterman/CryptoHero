@@ -14,7 +14,7 @@ export default interface ISetPercentTextAction {
 export class SetPercentTextAction {
     static fire = (newText: string) => FuncToThunk(() => SetPercentTextAction.create(newText));
 
-    private static create(newText: string): ISetPercentTextAction{
+    private static create(newText: string): ISetPercentTextAction {
         return {
             type: SetPercentTextType,
             payload: {

@@ -18,7 +18,8 @@ interface StateProps {
     targetAsset: string,
 }
 
-interface OwnProps { }
+interface OwnProps {
+}
 
 export type TradeModalProps = StateProps & DispatchProps & OwnProps
 

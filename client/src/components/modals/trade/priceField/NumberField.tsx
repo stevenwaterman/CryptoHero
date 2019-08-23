@@ -12,7 +12,7 @@ interface NumberFieldProps {
     onDone: () => void
 }
 
-export default class NumberField extends React.Component<NumberFieldProps>{
+export default class NumberField extends React.Component<NumberFieldProps> {
     constructor(props: NumberFieldProps) {
         super(props);
 
@@ -23,14 +23,14 @@ export default class NumberField extends React.Component<NumberFieldProps>{
         this.handleEdit = this.handleEdit.bind(this);
     }
 
-    render(): ELEMENT{
+    render(): ELEMENT {
         return <div className="input-group">
             <input className="form-control" id="unitPrice" type="number"
                    disabled={this.props.value == null}
                    step={this.props.step}
                    value={this.props.text}
                    onChange={this.handleEdit}
-                   onBlur={this.props.onDone} />
+                   onBlur={this.props.onDone}/>
             <div className="input-group-append">
                 <div className="input-group-text">{this.props.append}</div>
             </div>
@@ -42,7 +42,7 @@ export default class NumberField extends React.Component<NumberFieldProps>{
         const newValue = Number.parseFloat(text);
         const clean = isFinite(newValue);
         this.props.onTextChange(text);
-        if(clean){
+        if (clean) {
             this.props.onValueChange(newValue);
         }
     }

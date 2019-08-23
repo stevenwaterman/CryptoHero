@@ -12,7 +12,6 @@ import ISetUnitsAction, {SetUnitsType} from "./value/ISetUnitsAction";
 import IResetPercentTextAction, {ResetPercentTextType} from "./resetText/IResetPercentTextAction";
 import IResetUnitsTextAction, {ResetUnitsTextType} from "./resetText/IResetUnitsTextAction";
 import IResetPriceTextAction, {ResetPriceTextType} from "./resetText/IResetPriceTextAction";
-import {act} from "react-dom/test-utils";
 
 type State = TradeStore
 type Actions = TradeActions
@@ -29,7 +28,7 @@ export function tradeReducer(
         case SetPercentType:
             return setPercent(state, action as ISetPercentAction);
         case SetUnitsType:
-            return setUnits(state,action as ISetUnitsAction);
+            return setUnits(state, action as ISetUnitsAction);
         case SetPriceTextType:
             return setPriceText(state, action as ISetPriceTextAction);
         case SetUnitsTextType:
@@ -58,7 +57,7 @@ function resetPriceText(state: State, action: IResetPriceTextAction) {
 
 function resetPercentText(state: State, action: IResetPercentTextAction) {
     let percentText = "";
-    if(state.percent != null){
+    if (state.percent != null) {
         percentText = formatMoney(state.percent, 2, false);
     }
 
@@ -123,13 +122,13 @@ function setUnits(state: State, action: ISetUnitsAction) {
 
     let actualUnits = Math.max(units, 0);
 
-    if(maxUnits != null){
+    if (maxUnits != null) {
         actualUnits = Math.min(maxUnits, actualUnits);
         percent = 100 * actualUnits / maxUnits;
         percentText = formatMoney(percent, 2, false);
     }
 
-    if(units !== actualUnits){
+    if (units !== actualUnits) {
         unitsText = formatMoney(actualUnits, 5, false)
     }
 
@@ -141,11 +140,12 @@ function setUnits(state: State, action: ISetUnitsAction) {
     };
     return withChanges(state, changes);
 }
+
 function setPercent(state: State, action: ISetPercentAction) {
     const {maxUnits, percent} = action.payload;
     let actualPercent = Math.min(Math.max(percent, 0), 100);
     let percentText = state.percentText;
-    if(actualPercent !== percent){
+    if (actualPercent !== percent) {
         percentText = formatMoney(actualPercent, 2, false);
     }
 
@@ -166,7 +166,7 @@ function setPrice(state: State, action: ISetPriceAction) {
     const {maxUnits, price} = action.payload;
     let {percent, percentText, units, unitsText} = state;
 
-    if(maxUnits != null){
+    if (maxUnits != null) {
         units = Math.min(maxUnits, units);
         unitsText = formatMoney(units, 5, false);
         percent = 100 * units / maxUnits;
