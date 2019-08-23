@@ -1,3 +1,8 @@
 .addAccount {
     font-size: 24px;
 }
+
+.logo {
+    letter-spacing: 0.05em;
+    font-weight: 900;
+}

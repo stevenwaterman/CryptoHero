@@ -5,11 +5,11 @@ export default class NavBar extends React.PureComponent {
     render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
         return (
             <nav className="navbar navbar-dark bg-primary mb-4">
-                <a className="navbar-brand mx-auto" href="#">
-                    <h4 className="display-4">
-                        CryptoHero
+                <div className="navbar-brand mx-auto">
+                    <h4 className="logo display-4">
+                        <b>CryptoHero</b>
                     </h4>
-                </a>
+                </div>
                 <form className="form-inline">
                     <select disabled={true} className="custom-select" id="accountSelector">
                         <option selected>Account 1</option>
