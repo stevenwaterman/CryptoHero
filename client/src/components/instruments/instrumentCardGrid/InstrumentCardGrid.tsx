@@ -5,15 +5,16 @@ import {InstrumentCardGridProps} from "./InstrumentCardGridContainer";
 import Instrument from "../../../models/Instrument";
 
 function generateColumns({instrumentPrices, selectedInstrument}: InstrumentCardGridProps): Array<any> {
-    return instrumentPrices.map(([instrument, price]) => {
+    return instrumentPrices.map(([instrument, price], index) => {
         const selected = instrument.name === selectedInstrument.name;
-        return generateOneColumn(instrument, price, selected);
+        return generateOneColumn(instrument, price, selected, index % 2 === 0);
     })
 }
 
-function generateOneColumn(instrument: Instrument, price: number, selected: boolean): ELEMENT {
+function generateOneColumn(instrument: Instrument, price: number, selected: boolean, isOnLeft: boolean): ELEMENT {
+    const paddingLetter = isOnLeft ? "r" : "l";
     return (
-        <div key={instrument.name} className="col-md-6 pr-md-0">
+        <div key={instrument.name} className={`col-md-6 p${paddingLetter}-md-0`}>
             <InstrumentCardContainer instrument={instrument} price={price} selected={selected}/>
         </div>
     )
