@@ -165,6 +165,7 @@ function setPercent(state: State, action: ISetPercentAction) {
 function setPrice(state: State, action: ISetPriceAction) {
     const {maxUnits, price} = action.payload;
     let {percent, percentText, units, unitsText} = state;
+    //Units and percent go blank when setting price to be 0
 
     if (maxUnits != null) {
         units = Math.min(maxUnits, units);
