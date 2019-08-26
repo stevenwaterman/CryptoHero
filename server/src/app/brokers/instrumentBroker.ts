@@ -24,11 +24,11 @@ export default class InstrumentBroker {
     }
 
     /**
-     * Performs a trade on two matched orders. Adjusts the units of the two orders.
-     * @param instrument The instrument to trade in
+     * Performs a tradeModal on two matched orders. Adjusts the units of the two orders.
+     * @param instrument The instrument to tradeModal in
      * @param order The new order. Must be defined + not null
      * @param matched The old order from the book. Must be define + not null
-     * @returns {Trade} The trade produced from matching the orders.
+     * @returns {Trade} The tradeModal produced from matching the orders.
      */
     private static makeTrade(
         instrument: Instrument,
@@ -54,7 +54,7 @@ export default class InstrumentBroker {
     }
 
     /**
-     * Tells you whether a trade can be done between two orders.
+     * Tells you whether a tradeModal can be done between two orders.
      * One of the orders must be a buy, the other must be a sell.
      */
     private static tradePossible(o1: Order, o2: Order): boolean {

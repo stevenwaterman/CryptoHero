@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
 import {State} from "../../../../state/store/RootStore";
 import {ThunkDispatch} from "redux-thunk"
-import NumberField from "../../NumberField";
+import NumberField from "../../../NumberField";
 import IWithdrawModalSetPercentAction, {WithdrawModalSetPercentAction} from "../../../../state/reducers/modalInputState/withdraw/value/IWithdrawModalSetPercentAction";
 import IWithdrawModalSetPercentTextAction, {WithdrawModalSetPercentTextAction} from "../../../../state/reducers/modalInputState/withdraw/text/IWithdrawModalSetPercentTextAction";
 import IWithdrawModalResetPercentTextAction, {WithdrawModalResetPercentTextAction} from "../../../../state/reducers/modalInputState/withdraw/resetText/IWithdrawModalResetPercentTextAction";

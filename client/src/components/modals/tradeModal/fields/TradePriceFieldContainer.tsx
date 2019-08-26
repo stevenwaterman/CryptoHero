@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
 import ITradeModalSetPriceAction, {TradeModalSetPriceAction} from "../../../../state/reducers/modalInputState/trade/value/ITradeModalSetPriceAction";
 import {State} from "../../../../state/store/RootStore";
-import NumberField from "../../NumberField";
+import NumberField from "../../../NumberField";
 import {ThunkDispatch} from "redux-thunk"
 import ITradeModalSetPriceTextAction, {TradeModalSetPriceTextAction} from "../../../../state/reducers/modalInputState/trade/text/ITradeModalSetPriceTextAction";
 import ITradeModalResetPriceTextAction, {TradeModalResetPriceTextAction} from "../../../../state/reducers/modalInputState/trade/resetText/ITradeModalResetPriceTextAction";

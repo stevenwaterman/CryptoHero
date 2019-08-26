@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import {State} from "../../../../state/store/RootStore";
-import NumberField from "../../NumberField";
+import NumberField from "../../../NumberField";
 import {ThunkDispatch} from "redux-thunk"
 import ITradeModalSetUnitsTextAction, {TradeModalSetUnitsTextAction} from "../../../../state/reducers/modalInputState/trade/text/ITradeModalSetUnitsTextAction";
 import ITradeModalSetUnitsAction, {TradeModalSetUnitsAction} from "../../../../state/reducers/modalInputState/trade/value/ITradeModalSetUnitsAction";

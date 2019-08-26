@@ -32,13 +32,15 @@ export default class AvailableFunds extends React.PureComponent<AvailableFundsPr
                 <div className="row py-2 px-2">
                     {generateColumns(this.props.availableFunds)}
                 </div>
-                <button className="btn btn-primary" data-target="#totalFunds" data-toggle="modal" type="button">
+                <button className="btn btn-primary" data-target="#totalFunds" onClick={this.props.onClickTotalFunds}
+                        data-toggle="modal" type="button">
                     Total Funds
                 </button>
                 <div className="row pt-2">
                     <div className="col-sm-6">
                         <button className="btn btn-primary btn-block pr-sm-1" data-target="#withdrawModal"
                                 data-toggle="modal"
+                                onClick={this.props.onClickWithdraw}
                                 type="button">
                             Withdraw
                         </button>
@@ -46,6 +48,7 @@ export default class AvailableFunds extends React.PureComponent<AvailableFundsPr
                     <div className="col-sm-6">
                         <button className="btn btn-primary btn-block pl-sm-1" data-target="#depositModal"
                                 data-toggle="modal"
+                                onClick={this.props.onClickDeposit}
                                 type="button">
                             Deposit
                         </button>

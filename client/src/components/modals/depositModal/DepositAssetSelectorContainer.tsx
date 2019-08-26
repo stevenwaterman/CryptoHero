@@ -1,10 +1,10 @@
 import {connect} from "react-redux";
-import {State} from "../../../../state/store/RootStore";
-import AssetSelector from "./AssetSelector";
+import {State} from "../../../state/store/RootStore";
+import AssetSelector from "../../AssetSelector";
 import {ThunkDispatch} from "redux-thunk";
-import IWithdrawModalSetAssetAction, {WithdrawModalSetAssetAction} from "../../../../state/reducers/modalInputState/withdraw/value/IWithdrawModalSetAssetAction";
+import IDepositModalSetAssetAction, {DepositModalSetAssetAction} from "../../../state/reducers/modalInputState/deposit/IDepositModalSetAssetAction";
 
-type Actions = IWithdrawModalSetAssetAction
+type Actions = IDepositModalSetAssetAction
 
 interface DispatchProps {
     onValueChange: (newAsset: string) => void,
@@ -12,24 +12,22 @@ interface DispatchProps {
 
 interface StateProps {
     assets: Array<string>,
-    selected: string
+    selectedAsset: string
 }
 
 interface OwnProps {
 }
 
-export type AssetSelectorProps = DispatchProps & StateProps & OwnProps
-
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onValueChange: newAsset => dispatch(WithdrawModalSetAssetAction.fire(newAsset)),
+        onValueChange: newAsset => dispatch(DepositModalSetAssetAction.fire(newAsset)),
     }
 }
 
 // noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
-        selected: state.withdrawModalInput.asset,
+        selectedAsset: state.depositModalInput.asset,
         assets: state.funds.availableFunds.map(it => it[0])
     }
 }

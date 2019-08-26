@@ -109,7 +109,7 @@ describe("matching orders", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
         placeSell(acc2, new Big("1"), new Big("1"));
 
-        //Check that our expected trade correctly doesn't match
+        //Check that our expected tradeModal correctly doesn't match
         const trade1 = new ExpectedTrade(acc2, acc1, new Big("1"), new Big("1"));
         expect(iBroker.getTrades(acc1)).not.toMatchObject([trade1]);
 
@@ -197,7 +197,7 @@ describe("matching orders", () => {
         expectExactly(acc3, trade2);
     });
 
-    test("Partial trade", () => {
+    test("Partial tradeModal", () => {
         placeBuy(acc1, new Big("2"), new Big("1"));
         placeSell(acc2, new Big("1"), new Big("1"));
         const trade = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
@@ -302,7 +302,7 @@ describe("pending orders", () => {
         expectPending(acc2, [o2], []);
     });
 
-    test("when a trade is completed, orders aren't pending any more", () => {
+    test("when a tradeModal is completed, orders aren't pending any more", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
         placeSell(acc2, new Big("1"), new Big("1"));
         expectPending(acc1, [], []);
@@ -343,7 +343,7 @@ describe("position updated after order", () => {
     });
 });
 
-describe("position updated after trade", () => {
+describe("position updated after tradeModal", () => {
     test("1x1", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
         placeSell(acc2, new Big("1"), new Big("1"));
@@ -444,7 +444,7 @@ describe("locked assets", () => {
         expect(iBroker.getLockedAssets(acc2)).toEqual([new Big("0"), new Big("1")]);
     });
 
-    test("Decreases after trade", () => {
+    test("Decreases after tradeModal", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
         expect(iBroker.getLockedAssets(acc1)).toEqual([new Big("0"), new Big("1")]);
         placeSell(acc2, new Big("1"), new Big("1"));
@@ -588,7 +588,7 @@ describe("Market prices", () => {
         expect(iBroker.getMarketPrice()).toEqual(new Big("0"));
     });
 
-    test("After 1 trade", () => {
+    test("After 1 tradeModal", () => {
         placeBuy(acc1, new Big("2"), new Big("2"));
         placeSell(acc2, new Big("3"), new Big("1"));
         expect(iBroker.getMarketPrice()).toEqual(new Big("2"));

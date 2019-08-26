@@ -3,7 +3,7 @@ import {State} from "../../../../state/store/RootStore";
 import {ThunkDispatch} from "redux-thunk"
 import IWithdrawModalSetUnitsTextAction, {WithdrawModalSetUnitsTextAction} from "../../../../state/reducers/modalInputState/withdraw/text/IWithdrawModalSetUnitsTextAction";
 import IWithdrawModalSetUnitsAction, {WithdrawModalSetUnitsAction} from "../../../../state/reducers/modalInputState/withdraw/value/IWithdrawModalSetUnitsAction";
-import NumberField from "../../NumberField";
+import NumberField from "../../../NumberField";
 import IWithdrawModalResetUnitsTextAction, {WithdrawModalResetUnitsTextAction} from "../../../../state/reducers/modalInputState/withdraw/resetText/IWithdrawModalResetUnitsTextAction";
 
 type Actions = IWithdrawModalSetUnitsAction | IWithdrawModalSetUnitsTextAction | IWithdrawModalResetUnitsTextAction

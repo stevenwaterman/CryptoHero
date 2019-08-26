@@ -4,10 +4,10 @@ import Trade from "../../../../trading/trade";
 import {REGISTRY} from "../../../../registry";
 
 export function urlGetTrade(broker: Broker, req: Request, res: Response): Trade | null {
-    const tradeId: string | undefined = req.params["trade"];
+    const tradeId: string | undefined = req.params["tradeModal"];
     if (tradeId == null) {
         res.status(400);
-        res.send("Missing trade parameter");
+        res.send("Missing tradeModal parameter");
         return null;
     }
 

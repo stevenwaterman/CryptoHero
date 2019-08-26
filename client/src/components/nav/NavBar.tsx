@@ -11,8 +11,8 @@ export default class NavBar extends React.PureComponent {
                     </h4>
                 </div>
                 <form className="form-inline">
-                    <select disabled={true} className="custom-select" id="accountSelector">
-                        <option selected>Account 1</option>
+                    <select disabled={true} className="custom-select" id="accountSelector" value={"Account 1"}>
+                        <option>Account 1</option>
                         <option>Account 2</option>
                         <option>Account 3</option>
                         <option>Account 4</option>

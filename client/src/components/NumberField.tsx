@@ -1,4 +1,4 @@
-import {ELEMENT} from "../../state/store/RootStore";
+import {ELEMENT} from "../state/store/RootStore";
 import React, {ChangeEvent} from "react";
 
 interface NumberFieldProps {

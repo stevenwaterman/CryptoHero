@@ -45,9 +45,7 @@ export default class TradeModal extends React.PureComponent<TradeModalProps> {
                                             {buySellString(this.props.buying)}
                                         </div>
                                         <div className="col-sm-5 mt-2 mt-sm-0">
-                                            <div className="input-group">
-                                                <UnitFieldContainer step={0.00001}/>
-                                            </div>
+                                            <UnitFieldContainer step={0.00001}/>
                                         </div>
                                         <div className="col-sm-1 my-auto px-0 text-center">
                                             for

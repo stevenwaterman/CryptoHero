@@ -1,5 +1,5 @@
 import {FuncToThunk} from "../../../../../util/FuncToThunk";
-import {maxWithdraw} from "../../../../../util/MaxWithdraw";
+import {fundsAvailable} from "../../../../../util/FundsAvailable";
 
 interface IPayload {
     newAsset: string,
@@ -15,7 +15,7 @@ export default interface IWithdrawModalSetAssetAction {
 
 export class WithdrawModalSetAssetAction {
     static fire = (newAsset: string) => FuncToThunk(state => {
-        const max: number = maxWithdraw(state);
+        const max: number = fundsAvailable(state.funds.availableFunds, newAsset);
         return WithdrawModalSetAssetAction.create(newAsset, max);
     });
 

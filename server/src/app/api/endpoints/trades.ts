@@ -14,7 +14,7 @@ export function setupTradesEndpoints(server: BitcoinExchangeServer): void {
     const broker = server.broker;
 
     app.get("/api/trades/list/account/:account", withBroker(broker, listTrades));
-    app.get("/api/trades/:trade/view", withBroker(broker, viewTrade));
+    app.get("/api/trades/:tradeModal/view", withBroker(broker, viewTrade));
 }
 
 function listTrades(broker: Broker, req: Request, res: Response): void {
