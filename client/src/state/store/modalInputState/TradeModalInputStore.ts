@@ -10,7 +10,7 @@ import ITradeModalResetUnitsTextAction
 import ITradeModalResetPercentTextAction
     from "../../reducers/modalInputState/trade/resetText/ITradeModalResetPercentTextAction";
 import ITradeModalSetPriceTextAction from "../../reducers/modalInputState/trade/text/ITradeModalSetPriceTextAction";
-import IStartTradeAction from "../../reducers/modal/trade/IStartTradeAction";
+import IShowTradeModalAction from "../../reducers/modal/trade/IShowTradeModalAction";
 
 export default interface TradeModalInputStore {
     readonly priceText: string,
@@ -35,7 +35,7 @@ export const initialTradeModalInputStore: TradeModalInputStore = {
 };
 
 export type TradeModalInputActions =
-    IStartTradeAction
+    IShowTradeModalAction
     | ITradeModalSetPriceAction
     | ITradeModalSetPercentAction
     | ITradeModalSetPercentTextAction

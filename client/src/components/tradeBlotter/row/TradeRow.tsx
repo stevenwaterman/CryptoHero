@@ -4,7 +4,7 @@ import TradeSimple from "../../../models/TradeSimple";
 import {formatMoney} from "../../../util/FormatMoney";
 
 export interface TradeRowProps {
-    onClick: () => void
+    onClick: (id: string) => void
     trade: TradeSimple
 }
 
@@ -16,7 +16,7 @@ function getClass(buying: boolean): string {
 export default class TradeRow extends React.PureComponent<TradeRowProps> {
     render(): ELEMENT {
         return (
-            <tr className={getClass(this.props.trade.isBuy)} onClick={this.props.onClick}>
+            <tr className={getClass(this.props.trade.isBuy)} onClick={() => this.props.onClick(this.props.trade.id)}>
                 <td>{this.props.trade.time}</td>
                 <td>{formatMoney(this.props.trade.units, 5, true, true)}</td>
                 <td>{formatMoney(this.props.trade.price, 5, true, true)}</td>

@@ -1,6 +1,7 @@
 import InstrumentStore, {initialInstrumentStore, InstrumentActions} from "../../store/InstrumentStore";
 import IInstrumentSelectionAction, {InstrumentSelectionType} from "./IInstrumentSelectionAction";
-import IInstrumentPricesAction, {InstrumentPricesType} from "./IInstrumentPricesAction";
+import ISetPriceAction, {SetPriceType} from "./ISetPriceAction";
+import Instrument from "../../../models/Instrument";
 
 type State = InstrumentStore
 type Actions = InstrumentActions
@@ -12,8 +13,8 @@ export function instrumentReducer(
     switch (action.type) {
         case InstrumentSelectionType:
             return instrumentSelection(state, action as IInstrumentSelectionAction);
-        case InstrumentPricesType:
-            return instrumentPrices(state, action as IInstrumentPricesAction);
+        case SetPriceType:
+            return instrumentPrices(state, action as ISetPriceAction);
         default:
             return state;
     }
@@ -22,16 +23,18 @@ export function instrumentReducer(
 function instrumentSelection(state: State, action: IInstrumentSelectionAction): State {
     const {selected} = action.payload;
     return {
-        prices: state.prices,
+        ...state,
         selectedInstrument: selected
     }
 }
 
-function instrumentPrices(state: State, action: IInstrumentPricesAction): State {
-    const {newPrices} = action.payload;
+function instrumentPrices(state: State, action: ISetPriceAction): State {
+    const {instrument, newPrice} = action.payload;
+    const newPrices: Array<[Instrument, number]> = state.prices.filter(it => it[0].name !== instrument.name);
+    newPrices.push([instrument, newPrice]);
     return {
+        ...state,
         prices: newPrices,
-        selectedInstrument: state.selectedInstrument
     }
 }
 

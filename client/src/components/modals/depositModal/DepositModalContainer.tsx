@@ -1,14 +1,17 @@
 import {connect} from "react-redux";
-import {Dispatch} from "redux"
+import {Store} from "redux"
 import {State} from "../../../state/store/RootStore";
-import IConfirmTradeAction from "../../../state/reducers/modal/trade/IConfirmTradeAction";
 import DepositModal from "./DepositModal";
-import {DepositFundsAction} from "../../../state/reducers/funds/IDepositAction";
+import {ConfirmDepositAction} from "../../../state/reducers/funds/IConfirmDepositAction";
+import IInstrumentSelectionAction from "../../../state/reducers/instrument/IInstrumentSelectionAction";
+import {ThunkDispatch} from "redux-thunk";
+import {HideDepositModalAction} from "../../../state/reducers/modal/deposit/IHideDepositModalAction";
 
-type Actions = IConfirmTradeAction
+type Actions = IInstrumentSelectionAction
 
 interface DispatchProps {
-    onConfirm: (asset: string, amount: number) => void,
+    onConfirm: () => void,
+    onHide: () => void,
 }
 
 interface StateProps {
@@ -21,9 +24,10 @@ interface OwnProps {
 
 export type DepositModalProps = StateProps & DispatchProps & OwnProps
 
-function mapDispatchToProps(dispatch: Dispatch<Actions>, ownProps: OwnProps): DispatchProps {
+function mapDispatchToProps(dispatch: ThunkDispatch<Store, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onConfirm: (asset: string, amount: number) => DepositFundsAction.fire(asset, amount),
+        onConfirm: () => dispatch(ConfirmDepositAction.fire()),
+        onHide: () => dispatch(HideDepositModalAction.fire)
     }
 }
 

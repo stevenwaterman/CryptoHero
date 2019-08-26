@@ -1,5 +1,5 @@
 import Instrument from "../../../models/Instrument";
-import IStartViewTradeAction from "../../reducers/modal/viewTrade/IStartViewTradeAction";
+import IShowViewTradeModalAction from "../../reducers/modal/viewTrade/IShowViewTradeModalAction";
 
 export default interface ViewTradeModalStore {
     readonly id: string,
@@ -25,4 +25,4 @@ export const initialViewTradeModalStore: ViewTradeModalStore = {
 };
 
 export type ViewTradeModalActions =
-    IStartViewTradeAction
+    IShowViewTradeModalAction

@@ -2,6 +2,7 @@ import RootReducer from "../reducers/RootReducer";
 import React from "react";
 import {applyMiddleware, createStore} from "redux";
 import thunk from "redux-thunk";
+import {FormControl, FormControlProps} from "react-bootstrap";
 
 export default createStore(
     RootReducer,
@@ -18,3 +19,5 @@ export type ELEMENT =
     | React.ReactNodeArray
     | React.ReactPortal
     | boolean
+
+export type FORM_EVENT = React.FormEvent<FormControlProps & FormControl>

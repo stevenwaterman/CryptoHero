@@ -6,38 +6,43 @@ import {ThunkDispatch} from "redux-thunk";
 import IWithdrawModalSetAssetAction
     from "../../../state/reducers/modalInputState/withdraw/value/IWithdrawModalSetAssetAction";
 import {CancelOrderAction} from "../../../state/reducers/blotter/ICancelOrderAction";
+import {HideViewTradeModalAction} from "../../../state/reducers/modal/viewTrade/IHideViewTradeModalAction";
 
 type Actions = IWithdrawModalSetAssetAction
 
 interface DispatchProps {
-    onClickCancel: () => void
+    onClickCancel: () => void,
+    onHide: () => void
 }
 
 interface StateProps {
-    readonly id: string,
-    readonly time: Date,
-    readonly buying: boolean,
-    readonly instrument: Instrument,
-    readonly units: number,
-    readonly price: number,
+    show: boolean,
+    id: string,
+    time: Date,
+    buying: boolean,
+    instrument: Instrument,
+    units: number,
+    price: number,
 
-    readonly remaining: number,
-    readonly averagePrice: number | null,
+    remaining: number,
+    averagePrice: number | null,
 }
 
 interface OwnProps {
 }
 
-export type TotalFundsModalProps = StateProps & DispatchProps & OwnProps
+export type ViewTradeModalProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onClickCancel: () => (CancelOrderAction.fire),
+        onClickCancel: () => CancelOrderAction.fire,
+        onHide: () => HideViewTradeModalAction.fire()
     }
 }
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
+        show: state.modalVisibility.viewTradeVisible,
         averagePrice: state.viewTradeModal.averagePrice,
         buying: state.viewTradeModal.buying,
         id: state.viewTradeModal.id,

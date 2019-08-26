@@ -4,7 +4,7 @@ import InstrumentCardGridContainer from "../instruments/instrumentCardGrid/Instr
 import {ELEMENT} from "../../state/store/RootStore";
 import TradeModalContainer from "../modals/tradeModal/TradeModalContainer";
 import AvailableFundsContainer from "../funds/AvailableFundsContainer";
-import NavBar from "../nav/NavBar";
+import TopBar from "../nav/TopBar";
 import TotalFundsModalContainer from "../modals/funds/TotalFundsModalContainer";
 import SelectedInstrumentContainer from "../selectedInstrument/SelectedInstrumentContainer";
 import WithdrawModalContainer from "../modals/withdrawModal/WithdrawModalContainer";
@@ -12,31 +12,34 @@ import DepositModalContainer from "../modals/depositModal/DepositModalContainer"
 import ChartCardContainer from "../chart/ChartCardContainer";
 import TradeBlotterContainer from "../tradeBlotter/TradeBlotterContainer";
 import ViewTradeModalContainer from "../modals/viewTrade/ViewTradeModalContainer";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/es/Col";
 
 export default class App extends React.Component {
     render(): ELEMENT {
         return (
-            <div>
-                <NavBar/>
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-sm-4">
+            <>
+                <TopBar/>
+                <Container fluid={true}>
+                    <Row>
+                        <Col sm="4">
                             <AvailableFundsContainer/>
                             <InstrumentCardGridContainer/>
-                        </div>
-                        <div className="col-sm-8 my-3 my-sm-0" id="right bar">
+                        </Col>
+                        <Col sm="8" className="col-sm-8 my-3 my-sm-0">
                             <SelectedInstrumentContainer/>
                             <ChartCardContainer/>
                             <TradeBlotterContainer/>
-                        </div>
-                    </div>
-                </div>
+                        </Col>
+                    </Row>
+                </Container>
                 <TradeModalContainer/>
                 <TotalFundsModalContainer/>
                 <WithdrawModalContainer/>
                 <DepositModalContainer/>
                 <ViewTradeModalContainer/>
-            </div>
+            </>
         )
     }
 }

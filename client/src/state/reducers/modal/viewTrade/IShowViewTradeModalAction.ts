@@ -12,14 +12,14 @@ interface IPayload {
     averagePrice: number | null;
 }
 
-export const StartViewTradeType: string = "START_VIEW_TRADE";
+export const ShowViewTradeModalType: string = "SHOW_VIEW_TRADE";
 
-export default interface IStartViewTradeAction {
-    type: typeof StartViewTradeType
+export default interface IShowViewTradeModalAction {
+    type: typeof ShowViewTradeModalType
     payload: IPayload
 }
 
-export class StartViewTradeAction {
+export class ShowViewTradeModal {
     static fire = (id: string) => FuncToThunk((state) => {
         //TODO this should do a server request.
         const time = new Date();
@@ -29,12 +29,12 @@ export class StartViewTradeAction {
         const price = 1;
         const remaining = 1;
         const averagePrice = null;
-        return StartViewTradeAction.create(id, time, buying, instrument, units, price, remaining, averagePrice)
+        return ShowViewTradeModal.create(id, time, buying, instrument, units, price, remaining, averagePrice)
     });
 
-    private static create(id: string, time: Date, buying: boolean, instrument: Instrument, units: number, price: number, remaining: number, averagePrice: number | null): IStartViewTradeAction {
+    private static create(id: string, time: Date, buying: boolean, instrument: Instrument, units: number, price: number, remaining: number, averagePrice: number | null): IShowViewTradeModalAction {
         return {
-            type: StartViewTradeType,
+            type: ShowViewTradeModalType,
             payload: {
                 id: id,
                 time: time,

@@ -1,5 +1,5 @@
 import Instrument from "../../../models/Instrument";
-import IStartTradeAction from "../../reducers/modal/trade/IStartTradeAction";
+import IShowTradeModalAction from "../../reducers/modal/trade/IShowTradeModalAction";
 import IConfirmTradeAction from "../../reducers/modal/trade/IConfirmTradeAction";
 
 export default interface TradeModalStore {
@@ -13,5 +13,5 @@ export const initialTradeModalStore: TradeModalStore = {
 };
 
 export type TradeModalActions =
-    IStartTradeAction
+    IShowTradeModalAction
     | IConfirmTradeAction

@@ -1,4 +1,4 @@
-import IStartTradeAction, {StartTradeType} from "../../modal/trade/IStartTradeAction";
+import IShowTradeModalAction, {ShowTradeModalType} from "../../modal/trade/IShowTradeModalAction";
 import ITradeModalSetPercentAction, {TradeModalSetPercentType} from "./value/ITradeModalSetPercentAction";
 import ITradeModalSetUnitsAction, {TradeModalSetUnitsType} from "./value/ITradeModalSetUnitsAction";
 import ITradeModalSetPriceTextAction, {TradeModalSetPriceTextType} from "./text/ITradeModalSetPriceTextAction";
@@ -9,7 +9,6 @@ import ITradeModalResetPriceTextAction, {TradeModalResetPriceTextType} from "./r
 import ITradeModalResetPercentTextAction, {TradeModalResetPercentTextType} from "./resetText/ITradeModalResetPercentTextAction";
 import ITradeModalResetUnitsTextAction, {TradeModalResetUnitsTextType} from "./resetText/ITradeModalResetUnitsTextAction";
 import {formatInput, formatPercent} from "../../../../util/FormatMoney";
-import {withChanges} from "../../../../util/WithChanges";
 import TradeModalInputStore, {
     initialTradeModalInputStore,
     TradeModalInputActions
@@ -23,8 +22,8 @@ export function tradeModalInputReducer(
     action: Actions
 ): State {
     switch (action.type) {
-        case StartTradeType:
-            return startTrade(state, action as IStartTradeAction);
+        case ShowTradeModalType:
+            return startTrade(state, action as IShowTradeModalAction);
         case TradeModalSetPercentType:
             return setPercent(state, action as ITradeModalSetPercentAction);
         case TradeModalSetUnitsType:
@@ -48,7 +47,7 @@ export function tradeModalInputReducer(
     }
 }
 
-function startTrade(state: State, action: IStartTradeAction): State {
+function startTrade(state: State, action: IShowTradeModalAction): State {
     const {startPrice} = action.payload;
     return {
         price: startPrice,
@@ -78,7 +77,8 @@ function setUnits(state: State, action: ITradeModalSetUnitsAction): State {
         unitsText = formatInput(actualUnits)
     }
 
-    return withChanges(state, {
+    return ({
+        ...state,
         units: actualUnits,
         unitsText: unitsText,
         percent: percent,
@@ -97,7 +97,8 @@ function setPercent(state: State, action: ITradeModalSetPercentAction): State {
     const units = actualPercent * maxUnits / 100;
     const unitsText = formatInput(units);
 
-    return withChanges(state, {
+    return ({
+        ...state,
         unitsText: unitsText,
         units: units,
         percent: actualPercent as number | null,
@@ -120,7 +121,8 @@ function setPrice(state: State, action: ITradeModalSetPriceAction): State {
         percentText = "";
     }
 
-    return withChanges(state, {
+    return ({
+        ...state,
         price: price,
         percent: percent,
         percentText: percentText,
@@ -130,7 +132,8 @@ function setPrice(state: State, action: ITradeModalSetPriceAction): State {
 }
 
 function resetPriceText(state: State, action: ITradeModalResetPriceTextAction): State {
-    return withChanges(state, {
+    return ({
+        ...state,
         priceText: formatInput(state.price)
     })
 }
@@ -138,31 +141,36 @@ function resetPriceText(state: State, action: ITradeModalResetPriceTextAction): 
 function resetPercentText(state: State, action: ITradeModalResetPercentTextAction): State {
     const percentText = (state.percent == null) ? "" : formatPercent(state.percent);
 
-    return withChanges(state, {
+    return ({
+        ...state,
         percentText: percentText
     });
 }
 
 function resetUnitsText(state: State, action: ITradeModalResetUnitsTextAction): State {
-    return withChanges(state, {
+    return ({
+        ...state,
         unitsText: formatInput(state.units)
     })
 }
 
 function setPriceText(state: State, action: ITradeModalSetPriceTextAction): State {
-    return withChanges(state, {
+    return ({
+        ...state,
         priceText: action.payload.newText
     })
 }
 
 function setUnitsText(state: State, action: ITradeModalSetUnitsTextAction): State {
-    return withChanges(state, {
+    return ({
+        ...state,
         unitsText: action.payload.newText
     });
 }
 
 function setPercentText(state: State, action: ITradeModalSetPercentTextAction): State {
-    return withChanges(state, {
+    return ({
+        ...state,
         percentText: action.payload.newText
     })
 }

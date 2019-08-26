@@ -2,6 +2,10 @@ import React from "react";
 import {formatMoney} from "../../util/FormatMoney";
 import {AvailableFundsProps} from "./AvailableFundsContainer";
 import {ELEMENT} from "../../state/store/RootStore";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
 
 function generateColumns(funds: Array<[string, number]>): Array<any> {
     return funds.map(generateOneColumn);
@@ -9,52 +13,43 @@ function generateColumns(funds: Array<[string, number]>): Array<any> {
 
 function generateOneColumn([asset, price]: [string, number]): ELEMENT {
     return (
-        <div className="col-lg-6" key={asset}>
-            <div className="row">
-                <div className="col-6 pr-1">
+        <Col lg="6" key={asset}>
+            <Row>
+                <Col className="pr-1">
                     <b>{asset}:</b>
-                </div>
-                <div className="col-6 pl-1 text-right">
+                </Col>
+                <Col className="pl-1 text-right">
                     {formatMoney(price, 2, true, false)}
-                </div>
-            </div>
-        </div>
+                </Col>
+            </Row>
+        </Col>
     )
 }
 
 export default class AvailableFunds extends React.PureComponent<AvailableFundsProps> {
     render(): ELEMENT {
         return (
-            <div className="card" id="position">
-                <div className="card-header my-auto">
-                    <h5 className="card-title text-center my-0"><b>Available Funds</b></h5>
-                </div>
-                <div className="row py-2 px-2">
+            <Card>
+                <Card.Header className="my-auto">
+                    <Card.Title className="text-center my-0"><b>Available Funds</b></Card.Title>
+                </Card.Header>
+                <Row className="py-2 px-2">
                     {generateColumns(this.props.availableFunds)}
-                </div>
-                <button className="btn btn-primary" data-target="#totalFunds" onClick={this.props.onClickTotalFunds}
-                        data-toggle="modal" type="button">
-                    Total Funds
-                </button>
-                <div className="row pt-2">
-                    <div className="col-sm-6">
-                        <button className="btn btn-primary btn-block pr-sm-1" data-target="#withdrawModal"
-                                data-toggle="modal"
-                                onClick={this.props.onClickWithdraw}
-                                type="button">
+                </Row>
+                <Button variant="primary" onClick={this.props.onClickTotalFunds}>Total Funds</Button>
+                <Row className="pt-2">
+                    <Col sm={true}>
+                        <Button variant="primary" block={true} className="pr-sm-1" onClick={this.props.onClickWithdraw}>
                             Withdraw
-                        </button>
-                    </div>
-                    <div className="col-sm-6">
-                        <button className="btn btn-primary btn-block pl-sm-1" data-target="#depositModal"
-                                data-toggle="modal"
-                                onClick={this.props.onClickDeposit}
-                                type="button">
+                        </Button>
+                    </Col>
+                    <Col sm={true}>
+                        <Button variant="primary" block={true} className="pl-sm-1" onClick={this.props.onClickDeposit}>
                             Deposit
-                        </button>
-                    </div>
-                </div>
-            </div>
+                        </Button>
+                    </Col>
+                </Row>
+            </Card>
         )
     }
 }

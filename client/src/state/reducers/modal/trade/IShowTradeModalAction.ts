@@ -7,10 +7,10 @@ interface IPayload {
     startPrice: number
 }
 
-export const StartTradeType: string = "TRADE_START";
+export const ShowTradeModalType: string = "SHOW_TRADE_MODAL";
 
-export default interface IStartTradeAction {
-    type: typeof StartTradeType
+export default interface IShowTradeModalAction {
+    type: typeof ShowTradeModalType
     payload: IPayload
 }
 
@@ -19,15 +19,15 @@ function getPrice(prices: Array<[Instrument, number]>, instrument: Instrument): 
     return amount;
 }
 
-export class StartTradeAction {
+export class ShowTradeModalAction {
     static fire = (buying: boolean, instrument: Instrument) => FuncToThunk(state => {
         const price = getPrice(state.instruments.prices, instrument);
-        return StartTradeAction.create(buying, instrument, price)
+        return ShowTradeModalAction.create(buying, instrument, price)
     });
 
-    private static create(buying: boolean, instrument: Instrument, price: number): IStartTradeAction {
+    private static create(buying: boolean, instrument: Instrument, price: number): IShowTradeModalAction {
         return {
-            type: StartTradeType,
+            type: ShowTradeModalType,
             payload: {
                 buying: buying,
                 instrument: instrument,

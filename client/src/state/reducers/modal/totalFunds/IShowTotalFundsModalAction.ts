@@ -4,15 +4,15 @@ interface IPayload {
     totalFunds: Array<[string, number]>
 }
 
-export const StartViewTotalFundsType: string = "START_VIEW_TOTAL_FUNDS";
+export const ShowTotalFundsModalType: string = "SHOW_TOTAL_FUNDS_MODAL";
 
-export default interface IStartViewTotalFundsAction {
-    type: typeof StartViewTotalFundsType;
+export default interface IShowTotalFundsModalAction {
+    type: typeof ShowTotalFundsModalType;
     payload: IPayload
 }
 
-export class StartViewTotalFundsAction {
-    static fire = () => FuncToThunk((state) => {
+export class ShowTotalFundsModalAction {
+    static fire = () => FuncToThunk(() => {
         //TODO this should do a web request
         const totalFunds: Array<[string, number]> = [
             ["GBP", 1000],
@@ -21,12 +21,12 @@ export class StartViewTotalFundsAction {
             ["ETH", 1000],
             ["DASH", 1000]
         ];
-        return StartViewTotalFundsAction.create(totalFunds)
+        return ShowTotalFundsModalAction.create(totalFunds)
     });
 
-    private static create(totalFunds: Array<[string, number]>): IStartViewTotalFundsAction {
+    private static create(totalFunds: Array<[string, number]>): IShowTotalFundsModalAction {
         return {
-            type: StartViewTotalFundsType,
+            type: ShowTotalFundsModalType,
             payload: {
                 totalFunds: totalFunds
             }

@@ -3,52 +3,45 @@ import {ELEMENT} from "../../../state/store/RootStore";
 import {DepositModalProps} from "./DepositModalContainer";
 import UnitFieldContainer from "./DepositUnitFieldContainer";
 import AssetSelectorContainer from "./DepositAssetSelectorContainer";
+import {Button, Col, Form, Modal} from "react-bootstrap";
 
 export default class DepositModal extends React.PureComponent<DepositModalProps> {
     render(): ELEMENT {
         return (
-            <div className={this.props.show ? "modal fade show" : "modal fade"} id="depositModal" role="dialog">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title"><b>Deposit Funds</b>
-                            </h5>
-                            <button aria-label="Close" className="close" data-dismiss="modal" type="button">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            <form>
-                                <div className="form-group">
-                                    <div className="form-row">
-                                        <div className="col-sm-2 my-auto px-0">
-                                            <label>Asset:</label>
-                                        </div>
-                                        <div className="col-sm-auto">
-                                            <AssetSelectorContainer/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="form-group">
-                                    <div className="form-row">
-                                        <div className="col-sm-2 my-auto px-0">
-                                            Deposit
-                                        </div>
-                                        <div className="col-sm-auto mt-2 mt-sm-0">
-                                            <UnitFieldContainer step={0.00001}/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div className="modal-footer">
-                            <button className="btn btn-danger" disabled={!this.props.canConfirm}
-                                    data-dismiss="modal" type="button">Confirm Deposit
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Modal show={this.props.show} onHide={this.props.onHide}>
+                <Modal.Header closeButton>
+                    <Modal.Title><b>Deposit Funds</b></Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group>
+                            <Form.Row>
+                                <Col sm="2" className="my-auto px-0">
+                                    Asset:
+                                </Col>
+                                <Col sm="auto">
+                                    <AssetSelectorContainer/>
+                                </Col>
+                            </Form.Row>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Row>
+                                <Col sm="2" className="my-auto px-0">
+                                    Deposit
+                                </Col>
+                                <Col sm="auto" className="mt-2 mt-sm-0">
+                                    <UnitFieldContainer step={0.00001}/>
+                                </Col>
+                            </Form.Row>
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" disabled={!this.props.canConfirm} onClick={this.props.onConfirm}>
+                        Confirm Deposit
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         );
     }
 }

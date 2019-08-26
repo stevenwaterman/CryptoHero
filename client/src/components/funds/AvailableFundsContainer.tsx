@@ -4,9 +4,9 @@ import AvailableFunds from "./AvailableFunds";
 import {ThunkDispatch} from "redux-thunk";
 import IWithdrawModalSetAssetAction
     from "../../state/reducers/modalInputState/withdraw/value/IWithdrawModalSetAssetAction";
-import {StartWithdrawAction} from "../../state/reducers/modal/withdraw/IStartWithdrawAction";
-import {StartDepositAction} from "../../state/reducers/modal/deposit/IStartDepositAction";
-import {StartViewTotalFundsAction} from "../../state/reducers/modal/totalFunds/IStartViewTotalFundsAction";
+import {ShowWithdrawModalAction} from "../../state/reducers/modal/withdraw/IShowWithdrawModalAction";
+import {ShowDepositModalAction} from "../../state/reducers/modal/deposit/IShowDepositModalAction";
+import {ShowTotalFundsModalAction} from "../../state/reducers/modal/totalFunds/IShowTotalFundsModalAction";
 
 type Actions = IWithdrawModalSetAssetAction
 
@@ -27,9 +27,9 @@ export type AvailableFundsProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onClickTotalFunds: () => dispatch(StartViewTotalFundsAction.fire()),
-        onClickWithdraw: () => dispatch(StartWithdrawAction.fire()),
-        onClickDeposit: () => dispatch(StartDepositAction.fire()),
+        onClickTotalFunds: () => dispatch(ShowTotalFundsModalAction.fire()),
+        onClickWithdraw: () => dispatch(ShowWithdrawModalAction.fire()),
+        onClickDeposit: () => dispatch(ShowDepositModalAction.fire()),
     }
 }
 

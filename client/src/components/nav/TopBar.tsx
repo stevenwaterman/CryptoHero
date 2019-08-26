@@ -1,28 +1,27 @@
 import React from "react";
 import "./NavBar.css";
+import {Button, Form, Navbar} from "react-bootstrap";
 
-export default class NavBar extends React.PureComponent {
+export default class TopBar extends React.PureComponent {
     render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
         return (
-            <nav className="navbar navbar-dark bg-primary mb-4">
-                <div className="navbar-brand mx-auto">
+            <Navbar bg="primary" variant="dark" className="mb-4">
+                <Navbar.Brand className="mx-auto">
                     <h4 className="logo display-4">
                         <b>CryptoHero</b>
                     </h4>
-                </div>
-                <form className="form-inline">
-                    <select disabled={true} className="custom-select" id="accountSelector" value={"Account 1"}>
+                </Navbar.Brand>
+                <Form className="form-inline">
+                    <Form.Control as="select" disabled={true} value={"Account 1"}>
                         <option>Account 1</option>
                         <option>Account 2</option>
                         <option>Account 3</option>
                         <option>Account 4</option>
                         <option>Account 5</option>
-                    </select>
-                    <button className="btn" id="addAccount" type="button">
-                        <span className="addAccount text-light">+</span>
-                    </button>
-                </form>
-            </nav>
+                    </Form.Control>
+                    <Button><span className="addAccount text-light">+</span></Button>
+                </Form>
+            </Navbar>
         )
     }
 }

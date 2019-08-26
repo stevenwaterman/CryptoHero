@@ -2,12 +2,12 @@ import ViewTradeModalStore, {
     initialViewTradeModalStore,
     ViewTradeModalActions
 } from "../../../store/modal/ViewTradeModalStore";
-import IStartViewTradeAction, {StartViewTradeType} from "./IStartViewTradeAction";
+import IShowViewTradeModalAction, {ShowViewTradeModalType} from "./IShowViewTradeModalAction";
 
 type State = ViewTradeModalStore
 type Actions = ViewTradeModalActions
 
-function viewTrade(state: State, action: IStartViewTradeAction): State {
+function viewTrade(state: State, action: IShowViewTradeModalAction): State {
     return action.payload;
 }
 
@@ -16,8 +16,8 @@ export function viewTradeModalReducer(
     action: Actions
 ): State {
     switch (action.type) {
-        case StartViewTradeType:
-            return viewTrade(state, action as IStartViewTradeAction);
+        case ShowViewTradeModalType:
+            return viewTrade(state, action as IShowViewTradeModalAction);
         default:
             return state;
     }

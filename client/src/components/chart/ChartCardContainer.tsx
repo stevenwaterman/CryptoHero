@@ -8,11 +8,11 @@ import IWithdrawModalSetAssetAction
 type Actions = IWithdrawModalSetAssetAction
 
 interface DispatchProps {
-    onSelectHistorical: () => void,
-    onSelectCurrent: () => void,
+    onChartTypeChange: (chartType: string) => void,
 }
 
 export interface StateProps {
+    chartType: string,
 }
 
 interface OwnProps {
@@ -22,15 +22,15 @@ export type ChartCardProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onSelectCurrent: () => {
-        },//TODO should be an actual chart
-        onSelectHistorical: () => {
+        onChartTypeChange: (chartType: string) => {//TODO fix this so it works}
         },
     }
 }
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
-    return {}
+    return {
+        chartType: ""//TODO
+    }
 }
 
 export default connect(

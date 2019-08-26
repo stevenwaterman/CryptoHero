@@ -3,14 +3,17 @@ import {Dispatch} from "redux"
 import {State} from "../../../state/store/RootStore";
 import IConfirmTradeAction, {ConfirmTradeAction} from "../../../state/reducers/modal/trade/IConfirmTradeAction";
 import TradeModal from "./TradeModal";
+import IHideTradeModalAction, {HideTradeModalAction} from "../../../state/reducers/modal/trade/IHideTradeModalAction";
 
-type Actions = IConfirmTradeAction
+type Actions = IConfirmTradeAction | IHideTradeModalAction
 
 interface DispatchProps {
     onConfirm: () => void,
+    onHide: () => void,
 }
 
 interface StateProps {
+    show: boolean,
     buying: boolean
     canConfirm: boolean,
     asset1: string,
@@ -26,6 +29,7 @@ export type TradeModalProps = StateProps & DispatchProps & OwnProps
 function mapDispatchToProps(dispatch: Dispatch<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onConfirm: () => ConfirmTradeAction.fire,
+        onHide: () => HideTradeModalAction.fire
     }
 }
 
@@ -40,6 +44,7 @@ function target(state: State): string {
 // noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
+        show: state.modalVisibility.tradeVisible,
         buying: state.tradeModal.buying,
         canConfirm: state.tradeModalInput.units > 0,
         asset1: state.tradeModal.instrument.asset1,

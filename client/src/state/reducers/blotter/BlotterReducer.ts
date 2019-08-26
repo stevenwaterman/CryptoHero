@@ -1,6 +1,4 @@
-import IBlotterShowPendingAction, {BlotterShowPendingType} from "./IBlotterShowPendingAction";
-import {withChanges} from "../../../util/WithChanges";
-import IBlotterShowCompletedAction, {BlotterShowCompletedType} from "./IBlotterShowCompletedAction";
+import IBlotterSetCategoryAction, {BlotterSetCategoryType} from "./IBlotterSetCategoryAction";
 import BlotterStore, {BlotterActions, initialBlotterStore} from "../../store/BlotterStore";
 import ICancelOrderAction, {CancelOrderType} from "./ICancelOrderAction";
 
@@ -12,10 +10,8 @@ export function blotterReducer(
     action: Actions
 ): State {
     switch (action.type) {
-        case BlotterShowCompletedType:
-            return showCompleted(state, action as IBlotterShowCompletedAction);
-        case BlotterShowPendingType:
-            return showPending(state, action as IBlotterShowPendingAction);
+        case BlotterSetCategoryType:
+            return setCategory(state, action as IBlotterSetCategoryAction);
         case CancelOrderType:
             return cancelOrder(state, action as ICancelOrderAction);
         default:
@@ -23,22 +19,17 @@ export function blotterReducer(
     }
 }
 
-function showCompleted(state: State, action: IBlotterShowCompletedAction): State {
-    return withChanges(state, {
-        showCompleted: true,
-    });
-}
-
-function showPending(state: State, action: IBlotterShowPendingAction): State {
-    return withChanges(state, {
-        showCompleted: false,
+function setCategory(state: State, action: IBlotterSetCategoryAction): State {
+    return ({
+        ...state,
+        showPending: action.payload.pendingSelected,
     });
 }
 
 function cancelOrder(state: State, action: ICancelOrderAction): State {
     const newPending = state.pending.filter(it => it.id !== action.payload.id);
-    return withChanges(state, {
+    return ({
+        ...state,
         pending: newPending
     });
 }
-

@@ -1,8 +1,13 @@
-import IStartViewTotalFundsAction from "../reducers/modal/totalFunds/IStartViewTotalFundsAction";
-import IStartWithdrawAction from "../reducers/modal/withdraw/IStartWithdrawAction";
-import IStartDepositAction from "../reducers/modal/deposit/IStartDepositAction";
-import IStartTradeAction from "../reducers/modal/trade/IStartTradeAction";
-import IStartViewTradeAction from "../reducers/modal/viewTrade/IStartViewTradeAction";
+import IShowTotalFundsModalAction from "../reducers/modal/totalFunds/IShowTotalFundsModalAction";
+import IShowWithdrawModalAction from "../reducers/modal/withdraw/IShowWithdrawModalAction";
+import IShowDepositModalAction from "../reducers/modal/deposit/IShowDepositModalAction";
+import IShowTradeModalAction from "../reducers/modal/trade/IShowTradeModalAction";
+import IShowViewTradeModalAction from "../reducers/modal/viewTrade/IShowViewTradeModalAction";
+import IHideTotalFundsModalAction from "../reducers/modal/totalFunds/IHideTotalFundsModalAction";
+import IHideWithdrawModalAction from "../reducers/modal/withdraw/IHideWithdrawModalAction";
+import IHideDepositModalAction from "../reducers/modal/deposit/IHideDepositModalAction";
+import IHideTradeModalAction from "../reducers/modal/trade/IHideTradeModalAction";
+import IHideViewTradeModalAction from "../reducers/modal/viewTrade/IHideViewTradeModalAction";
 
 export default interface ModalVisibilityStore {
     readonly totalFundsVisible: boolean;
@@ -21,8 +26,13 @@ export const initialModalVisibilityStore: ModalVisibilityStore = {
 };
 
 export type ModalVisibilityActions =
-    IStartViewTotalFundsAction
-    | IStartWithdrawAction
-    | IStartDepositAction
-    | IStartTradeAction
-    | IStartViewTradeAction
+    IShowTotalFundsModalAction
+    | IShowWithdrawModalAction
+    | IShowDepositModalAction
+    | IShowTradeModalAction
+    | IShowViewTradeModalAction
+    | IHideTotalFundsModalAction
+    | IHideWithdrawModalAction
+    | IHideDepositModalAction
+    | IHideTradeModalAction
+    | IHideViewTradeModalAction

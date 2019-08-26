@@ -5,10 +5,10 @@ import {InstrumentActions} from "../../../state/store/InstrumentStore";
 import {InstrumentSelectionAction} from "../../../state/reducers/instrument/IInstrumentSelectionAction";
 import {State} from "../../../state/store/RootStore";
 import Instrument from "../../../models/Instrument";
-import IStartTradeAction, {StartTradeAction} from "../../../state/reducers/modal/trade/IStartTradeAction";
+import IShowTradeModalAction, {ShowTradeModalAction} from "../../../state/reducers/modal/trade/IShowTradeModalAction";
 import {ThunkDispatch} from "redux-thunk"
 
-type Actions = InstrumentActions | IStartTradeAction
+type Actions = InstrumentActions | IShowTradeModalAction
 
 interface DispatchProps {
     onCardClick: () => void,
@@ -30,8 +30,8 @@ export type InstrumentCardProps = StateProps & DispatchProps & OwnProps
 function mapDispatchToProps(dispatch: ThunkDispatch<Store, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onCardClick: () => dispatch(InstrumentSelectionAction.fire(ownProps.instrument)),
-        onBuyClick: () => dispatch(StartTradeAction.fire(true, ownProps.instrument)),
-        onSellClick: () => dispatch(StartTradeAction.fire(false, ownProps.instrument))
+        onBuyClick: () => dispatch(ShowTradeModalAction.fire(true, ownProps.instrument)),
+        onSellClick: () => dispatch(ShowTradeModalAction.fire(false, ownProps.instrument))
     }
 }
 

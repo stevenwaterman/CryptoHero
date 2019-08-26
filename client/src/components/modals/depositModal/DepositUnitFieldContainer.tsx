@@ -24,7 +24,6 @@ interface OwnProps {
     step: number
 }
 
-
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onValueChange: newUnits => dispatch(DepositModalSetUnitsAction.fire(newUnits)),

@@ -5,14 +5,13 @@ import IWithdrawModalSetPercentTextAction, {WithdrawModalSetPercentTextType} fro
 import IWithdrawModalResetPercentTextAction, {WithdrawModalResetPercentTextType} from "./resetText/IWithdrawModalResetPercentTextAction";
 import IWithdrawModalResetUnitsTextAction, {WithdrawModalResetUnitsTextType} from "./resetText/IWithdrawModalResetUnitsTextAction";
 import {formatInput, formatPercent} from "../../../../util/FormatMoney";
-import {withChanges} from "../../../../util/WithChanges";
 import IWithdrawModalSetAssetAction, {WithdrawModalSetAssetType} from "./value/IWithdrawModalSetAssetAction";
 import WithdrawModalInputStore, {
     initialWithdrawModalInputStore,
     WithdrawModalInputActions
 } from "../../../store/modalInputState/WithdrawModalInputStore";
 import {clamp} from "../../../../util/Clamp";
-import IStartWithdrawAction, {StartWithdrawType} from "../../modal/withdraw/IStartWithdrawAction";
+import IShowWithdrawModalAction, {ShowWithdrawModalType} from "../../modal/withdraw/IShowWithdrawModalAction";
 
 type State = WithdrawModalInputStore
 type Actions = WithdrawModalInputActions
@@ -22,8 +21,8 @@ export function withdrawModalInputReducer(
     action: Actions
 ): State {
     switch (action.type) {
-        case StartWithdrawType:
-            return startWithdraw(state, action as IStartWithdrawAction);
+        case ShowWithdrawModalType:
+            return startWithdraw(state, action as IShowWithdrawModalAction);
         case WithdrawModalSetPercentType:
             return setPercent(state, action as IWithdrawModalSetPercentAction);
         case WithdrawModalSetUnitsType:
@@ -43,7 +42,7 @@ export function withdrawModalInputReducer(
     }
 }
 
-function startWithdraw(state: State, action: IStartWithdrawAction): State {
+function startWithdraw(state: State, action: IShowWithdrawModalAction): State {
     return {
         asset: "GBP", percent: 0, percentText: formatPercent(0), units: 0, unitsText: formatInput(0)
     }
@@ -57,13 +56,14 @@ function setAsset(state: State, action: IWithdrawModalSetAssetAction): State {
     const newPercent = 100 * newUnits / maxWithdraw;
     const newPercentText = formatPercent(newPercent);
 
-    return withChanges(state, {
+    return {
+        ...state,
         asset: newAsset,
         units: newUnits,
         unitsText: newUnitsText,
         percent: newPercent,
         percentText: newPercentText
-    })
+    }
 }
 
 function setUnits(state: State, action: IWithdrawModalSetUnitsAction): State {
@@ -78,12 +78,13 @@ function setUnits(state: State, action: IWithdrawModalSetUnitsAction): State {
         unitsText = formatInput(actualUnits)
     }
 
-    return withChanges(state, {
+    return {
+        ...state,
         units: actualUnits,
         unitsText: unitsText,
         percent: percent,
         percentText: percentText
-    });
+    };
 }
 
 function setPercent(state: State, action: IWithdrawModalSetPercentAction): State {
@@ -98,34 +99,39 @@ function setPercent(state: State, action: IWithdrawModalSetPercentAction): State
     const units = actualPercent * maxWithdraw / 100;
     const unitsText = formatPercent(units);
 
-    return withChanges(state, {
+    return {
+        ...state,
         unitsText: unitsText,
         units: units,
         percent: actualPercent,
         percentText: percentText
-    });
+    };
 }
 
 function resetPercentText(state: State, action: IWithdrawModalResetPercentTextAction): State {
-    return withChanges(state, {
+    return {
+        ...state,
         percentText: formatPercent(state.percent)
-    });
+    };
 }
 
 function resetUnitsText(state: State, action: IWithdrawModalResetUnitsTextAction): State {
-    return withChanges(state, {
+    return {
+        ...state,
         unitsText: formatInput(state.units)
-    })
+    };
 }
 
 function setUnitsText(state: State, action: IWithdrawModalSetUnitsTextAction): State {
-    return withChanges(state, {
+    return {
+        ...state,
         unitsText: action.payload.newText
-    })
+    };
 }
 
 function setPercentText(state: State, action: IWithdrawModalSetPercentTextAction): State {
-    return withChanges(state, {
+    return {
+        ...state,
         percentText: action.payload.newText
-    })
+    };
 }

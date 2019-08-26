@@ -1,6 +1,6 @@
-import IDepositFundsAction from "../reducers/funds/IDepositAction";
-import IWithdrawFundsAction from "../reducers/funds/IWithdrawAction";
-import IStartViewTotalFundsAction from "../reducers/modal/totalFunds/IStartViewTotalFundsAction";
+import IConfirmDepositAction from "../reducers/funds/IConfirmDepositAction";
+import IConfirmWithdrawAction from "../reducers/funds/IConfirmWithdrawAction";
+import IShowTotalFundsModalAction from "../reducers/modal/totalFunds/IShowTotalFundsModalAction";
 
 export default interface FundsStore {
     readonly availableFunds: Array<[string, number]>;
@@ -24,4 +24,4 @@ export const initialFundsStore: FundsStore = {
     ]
 };
 
-export type FundsActions = IDepositFundsAction | IWithdrawFundsAction | IStartViewTotalFundsAction
+export type FundsActions = IConfirmDepositAction | IConfirmWithdrawAction | IShowTotalFundsModalAction

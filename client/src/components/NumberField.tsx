@@ -1,5 +1,7 @@
-import {ELEMENT} from "../state/store/RootStore";
-import React, {ChangeEvent} from "react";
+import {ELEMENT, FORM_EVENT} from "../state/store/RootStore";
+import React from "react";
+import {FormControl, InputGroup} from "react-bootstrap";
+import {InputGroupAppend, InputGroupText} from "react-bootstrap/InputGroup";
 
 interface NumberFieldProps {
     text: string
@@ -14,26 +16,25 @@ interface NumberFieldProps {
 export default class NumberField extends React.Component<NumberFieldProps> {
     constructor(props: NumberFieldProps) {
         super(props);
-
         this.handleEdit = this.handleEdit.bind(this);
     }
 
     render(): ELEMENT {
-        return <div className="input-group">
-            <input className="form-control" id="unitPrice" type="number"
-                   disabled={this.props.value == null}
-                   step={this.props.step}
-                   value={this.props.text}
-                   onChange={this.handleEdit}
-                   onBlur={this.props.onDone}/>
-            <div className="input-group-append">
-                <div className="input-group-text">{this.props.append}</div>
-            </div>
-        </div>
+        return <InputGroup>
+            <FormControl type="number"
+                         disabled={this.props.value == null}
+                         step={this.props.step}
+                         value={this.props.text}
+                         onChange={this.handleEdit}
+                         onBlur={this.props.onDone}/>
+            <InputGroupAppend>
+                <InputGroupText>{this.props.append}</InputGroupText>
+            </InputGroupAppend>
+        </InputGroup>
     }
 
-    private handleEdit(event: ChangeEvent<HTMLInputElement>): void {
-        const text = event.target.value;
+    private handleEdit(event: FORM_EVENT): void {
+        const text: string = event.currentTarget.value as string;
         const newValue = Number.parseFloat(text);
         const clean = isFinite(newValue);
         this.props.onTextChange(text);

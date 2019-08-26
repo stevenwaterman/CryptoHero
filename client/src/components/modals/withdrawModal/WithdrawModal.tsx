@@ -4,58 +4,51 @@ import {WithdrawModalProps} from "./WithdrawModalContainer";
 import UnitFieldContainer from "./fields/WithdrawUnitFieldContainer";
 import PercentFieldContainer from "./fields/WithdrawPercentFieldContainer";
 import WithdrawAssetSelectorContainer from "./WithdrawAssetSelectorContainer";
+import {Button, Col, Form, Modal} from "react-bootstrap";
 
 export default class WithdrawModal extends React.PureComponent<WithdrawModalProps> {
     render(): ELEMENT {
         return (
-            <div className="modal fade" id="withdrawModal" role="dialog">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title"><b>Withdraw Funds</b>
-                            </h5>
-                            <button aria-label="Close" className="close" data-dismiss="modal" type="button">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            <form>
-                                <div className="form-group">
-                                    <div className="form-row">
-                                        <div className="col-sm-2 my-auto px-0">
-                                            <label>Asset:</label>
-                                        </div>
-                                        <div className="col-sm-auto">
-                                            <WithdrawAssetSelectorContainer/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="form-group">
-                                    <div className="form-row">
-                                        <div className="col-sm-2 my-auto px-0">
-                                            Withdraw
-                                        </div>
-                                        <div className="col-sm-5 mt-2 mt-sm-0">
-                                            <UnitFieldContainer step={0.00001}/>
-                                        </div>
-                                        <div className="col-sm-1 my-auto px-0 text-center">
-                                            =
-                                        </div>
-                                        <div className="col-sm-4 mt-2 mt-sm-0">
-                                            <PercentFieldContainer step={0.01}/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div className="modal-footer">
-                            <button className="btn btn-danger" disabled={!this.props.canConfirm}
-                                    data-dismiss="modal" type="button">Confirm Withdrawal
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Modal show={this.props.show} onHide={this.props.onHide}>
+                <Modal.Header closeButton>
+                    <Modal.Title><b>Withdraw Funds</b> </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group>
+                            <Form.Row>
+                                <Col sm="2" className="my-auto px-0">
+                                    Asset:
+                                </Col>
+                                <Col sm="auto">
+                                    <WithdrawAssetSelectorContainer/>
+                                </Col>
+                            </Form.Row>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Row>
+                                <Col sm="2" className="my-auto px-0">
+                                    Withdraw
+                                </Col>
+                                <Col sm="5" className="mt-2 mt-sm-0">
+                                    <UnitFieldContainer step={0.00001}/>
+                                </Col>
+                                <Col sm="1" className="my-auto px-0 text-center">
+                                    =
+                                </Col>
+                                <Col sm="4" className="mt-2 mt-sm-0">
+                                    <PercentFieldContainer step={0.01}/>
+                                </Col>
+                            </Form.Row>
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" disabled={!this.props.canConfirm}>
+                        Confirm Withdrawal
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         );
     }
 }

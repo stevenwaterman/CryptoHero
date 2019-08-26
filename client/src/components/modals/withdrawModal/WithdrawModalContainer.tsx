@@ -1,17 +1,21 @@
 import {connect} from "react-redux";
-import {Dispatch} from "redux"
+import {Store} from "redux"
 import {State} from "../../../state/store/RootStore";
 import IConfirmTradeAction from "../../../state/reducers/modal/trade/IConfirmTradeAction";
 import WithdrawModal from "./WithdrawModal";
-import {WithdrawFundsAction} from "../../../state/reducers/funds/IWithdrawAction";
+import {ConfirmWithdrawAction} from "../../../state/reducers/funds/IConfirmWithdrawAction";
+import {ThunkDispatch} from "redux-thunk";
+import IHideWithdrawModalAction, {HideWithdrawModalAction} from "../../../state/reducers/modal/withdraw/IHideWithdrawModalAction";
 
-type Actions = IConfirmTradeAction
+type Actions = IConfirmTradeAction | IHideWithdrawModalAction
 
 interface DispatchProps {
-    onConfirm: (asset: string, amount: number) => void,
+    onConfirm: () => void,
+    onHide: () => void
 }
 
 interface StateProps {
+    show: boolean
     canConfirm: boolean
 }
 
@@ -20,15 +24,17 @@ interface OwnProps {
 
 export type WithdrawModalProps = StateProps & DispatchProps & OwnProps
 
-function mapDispatchToProps(dispatch: Dispatch<Actions>, ownProps: OwnProps): DispatchProps {
+function mapDispatchToProps(dispatch: ThunkDispatch<Store, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onConfirm: (asset: string, amount: number) => WithdrawFundsAction.fire(asset, amount),
+        onConfirm: dispatch(ConfirmWithdrawAction.fire),
+        onHide: dispatch(HideWithdrawModalAction.fire)
     }
 }
 
 // noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
+        show: state.modalVisibility.withdrawVisible,
         canConfirm: state.withdrawModalInput.units > 0
     }
 }

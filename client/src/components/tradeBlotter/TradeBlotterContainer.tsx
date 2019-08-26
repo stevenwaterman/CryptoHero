@@ -5,9 +5,8 @@ import {ThunkDispatch} from "redux-thunk";
 import IWithdrawModalSetAssetAction
     from "../../state/reducers/modalInputState/withdraw/value/IWithdrawModalSetAssetAction";
 import TradeSimple from "../../models/TradeSimple";
-import {BlotterShowCompletedAction} from "../../state/reducers/blotter/IBlotterShowCompletedAction";
-import {BlotterShowPendingAction} from "../../state/reducers/blotter/IBlotterShowPendingAction";
-import {StartViewTradeAction} from "../../state/reducers/modal/viewTrade/IStartViewTradeAction";
+import {BlotterSetCategoryAction} from "../../state/reducers/blotter/IBlotterSetCategoryAction";
+import {ShowViewTradeModal} from "../../state/reducers/modal/viewTrade/IShowViewTradeModalAction";
 
 type Actions = IWithdrawModalSetAssetAction
 
@@ -18,6 +17,7 @@ interface DispatchProps {
 }
 
 export interface StateProps {
+    pendingSelected: boolean
     trades: Array<TradeSimple>
 }
 
@@ -28,18 +28,19 @@ export type ChartCardProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onSelectCompleted: () => (BlotterShowCompletedAction.fire()),
-        onSelectPending: () => dispatch(BlotterShowPendingAction.fire()),
-        onSelectTrade: (id: string) => dispatch(StartViewTradeAction.fire(id))
+        onSelectCompleted: () => (BlotterSetCategoryAction.fire(false)),
+        onSelectPending: () => dispatch(BlotterSetCategoryAction.fire(true)),
+        onSelectTrade: (id: string) => dispatch(ShowViewTradeModal.fire(id))
     }
 }
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
-    const showCompleted = state.blotter.showCompleted;
-    const relevant = showCompleted ? state.blotter.completed : state.blotter.pending;
+    const showPending = state.blotter.showPending;
+    const relevant = showPending ? state.blotter.pending : state.blotter.completed;
     const selectedInstrument = state.instruments.selectedInstrument;
     const filtered = relevant.filter((trade: TradeSimple) => trade.instrument.name === selectedInstrument.name);
     return {
+        pendingSelected: state.blotter.showPending,
         trades: filtered
     }
 }

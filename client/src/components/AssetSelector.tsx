@@ -1,5 +1,6 @@
 import {ELEMENT} from "../state/store/RootStore";
-import React, {ChangeEvent} from "react";
+import React from "react";
+import {FormControl} from "react-bootstrap";
 
 interface AssetSelectorProps {
     onValueChange: (newAsset: string) => void,
@@ -8,21 +9,17 @@ interface AssetSelectorProps {
 }
 
 export default class AssetSelector extends React.PureComponent<AssetSelectorProps> {
-    constructor(props: AssetSelectorProps) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-    }
+    private lastSelection: string = "";
 
     render(): ELEMENT {
         return (
-            <select className="custom-select" value={this.props.selectedAsset} onChange={this.handleChange}>
-                {this.props.assets.map((asset) => <option key={asset}>{asset}</option>)}
-            </select>
+            <FormControl as="select" value={this.props.selectedAsset} inputRef={this.props.onValueChange}>
+                {this.props.assets.map((asset) =>
+                    <option value={asset} key={asset}>
+                        {asset}
+                    </option>
+                )}
+            </FormControl>
         )
-    }
-
-    handleChange(event: ChangeEvent<HTMLSelectElement>): void {
-        const newAsset: string = event.target.value;
-        this.props.onValueChange(newAsset);
     }
 }

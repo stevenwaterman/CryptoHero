@@ -1,12 +1,11 @@
 import IDepositModalSetUnitsAction, {DepositModalSetUnitsType} from "./IDepositModalSetUnitsAction";
-import {withChanges} from "../../../../util/WithChanges";
 import IDepositModalSetAssetAction, {DepositModalSetAssetType} from "./IDepositModalSetAssetAction";
 import DepositModalInputStore, {
     DepositModalInputActions,
     initialDepositModalInputStore
 } from "../../../store/modalInputState/DepositModalInputStore";
 import {clamp} from "../../../../util/Clamp";
-import IStartDepositAction, {StartDepositType} from "../../modal/deposit/IStartDepositAction";
+import IShowDepositModalAction, {ShowDepositModalType} from "../../modal/deposit/IShowDepositModalAction";
 import IDepositModalSetUnitsTextAction, {DepositModalSetUnitsTextType} from "./IDepositModalSetUnitsTextAction";
 import IDepositModalResetUnitsTextAction, {DepositModalResetUnitsTextType} from "./IDepositModalResetUnitsTextAction";
 import {formatInput} from "../../../../util/FormatMoney";
@@ -19,8 +18,8 @@ export function depositModalInputReducer(
     action: Actions
 ): State {
     switch (action.type) {
-        case StartDepositType:
-            return startDeposit(state, action as IStartDepositAction);
+        case ShowDepositModalType:
+            return startDeposit(state, action as IShowDepositModalAction);
         case DepositModalSetUnitsType:
             return setUnits(state, action as IDepositModalSetUnitsAction);
         case DepositModalSetUnitsTextType:
@@ -34,7 +33,7 @@ export function depositModalInputReducer(
     }
 }
 
-function startDeposit(state: State, action: IStartDepositAction): State {
+function startDeposit(state: State, action: IShowDepositModalAction): State {
     return {
         asset: "GBP", units: 0, unitsText: formatInput(0)
     }
@@ -43,7 +42,8 @@ function startDeposit(state: State, action: IStartDepositAction): State {
 function setAsset(state: State, action: IDepositModalSetAssetAction): State {
     const {newAsset} = action.payload;
 
-    return withChanges(state, {
+    return ({
+        ...state,
         asset: newAsset,
     })
 }
@@ -57,20 +57,23 @@ function setUnits(state: State, action: IDepositModalSetUnitsAction): State {
         unitsText = formatInput(actualUnits)
     }
 
-    return withChanges(state, {
+    return ({
+        ...state,
         units: actualUnits,
         unitsText: unitsText,
     });
 }
 
 function resetUnitsText(state: State, action: IDepositModalResetUnitsTextAction): State {
-    return withChanges(state, {
+    return ({
+        ...state,
         unitsText: formatInput(state.units)
     })
 }
 
 function setUnitsText(state: State, action: IDepositModalSetUnitsTextAction): State {
-    return withChanges(state, {
+    return ({
+        ...state,
         unitsText: action.payload.newText
     })
 }

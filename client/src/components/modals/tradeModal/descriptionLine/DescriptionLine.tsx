@@ -4,7 +4,7 @@ import React from "react";
 import {DescriptionLineProps} from "./DescriptionLineContainer";
 
 export default class DescriptionLine extends React.PureComponent<DescriptionLineProps> {
-    render() {
+    render(): ELEMENT {
         if (this.props.units <= 0) {
             return <p className="text-center"><b>Increase {this.buySellString()} Amount</b></p>;
         } else {
