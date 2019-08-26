@@ -6,8 +6,11 @@ export function formatMoney(num: number | null, decimals: number, withCommas: bo
     }
     if (stripTrailingZeros) {
         const reverse = str.split("").reverse();
-        const index: number | undefined = reverse.findIndex((s) => s !== "." && s !== "0");
+
+        let index: number | undefined = reverse.findIndex((s) => s === "." || s !== "0");
         if (index == null) return str;
+        if (reverse[index] === ".") index++;
+
         const slice = reverse.slice(index);
         return slice.reverse().join("");
     } else {

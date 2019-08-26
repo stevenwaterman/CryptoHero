@@ -31,5 +31,3 @@ function startTrade(state: State, action: IStartTradeAction): State {
         instrument: instrument,
     }
 }
-
-

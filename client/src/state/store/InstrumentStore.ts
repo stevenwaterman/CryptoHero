@@ -14,7 +14,7 @@ export const initialInstrumentStore: InstrumentStore = {
         [new Instrument("ETH", "GBP"), 161.39427],
         [new Instrument("DASH", "GBP"), 78.07013],
     ],
-    selectedInstrument: new Instrument("GBP", "BTC")
+    selectedInstrument: new Instrument("BTC", "GBP")
 };
 
 export type InstrumentActions = IInstrumentSelectionAction | IInstrumentPricesAction
