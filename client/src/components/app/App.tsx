@@ -10,6 +10,8 @@ import SelectedInstrumentContainer from "../selectedInstrument/SelectedInstrumen
 import WithdrawModalContainer from "../modals/withdrawModal/WithdrawModalContainer";
 import DepositModalContainer from "../modals/depositModal/DepositModalContainer";
 import ChartCardContainer from "../chart/ChartCardContainer";
+import TradeBlotterContainer from "../tradeBlotter/TradeBlotterContainer";
+import ViewTradeModalContainer from "../modals/viewTrade/ViewTradeModalContainer";
 
 export default class App extends React.Component {
     render(): ELEMENT {
@@ -25,6 +27,7 @@ export default class App extends React.Component {
                         <div className="col-sm-8 my-3 my-sm-0" id="right bar">
                             <SelectedInstrumentContainer/>
                             <ChartCardContainer/>
+                            <TradeBlotterContainer/>
                         </div>
                     </div>
                 </div>
@@ -32,6 +35,7 @@ export default class App extends React.Component {
                 <TotalFundsModalContainer/>
                 <WithdrawModalContainer/>
                 <DepositModalContainer/>
+                <ViewTradeModalContainer/>
             </div>
         )
     }

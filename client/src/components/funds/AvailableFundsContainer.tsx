@@ -6,6 +6,7 @@ import IWithdrawModalSetAssetAction
     from "../../state/reducers/modalInputState/withdraw/value/IWithdrawModalSetAssetAction";
 import {StartWithdrawAction} from "../../state/reducers/modal/withdraw/IStartWithdrawAction";
 import {StartDepositAction} from "../../state/reducers/modal/deposit/IStartDepositAction";
+import {StartViewTotalFundsAction} from "../../state/reducers/modal/totalFunds/IStartViewTotalFundsAction";
 
 type Actions = IWithdrawModalSetAssetAction
 
@@ -26,8 +27,7 @@ export type AvailableFundsProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onClickTotalFunds: () => {
-        }, //TODO total funds should actually work out the info
+        onClickTotalFunds: () => dispatch(StartViewTotalFundsAction.fire()),
         onClickWithdraw: () => dispatch(StartWithdrawAction.fire()),
         onClickDeposit: () => dispatch(StartDepositAction.fire()),
     }

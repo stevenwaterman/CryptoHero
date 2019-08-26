@@ -17,7 +17,7 @@ export type TotalFundsModalProps = StateProps & DispatchProps & OwnProps
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
-        totalFunds: state.funds.availableFunds
+        totalFunds: state.funds.totalFunds
     }
 }
 

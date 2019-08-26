@@ -7,7 +7,7 @@ import AssetSelectorContainer from "./DepositAssetSelectorContainer";
 export default class DepositModal extends React.PureComponent<DepositModalProps> {
     render(): ELEMENT {
         return (
-            <div className="modal fade" id="depositModal" role="dialog">
+            <div className={this.props.show ? "modal fade show" : "modal fade"} id="depositModal" role="dialog">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">

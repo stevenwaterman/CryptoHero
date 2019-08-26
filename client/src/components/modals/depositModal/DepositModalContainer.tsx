@@ -13,6 +13,7 @@ interface DispatchProps {
 
 interface StateProps {
     canConfirm: boolean
+    show: boolean
 }
 
 interface OwnProps {
@@ -29,7 +30,8 @@ function mapDispatchToProps(dispatch: Dispatch<Actions>, ownProps: OwnProps): Di
 // noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
-        canConfirm: state.depositModalInput.units > 0
+        canConfirm: state.depositModalInput.units > 0,
+        show: state.modalVisibility.depositVisible
     }
 }
 
