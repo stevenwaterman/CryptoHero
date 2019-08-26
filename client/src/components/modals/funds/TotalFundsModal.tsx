@@ -15,7 +15,7 @@ function generateOneColumn([asset, price]: [string, number]): ELEMENT {
                     <b>{asset}:</b>
                 </div>
                 <div className="col-6 pl-1 text-right">
-                    {formatMoney(price, 2)}
+                    {formatMoney(price, 2, true, false)}
                 </div>
             </div>
         </div>

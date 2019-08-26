@@ -25,7 +25,7 @@ export default class InstrumentCard extends React.PureComponent<InstrumentCardPr
             <div className={`card ${borderColor(this.props.selected)} pt-1`} onClick={this.props.onCardClick}>
                 <h5 className={`card-title text-center ${textColor(this.props.selected)}`}>
                     <b>{this.props.instrument.name}</b></h5>
-                <p className={`card-text text-center ${textColor(this.props.selected)}`}>{formatMoney(this.props.price, 5)}</p>
+                <p className={`card-text text-center ${textColor(this.props.selected)}`}>{formatMoney(this.props.price, 5, true, false)}</p>
                 <div className="row mb-1 mx-0">
                     <div className="col-6 px-1">
                         <button className="btn btn-success btn-block btn-sm pl-1 pb-1" data-target="#tradeModal"

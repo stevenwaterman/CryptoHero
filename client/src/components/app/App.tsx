@@ -7,6 +7,7 @@ import AvailableFundsContainer from "../funds/AvailableFundsContainer";
 import NavBar from "../nav/NavBar";
 import TotalFundsModalContainer from "../modals/funds/TotalFundsModalContainer";
 import SelectedInstrument from "../selectedInstrument/SelectedInstrumentContainer";
+import WithdrawModal from "../modals/withdrawModal/WithdrawModalContainer";
 
 export default class App extends React.Component {
     render(): ELEMENT {
@@ -26,6 +27,7 @@ export default class App extends React.Component {
                 </div>
                 <TradeModalContainer/>
                 <TotalFundsModalContainer/>
+                <WithdrawModal/>
             </div>
         )
     }

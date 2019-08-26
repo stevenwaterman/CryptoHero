@@ -26,13 +26,13 @@ export type DescriptionLineProps = DispatchProps & StateProps & OwnProps
 // noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
-        buying: state.trade.buying,
-        asset1: state.trade.instrument.asset1,
-        asset1Amount: state.trade.units,
-        asset2: state.trade.instrument.asset2,
-        asset2Amount: state.trade.units * state.trade.price,
-        price: state.trade.price,
-        units: state.trade.units
+        buying: state.tradeModal.buying,
+        asset1: state.tradeModal.instrument.asset1,
+        asset1Amount: state.tradeModalInput.units,
+        asset2: state.tradeModal.instrument.asset2,
+        asset2Amount: state.tradeModalInput.units * state.tradeModalInput.price,
+        price: state.tradeModalInput.price,
+        units: state.tradeModalInput.units
     }
 }
 

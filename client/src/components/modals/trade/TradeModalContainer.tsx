@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
 import {Dispatch} from "redux"
 import {State} from "../../../state/store/RootStore";
-import IConfirmTradeAction, {ConfirmTradeAction} from "../../../state/reducers/trade/IConfirmTradeAction";
+import IConfirmTradeAction, {ConfirmTradeAction} from "../../../state/reducers/modal/trade/IConfirmTradeAction";
 import TradeModal from "./TradeModal";
 
 type Actions = IConfirmTradeAction
@@ -12,7 +12,7 @@ interface DispatchProps {
 
 interface StateProps {
     buying: boolean
-    units: number,
+    canConfirm: boolean,
     asset1: string,
     sourceAsset: string,
     targetAsset: string,
@@ -30,19 +30,19 @@ function mapDispatchToProps(dispatch: Dispatch<Actions>, ownProps: OwnProps): Di
 }
 
 function source(state: State): string {
-    return state.trade.buying ? state.trade.instrument.asset2 : state.trade.instrument.asset1
+    return state.tradeModal.buying ? state.tradeModal.instrument.asset2 : state.tradeModal.instrument.asset1
 }
 
 function target(state: State): string {
-    return state.trade.buying ? state.trade.instrument.asset1 : state.trade.instrument.asset2
+    return state.tradeModal.buying ? state.tradeModal.instrument.asset1 : state.tradeModal.instrument.asset2
 }
 
 // noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
-        buying: state.trade.buying,
-        units: state.trade.units,
-        asset1: state.trade.instrument.asset1,
+        buying: state.tradeModal.buying,
+        canConfirm: state.tradeModalInput.units > 0,
+        asset1: state.tradeModal.instrument.asset1,
         sourceAsset: source(state),
         targetAsset: target(state),
     }

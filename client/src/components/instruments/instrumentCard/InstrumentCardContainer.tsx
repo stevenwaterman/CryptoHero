@@ -5,7 +5,7 @@ import {InstrumentActions} from "../../../state/store/InstrumentStore";
 import {InstrumentSelectionAction} from "../../../state/reducers/instrument/IInstrumentSelectionAction";
 import {State} from "../../../state/store/RootStore";
 import Instrument from "../../../models/Instrument";
-import IStartTradeAction, {StartTradeAction} from "../../../state/reducers/trade/IStartTradeAction";
+import IStartTradeAction, {StartTradeAction} from "../../../state/reducers/modal/trade/IStartTradeAction";
 import {ThunkDispatch} from "redux-thunk"
 
 type Actions = InstrumentActions | IStartTradeAction

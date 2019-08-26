@@ -1,4 +1,4 @@
-export function formatMoney(num: number | null, decimals: number = 5, withCommas: boolean = true, stripTrailingZeros: boolean = false): string {
+export function formatMoney(num: number | null, decimals: number, withCommas: boolean, stripTrailingZeros: boolean): string {
     if (num == null) return "";
     let str = num.toFixed(decimals);
     if (withCommas) {
@@ -13,4 +13,12 @@ export function formatMoney(num: number | null, decimals: number = 5, withCommas
     } else {
         return str;
     }
+}
+
+export function formatInput(num: number | null): string {
+    return formatMoney(num, 5, false, false);
+}
+
+export function formatPercent(num: number | null): string {
+    return formatMoney(num, 2, false, false);
 }
