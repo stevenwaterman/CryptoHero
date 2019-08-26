@@ -6,9 +6,10 @@ import TradeModalContainer from "../modals/tradeModal/TradeModalContainer";
 import AvailableFundsContainer from "../funds/AvailableFundsContainer";
 import NavBar from "../nav/NavBar";
 import TotalFundsModalContainer from "../modals/funds/TotalFundsModalContainer";
-import SelectedInstrument from "../selectedInstrument/SelectedInstrumentContainer";
-import WithdrawModal from "../modals/withdrawModal/WithdrawModalContainer";
-import DepositModal from "../modals/depositModal/DepositModalContainer";
+import SelectedInstrumentContainer from "../selectedInstrument/SelectedInstrumentContainer";
+import WithdrawModalContainer from "../modals/withdrawModal/WithdrawModalContainer";
+import DepositModalContainer from "../modals/depositModal/DepositModalContainer";
+import ChartCardContainer from "../chart/ChartCardContainer";
 
 export default class App extends React.Component {
     render(): ELEMENT {
@@ -22,14 +23,15 @@ export default class App extends React.Component {
                             <InstrumentCardGridContainer/>
                         </div>
                         <div className="col-sm-8 my-3 my-sm-0" id="right bar">
-                            <SelectedInstrument/>
+                            <SelectedInstrumentContainer/>
+                            <ChartCardContainer/>
                         </div>
                     </div>
                 </div>
                 <TradeModalContainer/>
                 <TotalFundsModalContainer/>
-                <WithdrawModal/>
-                <DepositModal/>
+                <WithdrawModalContainer/>
+                <DepositModalContainer/>
             </div>
         )
     }
