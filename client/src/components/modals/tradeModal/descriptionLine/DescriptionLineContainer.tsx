@@ -23,7 +23,6 @@ interface OwnProps {
 
 export type DescriptionLineProps = DispatchProps & StateProps & OwnProps
 
-// noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
         buying: state.tradeModal.buying,

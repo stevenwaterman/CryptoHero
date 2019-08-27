@@ -1,10 +1,10 @@
-import TradeSimple from "../../models/TradeSimple";
-import IBlotterSetCategoryAction from "../reducers/blotter/IBlotterSetCategoryAction";
-import ICancelOrderAction from "../reducers/blotter/ICancelOrderAction";
+import Trade from "../../models/Trade";
+import BlotterSetCategoryAction from "../reducers/blotter/BlotterSetCategoryAction";
+import CancelOrderAction from "../reducers/blotter/CancelOrderAction";
 
 export default interface BlotterStore {
-    readonly completed: Array<TradeSimple>;
-    readonly pending: Array<TradeSimple>;
+    readonly completed: Array<Trade>;
+    readonly pending: Array<Trade>;
     readonly showPending: boolean;
 }
 
@@ -14,4 +14,4 @@ export const initialBlotterStore: BlotterStore = {
     showPending: false,
 };
 
-export type BlotterActions = IBlotterSetCategoryAction | ICancelOrderAction
+export type BlotterActions = BlotterSetCategoryAction | CancelOrderAction

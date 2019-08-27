@@ -1,16 +1,16 @@
-import ITradeModalSetPriceAction from "../../reducers/modalInputState/trade/value/ITradeModalSetPriceAction";
-import ITradeModalSetPercentAction from "../../reducers/modalInputState/trade/value/ITradeModalSetPercentAction";
-import ITradeModalSetPercentTextAction from "../../reducers/modalInputState/trade/text/ITradeModalSetPercentTextAction";
-import ITradeModalSetUnitsAction from "../../reducers/modalInputState/trade/value/ITradeModalSetUnitsAction";
-import ITradeModalSetUnitsTextAction from "../../reducers/modalInputState/trade/text/ITradeModalSetUnitsTextAction";
-import ITradeModalResetPriceTextAction
-    from "../../reducers/modalInputState/trade/resetText/ITradeModalResetPriceTextAction";
-import ITradeModalResetUnitsTextAction
-    from "../../reducers/modalInputState/trade/resetText/ITradeModalResetUnitsTextAction";
-import ITradeModalResetPercentTextAction
-    from "../../reducers/modalInputState/trade/resetText/ITradeModalResetPercentTextAction";
-import ITradeModalSetPriceTextAction from "../../reducers/modalInputState/trade/text/ITradeModalSetPriceTextAction";
-import IShowTradeModalAction from "../../reducers/modal/trade/IShowTradeModalAction";
+import TradeModalSetPriceAction from "../../reducers/modalInputState/trade/value/TradeModalSetPriceAction";
+import TradeModalSetPercentAction from "../../reducers/modalInputState/trade/value/TradeModalSetPercentAction";
+import TradeModalSetPercentTextAction from "../../reducers/modalInputState/trade/text/TradeModalSetPercentTextAction";
+import TradeModalSetUnitsAction from "../../reducers/modalInputState/trade/value/TradeModalSetUnitsAction";
+import TradeModalSetUnitsTextAction from "../../reducers/modalInputState/trade/text/TradeModalSetUnitsTextAction";
+import TradeModalResetPriceTextAction
+    from "../../reducers/modalInputState/trade/resetText/TradeModalResetPriceTextAction";
+import TradeModalResetUnitsTextAction
+    from "../../reducers/modalInputState/trade/resetText/TradeModalResetUnitsTextAction";
+import TradeModalResetPercentTextAction
+    from "../../reducers/modalInputState/trade/resetText/TradeModalResetPercentTextAction";
+import TradeModalSetPriceTextAction from "../../reducers/modalInputState/trade/text/TradeModalSetPriceTextAction";
+import ShowTradeModalAction from "../../reducers/modal/trade/ShowTradeModalAction";
 
 export default interface TradeModalInputStore {
     readonly priceText: string,
@@ -35,13 +35,13 @@ export const initialTradeModalInputStore: TradeModalInputStore = {
 };
 
 export type TradeModalInputActions =
-    IShowTradeModalAction
-    | ITradeModalSetPriceAction
-    | ITradeModalSetPercentAction
-    | ITradeModalSetPercentTextAction
-    | ITradeModalSetPriceTextAction
-    | ITradeModalSetUnitsTextAction
-    | ITradeModalSetUnitsAction
-    | ITradeModalResetPercentTextAction
-    | ITradeModalResetPriceTextAction
-    | ITradeModalResetUnitsTextAction
+    ShowTradeModalAction
+    | TradeModalSetPriceAction
+    | TradeModalSetPercentAction
+    | TradeModalSetPercentTextAction
+    | TradeModalSetPriceTextAction
+    | TradeModalSetUnitsTextAction
+    | TradeModalSetUnitsAction
+    | TradeModalResetPercentTextAction
+    | TradeModalResetPriceTextAction
+    | TradeModalResetUnitsTextAction

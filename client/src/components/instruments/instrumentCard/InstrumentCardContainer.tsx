@@ -1,19 +1,18 @@
 import {connect} from "react-redux";
 import InstrumentCard from "./InstrumentCard";
 import {Store} from "redux"
-import {InstrumentActions} from "../../../state/store/InstrumentStore";
-import {InstrumentSelectionAction} from "../../../state/reducers/instrument/IInstrumentSelectionAction";
-import {State} from "../../../state/store/RootStore";
 import Instrument from "../../../models/Instrument";
-import IShowTradeModalAction, {ShowTradeModalAction} from "../../../state/reducers/modal/trade/IShowTradeModalAction";
 import {ThunkDispatch} from "redux-thunk"
+import InstrumentSelectionAction, {createInstrumentSelectionAction} from "../../../state/reducers/instrument/InstrumentSelectionAction";
+import ShowTradeModalAction, {createShowTradeModalAction} from "../../../state/reducers/modal/trade/ShowTradeModalAction";
+import {fire} from "../../../util/StatefulActionCreator";
+import {State} from "../../../state/store/RootStore";
 
-type Actions = InstrumentActions | IShowTradeModalAction
+type Actions = InstrumentSelectionAction | ShowTradeModalAction
 
 interface DispatchProps {
-    onCardClick: () => void,
-    onBuyClick: () => void,
-    onSellClick: () => void
+    onCardClick: (instrument: Instrument) => void,
+    onTradeClick: ([buy, instrument]: [boolean, Instrument]) => void,
 }
 
 interface StateProps {
@@ -29,13 +28,11 @@ export type InstrumentCardProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDispatch<Store, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onCardClick: () => dispatch(InstrumentSelectionAction.fire(ownProps.instrument)),
-        onBuyClick: () => dispatch(ShowTradeModalAction.fire(true, ownProps.instrument)),
-        onSellClick: () => dispatch(ShowTradeModalAction.fire(false, ownProps.instrument))
+        onCardClick: fire(dispatch, createInstrumentSelectionAction),
+        onTradeClick: fire(dispatch, createShowTradeModalAction),
     }
 }
 
-// noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {}
 }

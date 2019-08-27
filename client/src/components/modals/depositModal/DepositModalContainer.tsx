@@ -2,12 +2,12 @@ import {connect} from "react-redux";
 import {Store} from "redux"
 import {State} from "../../../state/store/RootStore";
 import DepositModal from "./DepositModal";
-import {ConfirmDepositAction} from "../../../state/reducers/funds/IConfirmDepositAction";
-import IInstrumentSelectionAction from "../../../state/reducers/instrument/IInstrumentSelectionAction";
 import {ThunkDispatch} from "redux-thunk";
-import {HideDepositModalAction} from "../../../state/reducers/modal/deposit/IHideDepositModalAction";
+import ConfirmDepositAction, {createConfirmDepositAction} from "../../../state/reducers/funds/ConfirmDepositAction";
+import HideDepositModalAction, {createHideDepositModalAction} from "../../../state/reducers/modal/deposit/HideDepositModalAction";
+import {fireNP} from "../../../util/StatefulActionCreator";
 
-type Actions = IInstrumentSelectionAction
+type Actions = ConfirmDepositAction | HideDepositModalAction
 
 interface DispatchProps {
     onConfirm: () => void,
@@ -26,12 +26,11 @@ export type DepositModalProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDispatch<Store, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onConfirm: () => dispatch(ConfirmDepositAction.fire()),
-        onHide: () => dispatch(HideDepositModalAction.fire)
+        onConfirm: fireNP(dispatch, createConfirmDepositAction),
+        onHide: fireNP(dispatch, createHideDepositModalAction)
     }
 }
 
-// noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
         canConfirm: state.depositModalInput.units > 0,

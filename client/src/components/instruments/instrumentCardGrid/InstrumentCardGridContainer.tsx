@@ -1,10 +1,7 @@
 import {connect} from "react-redux";
 import {State} from "../../../state/store/RootStore";
 import InstrumentCardGrid from "./InstrumentCardGrid";
-import {InstrumentActions} from "../../../state/store/InstrumentStore";
 import Instrument from "../../../models/Instrument";
-
-type Actions = InstrumentActions
 
 interface DispatchProps {
 }
@@ -19,7 +16,6 @@ interface OwnProps {
 
 export type InstrumentCardGridProps = StateProps & DispatchProps & OwnProps
 
-// noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
         instrumentPrices: state.instruments.prices,

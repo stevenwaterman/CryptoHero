@@ -1,7 +1,6 @@
 import {ELEMENT, FORM_EVENT} from "../state/store/RootStore";
 import React from "react";
 import {FormControl, InputGroup} from "react-bootstrap";
-import {InputGroupAppend, InputGroupText} from "react-bootstrap/InputGroup";
 
 interface NumberFieldProps {
     text: string
@@ -27,9 +26,9 @@ export default class NumberField extends React.Component<NumberFieldProps> {
                          value={this.props.text}
                          onChange={this.handleEdit}
                          onBlur={this.props.onDone}/>
-            <InputGroupAppend>
-                <InputGroupText>{this.props.append}</InputGroupText>
-            </InputGroupAppend>
+            <InputGroup.Append>
+                <InputGroup.Text>{this.props.append}</InputGroup.Text>
+            </InputGroup.Append>
         </InputGroup>
     }
 

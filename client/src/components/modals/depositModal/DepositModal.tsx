@@ -9,7 +9,7 @@ export default class DepositModal extends React.PureComponent<DepositModalProps>
     render(): ELEMENT {
         return (
             <Modal show={this.props.show} onHide={this.props.onHide}>
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title><b>Deposit Funds</b></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

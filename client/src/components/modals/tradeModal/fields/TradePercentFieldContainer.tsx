@@ -1,12 +1,13 @@
 import {connect} from "react-redux";
 import {State} from "../../../../state/store/RootStore";
 import NumberField from "../../../NumberField";
-import ITradeModalSetPercentAction, {TradeModalSetPercentAction} from "../../../../state/reducers/modalInputState/trade/value/ITradeModalSetPercentAction";
 import {ThunkDispatch} from "redux-thunk"
-import ITradeModalSetPercentTextAction, {TradeModalSetPercentTextAction} from "../../../../state/reducers/modalInputState/trade/text/ITradeModalSetPercentTextAction";
-import ITradeModalResetPercentTextAction, {TradeModalResetPercentTextAction} from "../../../../state/reducers/modalInputState/trade/resetText/ITradeModalResetPercentTextAction";
+import TradeModalSetPercentAction, {createTradeModalSetPercentAction} from "../../../../state/reducers/modalInputState/trade/value/TradeModalSetPercentAction";
+import TradeModalResetPercentTextAction, {createTradeModalResetPercentTextAction} from "../../../../state/reducers/modalInputState/trade/resetText/TradeModalResetPercentTextAction";
+import TradeModalSetPercentTextAction, {createTradeModalSetPercentTextAction} from "../../../../state/reducers/modalInputState/trade/text/TradeModalSetPercentTextAction";
+import {fire, fireNP} from "../../../../util/StatefulActionCreator";
 
-type Actions = ITradeModalSetPercentAction | ITradeModalSetPercentTextAction | ITradeModalResetPercentTextAction
+type Actions = TradeModalSetPercentAction | TradeModalSetPercentTextAction | TradeModalResetPercentTextAction
 
 interface DispatchProps {
     onValueChange: (newPercent: number) => void,
@@ -26,13 +27,12 @@ interface OwnProps {
 
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onValueChange: (newPercent) => dispatch(TradeModalSetPercentAction.fire(newPercent)),
-        onTextChange: (newText) => dispatch(TradeModalSetPercentTextAction.fire(newText)),
-        onDone: () => dispatch(TradeModalResetPercentTextAction.fire()),
+        onValueChange: fire(dispatch, createTradeModalSetPercentAction),
+        onTextChange: fire(dispatch, createTradeModalSetPercentTextAction),
+        onDone: fireNP(dispatch, createTradeModalResetPercentTextAction),
     }
 }
 
-// noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
         text: state.tradeModalInput.percentText,

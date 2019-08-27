@@ -19,7 +19,7 @@ export default class TradeModal extends React.PureComponent<TradeModalProps> {
     render(): ELEMENT {
         return (
             <Modal show={this.props.show} onHide={this.props.onHide}>
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title><b>{this.props.sourceAsset} &rarr; {this.props.targetAsset}</b> </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

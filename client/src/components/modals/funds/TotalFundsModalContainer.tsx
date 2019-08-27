@@ -2,10 +2,11 @@ import {connect} from "react-redux";
 import {State} from "../../../state/store/RootStore";
 import TotalFundsModal from "./TotalFundsModal";
 import {Store} from "redux";
-import IHideTotalFundsModalAction, {HideTotalFundsModalAction} from "../../../state/reducers/modal/totalFunds/IHideTotalFundsModalAction";
+import HideTotalFundsModalAction, {createHideTotalFundsModalAction} from "../../../state/reducers/modal/totalFunds/HideTotalFundsModalAction";
 import {ThunkDispatch} from "redux-thunk";
+import {fireNP} from "../../../util/StatefulActionCreator";
 
-type Actions = IHideTotalFundsModalAction
+type Actions = HideTotalFundsModalAction
 
 interface DispatchProps {
     onHide: () => void;
@@ -23,7 +24,7 @@ export type TotalFundsModalProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDispatch<Store, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onHide: () => dispatch(HideTotalFundsModalAction.fire)
+        onHide: fireNP(dispatch, createHideTotalFundsModalAction)
     }
 }
 

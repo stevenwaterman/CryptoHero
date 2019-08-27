@@ -1,10 +1,11 @@
 import {connect} from "react-redux";
 import {State} from "../../../state/store/RootStore";
 import {ThunkDispatch} from "redux-thunk";
-import IWithdrawModalSetAssetAction, {WithdrawModalSetAssetAction} from "../../../state/reducers/modalInputState/withdraw/value/IWithdrawModalSetAssetAction";
 import AssetSelector from "../../AssetSelector";
+import WithdrawModalSetAssetAction, {createWithdrawModalSetAssetAction} from "../../../state/reducers/modalInputState/withdraw/value/WithdrawModalSetAssetAction";
+import {fire} from "../../../util/StatefulActionCreator";
 
-type Actions = IWithdrawModalSetAssetAction
+type Actions = WithdrawModalSetAssetAction
 
 interface DispatchProps {
     onValueChange: (newAsset: string) => void,
@@ -20,11 +21,10 @@ interface OwnProps {
 
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onValueChange: newAsset => dispatch(WithdrawModalSetAssetAction.fire(newAsset)),
+        onValueChange: fire(dispatch, createWithdrawModalSetAssetAction),
     }
 }
 
-// noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
         selectedAsset: state.withdrawModalInput.asset,

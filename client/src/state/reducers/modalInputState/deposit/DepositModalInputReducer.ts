@@ -1,13 +1,13 @@
-import IDepositModalSetUnitsAction, {DepositModalSetUnitsType} from "./IDepositModalSetUnitsAction";
-import IDepositModalSetAssetAction, {DepositModalSetAssetType} from "./IDepositModalSetAssetAction";
+import DepositModalSetUnitsAction, {DepositModalSetUnitsType} from "./DepositModalSetUnitsAction";
+import DepositModalSetAssetAction, {DepositModalSetAssetType} from "./DepositModalSetAssetAction";
 import DepositModalInputStore, {
     DepositModalInputActions,
     initialDepositModalInputStore
 } from "../../../store/modalInputState/DepositModalInputStore";
 import {clamp} from "../../../../util/Clamp";
-import IShowDepositModalAction, {ShowDepositModalType} from "../../modal/deposit/IShowDepositModalAction";
-import IDepositModalSetUnitsTextAction, {DepositModalSetUnitsTextType} from "./IDepositModalSetUnitsTextAction";
-import IDepositModalResetUnitsTextAction, {DepositModalResetUnitsTextType} from "./IDepositModalResetUnitsTextAction";
+import ShowDepositModalAction, {ShowDepositModalType} from "../../modal/deposit/ShowDepositModalAction";
+import DepositModalSetUnitsTextAction, {DepositModalSetUnitsTextType} from "./DepositModalSetUnitsTextAction";
+import DepositModalResetUnitsTextAction, {DepositModalResetUnitsTextType} from "./DepositModalResetUnitsTextAction";
 import {formatInput} from "../../../../util/FormatMoney";
 
 type State = DepositModalInputStore
@@ -19,27 +19,27 @@ export function depositModalInputReducer(
 ): State {
     switch (action.type) {
         case ShowDepositModalType:
-            return startDeposit(state, action as IShowDepositModalAction);
+            return startDeposit(state, action as ShowDepositModalAction);
         case DepositModalSetUnitsType:
-            return setUnits(state, action as IDepositModalSetUnitsAction);
+            return setUnits(state, action as DepositModalSetUnitsAction);
         case DepositModalSetUnitsTextType:
-            return setUnitsText(state, action as IDepositModalSetUnitsTextAction);
+            return setUnitsText(state, action as DepositModalSetUnitsTextAction);
         case DepositModalResetUnitsTextType:
-            return resetUnitsText(state, action as IDepositModalResetUnitsTextAction);
+            return resetUnitsText(state, action as DepositModalResetUnitsTextAction);
         case DepositModalSetAssetType:
-            return setAsset(state, action as IDepositModalSetAssetAction);
+            return setAsset(state, action as DepositModalSetAssetAction);
         default:
             return state;
     }
 }
 
-function startDeposit(state: State, action: IShowDepositModalAction): State {
+function startDeposit(state: State, action: ShowDepositModalAction): State {
     return {
         asset: "GBP", units: 0, unitsText: formatInput(0)
     }
 }
 
-function setAsset(state: State, action: IDepositModalSetAssetAction): State {
+function setAsset(state: State, action: DepositModalSetAssetAction): State {
     const {newAsset} = action.payload;
 
     return ({
@@ -48,7 +48,7 @@ function setAsset(state: State, action: IDepositModalSetAssetAction): State {
     })
 }
 
-function setUnits(state: State, action: IDepositModalSetUnitsAction): State {
+function setUnits(state: State, action: DepositModalSetUnitsAction): State {
     const {units} = action.payload;
     const actualUnits = clamp(units, 0);
 
@@ -64,14 +64,14 @@ function setUnits(state: State, action: IDepositModalSetUnitsAction): State {
     });
 }
 
-function resetUnitsText(state: State, action: IDepositModalResetUnitsTextAction): State {
+function resetUnitsText(state: State, action: DepositModalResetUnitsTextAction): State {
     return ({
         ...state,
         unitsText: formatInput(state.units)
     })
 }
 
-function setUnitsText(state: State, action: IDepositModalSetUnitsTextAction): State {
+function setUnitsText(state: State, action: DepositModalSetUnitsTextAction): State {
     return ({
         ...state,
         unitsText: action.payload.newText

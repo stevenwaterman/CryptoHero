@@ -3,10 +3,11 @@ import React from "react";
 import {applyMiddleware, createStore} from "redux";
 import thunk from "redux-thunk";
 import {FormControl, FormControlProps} from "react-bootstrap";
+import logger from "redux-logger";
 
 export default createStore(
     RootReducer,
-    applyMiddleware(thunk)
+    applyMiddleware(thunk, logger)
 );
 
 export type State = ReturnType<typeof RootReducer>

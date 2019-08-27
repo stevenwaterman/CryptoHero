@@ -13,10 +13,10 @@ export default class ChartCard extends React.PureComponent<ChartCardProps> {
                             <Card.Title className="text-center my-0"><b>Graphs</b></Card.Title>
                         </Col>
                         <Col xs="auto">
-                            <ToggleButtonGroup name="chartType" type="radio" value={this.props.chartType}
+                            <ToggleButtonGroup name="chartType" type="radio" value={this.props.showHistorical}
                                                onChange={this.props.onChartTypeChange}>
-                                <ToggleButton value={"Historical"}>Historical</ToggleButton>
-                                <ToggleButton value={"Current"}>Current</ToggleButton>
+                                <ToggleButton value={true}>Historical</ToggleButton>
+                                <ToggleButton value={false}>Current</ToggleButton>
                             </ToggleButtonGroup>
                         </Col>
                     </Row>

@@ -1,12 +1,13 @@
 import {connect} from "react-redux";
 import {State} from "../../../state/store/RootStore";
 import {ThunkDispatch} from "redux-thunk"
-import IDepositModalSetUnitsAction, {DepositModalSetUnitsAction} from "../../../state/reducers/modalInputState/deposit/IDepositModalSetUnitsAction";
 import NumberField from "../../NumberField";
-import IDepositModalSetUnitsTextAction, {DepositModalSetUnitsTextAction} from "../../../state/reducers/modalInputState/deposit/IDepositModalSetUnitsTextAction";
-import IDepositModalResetUnitsTextAction, {DepositModalResetUnitsTextAction} from "../../../state/reducers/modalInputState/deposit/IDepositModalResetUnitsTextAction";
+import DepositModalSetUnitsAction, {createDepositModalSetUnitsAction} from "../../../state/reducers/modalInputState/deposit/DepositModalSetUnitsAction";
+import DepositModalResetUnitsTextAction, {createDepositModalResetUnitsTextAction} from "../../../state/reducers/modalInputState/deposit/DepositModalResetUnitsTextAction";
+import DepositModalSetUnitsTextAction, {createDepositModalSetUnitsTextAction} from "../../../state/reducers/modalInputState/deposit/DepositModalSetUnitsTextAction";
+import {fire, fireNP} from "../../../util/StatefulActionCreator";
 
-type Actions = IDepositModalSetUnitsAction | IDepositModalSetUnitsTextAction | IDepositModalResetUnitsTextAction
+type Actions = DepositModalSetUnitsAction | DepositModalSetUnitsTextAction | DepositModalResetUnitsTextAction
 
 interface DispatchProps {
     onValueChange: (newUnits: number) => void,
@@ -26,13 +27,12 @@ interface OwnProps {
 
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onValueChange: newUnits => dispatch(DepositModalSetUnitsAction.fire(newUnits)),
-        onTextChange: newText => dispatch(DepositModalSetUnitsTextAction.fire(newText)),
-        onDone: () => dispatch(DepositModalResetUnitsTextAction.fire())
+        onValueChange: fire(dispatch, createDepositModalSetUnitsAction),
+        onTextChange: fire(dispatch, createDepositModalSetUnitsTextAction),
+        onDone: fireNP(dispatch, createDepositModalResetUnitsTextAction)
     }
 }
 
-// noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
         text: state.depositModalInput.unitsText,

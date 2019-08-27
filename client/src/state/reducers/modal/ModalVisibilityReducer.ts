@@ -2,21 +2,21 @@ import ModalVisibilityStore, {
     initialModalVisibilityStore,
     ModalVisibilityActions
 } from "../../store/ModalVisibilityStore";
-import IShowTotalFundsModalAction, {ShowTotalFundsModalType} from "./totalFunds/IShowTotalFundsModalAction";
-import IShowWithdrawModalAction, {ShowWithdrawModalType} from "./withdraw/IShowWithdrawModalAction";
-import IShowDepositModalAction, {ShowDepositModalType} from "./deposit/IShowDepositModalAction";
-import IShowTradeModalAction, {ShowTradeModalType} from "./trade/IShowTradeModalAction";
-import IShowViewTradeModalAction, {ShowViewTradeModalType} from "./viewTrade/IShowViewTradeModalAction";
-import {HideDepositModalType} from "./deposit/IHideDepositModalAction";
-import {HideWithdrawModalType} from "./withdraw/IHideWithdrawModalAction";
-import {HideTotalFundsModalType} from "./totalFunds/IHideTotalFundsModalAction";
-import {HideViewTradeModalType} from "./viewTrade/IHideViewTradeModalAction";
-import {HideTradeModalType} from "./trade/IHideTradeModalAction";
+import ShowTotalFundsModalAction, {ShowTotalFundsModalType} from "./totalFunds/ShowTotalFundsModalAction";
+import ShowWithdrawModalAction, {ShowWithdrawModalType} from "./withdraw/ShowWithdrawModalAction";
+import ShowDepositModalAction, {ShowDepositModalType} from "./deposit/ShowDepositModalAction";
+import ShowTradeModalAction, {ShowTradeModalType} from "./trade/ShowTradeModalAction";
+import ShowViewTradeModalAction, {ShowViewTradeModalType} from "./viewTrade/ShowViewTradeModalAction";
+import {HideDepositModalType} from "./deposit/HideDepositModalAction";
+import {HideWithdrawModalType} from "./withdraw/HideWithdrawModalAction";
+import {HideTotalFundsModalType} from "./totalFunds/HideTotalFundsModalAction";
+import {HideViewTradeModalType} from "./viewTrade/HideViewTradeModalAction";
+import {HideTradeModalType} from "./trade/HideTradeModalAction";
 
 type State = ModalVisibilityStore
 type Actions = ModalVisibilityActions
 
-function showTotalFunds(state: State, action: IShowTotalFundsModalAction): State {
+function showTotalFunds(state: State, action: ShowTotalFundsModalAction): State {
     return {
         depositVisible: false,
         totalFundsVisible: true,
@@ -26,7 +26,7 @@ function showTotalFunds(state: State, action: IShowTotalFundsModalAction): State
     }
 }
 
-function showWithdraw(state: State, action: IShowWithdrawModalAction): State {
+function showWithdraw(state: State, action: ShowWithdrawModalAction): State {
     return {
         depositVisible: false,
         totalFundsVisible: false,
@@ -36,7 +36,7 @@ function showWithdraw(state: State, action: IShowWithdrawModalAction): State {
     }
 }
 
-function showDeposit(state: State, action: IShowDepositModalAction): State {
+function showDeposit(state: State, action: ShowDepositModalAction): State {
     return {
         depositVisible: true,
         totalFundsVisible: false,
@@ -46,7 +46,7 @@ function showDeposit(state: State, action: IShowDepositModalAction): State {
     }
 }
 
-function showTrade(state: State, action: IShowTradeModalAction): State {
+function showTrade(state: State, action: ShowTradeModalAction): State {
     return {
         depositVisible: false,
         totalFundsVisible: false,
@@ -56,7 +56,7 @@ function showTrade(state: State, action: IShowTradeModalAction): State {
     };
 }
 
-function showViewTrade(state: State, action: IShowViewTradeModalAction): State {
+function showViewTrade(state: State, action: ShowViewTradeModalAction): State {
     return {
         depositVisible: false,
         totalFundsVisible: false,
@@ -80,15 +80,15 @@ export function modalVisibilityReducer(
 ): State {
     switch (action.type) {
         case ShowTotalFundsModalType:
-            return showTotalFunds(state, action as IShowTotalFundsModalAction);
+            return showTotalFunds(state, action as ShowTotalFundsModalAction);
         case ShowWithdrawModalType:
-            return showWithdraw(state, action as IShowWithdrawModalAction);
+            return showWithdraw(state, action as ShowWithdrawModalAction);
         case ShowDepositModalType:
-            return showDeposit(state, action as IShowDepositModalAction);
+            return showDeposit(state, action as ShowDepositModalAction);
         case ShowTradeModalType:
-            return showTrade(state, action as IShowTradeModalAction);
+            return showTrade(state, action as ShowTradeModalAction);
         case ShowViewTradeModalType:
-            return showViewTrade(state, action as IShowViewTradeModalAction);
+            return showViewTrade(state, action as ShowViewTradeModalAction);
 
         case HideDepositModalType:
         case HideWithdrawModalType:

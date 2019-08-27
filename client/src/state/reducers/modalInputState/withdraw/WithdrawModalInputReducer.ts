@@ -1,17 +1,17 @@
-import IWithdrawModalSetPercentAction, {WithdrawModalSetPercentType} from "./value/IWithdrawModalSetPercentAction";
-import IWithdrawModalSetUnitsAction, {WithdrawModalSetUnitsType} from "./value/IWithdrawModalSetUnitsAction";
-import IWithdrawModalSetUnitsTextAction, {WithdrawModalSetUnitsTextType} from "./text/IWithdrawModalSetUnitsTextAction";
-import IWithdrawModalSetPercentTextAction, {WithdrawModalSetPercentTextType} from "./text/IWithdrawModalSetPercentTextAction";
-import IWithdrawModalResetPercentTextAction, {WithdrawModalResetPercentTextType} from "./resetText/IWithdrawModalResetPercentTextAction";
-import IWithdrawModalResetUnitsTextAction, {WithdrawModalResetUnitsTextType} from "./resetText/IWithdrawModalResetUnitsTextAction";
+import WithdrawModalSetPercentAction, {WithdrawModalSetPercentType} from "./value/WithdrawModalSetPercentAction";
+import WithdrawModalSetUnitsAction, {WithdrawModalSetUnitsType} from "./value/WithdrawModalSetUnitsAction";
+import WithdrawModalSetUnitsTextAction, {WithdrawModalSetUnitsTextType} from "./text/WithdrawModalSetUnitsTextAction";
+import WithdrawModalSetPercentTextAction, {WithdrawModalSetPercentTextType} from "./text/WithdrawModalSetPercentTextAction";
+import WithdrawModalResetPercentTextAction, {WithdrawModalResetPercentTextType} from "./resetText/WithdrawModalResetPercentTextAction";
+import WithdrawModalResetUnitsTextAction, {WithdrawModalResetUnitsTextType} from "./resetText/WithdrawModalResetUnitsTextAction";
 import {formatInput, formatPercent} from "../../../../util/FormatMoney";
-import IWithdrawModalSetAssetAction, {WithdrawModalSetAssetType} from "./value/IWithdrawModalSetAssetAction";
+import WithdrawModalSetAssetAction, {WithdrawModalSetAssetType} from "./value/WithdrawModalSetAssetAction";
 import WithdrawModalInputStore, {
     initialWithdrawModalInputStore,
     WithdrawModalInputActions
 } from "../../../store/modalInputState/WithdrawModalInputStore";
 import {clamp} from "../../../../util/Clamp";
-import IShowWithdrawModalAction, {ShowWithdrawModalType} from "../../modal/withdraw/IShowWithdrawModalAction";
+import ShowWithdrawModalAction, {ShowWithdrawModalType} from "../../modal/withdraw/ShowWithdrawModalAction";
 
 type State = WithdrawModalInputStore
 type Actions = WithdrawModalInputActions
@@ -22,33 +22,33 @@ export function withdrawModalInputReducer(
 ): State {
     switch (action.type) {
         case ShowWithdrawModalType:
-            return startWithdraw(state, action as IShowWithdrawModalAction);
+            return startWithdraw(state, action as ShowWithdrawModalAction);
         case WithdrawModalSetPercentType:
-            return setPercent(state, action as IWithdrawModalSetPercentAction);
+            return setPercent(state, action as WithdrawModalSetPercentAction);
         case WithdrawModalSetUnitsType:
-            return setUnits(state, action as IWithdrawModalSetUnitsAction);
+            return setUnits(state, action as WithdrawModalSetUnitsAction);
         case WithdrawModalSetUnitsTextType:
-            return setUnitsText(state, action as IWithdrawModalSetUnitsTextAction);
+            return setUnitsText(state, action as WithdrawModalSetUnitsTextAction);
         case WithdrawModalSetPercentTextType:
-            return setPercentText(state, action as IWithdrawModalSetPercentTextAction);
+            return setPercentText(state, action as WithdrawModalSetPercentTextAction);
         case WithdrawModalResetPercentTextType:
-            return resetPercentText(state, action as IWithdrawModalResetPercentTextAction);
+            return resetPercentText(state, action as WithdrawModalResetPercentTextAction);
         case WithdrawModalResetUnitsTextType:
-            return resetUnitsText(state, action as IWithdrawModalResetUnitsTextAction);
+            return resetUnitsText(state, action as WithdrawModalResetUnitsTextAction);
         case WithdrawModalSetAssetType:
-            return setAsset(state, action as IWithdrawModalSetAssetAction);
+            return setAsset(state, action as WithdrawModalSetAssetAction);
         default:
             return state;
     }
 }
 
-function startWithdraw(state: State, action: IShowWithdrawModalAction): State {
+function startWithdraw(state: State, action: ShowWithdrawModalAction): State {
     return {
         asset: "GBP", percent: 0, percentText: formatPercent(0), units: 0, unitsText: formatInput(0)
     }
 }
 
-function setAsset(state: State, action: IWithdrawModalSetAssetAction): State {
+function setAsset(state: State, action: WithdrawModalSetAssetAction): State {
     const {maxWithdraw, newAsset} = action.payload;
 
     const newUnits = clamp(state.units, 0, maxWithdraw);
@@ -66,7 +66,7 @@ function setAsset(state: State, action: IWithdrawModalSetAssetAction): State {
     }
 }
 
-function setUnits(state: State, action: IWithdrawModalSetUnitsAction): State {
+function setUnits(state: State, action: WithdrawModalSetUnitsAction): State {
     const {maxWithdraw, units} = action.payload;
     const actualUnits = clamp(units, 0, maxWithdraw);
 
@@ -87,7 +87,7 @@ function setUnits(state: State, action: IWithdrawModalSetUnitsAction): State {
     };
 }
 
-function setPercent(state: State, action: IWithdrawModalSetPercentAction): State {
+function setPercent(state: State, action: WithdrawModalSetPercentAction): State {
     const {maxWithdraw, percent} = action.payload;
 
     let actualPercent = clamp(percent, 0, 100);
@@ -108,28 +108,28 @@ function setPercent(state: State, action: IWithdrawModalSetPercentAction): State
     };
 }
 
-function resetPercentText(state: State, action: IWithdrawModalResetPercentTextAction): State {
+function resetPercentText(state: State, action: WithdrawModalResetPercentTextAction): State {
     return {
         ...state,
         percentText: formatPercent(state.percent)
     };
 }
 
-function resetUnitsText(state: State, action: IWithdrawModalResetUnitsTextAction): State {
+function resetUnitsText(state: State, action: WithdrawModalResetUnitsTextAction): State {
     return {
         ...state,
         unitsText: formatInput(state.units)
     };
 }
 
-function setUnitsText(state: State, action: IWithdrawModalSetUnitsTextAction): State {
+function setUnitsText(state: State, action: WithdrawModalSetUnitsTextAction): State {
     return {
         ...state,
         unitsText: action.payload.newText
     };
 }
 
-function setPercentText(state: State, action: IWithdrawModalSetPercentTextAction): State {
+function setPercentText(state: State, action: WithdrawModalSetPercentTextAction): State {
     return {
         ...state,
         percentText: action.payload.newText

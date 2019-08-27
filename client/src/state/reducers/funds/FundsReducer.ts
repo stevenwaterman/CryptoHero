@@ -1,7 +1,7 @@
-import IConfirmDepositAction, {ConfirmDepositType} from "./IConfirmDepositAction";
+import ConfirmDepositAction, {ConfirmDepositType} from "./ConfirmDepositAction";
 import FundsStore, {FundsActions, initialFundsStore} from "../../store/FundsStore";
-import IConfirmWithdrawAction, {ConfirmWithdrawType} from "./IConfirmWithdrawAction";
-import IShowTotalFundsModalAction, {ShowTotalFundsModalType} from "../modal/totalFunds/IShowTotalFundsModalAction";
+import ConfirmWithdrawAction, {ConfirmWithdrawType} from "./ConfirmWithdrawAction";
+import ShowTotalFundsModalAction, {ShowTotalFundsModalType} from "../modal/totalFunds/ShowTotalFundsModalAction";
 
 type State = FundsStore
 type Actions = FundsActions
@@ -12,11 +12,11 @@ export function fundsReducer(
 ): State {
     switch (action.type) {
         case ConfirmDepositType:
-            return deposit(state, action as IConfirmDepositAction);
+            return deposit(state, action as ConfirmDepositAction);
         case ConfirmWithdrawType:
-            return withdraw(state, action as IConfirmWithdrawAction);
+            return withdraw(state, action as ConfirmWithdrawAction);
         case ShowTotalFundsModalType:
-            return setTotalFunds(state, action as IShowTotalFundsModalAction);
+            return setTotalFunds(state, action as ShowTotalFundsModalAction);
         default:
             return state;
     }
@@ -32,25 +32,25 @@ function adjustAsset(funds: Array<[string, number]>, asset: string, add: number)
     });
 }
 
-function withdraw(state: State, action: IConfirmWithdrawAction): State {
-    const {asset, amount} = action.payload;
-    const newFunds = adjustAsset(state.availableFunds, asset, -amount);
+function withdraw(state: State, action: ConfirmWithdrawAction): State {
+    const {asset, units} = action.payload;
+    const newFunds = adjustAsset(state.availableFunds, asset, -units);
     return ({
         ...state,
         availableFunds: newFunds
     });
 }
 
-function deposit(state: State, action: IConfirmDepositAction): State {
-    const {asset, amount} = action.payload;
-    const newFunds = adjustAsset(state.availableFunds, asset, amount);
+function deposit(state: State, action: ConfirmDepositAction): State {
+    const {asset, units} = action.payload;
+    const newFunds = adjustAsset(state.availableFunds, asset, units);
     return ({
         ...state,
         availableFunds: newFunds
     })
 }
 
-function setTotalFunds(state: State, action: IShowTotalFundsModalAction): State {
+function setTotalFunds(state: State, action: ShowTotalFundsModalAction): State {
     return ({
         ...state,
         totalFunds: action.payload.totalFunds

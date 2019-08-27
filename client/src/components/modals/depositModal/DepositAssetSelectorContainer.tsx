@@ -2,9 +2,10 @@ import {connect} from "react-redux";
 import {State} from "../../../state/store/RootStore";
 import AssetSelector from "../../AssetSelector";
 import {ThunkDispatch} from "redux-thunk";
-import IDepositModalSetAssetAction, {DepositModalSetAssetAction} from "../../../state/reducers/modalInputState/deposit/IDepositModalSetAssetAction";
+import {fire} from "../../../util/StatefulActionCreator";
+import DepositModalSetAssetAction, {createDepositModalSetAssetAction} from "../../../state/reducers/modalInputState/deposit/DepositModalSetAssetAction";
 
-type Actions = IDepositModalSetAssetAction
+type Actions = DepositModalSetAssetAction
 
 interface DispatchProps {
     onValueChange: (newAsset: string) => void,
@@ -20,11 +21,10 @@ interface OwnProps {
 
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onValueChange: newAsset => dispatch(DepositModalSetAssetAction.fire(newAsset)),
+        onValueChange: fire(dispatch, createDepositModalSetAssetAction),
     }
 }
 
-// noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
         selectedAsset: state.depositModalInput.asset,

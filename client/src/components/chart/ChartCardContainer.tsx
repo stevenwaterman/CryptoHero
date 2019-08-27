@@ -2,17 +2,17 @@ import {connect} from "react-redux";
 import {State} from "../../state/store/RootStore";
 import ChartCard from "./ChartCard";
 import {ThunkDispatch} from "redux-thunk";
-import IWithdrawModalSetAssetAction
-    from "../../state/reducers/modalInputState/withdraw/value/IWithdrawModalSetAssetAction";
+import ChartSetTypeAction, {createChartSetTypeAction} from "../../state/reducers/chart/ChartSetTypeAction";
+import {fire} from "../../util/StatefulActionCreator";
 
-type Actions = IWithdrawModalSetAssetAction
+type Actions = ChartSetTypeAction
 
 interface DispatchProps {
-    onChartTypeChange: (chartType: string) => void,
+    onChartTypeChange: (selectedHistorical: boolean) => void,
 }
 
 export interface StateProps {
-    chartType: string,
+    showHistorical: boolean,
 }
 
 interface OwnProps {
@@ -22,14 +22,13 @@ export type ChartCardProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onChartTypeChange: (chartType: string) => {//TODO fix this so it works}
-        },
+        onChartTypeChange: fire(dispatch, createChartSetTypeAction)
     }
 }
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
-        chartType: ""//TODO
+        showHistorical: state.chart.showHistorical
     }
 }
 

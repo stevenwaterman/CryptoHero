@@ -2,11 +2,12 @@ import {connect} from "react-redux";
 import {State} from "../../../../state/store/RootStore";
 import NumberField from "../../../NumberField";
 import {ThunkDispatch} from "redux-thunk"
-import ITradeModalSetUnitsTextAction, {TradeModalSetUnitsTextAction} from "../../../../state/reducers/modalInputState/trade/text/ITradeModalSetUnitsTextAction";
-import ITradeModalSetUnitsAction, {TradeModalSetUnitsAction} from "../../../../state/reducers/modalInputState/trade/value/ITradeModalSetUnitsAction";
-import ITradeModalResetUnitsTextAction, {TradeModalResetUnitsTextAction} from "../../../../state/reducers/modalInputState/trade/resetText/ITradeModalResetUnitsTextAction";
+import TradeModalSetUnitsTextAction, {createTradeModalSetUnitsTextAction,} from "../../../../state/reducers/modalInputState/trade/text/TradeModalSetUnitsTextAction";
+import TradeModalSetUnitsAction, {createTradeModalSetUnitsAction,} from "../../../../state/reducers/modalInputState/trade/value/TradeModalSetUnitsAction";
+import TradeModalResetUnitsTextAction, {createTradeModalResetUnitsTextAction,} from "../../../../state/reducers/modalInputState/trade/resetText/TradeModalResetUnitsTextAction";
+import {fire, fireNP} from "../../../../util/StatefulActionCreator";
 
-type Actions = ITradeModalSetUnitsAction | ITradeModalSetUnitsTextAction | ITradeModalResetUnitsTextAction
+type Actions = TradeModalSetUnitsAction | TradeModalSetUnitsTextAction | TradeModalResetUnitsTextAction
 
 interface DispatchProps {
     onValueChange: (newUnits: number) => void,
@@ -27,9 +28,9 @@ interface OwnProps {
 
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onValueChange: newUnits => dispatch(TradeModalSetUnitsAction.fire(newUnits)),
-        onTextChange: newText => dispatch(TradeModalSetUnitsTextAction.fire(newText)),
-        onDone: () => dispatch(TradeModalResetUnitsTextAction.fire())
+        onValueChange: fire(dispatch, createTradeModalSetUnitsAction),
+        onTextChange: fire(dispatch, createTradeModalSetUnitsTextAction),
+        onDone: fireNP(dispatch, createTradeModalResetUnitsTextAction)
     }
 }
 

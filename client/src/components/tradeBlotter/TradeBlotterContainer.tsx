@@ -2,23 +2,21 @@ import {connect} from "react-redux";
 import {State} from "../../state/store/RootStore";
 import TradeBlotter from "./TradeBlotter";
 import {ThunkDispatch} from "redux-thunk";
-import IWithdrawModalSetAssetAction
-    from "../../state/reducers/modalInputState/withdraw/value/IWithdrawModalSetAssetAction";
-import TradeSimple from "../../models/TradeSimple";
-import {BlotterSetCategoryAction} from "../../state/reducers/blotter/IBlotterSetCategoryAction";
-import {ShowViewTradeModal} from "../../state/reducers/modal/viewTrade/IShowViewTradeModalAction";
+import Trade from "../../models/Trade";
+import BlotterSetCategoryAction, {createBlotterSetCategoryAction} from "../../state/reducers/blotter/BlotterSetCategoryAction";
+import ShowViewTradeModalAction, {createShowViewTradeModalAction} from "../../state/reducers/modal/viewTrade/ShowViewTradeModalAction";
+import {fire} from "../../util/StatefulActionCreator";
 
-type Actions = IWithdrawModalSetAssetAction
+type Actions = BlotterSetCategoryAction | ShowViewTradeModalAction
 
 interface DispatchProps {
     onSelectTrade: (id: string) => void,
-    onSelectPending: () => void,
-    onSelectCompleted: () => void,
+    onSetCategory: (selectPending: boolean) => void,
 }
 
 export interface StateProps {
     pendingSelected: boolean
-    trades: Array<TradeSimple>
+    trades: Array<Trade>
 }
 
 interface OwnProps {
@@ -28,9 +26,8 @@ export type ChartCardProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onSelectCompleted: () => (BlotterSetCategoryAction.fire(false)),
-        onSelectPending: () => dispatch(BlotterSetCategoryAction.fire(true)),
-        onSelectTrade: (id: string) => dispatch(ShowViewTradeModal.fire(id))
+        onSetCategory: fire(dispatch, createBlotterSetCategoryAction),
+        onSelectTrade: fire(dispatch, createShowViewTradeModalAction)
     }
 }
 
@@ -38,7 +35,7 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     const showPending = state.blotter.showPending;
     const relevant = showPending ? state.blotter.pending : state.blotter.completed;
     const selectedInstrument = state.instruments.selectedInstrument;
-    const filtered = relevant.filter((trade: TradeSimple) => trade.instrument.name === selectedInstrument.name);
+    const filtered = relevant.filter((trade: Trade) => trade.instrument.name === selectedInstrument.name);
     return {
         pendingSelected: state.blotter.showPending,
         trades: filtered

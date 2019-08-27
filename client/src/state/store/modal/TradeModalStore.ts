@@ -1,6 +1,6 @@
 import Instrument from "../../../models/Instrument";
-import IShowTradeModalAction from "../../reducers/modal/trade/IShowTradeModalAction";
-import IConfirmTradeAction from "../../reducers/modal/trade/IConfirmTradeAction";
+import ShowTradeModalAction from "../../reducers/modal/trade/ShowTradeModalAction";
+import ConfirmTradeAction from "../../reducers/modal/trade/ConfirmTradeAction";
 
 export default interface TradeModalStore {
     readonly buying: boolean,
@@ -13,5 +13,5 @@ export const initialTradeModalStore: TradeModalStore = {
 };
 
 export type TradeModalActions =
-    IShowTradeModalAction
-    | IConfirmTradeAction
+    ShowTradeModalAction
+    | ConfirmTradeAction

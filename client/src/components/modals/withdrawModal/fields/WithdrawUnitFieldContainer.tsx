@@ -1,12 +1,13 @@
 import {connect} from "react-redux";
 import {State} from "../../../../state/store/RootStore";
 import {ThunkDispatch} from "redux-thunk"
-import IWithdrawModalSetUnitsTextAction, {WithdrawModalSetUnitsTextAction} from "../../../../state/reducers/modalInputState/withdraw/text/IWithdrawModalSetUnitsTextAction";
-import IWithdrawModalSetUnitsAction, {WithdrawModalSetUnitsAction} from "../../../../state/reducers/modalInputState/withdraw/value/IWithdrawModalSetUnitsAction";
 import NumberField from "../../../NumberField";
-import IWithdrawModalResetUnitsTextAction, {WithdrawModalResetUnitsTextAction} from "../../../../state/reducers/modalInputState/withdraw/resetText/IWithdrawModalResetUnitsTextAction";
+import WithdrawModalSetUnitsAction, {createWithdrawModalSetUnitsAction} from "../../../../state/reducers/modalInputState/withdraw/value/WithdrawModalSetUnitsAction";
+import WithdrawModalResetUnitsTextAction, {createWithdrawModalResetUnitsTextAction} from "../../../../state/reducers/modalInputState/withdraw/resetText/WithdrawModalResetUnitsTextAction";
+import WithdrawModalSetUnitsTextAction, {createWithdrawModalSetUnitsTextAction} from "../../../../state/reducers/modalInputState/withdraw/text/WithdrawModalSetUnitsTextAction";
+import {fire, fireNP} from "../../../../util/StatefulActionCreator";
 
-type Actions = IWithdrawModalSetUnitsAction | IWithdrawModalSetUnitsTextAction | IWithdrawModalResetUnitsTextAction
+type Actions = WithdrawModalSetUnitsAction | WithdrawModalSetUnitsTextAction | WithdrawModalResetUnitsTextAction
 
 interface DispatchProps {
     onValueChange: (newUnits: number) => void,
@@ -27,13 +28,12 @@ interface OwnProps {
 
 function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onValueChange: newUnits => dispatch(WithdrawModalSetUnitsAction.fire(newUnits)),
-        onTextChange: newText => dispatch(WithdrawModalSetUnitsTextAction.fire(newText)),
-        onDone: () => dispatch(WithdrawModalResetUnitsTextAction.fire())
+        onValueChange: fire(dispatch, createWithdrawModalSetUnitsAction),
+        onTextChange: fire(dispatch, createWithdrawModalSetUnitsTextAction),
+        onDone: fireNP(dispatch, createWithdrawModalResetUnitsTextAction)
     }
 }
 
-// noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
         text: state.withdrawModalInput.unitsText,

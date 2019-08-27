@@ -1,6 +1,6 @@
-import IBlotterSetCategoryAction, {BlotterSetCategoryType} from "./IBlotterSetCategoryAction";
+import BlotterSetCategoryAction, {BlotterSetCategoryType} from "./BlotterSetCategoryAction";
 import BlotterStore, {BlotterActions, initialBlotterStore} from "../../store/BlotterStore";
-import ICancelOrderAction, {CancelOrderType} from "./ICancelOrderAction";
+import CancelOrderAction, {CancelOrderType} from "./CancelOrderAction";
 
 type State = BlotterStore
 type Actions = BlotterActions
@@ -11,22 +11,22 @@ export function blotterReducer(
 ): State {
     switch (action.type) {
         case BlotterSetCategoryType:
-            return setCategory(state, action as IBlotterSetCategoryAction);
+            return setCategory(state, action as BlotterSetCategoryAction);
         case CancelOrderType:
-            return cancelOrder(state, action as ICancelOrderAction);
+            return cancelOrder(state, action as CancelOrderAction);
         default:
             return state;
     }
 }
 
-function setCategory(state: State, action: IBlotterSetCategoryAction): State {
+function setCategory(state: State, action: BlotterSetCategoryAction): State {
     return ({
         ...state,
         showPending: action.payload.pendingSelected,
     });
 }
 
-function cancelOrder(state: State, action: ICancelOrderAction): State {
+function cancelOrder(state: State, action: CancelOrderAction): State {
     const newPending = state.pending.filter(it => it.id !== action.payload.id);
     return ({
         ...state,

@@ -1,5 +1,5 @@
-import IInstrumentSelectionAction from "../reducers/instrument/IInstrumentSelectionAction";
-import ISetPriceAction from "../reducers/instrument/ISetPriceAction";
+import InstrumentSelectionAction from "../reducers/instrument/InstrumentSelectionAction";
+import SetPriceAction from "../reducers/instrument/SetPriceAction";
 import Instrument from "../../models/Instrument";
 
 export default interface InstrumentStore {
@@ -17,4 +17,4 @@ export const initialInstrumentStore: InstrumentStore = {
     selectedInstrument: new Instrument("BTC", "GBP")
 };
 
-export type InstrumentActions = IInstrumentSelectionAction | ISetPriceAction
+export type InstrumentActions = InstrumentSelectionAction | SetPriceAction

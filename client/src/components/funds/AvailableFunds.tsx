@@ -36,7 +36,7 @@ export default class AvailableFunds extends React.PureComponent<AvailableFundsPr
                 <Row className="py-2 px-2">
                     {generateColumns(this.props.availableFunds)}
                 </Row>
-                <Button variant="primary" onClick={this.props.onClickTotalFunds}>Total Funds</Button>
+                <Button variant="primary" onClick={() => this.props.onClickTotalFunds()}>Total Funds</Button>
                 <Row className="pt-2">
                     <Col sm={true}>
                         <Button variant="primary" block={true} className="pr-sm-1" onClick={this.props.onClickWithdraw}>

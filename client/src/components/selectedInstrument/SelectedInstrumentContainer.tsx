@@ -15,7 +15,6 @@ interface OwnProps {
 
 export type SelectedInstrumentProps = DispatchProps & StateProps & OwnProps
 
-// noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
         selectedInstrument: state.instruments.selectedInstrument

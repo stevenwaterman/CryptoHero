@@ -1,8 +1,7 @@
-import IDepositModalSetAssetAction from "../../reducers/modalInputState/deposit/IDepositModalSetAssetAction";
-import IDepositModalResetUnitsTextAction
-    from "../../reducers/modalInputState/deposit/IDepositModalResetUnitsTextAction";
-import IDepositModalSetUnitsAction from "../../reducers/modalInputState/deposit/IDepositModalSetUnitsAction";
-import IDepositModalSetUnitsTextAction from "../../reducers/modalInputState/deposit/IDepositModalSetUnitsTextAction";
+import DepositModalSetAssetAction from "../../reducers/modalInputState/deposit/DepositModalSetAssetAction";
+import DepositModalResetUnitsTextAction from "../../reducers/modalInputState/deposit/DepositModalResetUnitsTextAction";
+import DepositModalSetUnitsAction from "../../reducers/modalInputState/deposit/DepositModalSetUnitsAction";
+import DepositModalSetUnitsTextAction from "../../reducers/modalInputState/deposit/DepositModalSetUnitsTextAction";
 
 export default interface DepositModalInputStore {
     readonly asset: string,
@@ -19,7 +18,7 @@ export const initialDepositModalInputStore: DepositModalInputStore = {
 };
 
 export type DepositModalInputActions =
-    IDepositModalSetAssetAction
-    | IDepositModalSetUnitsTextAction
-    | IDepositModalSetUnitsAction
-    | IDepositModalResetUnitsTextAction
+    DepositModalSetAssetAction
+    | DepositModalSetUnitsTextAction
+    | DepositModalSetUnitsAction
+    | DepositModalResetUnitsTextAction

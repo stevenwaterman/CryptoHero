@@ -1,15 +1,14 @@
-import IWithdrawModalSetAssetAction from "../../reducers/modalInputState/withdraw/value/IWithdrawModalSetAssetAction";
-import IWithdrawModalSetPercentAction
-    from "../../reducers/modalInputState/withdraw/value/IWithdrawModalSetPercentAction";
-import IWithdrawModalResetPercentTextAction
-    from "../../reducers/modalInputState/withdraw/resetText/IWithdrawModalResetPercentTextAction";
-import IWithdrawModalSetUnitsAction from "../../reducers/modalInputState/withdraw/value/IWithdrawModalSetUnitsAction";
-import IWithdrawModalSetPercentTextAction
-    from "../../reducers/modalInputState/withdraw/text/IWithdrawModalSetPercentTextAction";
-import IWithdrawModalSetUnitsTextAction
-    from "../../reducers/modalInputState/withdraw/text/IWithdrawModalSetUnitsTextAction";
-import IWithdrawModalResetUnitsTextAction
-    from "../../reducers/modalInputState/withdraw/resetText/IWithdrawModalResetUnitsTextAction";
+import WithdrawModalSetAssetAction from "../../reducers/modalInputState/withdraw/value/WithdrawModalSetAssetAction";
+import WithdrawModalSetPercentAction from "../../reducers/modalInputState/withdraw/value/WithdrawModalSetPercentAction";
+import WithdrawModalResetPercentTextAction
+    from "../../reducers/modalInputState/withdraw/resetText/WithdrawModalResetPercentTextAction";
+import WithdrawModalSetUnitsAction from "../../reducers/modalInputState/withdraw/value/WithdrawModalSetUnitsAction";
+import WithdrawModalSetPercentTextAction
+    from "../../reducers/modalInputState/withdraw/text/WithdrawModalSetPercentTextAction";
+import WithdrawModalSetUnitsTextAction
+    from "../../reducers/modalInputState/withdraw/text/WithdrawModalSetUnitsTextAction";
+import WithdrawModalResetUnitsTextAction
+    from "../../reducers/modalInputState/withdraw/resetText/WithdrawModalResetUnitsTextAction";
 
 export default interface WithdrawModalInputStore {
     readonly asset: string,
@@ -32,10 +31,10 @@ export const initialWithdrawModalInputStore: WithdrawModalInputStore = {
 };
 
 export type WithdrawModalInputActions =
-    IWithdrawModalSetAssetAction
-    | IWithdrawModalSetPercentAction
-    | IWithdrawModalSetPercentTextAction
-    | IWithdrawModalSetUnitsTextAction
-    | IWithdrawModalSetUnitsAction
-    | IWithdrawModalResetPercentTextAction
-    | IWithdrawModalResetUnitsTextAction
+    WithdrawModalSetAssetAction
+    | WithdrawModalSetPercentAction
+    | WithdrawModalSetPercentTextAction
+    | WithdrawModalSetUnitsTextAction
+    | WithdrawModalSetUnitsAction
+    | WithdrawModalResetPercentTextAction
+    | WithdrawModalResetUnitsTextAction

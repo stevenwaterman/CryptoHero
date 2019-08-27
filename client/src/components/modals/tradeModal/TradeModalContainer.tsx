@@ -1,11 +1,12 @@
 import {connect} from "react-redux";
 import {Dispatch} from "redux"
 import {State} from "../../../state/store/RootStore";
-import IConfirmTradeAction, {ConfirmTradeAction} from "../../../state/reducers/modal/trade/IConfirmTradeAction";
 import TradeModal from "./TradeModal";
-import IHideTradeModalAction, {HideTradeModalAction} from "../../../state/reducers/modal/trade/IHideTradeModalAction";
+import {fireNP} from "../../../util/StatefulActionCreator";
+import ConfirmTradeAction, {createConfirmTradeAction} from "../../../state/reducers/modal/trade/ConfirmTradeAction";
+import HideTradeModalAction, {createHideTradeModalAction} from "../../../state/reducers/modal/trade/HideTradeModalAction";
 
-type Actions = IConfirmTradeAction | IHideTradeModalAction
+type Actions = ConfirmTradeAction | HideTradeModalAction
 
 interface DispatchProps {
     onConfirm: () => void,
@@ -28,8 +29,8 @@ export type TradeModalProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: Dispatch<Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onConfirm: () => ConfirmTradeAction.fire,
-        onHide: () => HideTradeModalAction.fire
+        onConfirm: fireNP(dispatch, createConfirmTradeAction),
+        onHide: fireNP(dispatch, createHideTradeModalAction)
     }
 }
 

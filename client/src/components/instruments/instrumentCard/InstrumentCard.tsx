@@ -11,7 +11,7 @@ export default class InstrumentCard extends React.PureComponent<InstrumentCardPr
                 text={this.props.selected ? "primary" : undefined}
                 border={this.props.selected ? "primary" : undefined}
                 className="text-center pt-1"
-                onClick={this.props.onCardClick}
+                onClick={() => this.props.onCardClick(this.props.instrument)}
             >
                 <Card.Title><b> {this.props.instrument.name} </b></Card.Title>
                 <Card.Text>
@@ -20,11 +20,11 @@ export default class InstrumentCard extends React.PureComponent<InstrumentCardPr
                 <Row className="mb-1 mx-0">
                     <Col className="px-1">
                         <Button variant="success" block={true} size="sm" className="pl-1 pb-1"
-                                onClick={this.props.onBuyClick}>Buy</Button>
+                                onClick={() => this.props.onTradeClick([true, this.props.instrument])}>Buy</Button>
                     </Col>
                     <Col className="px-1">
                         <Button variant="danger" block={true} size="sm" className="pr-1 pb-1"
-                                onClick={this.props.onSellClick}>Sell</Button>
+                                onClick={() => this.props.onTradeClick([false, this.props.instrument])}>Sell</Button>
                     </Col>
                 </Row>
             </Card>

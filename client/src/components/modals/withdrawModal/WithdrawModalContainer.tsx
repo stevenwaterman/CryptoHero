@@ -1,13 +1,14 @@
 import {connect} from "react-redux";
 import {Store} from "redux"
 import {State} from "../../../state/store/RootStore";
-import IConfirmTradeAction from "../../../state/reducers/modal/trade/IConfirmTradeAction";
+import ConfirmTradeAction from "../../../state/reducers/modal/trade/ConfirmTradeAction";
 import WithdrawModal from "./WithdrawModal";
-import {ConfirmWithdrawAction} from "../../../state/reducers/funds/IConfirmWithdrawAction";
 import {ThunkDispatch} from "redux-thunk";
-import IHideWithdrawModalAction, {HideWithdrawModalAction} from "../../../state/reducers/modal/withdraw/IHideWithdrawModalAction";
+import HideWithdrawModalAction, {createHideWithdrawModalAction,} from "../../../state/reducers/modal/withdraw/HideWithdrawModalAction";
+import {createConfirmWithdrawAction} from "../../../state/reducers/funds/ConfirmWithdrawAction";
+import {fireNP} from "../../../util/StatefulActionCreator";
 
-type Actions = IConfirmTradeAction | IHideWithdrawModalAction
+type Actions = ConfirmTradeAction | HideWithdrawModalAction
 
 interface DispatchProps {
     onConfirm: () => void,
@@ -26,8 +27,8 @@ export type WithdrawModalProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDispatch<Store, void, Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onConfirm: dispatch(ConfirmWithdrawAction.fire),
-        onHide: dispatch(HideWithdrawModalAction.fire)
+        onConfirm: fireNP(dispatch, createConfirmWithdrawAction),
+        onHide: fireNP(dispatch, createHideWithdrawModalAction)
     }
 }
 
