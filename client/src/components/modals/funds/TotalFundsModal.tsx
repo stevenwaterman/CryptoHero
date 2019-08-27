@@ -4,11 +4,13 @@ import {formatMoney} from "../../../util/FormatMoney";
 import {TotalFundsModalProps} from "./TotalFundsModalContainer";
 import {Col, Modal, Row} from "react-bootstrap";
 
-function generateColumns(funds: Array<[string, number]>): Array<any> {
-    return funds.map(generateOneColumn);
+function generateColumns(funds: Map<string, number>): Array<any> {
+    const columns: Array<any> = [];
+    funds.forEach((value, asset) => columns.push(generateOneColumn(asset, value)));
+    return columns;
 }
 
-function generateOneColumn([asset, price]: [string, number]): ELEMENT {
+function generateOneColumn(asset: string, price: number): ELEMENT {
     return (
         <Col lg="6" key={asset}>
             <Row>

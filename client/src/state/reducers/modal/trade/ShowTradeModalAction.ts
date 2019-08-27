@@ -14,20 +14,14 @@ export default interface ShowTradeModalAction {
     payload: IPayload
 }
 
-function getPrice(prices: Array<[Instrument, number]>, instrument: Instrument): number {
-    const [_, amount] = prices.find(([check]) => check.name === instrument.name) as [Instrument, number];
-    return amount;
-}
-
 export function createShowTradeModalAction(state: State, [buying, instrument]: [boolean, Instrument]): ShowTradeModalAction {
-    const prices = state.instruments.prices;
-    const instrumentPrice = getPrice(prices, instrument);
+    const price: number = state.instruments.prices.get(instrument) as number;
     return {
         type: ShowTradeModalType,
         payload: {
             buying: buying,
             instrument: instrument,
-            startPrice: instrumentPrice
+            startPrice: price
         }
     }
 }

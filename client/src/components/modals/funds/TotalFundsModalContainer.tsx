@@ -13,7 +13,7 @@ interface DispatchProps {
 }
 
 interface StateProps {
-    totalFunds: Array<[string, number]>
+    totalFunds: Map<string, number>
     show: boolean
 }
 

@@ -30,8 +30,8 @@ function instrumentSelection(state: State, action: InstrumentSelectionAction): S
 
 function instrumentPrices(state: State, action: SetPriceAction): State {
     const {instrument, newPrice} = action.payload;
-    const newPrices: Array<[Instrument, number]> = state.prices.filter(it => it[0].name !== instrument.name);
-    newPrices.push([instrument, newPrice]);
+    const newPrices = {...state.prices};
+    newPrices.set(instrument, newPrice);
     return {
         ...state,
         prices: newPrices,

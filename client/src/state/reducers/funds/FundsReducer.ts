@@ -22,19 +22,17 @@ export function fundsReducer(
     }
 }
 
-function adjustAsset(funds: Array<[string, number]>, asset: string, add: number): Array<[string, number]> {
-    return funds.map(([checkAsset, current]) => {
-        if (checkAsset === asset) {
-            return [checkAsset, current + add]
-        } else {
-            return [checkAsset, current]
-        }
-    });
+function adjustAsset(funds: Map<string, number>, asset: string, add: number): void {
+    const current: number = funds.get(asset) as number;
+    funds.set(asset, current + add);
 }
 
 function withdraw(state: State, action: ConfirmWithdrawAction): State {
     const {asset, units} = action.payload;
-    const newFunds = adjustAsset(state.availableFunds, asset, -units);
+
+    const newFunds: Map<string, number> = {...state.availableFunds};
+    adjustAsset(newFunds, asset, -units);
+
     return ({
         ...state,
         availableFunds: newFunds
@@ -43,7 +41,10 @@ function withdraw(state: State, action: ConfirmWithdrawAction): State {
 
 function deposit(state: State, action: ConfirmDepositAction): State {
     const {asset, units} = action.payload;
-    const newFunds = adjustAsset(state.availableFunds, asset, units);
+
+    const newFunds: Map<string, number> = {...state.availableFunds};
+    adjustAsset(state.availableFunds, asset, units);
+
     return ({
         ...state,
         availableFunds: newFunds

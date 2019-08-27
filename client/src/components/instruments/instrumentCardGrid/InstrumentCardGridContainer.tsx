@@ -7,7 +7,7 @@ interface DispatchProps {
 }
 
 export interface StateProps {
-    instrumentPrices: Array<[Instrument, number]>,
+    instrumentPrices: Map<Instrument, number>,
     selectedInstrument: Instrument
 }
 

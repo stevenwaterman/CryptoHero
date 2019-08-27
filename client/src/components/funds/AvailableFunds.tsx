@@ -7,11 +7,13 @@ import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
-function generateColumns(funds: Array<[string, number]>): Array<any> {
-    return funds.map(generateOneColumn);
+function generateColumns(funds: Map<string, number>): Array<any> {
+    const columns: Array<any> = [];
+    funds.forEach((price: number, asset: string) => columns.push(generateOneColumn(asset, price)));
+    return columns
 }
 
-function generateOneColumn([asset, price]: [string, number]): ELEMENT {
+function generateOneColumn(asset: string, price: number): ELEMENT {
     return (
         <Col lg="6" key={asset}>
             <Row>

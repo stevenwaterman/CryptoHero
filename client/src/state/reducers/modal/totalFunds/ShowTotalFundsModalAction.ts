@@ -1,7 +1,7 @@
 import {State} from "../../../store/RootStore";
 
 interface IPayload {
-    totalFunds: Array<[string, number]>
+    totalFunds: Map<string, number>
 }
 
 export const ShowTotalFundsModalType: string = "SHOW_TOTAL_FUNDS_MODAL";
@@ -12,6 +12,9 @@ export default interface ShowTotalFundsModalAction {
 }
 
 export function createShowTotalFundsModalAction(state: State): ShowTotalFundsModalAction {
+    const availableFunds = state.funds.availableFunds;
+    const pendingOrders = state.blotter.pending;
+
     return {
         type: ShowTotalFundsModalType,
         payload: {

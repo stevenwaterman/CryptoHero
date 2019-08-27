@@ -16,7 +16,7 @@ interface DispatchProps {
 }
 
 export interface StateProps {
-    availableFunds: Array<[string, number]>,
+    availableFunds: Map<string, number>,
 }
 
 interface OwnProps {

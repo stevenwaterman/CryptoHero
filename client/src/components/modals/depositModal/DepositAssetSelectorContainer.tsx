@@ -26,9 +26,10 @@ function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): Di
 }
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
+    const assets = Array.from(state.funds.availableFunds.keys());
     return {
         selectedAsset: state.depositModalInput.asset,
-        assets: state.funds.availableFunds.map(it => it[0])
+        assets: assets
     }
 }
 
