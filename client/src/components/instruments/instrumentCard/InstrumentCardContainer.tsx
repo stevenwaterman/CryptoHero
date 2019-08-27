@@ -5,7 +5,7 @@ import Instrument from "../../../models/Instrument";
 import {ThunkDispatch} from "redux-thunk"
 import InstrumentSelectionAction, {createInstrumentSelectionAction} from "../../../state/reducers/instrument/InstrumentSelectionAction";
 import ShowTradeModalAction, {createShowTradeModalAction} from "../../../state/reducers/modal/trade/ShowTradeModalAction";
-import {fire} from "../../../util/Thunker";
+import {fire, ThunkDsp} from "../../../util/Thunker";
 import {State} from "../../../state/store/RootStore";
 
 type Actions = InstrumentSelectionAction | ShowTradeModalAction
@@ -26,7 +26,7 @@ interface OwnProps {
 
 export type InstrumentCardProps = StateProps & DispatchProps & OwnProps
 
-function mapDispatchToProps(dispatch: ThunkDispatch<Store, void, Actions>, ownProps: OwnProps): DispatchProps {
+function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onCardClick: fire(dispatch, createInstrumentSelectionAction),
         onTradeClick: fire(dispatch, createShowTradeModalAction),

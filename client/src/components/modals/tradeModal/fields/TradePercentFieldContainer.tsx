@@ -5,7 +5,7 @@ import {ThunkDispatch} from "redux-thunk"
 import TradeModalSetPercentAction, {createTradeModalSetPercentAction} from "../../../../state/reducers/modalInputState/trade/value/TradeModalSetPercentAction";
 import TradeModalResetPercentTextAction, {createTradeModalResetPercentTextAction} from "../../../../state/reducers/modalInputState/trade/resetText/TradeModalResetPercentTextAction";
 import TradeModalSetPercentTextAction, {createTradeModalSetPercentTextAction} from "../../../../state/reducers/modalInputState/trade/text/TradeModalSetPercentTextAction";
-import {fire, fireNP} from "../../../../util/Thunker";
+import {fire, fireNP, ThunkDsp} from "../../../../util/Thunker";
 
 type Actions = TradeModalSetPercentAction | TradeModalSetPercentTextAction | TradeModalResetPercentTextAction
 
@@ -25,7 +25,7 @@ interface OwnProps {
     step: number
 }
 
-function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
+function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onValueChange: fire(dispatch, createTradeModalSetPercentAction),
         onTextChange: fire(dispatch, createTradeModalSetPercentTextAction),

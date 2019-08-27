@@ -3,7 +3,7 @@ import {State} from "../../../state/store/RootStore";
 import {ThunkDispatch} from "redux-thunk";
 import AssetSelector from "../../AssetSelector";
 import WithdrawModalSetAssetAction, {createWithdrawModalSetAssetAction} from "../../../state/reducers/modalInputState/withdraw/value/WithdrawModalSetAssetAction";
-import {fire} from "../../../util/Thunker";
+import {fire, ThunkDsp} from "../../../util/Thunker";
 
 type Actions = WithdrawModalSetAssetAction
 
@@ -19,7 +19,7 @@ interface StateProps {
 interface OwnProps {
 }
 
-function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
+function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onValueChange: fire(dispatch, createWithdrawModalSetAssetAction),
     }

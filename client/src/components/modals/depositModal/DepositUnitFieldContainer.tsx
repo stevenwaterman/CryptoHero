@@ -5,7 +5,7 @@ import NumberField from "../../NumberField";
 import DepositModalSetUnitsAction, {createDepositModalSetUnitsAction} from "../../../state/reducers/modalInputState/deposit/DepositModalSetUnitsAction";
 import DepositModalResetUnitsTextAction, {createDepositModalResetUnitsTextAction} from "../../../state/reducers/modalInputState/deposit/DepositModalResetUnitsTextAction";
 import DepositModalSetUnitsTextAction, {createDepositModalSetUnitsTextAction} from "../../../state/reducers/modalInputState/deposit/DepositModalSetUnitsTextAction";
-import {fire, fireNP} from "../../../util/Thunker";
+import {fire, fireNP, ThunkDsp} from "../../../util/Thunker";
 
 type Actions = DepositModalSetUnitsAction | DepositModalSetUnitsTextAction | DepositModalResetUnitsTextAction
 
@@ -25,7 +25,7 @@ interface OwnProps {
     step: number
 }
 
-function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
+function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onValueChange: fire(dispatch, createDepositModalSetUnitsAction),
         onTextChange: fire(dispatch, createDepositModalSetUnitsTextAction),

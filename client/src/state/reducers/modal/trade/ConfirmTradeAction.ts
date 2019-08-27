@@ -1,8 +1,10 @@
 import {State} from "../../../store/RootStore";
+import Trade from "../../../../models/Trade";
+import {ThunkDsp} from "../../../../util/Thunker";
+import Instrument from "../../../../models/Instrument";
 
 interface IPayload {
-    price: number,
-    units: number
+    newTrade: Trade
 }
 
 export const ConfirmTradeType: string = "TRADE_CONFIRM";
@@ -12,12 +14,11 @@ export default interface ConfirmTradeAction {
     payload: IPayload
 }
 
-export function createConfirmTradeAction(state: State): ConfirmTradeAction {
+export function createConfirmTradeAction(state: State, params: null, dispatch: ThunkDsp<ConfirmTradeAction>): ConfirmTradeAction {
     return {
         type: ConfirmTradeType,
         payload: {
-            price: state.tradeModalInput.price,
-            units: state.tradeModalInput.units
+            newTrade: new Trade("1234", new Instrument("BTC", "GBP"), new Date(), 1, 1, true)
         }
     }
 }

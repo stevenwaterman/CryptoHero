@@ -3,7 +3,7 @@ import {State} from "../../state/store/RootStore";
 import ChartCard from "./ChartCard";
 import {ThunkDispatch} from "redux-thunk";
 import ChartSetTypeAction, {createChartSetTypeAction} from "../../state/reducers/chart/ChartSetTypeAction";
-import {fire} from "../../util/Thunker";
+import {fire, ThunkDsp} from "../../util/Thunker";
 
 type Actions = ChartSetTypeAction
 
@@ -20,7 +20,7 @@ interface OwnProps {
 
 export type ChartCardProps = StateProps & DispatchProps & OwnProps
 
-function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
+function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onChartTypeChange: fire(dispatch, createChartSetTypeAction)
     }

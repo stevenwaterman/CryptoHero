@@ -5,7 +5,7 @@ import {ThunkDispatch} from "redux-thunk";
 import ShowWithdrawModalAction, {createShowWithdrawModalAction} from "../../state/reducers/modal/withdraw/ShowWithdrawModalAction";
 import ShowDepositModalAction, {createShowDepositModalAction} from "../../state/reducers/modal/deposit/ShowDepositModalAction";
 import ShowTotalFundsModalAction, {createShowTotalFundsModalAction} from "../../state/reducers/modal/totalFunds/ShowTotalFundsModalAction";
-import {fireNP} from "../../util/Thunker";
+import {fireNP, ThunkDsp} from "../../util/Thunker";
 
 type Actions = ShowTotalFundsModalAction | ShowWithdrawModalAction | ShowDepositModalAction
 
@@ -24,7 +24,7 @@ interface OwnProps {
 
 export type AvailableFundsProps = StateProps & DispatchProps & OwnProps
 
-function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
+function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onClickTotalFunds: fireNP(dispatch, createShowTotalFundsModalAction),
         onClickWithdraw: fireNP(dispatch, createShowWithdrawModalAction),

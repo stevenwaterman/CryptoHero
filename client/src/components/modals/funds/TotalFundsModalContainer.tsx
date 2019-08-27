@@ -4,7 +4,7 @@ import TotalFundsModal from "./TotalFundsModal";
 import {Store} from "redux";
 import HideTotalFundsModalAction, {createHideTotalFundsModalAction} from "../../../state/reducers/modal/totalFunds/HideTotalFundsModalAction";
 import {ThunkDispatch} from "redux-thunk";
-import {fireNP} from "../../../util/Thunker";
+import {fireNP, ThunkDsp} from "../../../util/Thunker";
 
 type Actions = HideTotalFundsModalAction
 
@@ -22,7 +22,7 @@ interface OwnProps {
 
 export type TotalFundsModalProps = StateProps & DispatchProps & OwnProps
 
-function mapDispatchToProps(dispatch: ThunkDispatch<Store, void, Actions>, ownProps: OwnProps): DispatchProps {
+function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onHide: fireNP(dispatch, createHideTotalFundsModalAction)
     }

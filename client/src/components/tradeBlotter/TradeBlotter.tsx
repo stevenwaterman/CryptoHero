@@ -16,8 +16,8 @@ export default class TradeBlotter extends React.PureComponent<ChartCardProps> {
                         <Col xs="auto">
                             <ToggleButtonGroup name="tradeType" type="radio" value={this.props.pendingSelected}
                                                onChange={this.props.onSetCategory}>
-                                <ToggleButton value={false}>Pending</ToggleButton>
-                                <ToggleButton value={true}>Completed</ToggleButton>
+                                <ToggleButton value={true}>Pending</ToggleButton>
+                                <ToggleButton value={false}>Completed</ToggleButton>
                             </ToggleButtonGroup>
                         </Col>
                     </Row>

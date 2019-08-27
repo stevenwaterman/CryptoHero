@@ -5,7 +5,7 @@ import NumberField from "../../../NumberField";
 import {ThunkDispatch} from "redux-thunk"
 import TradeModalSetPriceTextAction, {createTradeModalSetPriceTextAction,} from "../../../../state/reducers/modalInputState/trade/text/TradeModalSetPriceTextAction";
 import TradeModalResetPriceTextAction, {createTradeModalResetPriceTextAction,} from "../../../../state/reducers/modalInputState/trade/resetText/TradeModalResetPriceTextAction";
-import {fire, fireNP} from "../../../../util/Thunker";
+import {fire, fireNP, ThunkDsp} from "../../../../util/Thunker";
 
 type Actions = TradeModalSetPriceAction | TradeModalSetPriceTextAction | TradeModalResetPriceTextAction
 
@@ -25,7 +25,7 @@ interface OwnProps {
     step: number
 }
 
-function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
+function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onValueChange: fire(dispatch, createTradeModalSetPriceAction),
         onTextChange: fire(dispatch, createTradeModalSetPriceTextAction),

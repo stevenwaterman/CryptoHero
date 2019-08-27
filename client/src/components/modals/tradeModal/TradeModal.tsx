@@ -58,7 +58,7 @@ export default class TradeModal extends React.PureComponent<TradeModalProps> {
                         time, refunding any allocated funds.</p>
                 </Modal.Body>
                 <Modal.Footer className="modal-footer">
-                    <Button variant="danger" disabled={!this.props.canConfirm}>Confirm Trade</Button>
+                    <Button variant="danger" disabled={!this.props.canConfirm} onClick={this.props.onConfirm}>Confirm Trade</Button>
                 </Modal.Footer>
             </Modal>
         );

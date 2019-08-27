@@ -5,7 +5,7 @@ import DepositModal from "./DepositModal";
 import {ThunkDispatch} from "redux-thunk";
 import ConfirmDepositAction, {createConfirmDepositAction} from "../../../state/reducers/funds/ConfirmDepositAction";
 import HideDepositModalAction, {createHideDepositModalAction} from "../../../state/reducers/modal/deposit/HideDepositModalAction";
-import {fireNP} from "../../../util/Thunker";
+import {fireNP, ThunkDsp} from "../../../util/Thunker";
 
 type Actions = ConfirmDepositAction | HideDepositModalAction
 
@@ -24,7 +24,7 @@ interface OwnProps {
 
 export type DepositModalProps = StateProps & DispatchProps & OwnProps
 
-function mapDispatchToProps(dispatch: ThunkDispatch<Store, void, Actions>, ownProps: OwnProps): DispatchProps {
+function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onConfirm: fireNP(dispatch, createConfirmDepositAction),
         onHide: fireNP(dispatch, createHideDepositModalAction)

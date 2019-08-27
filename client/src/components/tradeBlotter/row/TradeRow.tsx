@@ -17,7 +17,7 @@ export default class TradeRow extends React.PureComponent<TradeRowProps> {
     render(): ELEMENT {
         return (
             <tr className={getClass(this.props.trade.isBuy)} onClick={() => this.props.onClick(this.props.trade.id)}>
-                <td>{this.props.trade.time}</td>
+                <td>{this.props.trade.time.toISOString()}</td>
                 <td>{formatMoney(this.props.trade.units, 5, true, true)}</td>
                 <td>{formatMoney(this.props.trade.price, 5, true, true)}</td>
             </tr>

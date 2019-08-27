@@ -5,7 +5,7 @@ import {ThunkDispatch} from "redux-thunk";
 import Trade from "../../models/Trade";
 import BlotterSetCategoryAction, {createBlotterSetCategoryAction} from "../../state/reducers/blotter/BlotterSetCategoryAction";
 import ShowViewTradeModalAction, {createShowViewTradeModalAction} from "../../state/reducers/modal/viewTrade/ShowViewTradeModalAction";
-import {fire} from "../../util/Thunker";
+import {fire, ThunkDsp} from "../../util/Thunker";
 
 type Actions = BlotterSetCategoryAction | ShowViewTradeModalAction
 
@@ -24,7 +24,7 @@ interface OwnProps {
 
 export type ChartCardProps = StateProps & DispatchProps & OwnProps
 
-function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
+function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onSetCategory: fire(dispatch, createBlotterSetCategoryAction),
         onSelectTrade: fire(dispatch, createShowViewTradeModalAction)

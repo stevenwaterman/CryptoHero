@@ -44,7 +44,7 @@ export default class WithdrawModal extends React.PureComponent<WithdrawModalProp
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger" disabled={!this.props.canConfirm}>
+                    <Button variant="danger" disabled={!this.props.canConfirm} onClick={this.props.onConfirm}>
                         Confirm Withdrawal
                     </Button>
                 </Modal.Footer>

@@ -12,6 +12,9 @@ import {HideWithdrawModalType} from "./withdraw/HideWithdrawModalAction";
 import {HideTotalFundsModalType} from "./totalFunds/HideTotalFundsModalAction";
 import {HideViewTradeModalType} from "./viewTrade/HideViewTradeModalAction";
 import {HideTradeModalType} from "./trade/HideTradeModalAction";
+import ConfirmTradeAction, {ConfirmTradeType} from "./trade/ConfirmTradeAction";
+import {ConfirmDepositType} from "../funds/ConfirmDepositAction";
+import ConfirmWithdrawAction, {ConfirmWithdrawType} from "../funds/ConfirmWithdrawAction";
 
 type State = ModalVisibilityStore
 type Actions = ModalVisibilityActions
@@ -95,6 +98,9 @@ export function modalVisibilityReducer(
         case HideTotalFundsModalType:
         case HideViewTradeModalType:
         case HideTradeModalType:
+        case ConfirmTradeType:
+        case ConfirmDepositType:
+        case ConfirmWithdrawType:
             return allHidden;
         default:
             return state;

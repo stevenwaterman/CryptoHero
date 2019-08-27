@@ -5,7 +5,7 @@ import NumberField from "../../../NumberField";
 import WithdrawModalSetUnitsAction, {createWithdrawModalSetUnitsAction} from "../../../../state/reducers/modalInputState/withdraw/value/WithdrawModalSetUnitsAction";
 import WithdrawModalResetUnitsTextAction, {createWithdrawModalResetUnitsTextAction} from "../../../../state/reducers/modalInputState/withdraw/resetText/WithdrawModalResetUnitsTextAction";
 import WithdrawModalSetUnitsTextAction, {createWithdrawModalSetUnitsTextAction} from "../../../../state/reducers/modalInputState/withdraw/text/WithdrawModalSetUnitsTextAction";
-import {fire, fireNP} from "../../../../util/Thunker";
+import {fire, fireNP, ThunkDsp} from "../../../../util/Thunker";
 
 type Actions = WithdrawModalSetUnitsAction | WithdrawModalSetUnitsTextAction | WithdrawModalResetUnitsTextAction
 
@@ -26,7 +26,7 @@ interface OwnProps {
 }
 
 
-function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
+function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onValueChange: fire(dispatch, createWithdrawModalSetUnitsAction),
         onTextChange: fire(dispatch, createWithdrawModalSetUnitsTextAction),

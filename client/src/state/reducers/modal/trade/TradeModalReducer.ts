@@ -20,7 +20,6 @@ export function tradeModalReducer(
 }
 
 function confirmTrade(state: State, action: ConfirmTradeAction): State {
-    //TODO
     return state;
 }
 

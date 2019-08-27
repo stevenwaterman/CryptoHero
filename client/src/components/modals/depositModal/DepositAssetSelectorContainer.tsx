@@ -2,7 +2,7 @@ import {connect} from "react-redux";
 import {State} from "../../../state/store/RootStore";
 import AssetSelector from "../../AssetSelector";
 import {ThunkDispatch} from "redux-thunk";
-import {fire} from "../../../util/Thunker";
+import {fire, ThunkDsp} from "../../../util/Thunker";
 import DepositModalSetAssetAction, {createDepositModalSetAssetAction} from "../../../state/reducers/modalInputState/deposit/DepositModalSetAssetAction";
 
 type Actions = DepositModalSetAssetAction
@@ -19,7 +19,7 @@ interface StateProps {
 interface OwnProps {
 }
 
-function mapDispatchToProps(dispatch: ThunkDispatch<State, void, Actions>, ownProps: OwnProps): DispatchProps {
+function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onValueChange: fire(dispatch, createDepositModalSetAssetAction),
     }
