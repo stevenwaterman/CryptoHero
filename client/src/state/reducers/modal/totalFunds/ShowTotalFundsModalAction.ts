@@ -13,7 +13,8 @@ export default interface ShowTotalFundsModalAction {
 
 export function createShowTotalFundsModalAction(state: State): ShowTotalFundsModalAction {
     const availableFunds = state.funds.availableFunds;
-    const pendingOrders = state.blotter.pending;
+    const pendingOrders = state.blotter.pending;//TODO work this out
+
 
     return {
         type: ShowTotalFundsModalType,

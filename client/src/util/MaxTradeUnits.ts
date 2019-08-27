@@ -1,5 +1,4 @@
 import {State} from "../state/store/RootStore";
-import {fundsAvailable} from "./FundsAvailable";
 
 export function maxTradeUnits(state: State, price: number | undefined = undefined): number | null {
     const buying = state.tradeModal.buying;
@@ -8,8 +7,8 @@ export function maxTradeUnits(state: State, price: number | undefined = undefine
     }
     const sourceAsset = source(state);
     const targetAsset = target(state);
-    const sourceFundsAvailable = fundsAvailable(state.funds.availableFunds, sourceAsset);
-    const targetFundsAvailable = fundsAvailable(state.funds.availableFunds, targetAsset);
+    const sourceFundsAvailable = state.funds.availableFunds.get(sourceAsset) as number;
+    const targetFundsAvailable = state.funds.availableFunds.get(targetAsset) as number;
 
     if (buying) {
         if (price > 0) return sourceFundsAvailable / price;

@@ -1,4 +1,3 @@
-import {fundsAvailable} from "../../../../../util/FundsAvailable";
 import {State} from "../../../../store/RootStore";
 
 interface IPayload {
@@ -14,7 +13,7 @@ export default interface WithdrawModalSetAssetAction {
 }
 
 export function createWithdrawModalSetAssetAction(state: State, newAsset: string): WithdrawModalSetAssetAction {
-    const max: number = fundsAvailable(state.funds.availableFunds, newAsset);
+    const max = state.funds.availableFunds.get(state.withdrawModalInput.asset) as number;
     return {
         type: WithdrawModalSetAssetType,
         payload: {
