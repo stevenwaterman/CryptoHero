@@ -3,7 +3,11 @@ import React from "react";
 import {applyMiddleware, createStore} from "redux";
 import thunk from "redux-thunk";
 import {FormControl, FormControlProps} from "react-bootstrap";
-import logger from "redux-logger";
+import {createLogger} from "redux-logger";
+
+const logger = createLogger({
+    diff: true
+});
 
 export default createStore(
     RootReducer,
