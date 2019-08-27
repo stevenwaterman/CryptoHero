@@ -4,7 +4,7 @@ import TotalFundsModal from "./TotalFundsModal";
 import {Store} from "redux";
 import HideTotalFundsModalAction, {createHideTotalFundsModalAction} from "../../../state/reducers/modal/totalFunds/HideTotalFundsModalAction";
 import {ThunkDispatch} from "redux-thunk";
-import {fireNP} from "../../../util/StatefulActionCreator";
+import {fireNP} from "../../../util/Thunker";
 
 type Actions = HideTotalFundsModalAction
 

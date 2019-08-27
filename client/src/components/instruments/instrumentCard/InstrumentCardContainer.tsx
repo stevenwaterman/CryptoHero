@@ -5,7 +5,7 @@ import Instrument from "../../../models/Instrument";
 import {ThunkDispatch} from "redux-thunk"
 import InstrumentSelectionAction, {createInstrumentSelectionAction} from "../../../state/reducers/instrument/InstrumentSelectionAction";
 import ShowTradeModalAction, {createShowTradeModalAction} from "../../../state/reducers/modal/trade/ShowTradeModalAction";
-import {fire} from "../../../util/StatefulActionCreator";
+import {fire} from "../../../util/Thunker";
 import {State} from "../../../state/store/RootStore";
 
 type Actions = InstrumentSelectionAction | ShowTradeModalAction

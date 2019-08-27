@@ -5,7 +5,7 @@ import NumberField from "../../../NumberField";
 import WithdrawModalSetPercentAction, {createWithdrawModalSetPercentAction} from "../../../../state/reducers/modalInputState/withdraw/value/WithdrawModalSetPercentAction";
 import WithdrawModalSetPercentTextAction, {createWithdrawModalSetPercentTextAction} from "../../../../state/reducers/modalInputState/withdraw/text/WithdrawModalSetPercentTextAction";
 import WithdrawModalResetPercentTextAction, {createWithdrawModalResetPercentTextAction} from "../../../../state/reducers/modalInputState/withdraw/resetText/WithdrawModalResetPercentTextAction";
-import {fire, fireNP} from "../../../../util/StatefulActionCreator";
+import {fire, fireNP} from "../../../../util/Thunker";
 
 type Actions =
     WithdrawModalSetPercentAction

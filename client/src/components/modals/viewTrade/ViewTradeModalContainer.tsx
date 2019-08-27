@@ -5,7 +5,7 @@ import {ThunkDispatch} from "redux-thunk";
 import HideViewTradeModalAction, {createHideViewTradeModalAction} from "../../../state/reducers/modal/viewTrade/HideViewTradeModalAction";
 import CancelOrderAction, {createCancelOrderAction} from "../../../state/reducers/blotter/CancelOrderAction";
 import Trade from "../../../models/Trade";
-import {fireNP} from "../../../util/StatefulActionCreator";
+import {fireNP} from "../../../util/Thunker";
 
 type Actions = CancelOrderAction | HideViewTradeModalAction
 

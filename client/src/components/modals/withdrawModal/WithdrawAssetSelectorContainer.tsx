@@ -3,7 +3,7 @@ import {State} from "../../../state/store/RootStore";
 import {ThunkDispatch} from "redux-thunk";
 import AssetSelector from "../../AssetSelector";
 import WithdrawModalSetAssetAction, {createWithdrawModalSetAssetAction} from "../../../state/reducers/modalInputState/withdraw/value/WithdrawModalSetAssetAction";
-import {fire} from "../../../util/StatefulActionCreator";
+import {fire} from "../../../util/Thunker";
 
 type Actions = WithdrawModalSetAssetAction
 

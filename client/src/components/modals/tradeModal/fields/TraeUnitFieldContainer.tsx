@@ -5,7 +5,7 @@ import {ThunkDispatch} from "redux-thunk"
 import TradeModalSetUnitsTextAction, {createTradeModalSetUnitsTextAction,} from "../../../../state/reducers/modalInputState/trade/text/TradeModalSetUnitsTextAction";
 import TradeModalSetUnitsAction, {createTradeModalSetUnitsAction,} from "../../../../state/reducers/modalInputState/trade/value/TradeModalSetUnitsAction";
 import TradeModalResetUnitsTextAction, {createTradeModalResetUnitsTextAction,} from "../../../../state/reducers/modalInputState/trade/resetText/TradeModalResetUnitsTextAction";
-import {fire, fireNP} from "../../../../util/StatefulActionCreator";
+import {fire, fireNP} from "../../../../util/Thunker";
 
 type Actions = TradeModalSetUnitsAction | TradeModalSetUnitsTextAction | TradeModalResetUnitsTextAction
 

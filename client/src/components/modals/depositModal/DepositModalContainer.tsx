@@ -5,7 +5,7 @@ import DepositModal from "./DepositModal";
 import {ThunkDispatch} from "redux-thunk";
 import ConfirmDepositAction, {createConfirmDepositAction} from "../../../state/reducers/funds/ConfirmDepositAction";
 import HideDepositModalAction, {createHideDepositModalAction} from "../../../state/reducers/modal/deposit/HideDepositModalAction";
-import {fireNP} from "../../../util/StatefulActionCreator";
+import {fireNP} from "../../../util/Thunker";
 
 type Actions = ConfirmDepositAction | HideDepositModalAction
 

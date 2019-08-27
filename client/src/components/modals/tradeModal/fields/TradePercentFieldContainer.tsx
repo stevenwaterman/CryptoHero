@@ -5,7 +5,7 @@ import {ThunkDispatch} from "redux-thunk"
 import TradeModalSetPercentAction, {createTradeModalSetPercentAction} from "../../../../state/reducers/modalInputState/trade/value/TradeModalSetPercentAction";
 import TradeModalResetPercentTextAction, {createTradeModalResetPercentTextAction} from "../../../../state/reducers/modalInputState/trade/resetText/TradeModalResetPercentTextAction";
 import TradeModalSetPercentTextAction, {createTradeModalSetPercentTextAction} from "../../../../state/reducers/modalInputState/trade/text/TradeModalSetPercentTextAction";
-import {fire, fireNP} from "../../../../util/StatefulActionCreator";
+import {fire, fireNP} from "../../../../util/Thunker";
 
 type Actions = TradeModalSetPercentAction | TradeModalSetPercentTextAction | TradeModalResetPercentTextAction
 

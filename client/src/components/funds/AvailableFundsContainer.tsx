@@ -5,7 +5,7 @@ import {ThunkDispatch} from "redux-thunk";
 import ShowWithdrawModalAction, {createShowWithdrawModalAction} from "../../state/reducers/modal/withdraw/ShowWithdrawModalAction";
 import ShowDepositModalAction, {createShowDepositModalAction} from "../../state/reducers/modal/deposit/ShowDepositModalAction";
 import ShowTotalFundsModalAction, {createShowTotalFundsModalAction} from "../../state/reducers/modal/totalFunds/ShowTotalFundsModalAction";
-import {fireNP} from "../../util/StatefulActionCreator";
+import {fireNP} from "../../util/Thunker";
 
 type Actions = ShowTotalFundsModalAction | ShowWithdrawModalAction | ShowDepositModalAction
 

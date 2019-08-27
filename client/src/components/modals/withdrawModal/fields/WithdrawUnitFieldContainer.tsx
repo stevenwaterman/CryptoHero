@@ -5,7 +5,7 @@ import NumberField from "../../../NumberField";
 import WithdrawModalSetUnitsAction, {createWithdrawModalSetUnitsAction} from "../../../../state/reducers/modalInputState/withdraw/value/WithdrawModalSetUnitsAction";
 import WithdrawModalResetUnitsTextAction, {createWithdrawModalResetUnitsTextAction} from "../../../../state/reducers/modalInputState/withdraw/resetText/WithdrawModalResetUnitsTextAction";
 import WithdrawModalSetUnitsTextAction, {createWithdrawModalSetUnitsTextAction} from "../../../../state/reducers/modalInputState/withdraw/text/WithdrawModalSetUnitsTextAction";
-import {fire, fireNP} from "../../../../util/StatefulActionCreator";
+import {fire, fireNP} from "../../../../util/Thunker";
 
 type Actions = WithdrawModalSetUnitsAction | WithdrawModalSetUnitsTextAction | WithdrawModalResetUnitsTextAction
 

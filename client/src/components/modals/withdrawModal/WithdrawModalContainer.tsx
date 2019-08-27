@@ -6,7 +6,7 @@ import WithdrawModal from "./WithdrawModal";
 import {ThunkDispatch} from "redux-thunk";
 import HideWithdrawModalAction, {createHideWithdrawModalAction,} from "../../../state/reducers/modal/withdraw/HideWithdrawModalAction";
 import {createConfirmWithdrawAction} from "../../../state/reducers/funds/ConfirmWithdrawAction";
-import {fireNP} from "../../../util/StatefulActionCreator";
+import {fireNP} from "../../../util/Thunker";
 
 type Actions = ConfirmTradeAction | HideWithdrawModalAction
 

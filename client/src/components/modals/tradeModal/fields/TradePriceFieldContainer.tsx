@@ -5,7 +5,7 @@ import NumberField from "../../../NumberField";
 import {ThunkDispatch} from "redux-thunk"
 import TradeModalSetPriceTextAction, {createTradeModalSetPriceTextAction,} from "../../../../state/reducers/modalInputState/trade/text/TradeModalSetPriceTextAction";
 import TradeModalResetPriceTextAction, {createTradeModalResetPriceTextAction,} from "../../../../state/reducers/modalInputState/trade/resetText/TradeModalResetPriceTextAction";
-import {fire, fireNP} from "../../../../util/StatefulActionCreator";
+import {fire, fireNP} from "../../../../util/Thunker";
 
 type Actions = TradeModalSetPriceAction | TradeModalSetPriceTextAction | TradeModalResetPriceTextAction
 

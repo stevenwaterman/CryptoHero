@@ -5,7 +5,7 @@ import {ThunkDispatch} from "redux-thunk";
 import Trade from "../../models/Trade";
 import BlotterSetCategoryAction, {createBlotterSetCategoryAction} from "../../state/reducers/blotter/BlotterSetCategoryAction";
 import ShowViewTradeModalAction, {createShowViewTradeModalAction} from "../../state/reducers/modal/viewTrade/ShowViewTradeModalAction";
-import {fire} from "../../util/StatefulActionCreator";
+import {fire} from "../../util/Thunker";
 
 type Actions = BlotterSetCategoryAction | ShowViewTradeModalAction
 

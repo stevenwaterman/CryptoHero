@@ -3,7 +3,7 @@ import {State} from "../../state/store/RootStore";
 import ChartCard from "./ChartCard";
 import {ThunkDispatch} from "redux-thunk";
 import ChartSetTypeAction, {createChartSetTypeAction} from "../../state/reducers/chart/ChartSetTypeAction";
-import {fire} from "../../util/StatefulActionCreator";
+import {fire} from "../../util/Thunker";
 
 type Actions = ChartSetTypeAction
 
