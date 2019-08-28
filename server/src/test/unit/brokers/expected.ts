@@ -1,6 +1,7 @@
 import TradeDirection from "../../../app/trading/tradeDirection";
 import Big from "big.js";
 import Account from "../../../app/trading/account";
+import Instrument from "../../../app/trading/instrument";
 
 export class ExpectedPending {
     readonly buy: Array<ExpectedOrder>;
@@ -23,12 +24,14 @@ export class ExpectedAccount {
 export class ExpectedOrder {
     readonly account: ExpectedAccount;
     readonly direction: TradeDirection;
+    readonly instrument: Instrument;
     readonly units: Big;
     readonly unitPrice: Big;
 
-    constructor(account: Account, direction: TradeDirection, units: Big, unitPrice: Big) {
+    constructor(account: Account, direction: TradeDirection,  instrument: Instrument, units: Big, unitPrice: Big) {
         this.account = new ExpectedAccount(account);
         this.direction = direction;
+        this.instrument = instrument;
         this.units = units;
         this.unitPrice = unitPrice;
     }

@@ -3,6 +3,7 @@ import BitcoinExchangeServer from "../bitcoinExchangeServer";
 import Broker from "../../brokers/broker";
 import {withBroker} from "../util/withBroker";
 import Instrument from "../../trading/instrument";
+import SER from "../util/serialisation/SER";
 
 export function setupInstrumentEndpoints(server: BitcoinExchangeServer): void {
     const app = server.app;
@@ -12,7 +13,5 @@ export function setupInstrumentEndpoints(server: BitcoinExchangeServer): void {
 
 function listInstruments(broker: Broker, req: Request, res: Response): void {
     const names: Array<string> = Instrument.NAMES.toArray();
-
-    res.status(200);
-    res.json(names);
+    return res.respond(200, names, SER.NO)
 }

@@ -24,11 +24,11 @@ test("Happy Path", done => {
     acc2.adjustAssets(Asset.GBP, new Big("100"));
     acc2.adjustAssets(Asset.BTC, new Big("100"));
 
-    const buy1 = new Order(acc1, TradeDirection.BUY, new Big("50"), new Big("1.5"));
-    const sell1 = new Order(acc2, TradeDirection.SELL, new Big("50"), new Big("1.5"));
+    const buy1 = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC, new Big("50"), new Big("1.5"));
+    const sell1 = new Order(acc2, TradeDirection.SELL, Instrument.GBPBTC, new Big("50"), new Big("1.5"));
 
-    G.BROKER.placeOrder(Instrument.GBPBTC, buy1);
-    G.BROKER.placeOrder(Instrument.GBPBTC, sell1);
+    G.BROKER.placeOrder(buy1);
+    G.BROKER.placeOrder(sell1);
 
     const expected = {
         "unit price": new Big("1.5").toString(),

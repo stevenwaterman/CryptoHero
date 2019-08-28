@@ -11,7 +11,13 @@ import {OrderState} from "../../../trading/orderState";
 export type Serialisable = string | number | {[k: string]: Serialisable | Array<Serialisable>};
 
 export default class SER {
-    static NO: (x: Serialisable) => Serialisable = (x) => x;
+    static NO<T extends Serialisable | Array<Serialisable>>(serialisable: T): T {
+        return serialisable;
+    }
+
+    static ERROR(error: Error): string {
+        return error.message;
+    }
 
     static BIG(big: Big): Serialisable {
         return big.toString();

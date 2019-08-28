@@ -18,24 +18,15 @@ function getUrl(orderId: string): string {
 test("Happy Path", done => {
     const account = new Account();
     account.adjustAssets(Asset.BTC, new Big("100"));
-    const order = new Order(account, TradeDirection.BUY, new Big("20"), new Big("1"));
-    G.BROKER.placeOrder(Instrument.GBPBTC, order);
+    const order = new Order(account, TradeDirection.BUY, Instrument.GBPBTC, new Big("20"), new Big("1"));
+    G.BROKER.placeOrder(order);
 
-    const options = {
-        "json": true,
-        "body": {
-            "instrument": Instrument.GBPBTC.name
-        }
-    };
-
-    request.post(getUrl(order.id), options, (error, response, body) => {
+    request.post(getUrl(order.id), (error, response, body) => {
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(200);
 
         expect(body).toEqual("Successful");
-
-        const pending = G.BROKER.getIBroker(Instrument.GBPBTC).getPendingOrders(account).buy;
-        expect(pending).toHaveLength(0);
+        //TODO check that it's actually deleted
         done();
     });
 });
@@ -45,8 +36,8 @@ const testRunner = (name: string, params: any, expectedStatus: number) => {
         const account = new Account();
         account.adjustAssets(Asset.BTC, new Big("100"));
 
-        const order = new Order(account, TradeDirection.BUY, new Big("20"), new Big("1"));
-        G.BROKER.placeOrder(Instrument.GBPBTC, order);
+        const order = new Order(account, TradeDirection.BUY, Instrument.GBPBTC, new Big("20"), new Big("1"));
+        G.BROKER.placeOrder(order);
         if (params.order == null) {
             params.order = order.id;
         }

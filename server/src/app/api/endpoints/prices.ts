@@ -21,11 +21,8 @@ export function setupPriceEndpoints(server: BitcoinExchangeServer): void {
 }
 
 function aggregatePrices(broker: Broker, req: Request, res: Response): void {
-    const prices: Map<Instrument, PriceAggregate> = broker.getAggregatePrices();
-
-    const serialisable = SER.MAP(prices, SER.INSTRUMENT, SER.PRICE_AGGREGATE);
-    res.status(200);
-    res.json(serialisable);
+    const serialiser = SER.MAPFUNC(SER.INSTRUMENT, SER.PRICE_AGGREGATE);
+    res.respond(200, broker.getAggregatePrices(), serialiser);
 }
 
 function instrumentAggregatePrice(broker: Broker, req: Request, res: Response): void {
@@ -33,19 +30,12 @@ function instrumentAggregatePrice(broker: Broker, req: Request, res: Response): 
     if (instrument == null) return;
 
     const iBroker = broker.getIBroker(instrument);
-    const prices: PriceAggregate = iBroker.getAggregatePrices();
-
-    const serialisable = SER.PRICE_AGGREGATE(prices);
-    res.status(200);
-    res.json(serialisable);
+    res.respond(200, iBroker.getAggregatePrices(), SER.PRICE_AGGREGATE);
 }
 
 function marketPrices(broker: Broker, req: Request, res: Response): void {
-    const prices: Map<Instrument, Big> = broker.getMarketPrices();
-
-    const serialisable = SER.MAP(prices, SER.INSTRUMENT, SER.BIG.bind(SER));
-    res.status(200);
-    res.json(serialisable);
+    const serialiser = SER.MAPFUNC(SER.INSTRUMENT, SER.BIG);
+    res.respond(200, broker.getMarketPrices(), serialiser)
 }
 
 function instrumentMarketPrice(broker: Broker, req: Request, res: Response): void {
@@ -53,11 +43,5 @@ function instrumentMarketPrice(broker: Broker, req: Request, res: Response): voi
     if (instrument == null) return;
 
     const iBroker = broker.getIBroker(instrument);
-    const price: Big = iBroker.getMarketPrice();
-
-    const serialisable = {
-        "unit price": SER.BIG(price)
-    };
-    res.status(200);
-    res.json(serialisable);
+    res.respond(200, iBroker.getMarketPrice(), SER.BIG)
 }

@@ -43,27 +43,16 @@ function placeOrder(broker: Broker, req: Request, res: Response): void {
     try {
         broker.placeOrder(order);
     } catch (error) {
-        res.status(400);
-        res.send(error.message);
-        return;
+        return res.respond(400, error, SER.ERROR);
     }
 
-    const out = {
-        "id": order.id
-    };
-    res.status(200);
-    res.json(out);
+    res.respond(200, order, SER.ORDER);
 }
 
 function listOrders(broker: Broker, req: Request, res: Response): void {
     const account = urlGetAccount(broker, req, res);
     if (account == null) return;
-
-    const orders: Array<Order> = account.orders;
-    const serialisable = SER.ARRAY(orders, SER.ORDER);
-
-    res.status(200);
-    res.json(serialisable);
+    res.respond(200, account.orders, SER.ARRAYFUNC(SER.ORDER));
 }
 
 function cancelOrder(broker: Broker, req: Request, res: Response): void {
@@ -74,16 +63,11 @@ function cancelOrder(broker: Broker, req: Request, res: Response): void {
     if (instrument == null) return;
 
     broker.cancelOrder(order);
-
-    res.status(200);
-    res.send("Successful");
+    res.respond(200, "Successful", SER.NO);
 }
 
 function viewOrder(broker: Broker, req: Request, res: Response): void {
     const order = urlGetOrder(broker, req, res);
     if (order == null) return;
-
-    const serialisable = SER.ORDER(order);
-    res.status(200);
-    res.json(serialisable);
+    res.respond(200, order, SER.ORDER);
 }
