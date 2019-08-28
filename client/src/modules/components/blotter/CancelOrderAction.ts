@@ -1,8 +1,8 @@
 import {State} from "../../RootStore";
-import Trade from "../../../models/Trade";
+import Order from "../../../models/Order";
 
 interface IPayload {
-    trade: Trade
+    trade: Order
 }
 
 export const CancelOrderType: string = "CANCEL_ORDER";

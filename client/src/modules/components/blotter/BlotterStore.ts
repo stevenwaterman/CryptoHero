@@ -1,11 +1,11 @@
-import Trade from "../../../models/Trade";
+import Order from "../../../models/Order";
 import BlotterSetCategoryAction from "./BlotterSetCategoryAction";
 import CancelOrderAction from "./CancelOrderAction";
 import ConfirmTradeAction from "../../modals/trade/ConfirmTradeAction";
 
 export default interface BlotterStore {
-    readonly completed: Array<Trade>;
-    readonly pending: Array<Trade>;
+    readonly completed: Array<Order>;
+    readonly pending: Array<Order>;
     readonly showPending: boolean;
 }
 

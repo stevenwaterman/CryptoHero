@@ -1,6 +1,6 @@
 import Instrument from "./Instrument";
 
-export default class Trade {
+export default class Order {
     readonly id: string;
     readonly time: Date;
     readonly instrument: Instrument;

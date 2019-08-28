@@ -1,13 +1,13 @@
 import Instrument from "../../../models/Instrument";
 import ShowViewTradeModalAction from "./ShowViewTradeModalAction";
-import Trade from "../../../models/Trade";
+import Order from "../../../models/Order";
 
 export default interface ViewTradeModalStore {
-    readonly trade: Trade
+    readonly trade: Order
 }
 
 export const initialViewTradeModalStore: ViewTradeModalStore = {
-    trade: new Trade(
+    trade: new Order(
         "6a3ef434-26cb-40d5-9844-ca189a83c177",
         new Date(),
         new Instrument("BTC", "GBP"),

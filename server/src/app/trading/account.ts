@@ -3,6 +3,7 @@ import uuidv4 from "uuid/v4";
 import Asset from "./asset";
 import * as Immutable from "immutable";
 import {REGISTRY} from "../registry";
+import Order from "./order";
 
 export default class Account {
     id: string = uuidv4();
@@ -13,6 +14,8 @@ export default class Account {
     private readonly availableAssets: Map<Asset, Big> = new Map<Asset, Big>(
         Asset.ALL.map((asset: Asset) => [asset, Big("0")])
     );
+
+    readonly orders: Array<Order> = [];
 
     constructor() {
         REGISTRY.registerAccount(this);

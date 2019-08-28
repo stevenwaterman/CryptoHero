@@ -24,6 +24,9 @@
     "moduleResolution": "node",
     "jsx": "preserve"
   },
+  "files": [
+    "./type.d.ts"
+  ],
   "include": [
     "src"
   ]

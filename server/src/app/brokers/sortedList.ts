@@ -18,6 +18,12 @@ export default class SortedList<T> {
         this.comparator = comparator;
     }
 
+    deleteFirstIf(predicate: (first: T) => boolean): void{
+        const first = this.min();
+        if(first == null) return;
+        if(predicate(first)) this.values.shift()
+    }
+
     min(): T | undefined {
         return this.values[0];
     }

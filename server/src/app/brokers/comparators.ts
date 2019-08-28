@@ -12,7 +12,7 @@ function compareTime(a: Order, b: Order): number {
 }
 
 export function buyComparator(a: Order, b: Order): number {
-    const compPrice = b.showUnitPrice.cmp(a.showUnitPrice);
+    const compPrice = b.unitPrice.cmp(a.unitPrice);
     if (compPrice === 0) {
         return compareTime(a, b);
     } else {
@@ -26,7 +26,7 @@ export function buyComparator(a: Order, b: Order): number {
  * Then return 0 iff account ids are the same
  */
 export function sellComparator(a: Order, b: Order): number {
-    const compPrice = a.showUnitPrice.cmp(b.showUnitPrice);
+    const compPrice = a.unitPrice.cmp(b.unitPrice);
     if (compPrice === 0) {
         return compareTime(a, b);
     } else {

@@ -3,25 +3,31 @@ import Big from "big.js";
 import {Map} from "immutable";
 import Instrument from "../../../trading/instrument";
 import Account from "../../../trading/account";
-import Trade from "../../../trading/trade";
 import Order from "../../../trading/order";
 import TradeDirection from "../../../trading/tradeDirection";
-import PendingOrders from "../../../brokers/pendingOrders";
 import PriceAggregate, {PriceAggregateElement} from "../../../brokers/priceAggregate";
+import {OrderState} from "../../../trading/orderState";
+
+export type Serialisable = string | number | {[k: string]: Serialisable | Array<Serialisable>};
 
 export default class SER {
-    static BIG(big: Big): string {
+    static NO: (x: Serialisable) => Serialisable = (x) => x;
+
+    static BIG(big: Big): Serialisable {
         return big.toString();
     }
 
-    static MAP<K, V>(map: Map<K, V>, keyFunc: (k: K) => string, valFunc: (v: V) => any): any {
+    static MAP<K, V>(map: Map<K, V>, keyFunc: (k: K) => string, valFunc: (v: V) => any): Serialisable {
         return map
             .mapKeys(keyFunc)
             .map(valFunc)
             .toObject();
     }
 
-    static MAPFUNC<K, V>(keyFunc: (k: K) => string, valFunc: (v: V) => any): (map: Map<K, V>) => any {
+    static MAPFUNC<K, V>(
+        keyFunc: (k: K) => string,
+        valFunc: (v: V) => Serialisable
+    ): (map: Map<K, V>) => Serialisable {
         return (map: Map<K, V>) => SER.MAP(map, keyFunc, valFunc);
     }
 
@@ -37,58 +43,60 @@ export default class SER {
         return account.id;
     }
 
-    static ARRAY<S, T>(array: Array<S>, func: (s: S) => T): Array<T> {
+    static ARRAY<S, T extends Serialisable>(array: Array<S>, func: (s: S) => T): Array<T> {
         return array.map(func);
-    }
-
-    static TRADE(trade: Trade): any {
-        return {
-            "id": trade.id,
-            "buyer": SER.ACCOUNT(trade.buyer),
-            "seller": SER.ACCOUNT(trade.seller),
-            "units": SER.BIG(trade.units),
-            "unit price": SER.BIG(trade.showUnitPrice)
-        };
     }
 
     static INSTRUMENT(instrument: Instrument): string {
         return instrument.name;
     }
 
-    static ARRAYFUNC<S, T>(func: (s: S) => T): (arr: Array<S>) => Array<T> {
+    static ARRAYFUNC<S, T extends Serialisable>(func: (s: S) => T): (arr: Array<S>) => Array<T> {
         return (arr: Array<S>) => SER.ARRAY(arr, func);
     }
 
-    static ORDER(order: Order): any {
+    static ORDER(
+        {
+            direction,
+            getAveragePrice,
+            getRemainingUnits,
+            id,
+            instrument,
+            originalUnits,
+            state,
+            timestamp: {getTime},
+            unitPrice
+        }: Order
+    ): Serialisable {
         return {
-            "id": order.id,
-            "account": SER.ACCOUNT(order.account),
-            "timestamp": order.timestamp.getTime(),
-            "direction": SER.DIRECTION(order.direction),
-            "units": SER.BIG(order.units),
-            "unit price": SER.BIG(order.showUnitPrice)
+            "id": id,
+            "time": getTime(),
+            "instrument": SER.INSTRUMENT(instrument),
+            "state": SER.ORDER_STATE(state),
+            "direction": SER.DIRECTION(direction),
+            "units": SER.BIG(originalUnits),
+            "unit price": SER.BIG(unitPrice),
+            "remaining units": SER.BIG(getRemainingUnits()),
+            "average price": SER.BIG(getAveragePrice())
+        };
+    }
+
+    static PRICE_AGGREGATE({buy, sell}: PriceAggregate): Serialisable {
+        return {
+            "buy": SER.ARRAY(buy, SER.PRICE_AGGREGATE_ELEMENT),
+            "sell": SER.ARRAY(sell, SER.PRICE_AGGREGATE_ELEMENT)
         }
     }
 
-    static PENDING_ORDERS(pendingOrders: PendingOrders): any {
+    private static PRICE_AGGREGATE_ELEMENT(element: PriceAggregateElement): Serialisable {
         return {
-            "buy": SER.ARRAY(pendingOrders.buy, SER.ORDER),
-            "sell": SER.ARRAY(pendingOrders.sell, SER.ORDER)
-        }
-    }
-
-    static PRICE_AGGREGATE(priceAggregate: PriceAggregate): any {
-        return {
-            "buy": SER.ARRAY(priceAggregate.buy, SER.PRICE_AGGREGATE_ELEMENT),
-            "sell": SER.ARRAY(priceAggregate.sell, SER.PRICE_AGGREGATE_ELEMENT)
-        }
-    }
-
-    private static PRICE_AGGREGATE_ELEMENT(element: PriceAggregateElement): any {
-        return {
-            "unit price": SER.BIG(element.showUnitPrice),
+            "unit price": SER.BIG(element.unitPrice),
             "units": SER.BIG(element.units)
         }
+    }
+
+    private static ORDER_STATE(state: OrderState): Serialisable {
+        return state.name
     }
 }
 

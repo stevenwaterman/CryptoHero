@@ -1,10 +1,10 @@
 import {State} from "../../RootStore";
-import Trade from "../../../models/Trade";
+import Order from "../../../models/Order";
 import {ThunkDsp} from "../../../util/Thunker";
 import Instrument from "../../../models/Instrument";
 
 interface IPayload {
-    newTrade: Trade
+    newTrade: Order
 }
 
 export const ConfirmTradeType: string = "TRADE_CONFIRM";

@@ -1,6 +1,6 @@
 import Instrument from "../../../models/Instrument";
 import ShowViewTradeModalAction from "../viewTrade/ShowViewTradeModalAction";
-import Trade from "../../../models/Trade";
+import Order from "../../../models/Order";
 import ShowTotalFundsModalAction from "./ShowTotalFundsModalAction";
 
 export default interface TotalFundsModalStore {

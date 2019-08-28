@@ -14,20 +14,11 @@ export default class Instrument {
 
     readonly name: string;
     readonly toAsset: Asset;
-    readonly buyerGains: Asset;
-    readonly sellerSpends: Asset;
     readonly fromAsset: Asset;
-    readonly buyerSpends: Asset;
-    readonly sellerGains: Asset;
 
     private constructor(toAsset: Asset, fromAsset: Asset) {
         this.toAsset = toAsset;
-        this.buyerGains = toAsset;
-        this.sellerSpends = toAsset;
-
         this.fromAsset = fromAsset;
-        this.buyerSpends = fromAsset;
-        this.sellerGains = fromAsset;
 
         this.name = `${this.toAsset.name}${this.fromAsset.name}`;
     }

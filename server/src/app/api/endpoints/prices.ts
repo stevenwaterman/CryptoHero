@@ -43,7 +43,7 @@ function instrumentAggregatePrice(broker: Broker, req: Request, res: Response): 
 function marketPrices(broker: Broker, req: Request, res: Response): void {
     const prices: Map<Instrument, Big> = broker.getMarketPrices();
 
-    const serialisable = SER.MAP(prices, SER.INSTRUMENT, SER.BIG);
+    const serialisable = SER.MAP(prices, SER.INSTRUMENT, SER.BIG.bind(SER));
     res.status(200);
     res.json(serialisable);
 }

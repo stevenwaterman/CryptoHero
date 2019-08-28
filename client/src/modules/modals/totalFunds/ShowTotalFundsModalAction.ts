@@ -1,5 +1,5 @@
 import {State} from "../../RootStore";
-import Trade from "../../../models/Trade";
+import Order from "../../../models/Order";
 
 interface IPayload {
     totalFunds: Map<string, number>
@@ -14,7 +14,7 @@ export default interface ShowTotalFundsModalAction {
 
 export function createShowTotalFundsModalAction(state: State): ShowTotalFundsModalAction {
     const totalFunds: Map<string, number> = new Map(state.funds.availableFunds);
-    const pendingOrders: Array<Trade> = state.blotter.pending;
+    const pendingOrders: Array<Order> = state.blotter.pending;
     pendingOrders.forEach(({instrument, isBuy, remainingUnits, unitPrice}) => {
         const lockedAsset = isBuy ? instrument.asset2 : instrument.asset1;
         const lockedAmount = isBuy ? remainingUnits * unitPrice : remainingUnits;

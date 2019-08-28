@@ -1,11 +1,11 @@
 import React from "react";
 import {ELEMENT} from "../../../modules/RootStore";
-import Trade from "../../../models/Trade";
+import Order from "../../../models/Order";
 import {formatMoney} from "../../../util/FormatMoney";
 
 export interface TradeRowProps {
     onClick: (id: string) => void
-    trade: Trade
+    trade: Order
 }
 
 function getClass(buying: boolean): string {

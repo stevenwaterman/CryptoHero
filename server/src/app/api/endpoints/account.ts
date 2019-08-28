@@ -11,54 +11,33 @@ import {bodyGetUnits} from "../util/paramaters/body/bodyGetUnits";
 import Account from "../../trading/account";
 import SER from "../util/serialisation/SER";
 
+
 export function setupAccountsEndpoints(server: BitcoinExchangeServer): void {
     const app = server.app;
     const broker = server.broker;
 
     app.post("/api/account/create", withBroker(broker, createAccount));
 
-    app.get("/api/account/:account/assets/available", withBroker(broker, getAvailableAssets));
-    app.get("/api/account/:account/assets/total", withBroker(broker, getTotalAssets));
-
-    app.get("/api/account/:account/assets/:asset/available", withBroker(broker, assetGetAvailable));
-    app.get("/api/account/:account/assets/:asset/total", withBroker(broker, assetGetTotal));
-    app.post("/api/account/:account/assets/:asset/deposit", withBroker(broker, assetDeposit));
-    app.post("/api/account/:account/assets/:asset/withdraw", withBroker(broker, assetWithdraw));
+    app.get("/api/account/:account/assets/available", withBroker(broker, getAllAvailableAssets));
+    app.get("/api/account/:account/assets/:asset/available", withBroker(broker, getOneAvailableAsset));
+    app.post("/api/account/:account/assets/:asset/deposit", withBroker(broker, depositAsset));
+    app.post("/api/account/:account/assets/:asset/withdraw", withBroker(broker, withdrawAsset));
 }
 
 function createAccount(broker: Broker, req: Request, res: Response): void {
     const account = new Account();
-
-    const out = {
-        "id": account.id
-    };
-    res.status(200);
-    res.json(out);
+    res.respond(200, account, SER.ACCOUNT);
 }
 
-function getAvailableAssets(broker: Broker, req: Request, res: Response): void {
+function getAllAvailableAssets(broker: Broker, req: Request, res: Response): void {
     const account = urlGetAccount(broker, req, res);
     if (account == null) return;
+
     const assets: Map<Asset, Big> = account.getAllAvailableAssets();
-
-    const serialisable = SER.MAP(assets, SER.ASSET, SER.BIG);
-    res.status(200);
-    res.json(serialisable);
+    res.respond(200, assets, SER.MAPFUNC(SER.ASSET, SER.BIG));
 }
 
-function getTotalAssets(broker: Broker, req: Request, res: Response): void {
-    const account = urlGetAccount(broker, req, res);
-    if (account == null) return;
-    const available: Map<Asset, Big> = account.getAllAvailableAssets();
-    const locked: Map<Asset, Big> = broker.getLockedAssets(account);
-    const total: Map<Asset, Big> = available.mergeWith((oldVal, newVal) => oldVal.plus(newVal), locked);
-
-    const serialisable = SER.MAP(total, SER.ASSET, SER.BIG);
-    res.status(200);
-    res.json(serialisable);
-}
-
-function assetGetAvailable(broker: Broker, req: Request, res: Response): void {
+function getOneAvailableAsset(broker: Broker, req: Request, res: Response): void {
     const account = urlGetAccount(broker, req, res);
     if (account == null) return;
 
@@ -66,34 +45,10 @@ function assetGetAvailable(broker: Broker, req: Request, res: Response): void {
     if (asset == null) return;
 
     const amount: Big = account.getAvailableAssets(asset);
-
-    const serialisable = {
-        "amount": SER.BIG(amount)
-    };
-    res.status(200);
-    res.json(serialisable);
+    res.respond(200, amount, SER.BIG);
 }
 
-function assetGetTotal(broker: Broker, req: Request, res: Response): void {
-    const account = urlGetAccount(broker, req, res);
-    if (account == null) return;
-
-    const asset = urlGetAsset(broker, req, res);
-    if (asset == null) return;
-
-    const available = account.getAvailableAssets(asset);
-    const lockedAssets: Map<Asset, Big> = broker.getLockedAssets(account);
-    const locked = <Big>lockedAssets.get(asset);
-    const total: Big = available.plus(locked);
-
-    const serialisable = {
-        "amount": SER.BIG(total)
-    };
-    res.status(200);
-    res.json(serialisable);
-}
-
-function assetDeposit(broker: Broker, req: Request, res: Response): void {
+function depositAsset(broker: Broker, req: Request, res: Response): void {
     const account = urlGetAccount(broker, req, res);
     if (account == null) return;
 
@@ -103,18 +58,15 @@ function assetDeposit(broker: Broker, req: Request, res: Response): void {
     const units = bodyGetUnits(broker, req, res);
     if (units == null) return;
     if (units.lte(new Big("0"))) {
-        res.status(400);
-        res.send(`Amount must be positive, was ${units}`);
-        return;
+        const out = `Amount must be positive, was ${units}`;
+        return res.respond(400, out, SER.NO);
     }
 
     account.adjustAssets(asset, units);
-
-    res.status(200);
-    res.send("Successful");
+    return res.respond(200, "Successful", SER.NO);
 }
 
-function assetWithdraw(broker: Broker, req: Request, res: Response): void {
+function withdrawAsset(broker: Broker, req: Request, res: Response): void {
     const account = urlGetAccount(broker, req, res);
     if (account == null) return;
 
@@ -131,9 +83,7 @@ function assetWithdraw(broker: Broker, req: Request, res: Response): void {
         return;
     }
 
-    const adjustment = new Big("0").minus(units);
-    account.adjustAssets(asset, adjustment);
-
-    res.status(200);
-    res.send("Successful");
+    const negative = new Big("0").minus(units);
+    account.adjustAssets(asset, negative);
+    res.respond(200, "Successful", SER.NO);
 }

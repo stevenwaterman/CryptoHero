@@ -2,7 +2,7 @@ import {Button, Modal} from "react-bootstrap";
 import {formatMoney} from "../../../../util/FormatMoney";
 import React from "react";
 import {ELEMENT} from "../../../../modules/RootStore";
-import Trade from "../../../../models/Trade";
+import Order from "../../../../models/Order";
 import {ViewTradeModalProps} from "../ViewTradeModalContainer";
 
 export default class FinishedSell extends React.PureComponent<ViewTradeModalProps> {

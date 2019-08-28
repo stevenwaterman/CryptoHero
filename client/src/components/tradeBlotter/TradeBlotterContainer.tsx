@@ -2,7 +2,7 @@ import {connect} from "react-redux";
 import {State} from "../../modules/RootStore";
 import TradeBlotter from "./TradeBlotter";
 import {ThunkDispatch} from "redux-thunk";
-import Trade from "../../models/Trade";
+import Order from "../../models/Order";
 import BlotterSetCategoryAction, {createBlotterSetCategoryAction} from "../../modules/components/blotter/BlotterSetCategoryAction";
 import ShowViewTradeModalAction, {createShowViewTradeModalAction} from "../../modules/modals/viewTrade/ShowViewTradeModalAction";
 import {fire, ThunkDsp} from "../../util/Thunker";
@@ -16,7 +16,7 @@ interface DispatchProps {
 
 export interface StateProps {
     pendingSelected: boolean
-    trades: Array<Trade>
+    trades: Array<Order>
 }
 
 interface OwnProps {
@@ -35,7 +35,7 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     const showPending = state.blotter.showPending;
     const relevant = showPending ? state.blotter.pending : state.blotter.completed;
     const selectedInstrument = state.instruments.selectedInstrument;
-    const filtered = relevant.filter((trade: Trade) => trade.instrument.name === selectedInstrument.name);
+    const filtered = relevant.filter((trade: Order) => trade.instrument.name === selectedInstrument.name);
     return {
         pendingSelected: state.blotter.showPending,
         trades: filtered

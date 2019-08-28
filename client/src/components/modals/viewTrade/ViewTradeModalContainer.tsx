@@ -4,7 +4,7 @@ import ViewTradeModal from "./ViewTradeModal";
 import {ThunkDispatch} from "redux-thunk";
 import HideViewTradeModalAction, {createHideViewTradeModalAction} from "../../../modules/modals/viewTrade/HideViewTradeModalAction";
 import CancelOrderAction, {createCancelOrderAction} from "../../../modules/components/blotter/CancelOrderAction";
-import Trade from "../../../models/Trade";
+import Order from "../../../models/Order";
 import {fireNP, ThunkDsp} from "../../../util/Thunker";
 
 type Actions = CancelOrderAction | HideViewTradeModalAction
@@ -16,7 +16,7 @@ interface DispatchProps {
 
 interface StateProps {
     show: boolean,
-    trade: Trade
+    trade: Order
 }
 
 interface OwnProps {

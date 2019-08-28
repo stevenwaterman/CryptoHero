@@ -6,68 +6,53 @@ import Instrument from "../trading/instrument";
 import Order from "../trading/order";
 import TradeDirection from "../trading/tradeDirection";
 import Account from "../trading/account";
-import Asset from "../trading/asset";
-import PendingOrders from "./pendingOrders";
 import PriceAggregate, {PriceAggregateElement} from "./priceAggregate";
+import {OrderState} from "../trading/orderState";
+
+
 
 /**
  * The matcher accepts orders and matches them to create trades
  */
 export default class InstrumentBroker {
-    readonly instrument: Instrument;
     private readonly buys: SortedList<Order> = new SortedList(buyComparator);
     private readonly sells: SortedList<Order> = new SortedList(sellComparator);
-    private readonly trades: Array<Trade> = [];
+    private lastPrice: Big = new Big("0");
 
-    constructor(instrument: Instrument) {
-        this.instrument = instrument;
+    private static sortOrders(order: Order, matched: Order): [Order, Order] {
+        const buy = order.direction === TradeDirection.BUY ? order : matched;
+        const sell = matched.direction === TradeDirection.SELL ? matched : order;
+        return [buy, sell]
     }
 
     /**
      * Performs a tradeModal on two matched orders. Adjusts the units of the two orders.
-     * @param instrument The instrument to tradeModal in
      * @param order The new order. Must be defined + not null
      * @param matched The old order from the book. Must be define + not null
      * @returns {Trade} The tradeModal produced from matching the orders.
      */
     private static makeTrade(
-        instrument: Instrument,
         order: Order,
         matched: Order
-    ): Trade {
-        const buy = order.direction === TradeDirection.BUY ? order : matched;
-        const sell = matched.direction === TradeDirection.SELL ? matched : order;
-
-        const unitPrice = matched.showUnitPrice;
+    ): void {
+        const [buy, sell] = InstrumentBroker.sortOrders(order, matched);
+        const unitPrice = matched.unitPrice;
         const units = InstrumentBroker.getUnitsTraded(order, matched);
-        buy.units = buy.units.minus(units);
-        sell.units = sell.units.minus(units);
-
-        InstrumentBroker.updatePositionOnTrade(
-            instrument,
-            buy,
-            sell,
-            units,
-            unitPrice
-        );
-        return new Trade(buy.account, sell.account, units, unitPrice);
+        const trade = new Trade(buy.account, sell.account, units, unitPrice);
+        buy.trades.push(trade);
+        sell.trades.push(trade);
+        InstrumentBroker.updateStateIfComplete(order);
+        InstrumentBroker.updateStateIfComplete(matched);
+        InstrumentBroker.updatePositionOnTrade(buy, sell, units, unitPrice);
     }
 
     /**
      * Tells you whether a tradeModal can be done between two orders.
      * One of the orders must be a buy, the other must be a sell.
      */
-    private static tradePossible(o1: Order, o2: Order): boolean {
-        if (o1.units.lte(new Big("0")) || o2.units.lte(new Big("0"))) return false;
-
-        switch (o1.direction) {
-            case TradeDirection.BUY:
-                return o1.showUnitPrice.gte(o2.showUnitPrice);
-            case TradeDirection.SELL:
-                return o1.showUnitPrice.lte(o2.showUnitPrice);
-            default:
-                throw `Unrecognised trade direction: ${o1.direction}`;
-        }
+    private static tradePossible(order: Order, matched: Order): boolean {
+        const [buy, sell] = InstrumentBroker.sortOrders(order, matched);
+        return buy.unitPrice.gte(sell.unitPrice);
     }
 
     /**
@@ -77,8 +62,8 @@ export default class InstrumentBroker {
      * @returns {Big} The number of units that can be traded between the two orders
      */
     private static getUnitsTraded(o1: Order, o2: Order): Big {
-        const o1Units = o1.units;
-        const o2Units = o2.units;
+        const o1Units = o1.getRemainingUnits();
+        const o2Units = o2.getRemainingUnits();
         if (o1Units.lt(o2Units)) {
             return o1Units;
         } else {
@@ -87,108 +72,56 @@ export default class InstrumentBroker {
     }
 
     private static updatePositionOnPlaceOrder(
-        instrument: Instrument,
-        order: Order
+        {account, spentAsset: assetToLock, originallyLocked: amountToLock}: Order
     ): void {
-        const account: Account = order.account;
-        const asset: Asset =
-            order.direction === TradeDirection.BUY
-                ? instrument.buyerSpends
-                : instrument.sellerSpends;
-
-        const amount: Big = order.spendAmount;
-
-        const position = account.getAvailableAssets(asset);
-        if (position.lt(amount)) {
-            throw `Account cannot afford ${amount}${asset.name}, only has ${position}`;
+        const position = account.getAvailableAssets(assetToLock);
+        if (position.lt(amountToLock)) {
+            throw `Account cannot afford ${amountToLock}${assetToLock.name}, only has ${position}`;
         }
 
-        const subAmount = new Big("0").minus(amount);
-        account.adjustAssets(asset, subAmount);
+        const negativeAdjustment = new Big("0").minus(amountToLock);
+        account.adjustAssets(assetToLock, negativeAdjustment);
     }
 
     private static updatePositionOnCancelOrder(
-        instrument: Instrument,
-        order: Order
+        {account, spentAsset: assetToUnlock, originallyLocked, ...rest}: Order
     ): void {
-        const account = order.account;
-        const asset =
-            order.direction === TradeDirection.BUY
-                ? instrument.buyerSpends
-                : instrument.sellerSpends;
-        const amount = order.spendAmount;
-        account.adjustAssets(asset, amount);
+
+        const fractionRemaining: Big = rest.getRemainingFraction();
+        const amountToUnlock: Big = originallyLocked.mul(fractionRemaining);
+        account.adjustAssets(assetToUnlock, amountToUnlock);
     }
 
     private static updatePositionOnBuy(
-        instrument: Instrument,
-        order: Order,
+        {account, gainedAsset, unitPrice}: Order,
         actualUnits: Big,
         actualUnitPrice: Big
     ): void {
-        const account = order.account;
-        const gaining: Asset = instrument.buyerGains;
-        const spending: Asset = instrument.buyerSpends;
+        account.adjustAssets(gainedAsset, actualUnits);
 
-        // noinspection UnnecessaryLocalVariableJS
-        const gainedAmount = actualUnits;
-        account.adjustAssets(gaining, gainedAmount);
-
-        const expectedSpend = actualUnits.mul(order.showUnitPrice);
+        const expectedSpend = actualUnits.mul(unitPrice);
         const actuallySpent = actualUnits.mul(actualUnitPrice);
         const refundDue = expectedSpend.minus(actuallySpent);
-        account.adjustAssets(spending, refundDue);
+        account.adjustAssets(gainedAsset, refundDue);
     }
 
     private static updatePositionOnTrade(
-        instrument: Instrument,
         buyOrder: Order,
         sellOrder: Order,
         units: Big,
         unitPrice: Big
     ): void {
-        InstrumentBroker.updatePositionOnBuy(
-            instrument,
-            buyOrder,
-            units,
-            unitPrice
-        );
-        InstrumentBroker.updatePositionOnSell(
-            instrument,
-            sellOrder,
-            units,
-            unitPrice
-        );
+        InstrumentBroker.updatePositionOnBuy(buyOrder, units, unitPrice);
+        InstrumentBroker.updatePositionOnSell(sellOrder, units, unitPrice);
     }
 
     private static updatePositionOnSell(
-        instrument: Instrument,
-        order: Order,
+        {account, gainedAsset}: Order,
         actualUnits: Big,
         actualUnitPrice: Big
     ): void {
-        const account = order.account;
-        const gaining = instrument.sellerGains;
-
-        // noinspection UnnecessaryLocalVariableJS
         const gainedAmount = actualUnits.mul(actualUnitPrice);
-        account.adjustAssets(gaining, gainedAmount);
-    }
-
-    /**
-     * Returns the list of all trades involving a given account
-     */
-    getTrades(account: Account): Array<Trade> {
-        return this.trades.filter(
-            trade => trade.buyer.id === account.id || trade.seller.id === account.id
-        );
-    }
-
-    getPendingOrders(account: Account): PendingOrders {
-        return new PendingOrders(
-            this.getPendingBuys(account),
-            this.getPendingSells(account)
-        );
+        account.adjustAssets(gainedAsset, gainedAmount);
     }
 
     /**
@@ -206,20 +139,6 @@ export default class InstrumentBroker {
         }
     }
 
-    getLockedAssets(account: Account): [Big, Big] {
-        const pendingOrders = this.getPendingOrders(account);
-        const buy = pendingOrders.buy;
-        const sell = pendingOrders.sell;
-
-        const a1 = sell
-            .map(it => it.spendAmount)
-            .reduce((a, b) => a.plus(b), new Big("0"));
-        const a2 = buy
-            .map(it => it.spendAmount)
-            .reduce((a, b) => a.plus(b), new Big("0"));
-        return [a1, a2];
-    }
-
     /**
      * Matches the order param with orders from the book until no more can be made
      * then adds the order to the book if it has any remaining quantity.
@@ -231,9 +150,9 @@ export default class InstrumentBroker {
             throw `Unrecognised TradeDirection: ${order.direction}`;
 
         this.selfTradeGuard(order);
-        InstrumentBroker.updatePositionOnPlaceOrder(this.instrument, order);
+        InstrumentBroker.updatePositionOnPlaceOrder(order);
         this.makeTrades(order);
-        if (order.units.gt(new Big("0"))) {
+        if (order.getRemainingUnits().gt(new Big("0"))) {
             this.pushOrder(order);
         }
     }
@@ -247,31 +166,13 @@ export default class InstrumentBroker {
         }
     }
 
-    private getPendingBuys(account: Account): Array<Order> {
-        return this.buys
-            .underlying()
-            .filter(order => order.account.id === account.id);
-    }
-
-    private getPendingSells(account: Account): Array<Order> {
-        return this.sells
-            .underlying()
-            .filter(order => order.account.id === account.id);
-    }
-
     /**
      * Checks the first order on the buy and sell lists and removes them if there's no units left
      */
     private clearCompletedOrders(): void {
-        const buy = this.buys.min();
-        if (buy != null && buy.units.lte(new Big("0"))) {
-            this.buys.delete(buy);
-        }
-
-        const sell = this.sells.min();
-        if (sell != null && sell.units.lte(new Big("0"))) {
-            this.sells.delete(sell);
-        }
+        const shouldDelete = (order: Order) => order.state === OrderState.COMPLETE;
+        this.buys.deleteFirstIf(shouldDelete);
+        this.sells.deleteFirstIf(shouldDelete);
     }
 
     /**
@@ -294,9 +195,7 @@ export default class InstrumentBroker {
     private makeTrades(order: Order): void {
         let match = this.getPotentialOrderMatch(order);
         while (match != null && InstrumentBroker.tradePossible(order, match)) {
-            const trade = InstrumentBroker.makeTrade(this.instrument, order, match);
-            this.trades.push(trade);
-
+            InstrumentBroker.makeTrade(order, match);
             this.clearCompletedOrders();
             match = this.getPotentialOrderMatch(order);
         }
@@ -305,13 +204,13 @@ export default class InstrumentBroker {
     private cancelBuy(order: Order): void {
         if (!this.buys.includes(order)) throw "Order was not pending";
         this.buys.delete(order);
-        InstrumentBroker.updatePositionOnCancelOrder(this.instrument, order);
+        InstrumentBroker.updatePositionOnCancelOrder(order);
     }
 
     private cancelSell(order: Order): void {
         if (!this.sells.includes(order)) throw "Order was not pending";
         this.sells.delete(order);
-        InstrumentBroker.updatePositionOnCancelOrder(this.instrument, order);
+        InstrumentBroker.updatePositionOnCancelOrder(order);
     }
 
     private selfTradeGuard(order: Order): void {
@@ -324,8 +223,7 @@ export default class InstrumentBroker {
     }
 
     getMarketPrice(): Big {
-        if (this.trades.length === 0) return Big("0");
-        return this.trades[this.trades.length - 1].showUnitPrice;
+        return this.lastPrice;
     }
 
     private selfTradeBuyingGuard(buy: Order): void {
@@ -333,8 +231,8 @@ export default class InstrumentBroker {
             .underlying()
             .find(sell => buy.account.id === sell.account.id);
 
-        if (bestSell != null && buy.showUnitPrice.gte(bestSell.showUnitPrice)) {
-            throw `Would cause self-trade. Buy order placed @ ${buy.showUnitPrice}, sell exists @ ${bestSell.showUnitPrice}`;
+        if (bestSell != null && buy.unitPrice.gte(bestSell.unitPrice)) {
+            throw `Would cause self-trade. Buy order placed @ ${buy.unitPrice}, sell exists @ ${bestSell.unitPrice}`;
         }
     }
 
@@ -349,24 +247,24 @@ export default class InstrumentBroker {
             .underlying()
             .find(buy => buy.account.id === sell.account.id);
 
-        if (bestBuy != null && bestBuy.showUnitPrice.gte(sell.showUnitPrice)) {
-            throw `Would cause self-trade. Sell order placed @ ${sell.showUnitPrice}, buy exists @ ${bestBuy.showUnitPrice}`;
+        if (bestBuy != null && bestBuy.unitPrice.gte(sell.unitPrice)) {
+            throw `Would cause self-trade. Sell order placed @ ${sell.unitPrice}, buy exists @ ${bestBuy.unitPrice}`;
         }
     }
 
     private aggregateOrders(orders: Array<Order>): Array<PriceAggregateElement> {
         const reducer = (acc: Array<PriceAggregateElement>, order: Order) => {
             if (acc.length === 0) {
-                acc.push(new PriceAggregateElement(order.showUnitPrice, order.units));
+                acc.push(new PriceAggregateElement(order.unitPrice, order.getRemainingUnits()));
                 return acc;
             }
 
             const last = acc[acc.length - 1];
-            if (order.showUnitPrice.eq(last.showUnitPrice)) {
-                last.units = last.units.plus(order.units);
+            if (order.unitPrice.eq(last.unitPrice)) {
+                last.units = last.units.plus(order.getRemainingUnits());
                 return acc;
             } else {
-                acc.push(new PriceAggregateElement(order.showUnitPrice, order.units));
+                acc.push(new PriceAggregateElement(order.unitPrice, order.getRemainingUnits()));
                 return acc;
             }
         };
@@ -377,6 +275,12 @@ export default class InstrumentBroker {
     clear(): void {
         this.buys.underlying().length = 0;
         this.sells.underlying().length = 0;
-        this.trades.length = 0;
+    }
+
+    private static updateStateIfComplete(order: Order): void {
+        const remaining = order.getRemainingUnits();
+        if(remaining.eq(new Big("0"))){
+            order.state = OrderState.COMPLETE;
+        }
     }
 }

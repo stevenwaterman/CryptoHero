@@ -3,10 +3,10 @@ import Broker from "../brokers/broker";
 import {setupOrdersEndpoints} from "./endpoints/orders";
 import cors from "cors";
 import {setupAccountsEndpoints} from "./endpoints/account";
-import {setupTradesEndpoints} from "./endpoints/trades";
 import {setupPriceEndpoints} from "./endpoints/prices";
 import * as http from "http";
 import {setupInstrumentEndpoints} from "./endpoints/instruments";
+
 
 export default class BitcoinExchangeServer {
     readonly app: Express = express();
@@ -21,7 +21,6 @@ export default class BitcoinExchangeServer {
         setupInstrumentEndpoints(this);
         setupOrdersEndpoints(this);
         setupPriceEndpoints(this);
-        setupTradesEndpoints(this);
     }
 
     launch(port: number): void {

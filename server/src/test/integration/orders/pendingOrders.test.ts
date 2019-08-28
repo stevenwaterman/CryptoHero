@@ -31,7 +31,7 @@ test("Happy Path", done => {
                     "direction": order.direction.name,
                     "timestamp": order.timestamp.getTime(),
                     "units": order.units.toString(),
-                    "unit price": order.showUnitPrice.toString()
+                    "unit price": order.unitPrice.toString()
                 }
             ],
             "sell": []

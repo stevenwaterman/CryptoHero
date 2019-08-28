@@ -122,7 +122,7 @@ describe("matching orders", () => {
         expectNoTrades(acc1);
     });
 
-    test("Simple Trade", () => {
+    test("Simple Order", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
         placeSell(acc2, new Big("1"), new Big("1"));
         const trade = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
@@ -144,7 +144,7 @@ describe("matching orders", () => {
         expectNoTrades(acc2);
     });
 
-    test("Trade happens at best price for second person (buy first)", () => {
+    test("Order happens at best price for second person (buy first)", () => {
         placeBuy(acc1, new Big("1"), new Big("1.1"));
         placeSell(acc2, new Big("1"), new Big("1"));
         const trade = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1.1"));
@@ -152,7 +152,7 @@ describe("matching orders", () => {
         expectExactly(acc2, trade);
     });
 
-    test("Trade happens at best price for second person (sell first)", () => {
+    test("Order happens at best price for second person (sell first)", () => {
         placeSell(acc1, new Big("1"), new Big("1"));
         placeBuy(acc2, new Big("1"), new Big("1.1"));
         const trade = new ExpectedTrade(acc2, acc1, new Big("1"), new Big("1"));
@@ -491,7 +491,7 @@ describe("Cancel order", () => {
     });
 });
 
-describe("Self-Trade prevention", () => {
+describe("Self-Order prevention", () => {
     test("Buy first", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
         const sell = new Order(acc1, TradeDirection.SELL, new Big("1"), new Big("1"));
