@@ -22,16 +22,14 @@ describe("buyComparator", () => {
 
     beforeEach(() => {
         order1 = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC, new Big("100"), new Big("1.14"));
-        order2 = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC,new Big("100"), new Big("1.2"));
+        order2 = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC, new Big("100"), new Big("1.2"));
 
-        order3 = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC,new Big("100"), new Big("1.14"));
+        order3 = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC, new Big("100"), new Big("1.14"));
         order3.timestamp.setTime(order1.timestamp.getTime() + 1000);
 
-        order4 = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC,new Big("200"), new Big("1.14"));
-        order4.timestamp.setTime(order1.timestamp.getTime());
-        //TODO set order 4 id = order 1
+        order4 = {...order1};
 
-        order5 = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC,new Big("200"), new Big("1.14"));
+        order5 = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC, new Big("200"), new Big("1.14"));
         order5.timestamp.setTime(order1.timestamp.getTime());
     });
 
@@ -63,17 +61,15 @@ describe("sellComparator", () => {
     let order5: Order;
 
     beforeEach(() => {
-        order1 = new Order(acc1, TradeDirection.SELL, Instrument.GBPBTC,new Big("100"), new Big("1.14"));
-        order2 = new Order(acc1, TradeDirection.SELL,Instrument.GBPBTC, new Big("100"), new Big("1.2"));
+        order1 = new Order(acc1, TradeDirection.SELL, Instrument.GBPBTC, new Big("100"), new Big("1.14"));
+        order2 = new Order(acc1, TradeDirection.SELL, Instrument.GBPBTC, new Big("100"), new Big("1.2"));
 
-        order3 = new Order(acc1, TradeDirection.SELL,Instrument.GBPBTC, new Big("100"), new Big("1.14"));
+        order3 = new Order(acc1, TradeDirection.SELL, Instrument.GBPBTC, new Big("100"), new Big("1.14"));
         order3.timestamp.setTime(order1.timestamp.getTime() + 1000);
 
-        order4 = new Order(acc1, TradeDirection.SELL, Instrument.GBPBTC,new Big("200"), new Big("1.14"));
-        order4.timestamp.setTime(order1.timestamp.getTime());
-        //tODO set order 4 id = order 1id
+        order4 = {...order1};
 
-        order5 = new Order(acc1, TradeDirection.SELL, Instrument.GBPBTC,new Big("200"), new Big("1.14"));
+        order5 = new Order(acc1, TradeDirection.SELL, Instrument.GBPBTC, new Big("200"), new Big("1.14"));
         order5.timestamp.setTime(order1.timestamp.getTime());
     });
 

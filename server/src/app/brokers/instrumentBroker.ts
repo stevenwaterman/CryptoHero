@@ -2,13 +2,10 @@ import SortedList from "./sortedList";
 import Trade from "../trading/trade";
 import {buyComparator, sellComparator} from "./comparators";
 import {Big} from "big.js";
-import Instrument from "../trading/instrument";
 import Order from "../trading/order";
 import TradeDirection from "../trading/tradeDirection";
-import Account from "../trading/account";
 import PriceAggregate, {PriceAggregateElement} from "./priceAggregate";
 import {OrderState} from "../trading/orderState";
-
 
 
 /**
@@ -29,12 +26,12 @@ export default class InstrumentBroker {
      * Performs a tradeModal on two matched orders. Adjusts the units of the two orders.
      * @param order The new order. Must be defined + not null
      * @param matched The old order from the book. Must be define + not null
-     * @returns {Trade} The tradeModal produced from matching the orders.
+     * @returns {Big} The price that the trade executed at
      */
     private static makeTrade(
         order: Order,
         matched: Order
-    ): void {
+    ): Big {
         const [buy, sell] = InstrumentBroker.sortOrders(order, matched);
         const unitPrice = matched.unitPrice;
         const units = InstrumentBroker.getUnitsTraded(order, matched);
@@ -44,6 +41,7 @@ export default class InstrumentBroker {
         InstrumentBroker.updateStateIfComplete(order);
         InstrumentBroker.updateStateIfComplete(matched);
         InstrumentBroker.updatePositionOnTrade(buy, sell, units, unitPrice);
+        return unitPrice;
     }
 
     /**
@@ -195,7 +193,7 @@ export default class InstrumentBroker {
     private makeTrades(order: Order): void {
         let match = this.getPotentialOrderMatch(order);
         while (match != null && InstrumentBroker.tradePossible(order, match)) {
-            InstrumentBroker.makeTrade(order, match);
+            this.lastPrice = InstrumentBroker.makeTrade(order, match);
             this.clearCompletedOrders();
             match = this.getPotentialOrderMatch(order);
         }
@@ -203,12 +201,14 @@ export default class InstrumentBroker {
 
     private cancelBuy(order: Order): void {
         if (!this.buys.includes(order)) throw "Order was not pending";
+        order.state = OrderState.CANCELLED;
         this.buys.delete(order);
         InstrumentBroker.updatePositionOnCancelOrder(order);
     }
 
     private cancelSell(order: Order): void {
         if (!this.sells.includes(order)) throw "Order was not pending";
+        order.state = OrderState.CANCELLED;
         this.sells.delete(order);
         InstrumentBroker.updatePositionOnCancelOrder(order);
     }

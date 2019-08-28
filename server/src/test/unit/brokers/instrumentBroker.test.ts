@@ -5,44 +5,29 @@ import {Big} from "big.js";
 import Instrument from "../../../app/trading/instrument";
 import TradeDirection from "../../../app/trading/tradeDirection";
 import Asset from "../../../app/trading/asset";
-import {ExpectedOrder, ExpectedPending, ExpectedTrade} from "./expected";
+import {
+    ExpectedOrder,
+    ExpectedPending,
+    ExpectedTrade,
+    expectOrders,
+    placeBuy,
+    placeSell,
+    testIBroker
+} from "../expected";
 import PriceAggregate, {PriceAggregateElement} from "../../../app/brokers/priceAggregate";
+import {OrderState} from "../../../app/trading/orderState";
 
 let acc1: Account, acc2: Account, acc3: Account, acc4: Account;
-let iBroker: InstrumentBroker;
 beforeEach(() => {
     acc1 = new Account();
     acc2 = new Account();
     acc3 = new Account();
     acc4 = new Account();
-    iBroker = new InstrumentBroker();
     [acc1, acc2, acc3, acc4].forEach(acc => {
         acc.adjustAssets(Asset.GBP, new Big("1000"));
         acc.adjustAssets(Asset.BTC, new Big("1000"));
     });
 });
-
-const placeBuy = function (account: Account, units: Big, price: Big): ExpectedOrder {
-    iBroker.place(new Order(account, TradeDirection.BUY, Instrument.GBPBTC,units, price));
-    return new ExpectedOrder(account, TradeDirection.BUY,  Instrument.GBPBTC,units, price);
-};
-
-const placeSell = function (account: Account, units: Big, price: Big): ExpectedOrder {
-    iBroker.place(new Order(account, TradeDirection.SELL, Instrument.GBPBTC, units, price));
-    return new ExpectedOrder(account, TradeDirection.SELL, Instrument.GBPBTC, units, price);
-};
-
-const expectNoTrades = function (account: Account): void {
-    expectTradeCount(account, 0);
-};
-
-const expectTradeCount = function (account: Account, count: number): void {
-    //TODO expect(iBroker.getTrades(account)).toHaveLength(count);
-};
-
-const expectExactly = function (account: Account, ...trades: Array<any>): void {
-    //TODO expect(iBroker.getTrades(account)).toMatchObject(trades);
-};
 
 describe("adding orders", () => {
     let sellOrder: Order;
@@ -59,122 +44,123 @@ describe("adding orders", () => {
 
     test("can add sell order", () => {
         expect(() => {
-            iBroker.place(sellOrder);
+            testIBroker.place(sellOrder);
         }).not.toThrow();
     });
 
     test("can add sell order with -ve price", () => {
         expect(() => {
-            iBroker.place(sellOrderNegPrice);
+            testIBroker.place(sellOrderNegPrice);
         }).not.toThrow();
     });
 
     test("can add buy order", () => {
         expect(() => {
-            iBroker.place(buyOrder);
+            testIBroker.place(buyOrder);
         }).not.toThrow();
     });
 
     test("can add buy order with -ve price", () => {
         expect(() => {
-            iBroker.place(buyOrderNegPrice);
+            testIBroker.place(buyOrderNegPrice);
         }).not.toThrow();
     });
 
     test("can't add a buy order that they can't afford", () => {
         acc1.adjustAssets(Asset.BTC, new Big("-900"));
         expect(() => {
-            iBroker.place(buyOrder);
+            testIBroker.place(buyOrder);
         }).toThrow();
     });
 
     test("can't add a sell order that they can't afford", () => {
         acc1.adjustAssets(Asset.GBP, new Big("-950"));
         expect(() => {
-            iBroker.place(sellOrder);
+            testIBroker.place(sellOrder);
         }).toThrow();
     });
 });
 
 describe("matching orders", () => {
-    test("Test our expectedTrade helper function", () => {
-        placeBuy(acc1, new Big("1"), new Big("1"));
-        placeSell(acc2, new Big("1"), new Big("1"));
-
-        //Check that our expected tradeModal correctly doesn't match
-        const trade1 = new ExpectedTrade(acc2, acc1, new Big("1"), new Big("1"));
-        //TODO expect(iBroker.getTrades(acc1)).not.toMatchObject([trade1]);
-
-        //Check that it does match when it should
-        const trade2 = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
-        //TODO expect(iBroker.getTrades(acc1)).toMatchObject([trade2]);
-    });
-
-    test("No trades by default", () => {
-        expectNoTrades(acc1);
-    });
-
     test("Simple Order", () => {
-        placeBuy(acc1, new Big("1"), new Big("1"));
-        placeSell(acc2, new Big("1"), new Big("1"));
+        const o1 = placeBuy(Instrument.GBPBTC, acc1, new Big("1"), new Big("1"));
+        const o2 = placeSell(Instrument.GBPBTC, acc2, new Big("1"), new Big("1"));
         const trade = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
-        expectExactly(acc1, trade);
-        expectExactly(acc2, trade);
+        o1.trades.push(trade);
+        o2.trades.push(trade);
+        expectOrders(acc1, o1);
+        expectOrders(acc2, o2);
     });
 
     test("Two Buys", () => {
-        placeBuy(acc1, new Big("1"), new Big("1"));
-        placeBuy(acc2, new Big("1"), new Big("1.1"));
-        expectNoTrades(acc1);
-        expectNoTrades(acc2);
+        const o1 = placeBuy(Instrument.GBPBTC, acc1, new Big("1"), new Big("1"));
+        const o2 = placeBuy(Instrument.GBPBTC, acc2, new Big("1"), new Big("1.1"));
+        expectOrders(acc1);
+        expectOrders(acc2);
     });
 
     test("Two Sells", () => {
-        placeSell(acc1, new Big("1"), new Big("1"));
-        placeSell(acc2, new Big("1"), new Big("1.1"));
-        expectNoTrades(acc1);
-        expectNoTrades(acc2);
+        const o1 = placeSell(Instrument.GBPBTC, acc1, new Big("1"), new Big("1"));
+        const o2 = placeSell(Instrument.GBPBTC, acc2, new Big("1"), new Big("1.1"));
+        expectOrders(acc1);
+        expectOrders(acc2);
     });
 
     test("Order happens at best price for second person (buy first)", () => {
-        placeBuy(acc1, new Big("1"), new Big("1.1"));
-        placeSell(acc2, new Big("1"), new Big("1"));
+        const o1 = placeBuy(Instrument.GBPBTC, acc1, new Big("1"), new Big("1.1"));
+        const o2 = placeSell(Instrument.GBPBTC, acc2, new Big("1"), new Big("1"));
         const trade = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1.1"));
-        expectExactly(acc1, trade);
-        expectExactly(acc2, trade);
+        o1.trades.push(trade);
+        o2.trades.push(trade);
+        expectOrders(acc1, o1);
+        expectOrders(acc2, o2);
     });
 
     test("Order happens at best price for second person (sell first)", () => {
-        placeSell(acc1, new Big("1"), new Big("1"));
-        placeBuy(acc2, new Big("1"), new Big("1.1"));
+        const o1 = placeSell(Instrument.GBPBTC, acc1, new Big("1"), new Big("1"));
+        const o2 = placeBuy(Instrument.GBPBTC, acc2, new Big("1"), new Big("1.1"));
         const trade = new ExpectedTrade(acc2, acc1, new Big("1"), new Big("1"));
-        expectExactly(acc1, trade);
-        expectExactly(acc2, trade);
+        o1.trades.push(trade);
+        o2.trades.push(trade);
+        expectOrders(acc1, o1);
+        expectOrders(acc2, o2);
     });
 
     test("Multiple Trades", () => {
-        placeBuy(acc1, new Big("1"), new Big("1"));
-        placeSell(acc2, new Big("1"), new Big("1"));
-        placeBuy(acc3, new Big("1"), new Big("1"));
-        placeSell(acc4, new Big("1"), new Big("1"));
+        const o1 = placeBuy(Instrument.GBPBTC, acc1, new Big("1"), new Big("1"));
+        const o2 = placeSell(Instrument.GBPBTC, acc2, new Big("1"), new Big("1"));
+        const o3 = placeBuy(Instrument.GBPBTC, acc3, new Big("1"), new Big("1"));
+        const o4 = placeSell(Instrument.GBPBTC, acc4, new Big("1"), new Big("1"));
         const trade1 = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
         const trade2 = new ExpectedTrade(acc3, acc4, new Big("1"), new Big("1"));
-        expectExactly(acc1, trade1);
-        expectExactly(acc2, trade1);
-        expectExactly(acc3, trade2);
-        expectExactly(acc4, trade2);
+        o1.trades.push(trade1);
+        o2.trades.push(trade1);
+        o3.trades.push(trade2);
+        o4.trades.push(trade2);
+        expectOrders(acc1, o1);
+        expectOrders(acc2, o2);
+        expectOrders(acc3, o3);
+        expectOrders(acc4, o4);
     });
 
     test("Multiple Trades on One Account", () => {
-        placeBuy(acc1, new Big("1"), new Big("1"));
-        placeSell(acc2, new Big("1"), new Big("1"));
-        placeBuy(acc1, new Big("1"), new Big("1"));
-        placeSell(acc3, new Big("1"), new Big("1"));
+        const o1 = placeBuy(Instrument.GBPBTC, acc1, new Big("1"), new Big("1"));
+        const o2 = placeSell(Instrument.GBPBTC, acc2, new Big("1"), new Big("1"));
+        const o3 = placeBuy(Instrument.GBPBTC, acc1, new Big("1"), new Big("1"));
+        const o4 = placeSell(Instrument.GBPBTC, acc3, new Big("1"), new Big("1"));
         const trade1 = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
         const trade2 = new ExpectedTrade(acc1, acc3, new Big("1"), new Big("1"));
-        expectExactly(acc1, trade1, trade2);
-        expectExactly(acc2, trade1);
-        expectExactly(acc3, trade2);
+        o1.trades.push(trade1);
+        o2.trades.push(trade2);
+        o3.trades.push(trade1);
+        o4.trades.push(trade2);
+        o1.state = OrderState.COMPLETE;
+        o2.state = OrderState.COMPLETE;
+        o3.state = OrderState.COMPLETE;
+        o4.state = OrderState.COMPLETE;
+        expectOrders(acc1, o1, o3);
+        expectOrders(acc2, o2);
+        expectOrders(acc3, o4);
     });
 
     test("Multiple trades on book by one account simultaneously", () => {
