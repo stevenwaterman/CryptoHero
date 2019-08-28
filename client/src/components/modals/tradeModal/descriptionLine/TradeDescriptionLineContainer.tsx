@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import {State} from "../../../../state/store/RootStore";
-import DescriptionLine from "./DescriptionLine";
+import TradeDescriptionLine from "./TradeDescriptionLine";
 
 interface DispatchProps {
 }
@@ -21,7 +21,7 @@ interface StateProps {
 interface OwnProps {
 }
 
-export type DescriptionLineProps = DispatchProps & StateProps & OwnProps
+export type TradeDescriptionLineProps = DispatchProps & StateProps & OwnProps
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
@@ -37,4 +37,4 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
 
 export default connect(
     mapStateToProps
-)(DescriptionLine)
+)(TradeDescriptionLine)

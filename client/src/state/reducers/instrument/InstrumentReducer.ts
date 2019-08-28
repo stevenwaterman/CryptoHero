@@ -30,7 +30,7 @@ function instrumentSelection(state: State, action: InstrumentSelectionAction): S
 
 function instrumentPrices(state: State, action: SetPriceAction): State {
     const {instrument, newPrice} = action.payload;
-    const newPrices = {...state.prices};
+    const newPrices = new Map(state.prices);
     newPrices.set(instrument, newPrice);
     return {
         ...state,

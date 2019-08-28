@@ -30,7 +30,7 @@ function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): Di
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
-        totalFunds: state.funds.totalFunds,
+        totalFunds: state.totalFundsModal.funds,
         show: state.modalVisibility.totalFundsVisible
     }
 }

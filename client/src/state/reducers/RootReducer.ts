@@ -9,6 +9,7 @@ import {blotterReducer} from "./blotter/BlotterReducer";
 import {modalVisibilityReducer} from "./modal/ModalVisibilityReducer";
 import {viewTradeModalReducer} from "./modal/viewTrade/ViewTradeModalReducer";
 import {chartReducer} from "./chart/ChartReducer";
+import {totalFundsModalReducer} from "./modal/totalFunds/TotalFundsModalReducer";
 
 export default combineReducers({
     modalVisibility: modalVisibilityReducer,
@@ -23,5 +24,6 @@ export default combineReducers({
     withdrawModalInput: withdrawModalInputReducer,
     depositModalInput: depositModalInputReducer,
 
-    viewTradeModal: viewTradeModalReducer
+    viewTradeModal: viewTradeModalReducer,
+    totalFundsModal: totalFundsModalReducer
 })

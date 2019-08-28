@@ -7,7 +7,16 @@ export default interface ViewTradeModalStore {
 }
 
 export const initialViewTradeModalStore: ViewTradeModalStore = {
-    trade: new Trade("123", new Instrument("BTC", "GBP"), new Date(), 1, 1, true)
+    trade: new Trade(
+        "6a3ef434-26cb-40d5-9844-ca189a83c177",
+        new Date(),
+        new Instrument("BTC", "GBP"),
+        true,
+        100000,
+        1.523,
+        68000,
+        1.514
+    )
 };
 
 export type ViewTradeModalActions =

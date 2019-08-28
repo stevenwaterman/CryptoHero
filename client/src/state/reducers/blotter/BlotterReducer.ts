@@ -37,7 +37,7 @@ function setCategory(state: State, action: BlotterSetCategoryAction): State {
 }
 
 function cancelOrder(state: State, action: CancelOrderAction): State {
-    const newPending = state.pending.filter(it => it.id !== action.payload.id);
+    const newPending = state.pending.filter(it => it.id !== action.payload.trade.id);
     return ({
         ...state,
         pending: newPending

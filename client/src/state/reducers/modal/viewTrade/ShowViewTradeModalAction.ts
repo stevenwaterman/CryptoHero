@@ -17,8 +17,7 @@ export function createShowViewTradeModalAction(state: State, id: string): ShowVi
     return {
         type: ShowViewTradeModalType,
         payload: {
-            trade: new Trade("123", new Instrument("BTC", "GBP"), new Date(), 1, 1, true)
-            /*trade: getTrade(state, id) TODO*/
+            trade: state.viewTradeModal.trade //TODO
         }
     }
 }

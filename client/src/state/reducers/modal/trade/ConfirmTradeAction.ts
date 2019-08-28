@@ -18,7 +18,7 @@ export function createConfirmTradeAction(state: State, params: null, dispatch: T
     return {
         type: ConfirmTradeType,
         payload: {
-            newTrade: new Trade("1234", new Instrument("BTC", "GBP"), new Date(), 1, 1, true)
+            newTrade: state.viewTradeModal.trade //TODO
         }
     }
 }

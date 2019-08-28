@@ -4,6 +4,7 @@ import {DepositModalProps} from "./DepositModalContainer";
 import UnitFieldContainer from "./DepositUnitFieldContainer";
 import AssetSelectorContainer from "./DepositAssetSelectorContainer";
 import {Button, Col, Form, Modal} from "react-bootstrap";
+import DepositDescriptionLine from "./descriptionLine/DepositDescriptionLineContainer";
 
 export default class DepositModal extends React.PureComponent<DepositModalProps> {
     render(): ELEMENT {
@@ -35,6 +36,9 @@ export default class DepositModal extends React.PureComponent<DepositModalProps>
                             </Form.Row>
                         </Form.Group>
                     </Form>
+                    <hr className="col-12"/>
+                    <DepositDescriptionLine/>
+                    <p className="text-center">The amount will be deposited into your account instantly</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" disabled={!this.props.canConfirm} onClick={this.props.onConfirm}>

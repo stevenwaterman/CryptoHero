@@ -6,6 +6,8 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 function generateColumns(funds: Map<string, number>): Array<any> {
     const columns: Array<any> = [];
@@ -16,14 +18,23 @@ function generateColumns(funds: Map<string, number>): Array<any> {
 function generateOneColumn(asset: string, price: number): ELEMENT {
     return (
         <Col lg="6" key={asset}>
-            <Row>
-                <Col className="pr-1">
-                    <b>{asset}:</b>
-                </Col>
-                <Col className="pl-1 text-right">
-                    {formatMoney(price, 2, true, false)}
-                </Col>
-            </Row>
+            <OverlayTrigger
+                key={asset}
+                placement="right"
+                overlay={
+                    <Tooltip id={`${asset} Available tooltip`}>
+                        {formatMoney(price, 5, true, false)}
+                    </Tooltip>
+                }>
+                <Row>
+                    <Col className="pr-1">
+                        <b>{asset}:</b>
+                    </Col>
+                    <Col className="pl-1 text-right">
+                        {formatMoney(price, 2, true, false)}
+                    </Col>
+                </Row>
+            </OverlayTrigger>
         </Col>
     )
 }

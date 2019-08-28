@@ -4,7 +4,7 @@ import {TradeModalProps} from "./TradeModalContainer";
 import UnitFieldContainer from "./fields/TraeUnitFieldContainer";
 import PriceFieldContainer from "./fields/TradePriceFieldContainer";
 import PercentFieldContainer from "./fields/TradePercentFieldContainer";
-import DescriptionLineContainer from "./descriptionLine/DescriptionLineContainer";
+import DescriptionLineContainer from "./descriptionLine/TradeDescriptionLineContainer";
 import {Button, Col, Form, Modal} from "react-bootstrap";
 
 function maxMinPriceString(buying: boolean): string {

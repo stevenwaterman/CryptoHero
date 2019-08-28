@@ -5,6 +5,7 @@ import UnitFieldContainer from "./fields/WithdrawUnitFieldContainer";
 import PercentFieldContainer from "./fields/WithdrawPercentFieldContainer";
 import WithdrawAssetSelectorContainer from "./WithdrawAssetSelectorContainer";
 import {Button, Col, Form, Modal} from "react-bootstrap";
+import WithdrawDescriptionLine from "./descriptionLine/WithdrawDescriptionLineContainer";
 
 export default class WithdrawModal extends React.PureComponent<WithdrawModalProps> {
     render(): ELEMENT {
@@ -42,6 +43,9 @@ export default class WithdrawModal extends React.PureComponent<WithdrawModalProp
                             </Form.Row>
                         </Form.Group>
                     </Form>
+                    <hr className="col-12"/>
+                    <WithdrawDescriptionLine/>
+                    <p className="text-center">The amount will be withdrawn from your account instantly</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" disabled={!this.props.canConfirm} onClick={this.props.onConfirm}>

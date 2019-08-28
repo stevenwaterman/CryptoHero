@@ -2,18 +2,23 @@ import Instrument from "./Instrument";
 
 export default class Trade {
     readonly id: string;
-    readonly instrument: Instrument;
     readonly time: Date;
-    readonly units: number;
-    readonly price: number;
+    readonly instrument: Instrument;
     readonly isBuy: boolean;
+    readonly units: number;
+    readonly unitPrice: number;
 
-    constructor(id: string, instrument: Instrument, time: Date, units: number, price: number, buy: boolean) {
+    readonly remainingUnits: number;
+    readonly averagePrice: number;
+
+    constructor(id: string, time: Date, instrument: Instrument, isBuy: boolean, units: number, price: number, remaining: number, averagePrice: number) {
         this.id = id;
-        this.instrument = instrument;
         this.time = time;
+        this.instrument = instrument;
+        this.isBuy = isBuy;
         this.units = units;
-        this.price = price;
-        this.isBuy = buy;
+        this.unitPrice = price;
+        this.remainingUnits = remaining;
+        this.averagePrice = averagePrice;
     }
 }

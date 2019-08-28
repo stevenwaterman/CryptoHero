@@ -1,10 +1,10 @@
 import ConfirmDepositAction from "../reducers/funds/ConfirmDepositAction";
 import ConfirmWithdrawAction from "../reducers/funds/ConfirmWithdrawAction";
 import ShowTotalFundsModalAction from "../reducers/modal/totalFunds/ShowTotalFundsModalAction";
+import CancelOrderAction from "../reducers/blotter/CancelOrderAction";
 
 export default interface FundsStore {
     readonly availableFunds: Map<string, number>;
-    readonly totalFunds: Map<string, number>;
 }
 
 export const initialFundsStore: FundsStore = {
@@ -15,7 +15,6 @@ export const initialFundsStore: FundsStore = {
         ["ETH", 94.175],
         ["DASH", 352.126]
     ]),
-    totalFunds: new Map()
 };
 
-export type FundsActions = ConfirmDepositAction | ConfirmWithdrawAction | ShowTotalFundsModalAction
+export type FundsActions = ConfirmDepositAction | ConfirmWithdrawAction | CancelOrderAction

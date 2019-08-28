@@ -1,9 +1,9 @@
 import {ELEMENT} from "../../../../state/store/RootStore";
 import {formatMoney} from "../../../../util/FormatMoney";
 import React from "react";
-import {DescriptionLineProps} from "./DescriptionLineContainer";
+import {TradeDescriptionLineProps} from "./TradeDescriptionLineContainer";
 
-export default class DescriptionLine extends React.PureComponent<DescriptionLineProps> {
+export default class TradeDescriptionLine extends React.PureComponent<TradeDescriptionLineProps> {
     render(): ELEMENT {
         if (this.props.units <= 0) {
             return <p className="text-center"><b>Increase {this.buySellString()} Amount</b></p>;

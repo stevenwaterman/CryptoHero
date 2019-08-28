@@ -15,6 +15,7 @@ import {HideTradeModalType} from "./trade/HideTradeModalAction";
 import ConfirmTradeAction, {ConfirmTradeType} from "./trade/ConfirmTradeAction";
 import {ConfirmDepositType} from "../funds/ConfirmDepositAction";
 import ConfirmWithdrawAction, {ConfirmWithdrawType} from "../funds/ConfirmWithdrawAction";
+import {CancelOrderType} from "../blotter/CancelOrderAction";
 
 type State = ModalVisibilityStore
 type Actions = ModalVisibilityActions
@@ -101,6 +102,7 @@ export function modalVisibilityReducer(
         case ConfirmTradeType:
         case ConfirmDepositType:
         case ConfirmWithdrawType:
+        case CancelOrderType:
             return allHidden;
         default:
             return state;

@@ -1,7 +1,8 @@
 import {State} from "../../store/RootStore";
+import Trade from "../../../models/Trade";
 
 interface IPayload {
-    id: string
+    trade: Trade
 }
 
 export const CancelOrderType: string = "CANCEL_ORDER";
@@ -15,7 +16,7 @@ export function createCancelOrderAction(state: State): CancelOrderAction {
     return {
         type: CancelOrderType,
         payload: {
-            id: state.viewTradeModal.trade.id
+            trade: state.viewTradeModal.trade
         }
     }
 }
