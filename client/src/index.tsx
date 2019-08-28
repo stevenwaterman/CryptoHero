@@ -7,7 +7,7 @@ import {Provider} from "react-redux";
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
-import RootStore from "./state/store/RootStore";
+import RootStore from "./modules/RootStore";
 
 ReactDOM.render(
     <Provider store={RootStore}>

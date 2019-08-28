@@ -1,5 +1,5 @@
 import React from "react";
-import {ELEMENT} from "../../../state/store/RootStore";
+import {ELEMENT} from "../../../modules/RootStore";
 import {TradeModalProps} from "./TradeModalContainer";
 import UnitFieldContainer from "./fields/TraeUnitFieldContainer";
 import PriceFieldContainer from "./fields/TradePriceFieldContainer";

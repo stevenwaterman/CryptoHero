@@ -1,5 +1,5 @@
 import React from "react";
-import {ELEMENT} from "../../../state/store/RootStore";
+import {ELEMENT} from "../../../modules/RootStore";
 import {DepositModalProps} from "./DepositModalContainer";
 import UnitFieldContainer from "./DepositUnitFieldContainer";
 import AssetSelectorContainer from "./DepositAssetSelectorContainer";

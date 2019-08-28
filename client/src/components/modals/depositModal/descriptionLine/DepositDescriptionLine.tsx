@@ -1,4 +1,4 @@
-import {ELEMENT} from "../../../../state/store/RootStore";
+import {ELEMENT} from "../../../../modules/RootStore";
 import {formatMoney} from "../../../../util/FormatMoney";
 import React from "react";
 import {DepositDescriptionLineProps} from "./DepositDescriptionLineContainer";

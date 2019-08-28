@@ -1,10 +1,10 @@
 import {connect} from "react-redux";
-import {State} from "../../../../state/store/RootStore";
+import {State} from "../../../../modules/RootStore";
 import {ThunkDispatch} from "redux-thunk"
 import NumberField from "../../../NumberField";
-import WithdrawModalSetUnitsAction, {createWithdrawModalSetUnitsAction} from "../../../../state/reducers/modalInputState/withdraw/value/WithdrawModalSetUnitsAction";
-import WithdrawModalResetUnitsTextAction, {createWithdrawModalResetUnitsTextAction} from "../../../../state/reducers/modalInputState/withdraw/resetText/WithdrawModalResetUnitsTextAction";
-import WithdrawModalSetUnitsTextAction, {createWithdrawModalSetUnitsTextAction} from "../../../../state/reducers/modalInputState/withdraw/text/WithdrawModalSetUnitsTextAction";
+import WithdrawModalSetUnitsAction, {createWithdrawModalSetUnitsAction} from "../../../../modules/modals/withdraw/input/value/WithdrawModalSetUnitsAction";
+import WithdrawModalResetUnitsTextAction, {createWithdrawModalResetUnitsTextAction} from "../../../../modules/modals/withdraw/input/resetText/WithdrawModalResetUnitsTextAction";
+import WithdrawModalSetUnitsTextAction, {createWithdrawModalSetUnitsTextAction} from "../../../../modules/modals/withdraw/input/text/WithdrawModalSetUnitsTextAction";
 import {fire, fireNP, ThunkDsp} from "../../../../util/Thunker";
 
 type Actions = WithdrawModalSetUnitsAction | WithdrawModalSetUnitsTextAction | WithdrawModalResetUnitsTextAction

@@ -1,6 +1,6 @@
 import React from "react";
 import {SelectedInstrumentProps} from "./SelectedInstrumentContainer";
-import {ELEMENT} from "../../state/store/RootStore";
+import {ELEMENT} from "../../modules/RootStore";
 
 export default class SelectedInstrument extends React.PureComponent<SelectedInstrumentProps> {
     render(): ELEMENT {

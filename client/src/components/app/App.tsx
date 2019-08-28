@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import InstrumentCardGridContainer from "../instruments/instrumentCardGrid/InstrumentCardGridContainer";
-import {ELEMENT} from "../../state/store/RootStore";
+import {ELEMENT} from "../../modules/RootStore";
 import TradeModalContainer from "../modals/tradeModal/TradeModalContainer";
 import AvailableFundsContainer from "../funds/AvailableFundsContainer";
 import TopBar from "../nav/TopBar";

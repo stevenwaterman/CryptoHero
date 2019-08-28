@@ -1,10 +1,10 @@
 import {connect} from "react-redux";
-import {State} from "../../../state/store/RootStore";
+import {State} from "../../../modules/RootStore";
 import {ThunkDispatch} from "redux-thunk"
 import NumberField from "../../NumberField";
-import DepositModalSetUnitsAction, {createDepositModalSetUnitsAction} from "../../../state/reducers/modalInputState/deposit/DepositModalSetUnitsAction";
-import DepositModalResetUnitsTextAction, {createDepositModalResetUnitsTextAction} from "../../../state/reducers/modalInputState/deposit/DepositModalResetUnitsTextAction";
-import DepositModalSetUnitsTextAction, {createDepositModalSetUnitsTextAction} from "../../../state/reducers/modalInputState/deposit/DepositModalSetUnitsTextAction";
+import DepositModalSetUnitsAction, {createDepositModalSetUnitsAction} from "../../../modules/modals/deposit/input/DepositModalSetUnitsAction";
+import DepositModalResetUnitsTextAction, {createDepositModalResetUnitsTextAction} from "../../../modules/modals/deposit/input/DepositModalResetUnitsTextAction";
+import DepositModalSetUnitsTextAction, {createDepositModalSetUnitsTextAction} from "../../../modules/modals/deposit/input/DepositModalSetUnitsTextAction";
 import {fire, fireNP, ThunkDsp} from "../../../util/Thunker";
 
 type Actions = DepositModalSetUnitsAction | DepositModalSetUnitsTextAction | DepositModalResetUnitsTextAction

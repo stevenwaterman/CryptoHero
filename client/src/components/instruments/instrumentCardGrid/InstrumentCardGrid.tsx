@@ -1,5 +1,5 @@
 import React from "react";
-import {ELEMENT} from "../../../state/store/RootStore";
+import {ELEMENT} from "../../../modules/RootStore";
 import InstrumentCardContainer from "../instrumentCard/InstrumentCardContainer";
 import {InstrumentCardGridProps} from "./InstrumentCardGridContainer";
 import Instrument from "../../../models/Instrument";

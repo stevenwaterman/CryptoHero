@@ -1,10 +1,10 @@
 import {connect} from "react-redux";
-import {State} from "../../../../state/store/RootStore";
+import {State} from "../../../../modules/RootStore";
 import NumberField from "../../../NumberField";
 import {ThunkDispatch} from "redux-thunk"
-import TradeModalSetPercentAction, {createTradeModalSetPercentAction} from "../../../../state/reducers/modalInputState/trade/value/TradeModalSetPercentAction";
-import TradeModalResetPercentTextAction, {createTradeModalResetPercentTextAction} from "../../../../state/reducers/modalInputState/trade/resetText/TradeModalResetPercentTextAction";
-import TradeModalSetPercentTextAction, {createTradeModalSetPercentTextAction} from "../../../../state/reducers/modalInputState/trade/text/TradeModalSetPercentTextAction";
+import TradeModalSetPercentAction, {createTradeModalSetPercentAction} from "../../../../modules/modals/trade/input/value/TradeModalSetPercentAction";
+import TradeModalResetPercentTextAction, {createTradeModalResetPercentTextAction} from "../../../../modules/modals/trade/input/resetText/TradeModalResetPercentTextAction";
+import TradeModalSetPercentTextAction, {createTradeModalSetPercentTextAction} from "../../../../modules/modals/trade/input/text/TradeModalSetPercentTextAction";
 import {fire, fireNP, ThunkDsp} from "../../../../util/Thunker";
 
 type Actions = TradeModalSetPercentAction | TradeModalSetPercentTextAction | TradeModalResetPercentTextAction

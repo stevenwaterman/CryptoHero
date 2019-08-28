@@ -1,5 +1,5 @@
 import React from "react";
-import {ELEMENT} from "../../../state/store/RootStore";
+import {ELEMENT} from "../../../modules/RootStore";
 import Trade from "../../../models/Trade";
 import {formatMoney} from "../../../util/FormatMoney";
 

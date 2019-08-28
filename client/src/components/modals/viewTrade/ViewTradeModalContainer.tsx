@@ -1,9 +1,9 @@
 import {connect} from "react-redux";
-import {State} from "../../../state/store/RootStore";
+import {State} from "../../../modules/RootStore";
 import ViewTradeModal from "./ViewTradeModal";
 import {ThunkDispatch} from "redux-thunk";
-import HideViewTradeModalAction, {createHideViewTradeModalAction} from "../../../state/reducers/modal/viewTrade/HideViewTradeModalAction";
-import CancelOrderAction, {createCancelOrderAction} from "../../../state/reducers/blotter/CancelOrderAction";
+import HideViewTradeModalAction, {createHideViewTradeModalAction} from "../../../modules/modals/viewTrade/HideViewTradeModalAction";
+import CancelOrderAction, {createCancelOrderAction} from "../../../modules/components/blotter/CancelOrderAction";
 import Trade from "../../../models/Trade";
 import {fireNP, ThunkDsp} from "../../../util/Thunker";
 

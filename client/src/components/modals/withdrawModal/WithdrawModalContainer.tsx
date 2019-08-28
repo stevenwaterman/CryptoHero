@@ -1,11 +1,11 @@
 import {connect} from "react-redux";
 import {Store} from "redux"
-import {State} from "../../../state/store/RootStore";
-import ConfirmTradeAction from "../../../state/reducers/modal/trade/ConfirmTradeAction";
+import {State} from "../../../modules/RootStore";
+import ConfirmTradeAction from "../../../modules/modals/trade/ConfirmTradeAction";
 import WithdrawModal from "./WithdrawModal";
 import {ThunkDispatch} from "redux-thunk";
-import HideWithdrawModalAction, {createHideWithdrawModalAction,} from "../../../state/reducers/modal/withdraw/HideWithdrawModalAction";
-import {createConfirmWithdrawAction} from "../../../state/reducers/funds/ConfirmWithdrawAction";
+import HideWithdrawModalAction, {createHideWithdrawModalAction,} from "../../../modules/modals/withdraw/HideWithdrawModalAction";
+import {createConfirmWithdrawAction} from "../../../modules/components/availableFunds/ConfirmWithdrawAction";
 import {fireNP, ThunkDsp} from "../../../util/Thunker";
 
 type Actions = ConfirmTradeAction | HideWithdrawModalAction

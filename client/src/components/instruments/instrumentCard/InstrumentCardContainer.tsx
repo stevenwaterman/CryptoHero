@@ -3,10 +3,10 @@ import InstrumentCard from "./InstrumentCard";
 import {Store} from "redux"
 import Instrument from "../../../models/Instrument";
 import {ThunkDispatch} from "redux-thunk"
-import InstrumentSelectionAction, {createInstrumentSelectionAction} from "../../../state/reducers/instrument/InstrumentSelectionAction";
-import ShowTradeModalAction, {createShowTradeModalAction} from "../../../state/reducers/modal/trade/ShowTradeModalAction";
+import InstrumentSelectionAction, {createInstrumentSelectionAction} from "../../../modules/components/instruments/InstrumentSelectionAction";
+import ShowTradeModalAction, {createShowTradeModalAction} from "../../../modules/modals/trade/ShowTradeModalAction";
 import {fire, ThunkDsp} from "../../../util/Thunker";
-import {State} from "../../../state/store/RootStore";
+import {State} from "../../../modules/RootStore";
 
 type Actions = InstrumentSelectionAction | ShowTradeModalAction
 

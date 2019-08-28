@@ -1,4 +1,4 @@
-import {ELEMENT} from "../../../state/store/RootStore";
+import {ELEMENT} from "../../../modules/RootStore";
 import React from "react";
 import {ViewTradeModalProps} from "./ViewTradeModalContainer";
 import {Modal} from "react-bootstrap";

@@ -1,6 +1,6 @@
 import React from "react";
 import {ChartCardProps} from "./ChartCardContainer";
-import {ELEMENT} from "../../state/store/RootStore";
+import {ELEMENT} from "../../modules/RootStore";
 import {Card, Col, Row, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
 
 export default class ChartCard extends React.PureComponent<ChartCardProps> {

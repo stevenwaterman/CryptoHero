@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
 import SelectedInstrument from "./SelectedInstrument";
 import Instrument from "../../models/Instrument";
-import {State} from "../../state/store/RootStore";
+import {State} from "../../modules/RootStore";
 
 interface DispatchProps {
 }

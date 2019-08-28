@@ -1,4 +1,4 @@
-import {ELEMENT, FORM_EVENT} from "../state/store/RootStore";
+import {ELEMENT, FORM_EVENT} from "../modules/RootStore";
 import React from "react";
 import {FormControl, InputGroup} from "react-bootstrap";
 

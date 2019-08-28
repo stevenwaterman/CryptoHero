@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import {State} from "../../../../state/store/RootStore";
+import {State} from "../../../../modules/RootStore";
 import WithdrawDescriptionLine from "./WithdrawDescriptionLine";
 
 interface DispatchProps {

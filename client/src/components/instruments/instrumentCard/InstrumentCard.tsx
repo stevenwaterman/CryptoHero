@@ -1,5 +1,5 @@
 import React from "react";
-import {ELEMENT} from "../../../state/store/RootStore";
+import {ELEMENT} from "../../../modules/RootStore";
 import {InstrumentCardProps} from "./InstrumentCardContainer";
 import {formatMoney} from "../../../util/FormatMoney";
 import {Button, Card, Col, Row} from "react-bootstrap";

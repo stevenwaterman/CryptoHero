@@ -1,6 +1,6 @@
 import {Action} from "redux";
 import {ThunkAction, ThunkDispatch} from "redux-thunk"
-import {State} from "../state/store/RootStore";
+import {State} from "../modules/RootStore";
 
 export type ThunkDsp<A extends Action<any>> = ThunkDispatch<State, void, A>
 export type ActCreator<A extends Action<any>, P> = (state: State, param: P, dispatch: ThunkDsp<A>) => A | null;

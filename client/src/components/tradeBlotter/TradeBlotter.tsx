@@ -1,6 +1,6 @@
 import React from "react";
 import {ChartCardProps} from "./TradeBlotterContainer";
-import {ELEMENT} from "../../state/store/RootStore";
+import {ELEMENT} from "../../modules/RootStore";
 import TradeRow from "./row/TradeRow";
 import {Card, Col, Row, Table, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
 

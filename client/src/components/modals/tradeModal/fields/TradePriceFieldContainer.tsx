@@ -1,10 +1,10 @@
 import {connect} from "react-redux";
-import TradeModalSetPriceAction, {createTradeModalSetPriceAction,} from "../../../../state/reducers/modalInputState/trade/value/TradeModalSetPriceAction";
-import {State} from "../../../../state/store/RootStore";
+import TradeModalSetPriceAction, {createTradeModalSetPriceAction,} from "../../../../modules/modals/trade/input/value/TradeModalSetPriceAction";
+import {State} from "../../../../modules/RootStore";
 import NumberField from "../../../NumberField";
 import {ThunkDispatch} from "redux-thunk"
-import TradeModalSetPriceTextAction, {createTradeModalSetPriceTextAction,} from "../../../../state/reducers/modalInputState/trade/text/TradeModalSetPriceTextAction";
-import TradeModalResetPriceTextAction, {createTradeModalResetPriceTextAction,} from "../../../../state/reducers/modalInputState/trade/resetText/TradeModalResetPriceTextAction";
+import TradeModalSetPriceTextAction, {createTradeModalSetPriceTextAction,} from "../../../../modules/modals/trade/input/text/TradeModalSetPriceTextAction";
+import TradeModalResetPriceTextAction, {createTradeModalResetPriceTextAction,} from "../../../../modules/modals/trade/input/resetText/TradeModalResetPriceTextAction";
 import {fire, fireNP, ThunkDsp} from "../../../../util/Thunker";
 
 type Actions = TradeModalSetPriceAction | TradeModalSetPriceTextAction | TradeModalResetPriceTextAction

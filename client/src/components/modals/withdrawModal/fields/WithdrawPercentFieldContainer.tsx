@@ -1,10 +1,10 @@
 import {connect} from "react-redux";
-import {State} from "../../../../state/store/RootStore";
+import {State} from "../../../../modules/RootStore";
 import {ThunkDispatch} from "redux-thunk"
 import NumberField from "../../../NumberField";
-import WithdrawModalSetPercentAction, {createWithdrawModalSetPercentAction} from "../../../../state/reducers/modalInputState/withdraw/value/WithdrawModalSetPercentAction";
-import WithdrawModalSetPercentTextAction, {createWithdrawModalSetPercentTextAction} from "../../../../state/reducers/modalInputState/withdraw/text/WithdrawModalSetPercentTextAction";
-import WithdrawModalResetPercentTextAction, {createWithdrawModalResetPercentTextAction} from "../../../../state/reducers/modalInputState/withdraw/resetText/WithdrawModalResetPercentTextAction";
+import WithdrawModalSetPercentAction, {createWithdrawModalSetPercentAction} from "../../../../modules/modals/withdraw/input/value/WithdrawModalSetPercentAction";
+import WithdrawModalSetPercentTextAction, {createWithdrawModalSetPercentTextAction} from "../../../../modules/modals/withdraw/input/text/WithdrawModalSetPercentTextAction";
+import WithdrawModalResetPercentTextAction, {createWithdrawModalResetPercentTextAction} from "../../../../modules/modals/withdraw/input/resetText/WithdrawModalResetPercentTextAction";
 import {fire, fireNP, ThunkDsp} from "../../../../util/Thunker";
 
 type Actions =

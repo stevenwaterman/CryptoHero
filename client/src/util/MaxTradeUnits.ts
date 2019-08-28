@@ -1,4 +1,4 @@
-import {State} from "../state/store/RootStore";
+import {State} from "../modules/RootStore";
 
 export function maxTradeUnits(state: State, price: number | undefined = undefined): number | null {
     const buying = state.tradeModal.buying;

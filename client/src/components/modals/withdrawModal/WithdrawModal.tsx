@@ -1,5 +1,5 @@
 import React from "react";
-import {ELEMENT} from "../../../state/store/RootStore";
+import {ELEMENT} from "../../../modules/RootStore";
 import {WithdrawModalProps} from "./WithdrawModalContainer";
 import UnitFieldContainer from "./fields/WithdrawUnitFieldContainer";
 import PercentFieldContainer from "./fields/WithdrawPercentFieldContainer";

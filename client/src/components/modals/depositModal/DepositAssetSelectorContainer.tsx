@@ -1,9 +1,9 @@
 import {connect} from "react-redux";
-import {State} from "../../../state/store/RootStore";
+import {State} from "../../../modules/RootStore";
 import AssetSelector from "../../AssetSelector";
 import {ThunkDispatch} from "redux-thunk";
 import {fire, ThunkDsp} from "../../../util/Thunker";
-import DepositModalSetAssetAction, {createDepositModalSetAssetAction} from "../../../state/reducers/modalInputState/deposit/DepositModalSetAssetAction";
+import DepositModalSetAssetAction, {createDepositModalSetAssetAction} from "../../../modules/modals/deposit/input/DepositModalSetAssetAction";
 
 type Actions = DepositModalSetAssetAction
 

@@ -1,10 +1,10 @@
 import {connect} from "react-redux";
-import {State} from "../../state/store/RootStore";
+import {State} from "../../modules/RootStore";
 import TradeBlotter from "./TradeBlotter";
 import {ThunkDispatch} from "redux-thunk";
 import Trade from "../../models/Trade";
-import BlotterSetCategoryAction, {createBlotterSetCategoryAction} from "../../state/reducers/blotter/BlotterSetCategoryAction";
-import ShowViewTradeModalAction, {createShowViewTradeModalAction} from "../../state/reducers/modal/viewTrade/ShowViewTradeModalAction";
+import BlotterSetCategoryAction, {createBlotterSetCategoryAction} from "../../modules/components/blotter/BlotterSetCategoryAction";
+import ShowViewTradeModalAction, {createShowViewTradeModalAction} from "../../modules/modals/viewTrade/ShowViewTradeModalAction";
 import {fire, ThunkDsp} from "../../util/Thunker";
 
 type Actions = BlotterSetCategoryAction | ShowViewTradeModalAction

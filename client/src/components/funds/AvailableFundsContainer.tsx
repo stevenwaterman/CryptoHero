@@ -1,10 +1,10 @@
 import {connect} from "react-redux";
-import {State} from "../../state/store/RootStore";
+import {State} from "../../modules/RootStore";
 import AvailableFunds from "./AvailableFunds";
 import {ThunkDispatch} from "redux-thunk";
-import ShowWithdrawModalAction, {createShowWithdrawModalAction} from "../../state/reducers/modal/withdraw/ShowWithdrawModalAction";
-import ShowDepositModalAction, {createShowDepositModalAction} from "../../state/reducers/modal/deposit/ShowDepositModalAction";
-import ShowTotalFundsModalAction, {createShowTotalFundsModalAction} from "../../state/reducers/modal/totalFunds/ShowTotalFundsModalAction";
+import ShowWithdrawModalAction, {createShowWithdrawModalAction} from "../../modules/modals/withdraw/ShowWithdrawModalAction";
+import ShowDepositModalAction, {createShowDepositModalAction} from "../../modules/modals/deposit/ShowDepositModalAction";
+import ShowTotalFundsModalAction, {createShowTotalFundsModalAction} from "../../modules/modals/totalFunds/ShowTotalFundsModalAction";
 import {fireNP, ThunkDsp} from "../../util/Thunker";
 
 type Actions = ShowTotalFundsModalAction | ShowWithdrawModalAction | ShowDepositModalAction
