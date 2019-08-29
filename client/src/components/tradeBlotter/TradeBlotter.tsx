@@ -1,8 +1,9 @@
 import React from "react";
 import {ChartCardProps} from "./TradeBlotterContainer";
 import {ELEMENT} from "../../modules/RootStore";
-import TradeRow from "./row/TradeRow";
+import OrderRow from "./row/OrderRow";
 import {Card, Col, Row, Table, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
+import Order from "../../models/Order";
 
 export default class TradeBlotter extends React.PureComponent<ChartCardProps> {
     render(): ELEMENT {
@@ -32,11 +33,11 @@ export default class TradeBlotter extends React.PureComponent<ChartCardProps> {
                         </tr>
                         </thead>
                         <tbody className="table-hover">
-                        {this.props.trades.map((trade) =>
-                            <TradeRow
-                                onClick={(id: string) => this.props.onSelectTrade(id)}
-                                trade={trade}
-                                key={trade.id}
+                        {this.props.orders.map((order) =>
+                            <OrderRow
+                                onClick={(order: Order) => this.props.onSelectOrder(order)}
+                                order={order}
+                                key={order.id}
                             />)
                         }
                         </tbody>

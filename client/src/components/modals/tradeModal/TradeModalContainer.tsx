@@ -2,9 +2,10 @@ import {connect} from "react-redux";
 import {Dispatch} from "redux"
 import {State} from "../../../modules/RootStore";
 import TradeModal from "./TradeModal";
-import {fireNP, ThunkDsp} from "../../../util/Thunker";
+import {fireNP, firePromiseNP, ThunkDsp} from "../../../util/Thunker";
 import ConfirmTradeAction, {createConfirmTradeAction} from "../../../modules/modals/trade/ConfirmTradeAction";
 import HideTradeModalAction, {createHideTradeModalAction} from "../../../modules/modals/trade/HideTradeModalAction";
+import {createAccountAction} from "../../../modules/global/SetAccountAction";
 
 type Actions = ConfirmTradeAction | HideTradeModalAction
 
@@ -29,7 +30,9 @@ export type TradeModalProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onConfirm: fireNP(dispatch, createConfirmTradeAction),
+        onConfirm: async () => {
+            await dispatch(createConfirmTradeAction())
+        },
         onHide: fireNP(dispatch, createHideTradeModalAction)
     }
 }

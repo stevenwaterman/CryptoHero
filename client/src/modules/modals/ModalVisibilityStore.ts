@@ -2,12 +2,12 @@ import ShowTotalFundsModalAction from "./totalFunds/ShowTotalFundsModalAction";
 import ShowWithdrawModalAction from "./withdraw/ShowWithdrawModalAction";
 import ShowDepositModalAction from "./deposit/ShowDepositModalAction";
 import ShowTradeModalAction from "./trade/ShowTradeModalAction";
-import ShowViewTradeModalAction from "./viewTrade/ShowViewTradeModalAction";
+import ShowViewOrderModalAction from "./viewOrder/ShowViewOrderModalAction";
 import HideTotalFundsModalAction from "./totalFunds/HideTotalFundsModalAction";
 import HideWithdrawModalAction from "./withdraw/HideWithdrawModalAction";
 import HideDepositModalAction from "./deposit/HideDepositModalAction";
 import HideTradeModalAction from "./trade/HideTradeModalAction";
-import HideViewTradeModalAction from "./viewTrade/HideViewTradeModalAction";
+import HideViewOrderModalAction from "./viewOrder/HideViewOrderModalAction";
 
 export default interface ModalVisibilityStore {
     readonly totalFundsVisible: boolean;
@@ -30,9 +30,9 @@ export type ModalVisibilityActions =
     | ShowWithdrawModalAction
     | ShowDepositModalAction
     | ShowTradeModalAction
-    | ShowViewTradeModalAction
+    | ShowViewOrderModalAction
     | HideTotalFundsModalAction
     | HideWithdrawModalAction
     | HideDepositModalAction
     | HideTradeModalAction
-    | HideViewTradeModalAction
+    | HideViewOrderModalAction

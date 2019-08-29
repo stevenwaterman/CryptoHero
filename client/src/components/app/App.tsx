@@ -4,23 +4,28 @@ import InstrumentCardGridContainer from "../instruments/instrumentCardGrid/Instr
 import {ELEMENT} from "../../modules/RootStore";
 import TradeModalContainer from "../modals/tradeModal/TradeModalContainer";
 import AvailableFundsContainer from "../funds/AvailableFundsContainer";
-import TopBar from "../nav/TopBar";
 import TotalFundsModalContainer from "../modals/funds/TotalFundsModalContainer";
 import SelectedInstrumentContainer from "../selectedInstrument/SelectedInstrumentContainer";
 import WithdrawModalContainer from "../modals/withdrawModal/WithdrawModalContainer";
 import DepositModalContainer from "../modals/depositModal/DepositModalContainer";
 import ChartCardContainer from "../chart/ChartCardContainer";
 import TradeBlotterContainer from "../tradeBlotter/TradeBlotterContainer";
-import ViewTradeModalContainer from "../modals/viewTrade/ViewTradeModalContainer";
+import ViewTradeModalContainer from "../modals/viewOrder/ViewOrderModalContainer";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/es/Col";
+import TopBarContainer from "../nav/TopBarContainer";
+import {AppProps} from "./AppContainer";
 
-export default class App extends React.Component {
+export default class App extends React.Component<AppProps> {
+    componentDidMount(): void {
+        this.props.createAccount();
+    }
+
     render(): ELEMENT {
         return (
             <>
-                <TopBar/>
+                <TopBarContainer/>
                 <Container fluid={true}>
                     <Row>
                         <Col sm="4">

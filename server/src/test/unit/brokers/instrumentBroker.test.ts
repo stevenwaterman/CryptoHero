@@ -25,9 +25,9 @@ function placeSell(account: Account, units: Big, price: Big): ExpectedOrder {
 function placeOrder(direction: TradeDirection, account: Account, units: Big, price: Big): ExpectedOrder {
     time++;
     MockDate.set(time);
-    const order = new Order(account, direction, Instrument.GBPBTC, units, price);
+    const order = new Order(account, direction, Instrument.BTCGBP, units, price);
     iBroker.place(order);
-    return new ExpectedOrder(account, direction, Instrument.GBPBTC, units, price, OrderState.PENDING);
+    return new ExpectedOrder(account, direction, Instrument.BTCGBP, units, price, OrderState.PENDING);
 }
 
 let broker: Broker;
@@ -38,7 +38,7 @@ beforeEach(() => {
     MockDate.set(time);
     REGISTRY.clear();
     broker = new Broker();
-    iBroker = broker.getIBroker(Instrument.GBPBTC);
+    iBroker = broker.getIBroker(Instrument.BTCGBP);
     acc1 = new Account();
     acc2 = new Account();
     acc3 = new Account();
@@ -56,10 +56,10 @@ describe("adding orders", () => {
     let buyOrderNegPrice: Order;
 
     beforeEach(() => {
-        sellOrder = new Order(acc1, TradeDirection.SELL, Instrument.GBPBTC, new Big("100"), new Big("1.14"));
-        sellOrderNegPrice = new Order(acc1, TradeDirection.SELL, Instrument.GBPBTC, new Big("100"), new Big("-1.14"));
-        buyOrder = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC, new Big("100"), new Big("1.14"));
-        buyOrderNegPrice = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC, new Big("100"), new Big("-1.14"));
+        sellOrder = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, new Big("100"), new Big("1.14"));
+        sellOrderNegPrice = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, new Big("100"), new Big("-1.14"));
+        buyOrder = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("100"), new Big("1.14"));
+        buyOrderNegPrice = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("100"), new Big("-1.14"));
     });
 
     test("can add sell order", () => {
@@ -291,7 +291,7 @@ describe("matching orders", () => {
 
     test("Earlier buys get priority", () => {
         const o1 = placeBuy(acc1, new Big("1"), new Big("1"));
-        const o2Actual = new Order(acc2, TradeDirection.BUY, Instrument.GBPBTC, new Big("1"), new Big("1"));
+        const o2Actual = new Order(acc2, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1"));
         o2Actual.timestamp.setTime(o2Actual.timestamp.getTime() - 1000);
         iBroker.place(o2Actual);
         const o2 = ExpectedOrder.create(o2Actual);
@@ -308,7 +308,7 @@ describe("matching orders", () => {
 
     test("Earlier sells get priority", () => {
         const o1 = placeSell(acc1, new Big("1"), new Big("1"));
-        const o2Actual = new Order(acc2, TradeDirection.SELL, Instrument.GBPBTC, new Big("1"), new Big("1"));
+        const o2Actual = new Order(acc2, TradeDirection.SELL, Instrument.BTCGBP, new Big("1"), new Big("1"));
         o2Actual.timestamp.setTime(o2Actual.timestamp.getTime() - 1000);
         iBroker.place(o2Actual);
         const o2 = ExpectedOrder.create(o2Actual);
@@ -424,12 +424,12 @@ describe("position updated after trade", () => {
 describe("Cancel order", () => {
     test("Throws if cancelling order that hasn't been placed", () => {
         expect(() => {
-            iBroker.cancel(new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC, new Big("1"), new Big("1)")));
+            iBroker.cancel(new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1)")));
         }).toThrow();
     });
 
     test("Does not throw on valid call", () => {
-        const order = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC, new Big("1"), new Big("1"));
+        const order = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1"));
         iBroker.place(order);
         expect(() => {
             iBroker.cancel(order);
@@ -437,7 +437,7 @@ describe("Cancel order", () => {
     });
 
     test("Prevents trades from being made with the cancelled order", () => {
-        const buy = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC, new Big("1"), new Big("1"));
+        const buy = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1"));
         const o1 = ExpectedOrder.create(buy);
         iBroker.place(buy);
         iBroker.cancel(buy);
@@ -451,7 +451,7 @@ describe("Cancel order", () => {
 
     test("Unlocks the assets", () => {
         const before = (acc1.getAvailableAssets(Asset.BTC));
-        const order = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC, new Big("1"), new Big("1"));
+        const order = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1"));
         iBroker.place(order);
         iBroker.cancel(order);
         expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(before);
@@ -461,7 +461,7 @@ describe("Cancel order", () => {
 describe("Self-Order prevention", () => {
     test("Buy first", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
-        const sell = new Order(acc1, TradeDirection.SELL, Instrument.GBPBTC, new Big("1"), new Big("1"));
+        const sell = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, new Big("1"), new Big("1"));
         expect(() => {
             iBroker.place(sell);
         }).toThrow();
@@ -469,7 +469,7 @@ describe("Self-Order prevention", () => {
 
     test("Sell first", () => {
         placeSell(acc1, new Big("1"), new Big("1"));
-        const buy = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC, new Big("1"), new Big("1"));
+        const buy = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1"));
         expect(() => {
             iBroker.place(buy);
         }).toThrow();

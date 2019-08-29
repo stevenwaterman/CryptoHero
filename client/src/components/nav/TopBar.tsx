@@ -1,8 +1,9 @@
 import React from "react";
 import "./NavBar.css";
 import {Button, Form, Navbar} from "react-bootstrap";
+import {TopBarProps} from "./TopBarContainer";
 
-export default class TopBar extends React.PureComponent {
+export default class TopBar extends React.PureComponent<TopBarProps> {
     render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
         return (
             <Navbar bg="primary" variant="dark" className="mb-4">
@@ -12,8 +13,8 @@ export default class TopBar extends React.PureComponent {
                     </h4>
                 </Navbar.Brand>
                 <Form className="form-inline">
-                    <Form.Control as="select" disabled={true} value={"Account 1"}>
-                        <option>Account 1</option>
+                    <Form.Control as="select" disabled={true} value={this.props.accountId}>
+                        <option>{this.props.accountId}</option>
                         <option>Account 2</option>
                         <option>Account 3</option>
                         <option>Account 4</option>

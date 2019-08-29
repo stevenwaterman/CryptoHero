@@ -11,7 +11,7 @@ const logger = createLogger({
 
 export default createStore(
     RootReducer,
-    applyMiddleware(thunk, logger)
+    applyMiddleware(thunk/*, logger*/)
 );
 
 export type State = ReturnType<typeof RootReducer>

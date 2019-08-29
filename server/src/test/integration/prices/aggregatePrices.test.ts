@@ -19,14 +19,14 @@ test("Happy Path", done => {
     acc1.adjustAssets(Asset.BTC, new Big("100"));
     acc1.adjustAssets(Asset.LTC, new Big("100"));
 
-    const buy1 = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC, new Big("20"), new Big("1.5"));
-    const buy2 = new Order(acc1, TradeDirection.BUY, Instrument.GBPLTC, new Big("10"), new Big("1.6"));
+    const buy1 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("20"), new Big("1.5"));
+    const buy2 = new Order(acc1, TradeDirection.BUY, Instrument.LTCGBP, new Big("10"), new Big("1.6"));
 
     G.BROKER.placeOrder(buy1);
     G.BROKER.placeOrder(buy2);
 
     const expected = {
-        "GBPBTC": {
+        "BTCGBP": {
             "buy": [
                 {
                     "unit price": new Big("1.5").toString(),
@@ -35,7 +35,7 @@ test("Happy Path", done => {
             ],
             "sell": []
         },
-        "GBPLTC": {
+        "LTCGBP": {
             "buy": [
                 {
                     "unit price": new Big("1.6").toString(),

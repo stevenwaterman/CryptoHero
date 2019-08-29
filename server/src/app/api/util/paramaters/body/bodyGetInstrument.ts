@@ -14,7 +14,7 @@ export function bodyGetInstrument(broker: Broker, req: Request, res: Response): 
 
     const instrument: Instrument | undefined = Instrument.MAP.get(instrumentString);
     if (instrument == null) {
-        respond(res, 404, `instrument ${instrument} not found`, SER.NO);
+        respond(res, 404, `instrument ${instrumentString} not found`, SER.NO);
         return null
     }
     return instrument

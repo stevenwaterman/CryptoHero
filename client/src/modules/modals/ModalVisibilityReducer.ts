@@ -6,11 +6,11 @@ import ShowTotalFundsModalAction, {ShowTotalFundsModalType} from "./totalFunds/S
 import ShowWithdrawModalAction, {ShowWithdrawModalType} from "./withdraw/ShowWithdrawModalAction";
 import ShowDepositModalAction, {ShowDepositModalType} from "./deposit/ShowDepositModalAction";
 import ShowTradeModalAction, {ShowTradeModalType} from "./trade/ShowTradeModalAction";
-import ShowViewTradeModalAction, {ShowViewTradeModalType} from "./viewTrade/ShowViewTradeModalAction";
+import ShowViewOrderModalAction, {ShowViewOrderModalType} from "./viewOrder/ShowViewOrderModalAction";
 import {HideDepositModalType} from "./deposit/HideDepositModalAction";
 import {HideWithdrawModalType} from "./withdraw/HideWithdrawModalAction";
 import {HideTotalFundsModalType} from "./totalFunds/HideTotalFundsModalAction";
-import {HideViewTradeModalType} from "./viewTrade/HideViewTradeModalAction";
+import {HideViewTradeModalType} from "./viewOrder/HideViewOrderModalAction";
 import {HideTradeModalType} from "./trade/HideTradeModalAction";
 import ConfirmTradeAction, {ConfirmTradeType} from "./trade/ConfirmTradeAction";
 import {ConfirmDepositType} from "../components/availableFunds/ConfirmDepositAction";
@@ -60,7 +60,7 @@ function showTrade(state: State, action: ShowTradeModalAction): State {
     };
 }
 
-function showViewTrade(state: State, action: ShowViewTradeModalAction): State {
+function showViewTrade(state: State, action: ShowViewOrderModalAction): State {
     return {
         depositVisible: false,
         totalFundsVisible: false,
@@ -91,8 +91,8 @@ export function modalVisibilityReducer(
             return showDeposit(state, action as ShowDepositModalAction);
         case ShowTradeModalType:
             return showTrade(state, action as ShowTradeModalAction);
-        case ShowViewTradeModalType:
-            return showViewTrade(state, action as ShowViewTradeModalAction);
+        case ShowViewOrderModalType:
+            return showViewTrade(state, action as ShowViewOrderModalAction);
 
         case HideDepositModalType:
         case HideWithdrawModalType:

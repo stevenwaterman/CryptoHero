@@ -1,13 +1,13 @@
 import {ELEMENT} from "../../../modules/RootStore";
 import React from "react";
-import {ViewTradeModalProps} from "./ViewTradeModalContainer";
+import {ViewTradeModalProps} from "./ViewOrderModalContainer";
 import {Modal} from "react-bootstrap";
 import PendingBuy from "./Contents/PendingBuy";
 import PendingSell from "./Contents/PendingSell";
 import FinishedBuy from "./Contents/FinishedBuy";
 import FinishedSell from "./Contents/FinishedSell";
 
-export default class ViewTradeModal extends React.Component<ViewTradeModalProps> {
+export default class ViewOrderModal extends React.Component<ViewTradeModalProps> {
     render(): ELEMENT {
         const {isBuy, remainingUnits} = this.props.trade;
         return (

@@ -20,7 +20,7 @@ test("Happy Path", done => {
         "json": true,
         "body": {
             "account": account.id,
-            "instrument": Instrument.GBPBTC.name,
+            "instrument": Instrument.BTCGBP.name,
             "direction": TradeDirection.BUY.name,
             "units": new Big("20").toString(),
             "unit price": new Big("1").toString()
@@ -39,13 +39,13 @@ test("cannot self-trade", done => {
     const account = new Account();
     account.adjustAssets(Asset.BTC, new Big("100"));
     account.adjustAssets(Asset.GBP, new Big("100"));
-    G.BROKER.placeOrder(new Order(account, TradeDirection.BUY, Instrument.GBPBTC, new Big("1"), new Big("1")));
+    G.BROKER.placeOrder(new Order(account, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1")));
 
     const options = {
         "json": true,
         "body": {
             "account": account.id,
-            "instrument": Instrument.GBPBTC.name,
+            "instrument": Instrument.BTCGBP.name,
             "direction": TradeDirection.SELL.name,
             "units": new Big("1").toString(),
             "unit price": new Big("1").toString()
@@ -68,7 +68,7 @@ test("Not enough funds", done => {
         "json": true,
         "body": {
             "account": account.id,
-            "instrument": Instrument.GBPBTC.name,
+            "instrument": Instrument.BTCGBP.name,
             "direction": TradeDirection.BUY.name,
             "units": new Big("20").toString(),
             "unit price": new Big("1").toString()
@@ -111,7 +111,7 @@ const testRunner = (name: string, params: any, expectedStatus: number) => {
 };
 
 const defaultParams = {
-    "instrument": Instrument.GBPBTC.name,
+    "instrument": Instrument.BTCGBP.name,
     "direction": TradeDirection.BUY.name,
     "units": new Big("20").toString(),
     "price": new Big("1").toString()

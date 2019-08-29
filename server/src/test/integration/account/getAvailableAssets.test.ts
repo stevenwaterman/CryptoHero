@@ -18,7 +18,7 @@ function getUrl(accountId: string): string {
 test("Happy Path", done => {
     const account = new Account();
     account.adjustAssets(Asset.BTC, new Big("100"));
-    const order = new Order(account, TradeDirection.BUY, Instrument.GBPBTC, new Big("20"), new Big("2"));
+    const order = new Order(account, TradeDirection.BUY, Instrument.BTCGBP, new Big("20"), new Big("2"));
     G.BROKER.placeOrder(order);
 
     request.get(getUrl(account.id), (error, response, body) => {

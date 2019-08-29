@@ -4,19 +4,19 @@ import TradeBlotter from "./TradeBlotter";
 import {ThunkDispatch} from "redux-thunk";
 import Order from "../../models/Order";
 import BlotterSetCategoryAction, {createBlotterSetCategoryAction} from "../../modules/components/blotter/BlotterSetCategoryAction";
-import ShowViewTradeModalAction, {createShowViewTradeModalAction} from "../../modules/modals/viewTrade/ShowViewTradeModalAction";
+import ShowViewOrderModalAction, {createShowViewOrderModalAction} from "../../modules/modals/viewOrder/ShowViewOrderModalAction";
 import {fire, ThunkDsp} from "../../util/Thunker";
 
-type Actions = BlotterSetCategoryAction | ShowViewTradeModalAction
+type Actions = BlotterSetCategoryAction | ShowViewOrderModalAction
 
 interface DispatchProps {
-    onSelectTrade: (id: string) => void,
+    onSelectOrder: (order: Order) => void,
     onSetCategory: (selectPending: boolean) => void,
 }
 
 export interface StateProps {
     pendingSelected: boolean
-    trades: Array<Order>
+    orders: Array<Order>
 }
 
 interface OwnProps {
@@ -27,7 +27,7 @@ export type ChartCardProps = StateProps & DispatchProps & OwnProps
 function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         onSetCategory: fire(dispatch, createBlotterSetCategoryAction),
-        onSelectTrade: fire(dispatch, createShowViewTradeModalAction)
+        onSelectOrder: fire(dispatch, createShowViewOrderModalAction)
     }
 }
 
@@ -38,7 +38,7 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     const filtered = relevant.filter((trade: Order) => trade.instrument.name === selectedInstrument.name);
     return {
         pendingSelected: state.blotter.showPending,
-        trades: filtered
+        orders: filtered
     }
 }
 

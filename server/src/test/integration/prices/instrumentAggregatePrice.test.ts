@@ -21,7 +21,7 @@ test("Happy Path", done => {
     acc1.adjustAssets(Asset.GBP, new Big("100"));
     acc1.adjustAssets(Asset.BTC, new Big("100"));
 
-    const order = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC, new Big("50"), new Big("1.5"));
+    const order = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("50"), new Big("1.5"));
     G.BROKER.placeOrder(order);
 
     const expected = {
@@ -34,7 +34,7 @@ test("Happy Path", done => {
         "sell": []
     };
 
-    request.get(getUrl(Instrument.GBPBTC.name), (error, response, body) => {
+    request.get(getUrl(Instrument.BTCGBP.name), (error, response, body) => {
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(200);
         const json = JSON.parse(body);
@@ -54,7 +54,7 @@ const testRunner = (name: string, params: any, expectedStatus: number) => {
 };
 
 const defaultParams = {
-    "instrument": Instrument.GBPBTC.name
+    "instrument": Instrument.BTCGBP.name
 };
 
 new Requirements(defaultParams, testRunner)

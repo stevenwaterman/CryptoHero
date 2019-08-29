@@ -1,13 +1,13 @@
 import {connect} from "react-redux";
 import {State} from "../../../modules/RootStore";
-import ViewTradeModal from "./ViewTradeModal";
+import ViewOrderModal from "./ViewOrderModal";
 import {ThunkDispatch} from "redux-thunk";
-import HideViewTradeModalAction, {createHideViewTradeModalAction} from "../../../modules/modals/viewTrade/HideViewTradeModalAction";
+import HideViewOrderModalAction, {createHideViewTradeModalAction} from "../../../modules/modals/viewOrder/HideViewOrderModalAction";
 import CancelOrderAction, {createCancelOrderAction} from "../../../modules/components/blotter/CancelOrderAction";
 import Order from "../../../models/Order";
 import {fireNP, ThunkDsp} from "../../../util/Thunker";
 
-type Actions = CancelOrderAction | HideViewTradeModalAction
+type Actions = CancelOrderAction | HideViewOrderModalAction
 
 interface DispatchProps {
     onClickCancel: () => void,
@@ -34,11 +34,11 @@ function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): Di
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
         show: state.modalVisibility.viewTradeVisible,
-        trade: state.viewTradeModal.trade
+        trade: state.viewOrderModal.order
     }
 }
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ViewTradeModal)
+)(ViewOrderModal)

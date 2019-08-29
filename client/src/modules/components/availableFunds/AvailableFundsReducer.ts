@@ -1,14 +1,13 @@
 import ConfirmDepositAction, {ConfirmDepositType} from "./ConfirmDepositAction";
 import AvailableFundsStore, {FundsActions, initialFundsStore} from "./AvailableFundsStore";
 import ConfirmWithdrawAction, {ConfirmWithdrawType} from "./ConfirmWithdrawAction";
-import ShowTotalFundsModalAction, {ShowTotalFundsModalType} from "../../modals/totalFunds/ShowTotalFundsModalAction";
 import CancelOrderAction, {CancelOrderType} from "../blotter/CancelOrderAction";
 
 type State = AvailableFundsStore
 type Actions = FundsActions
 
 function cancelOrder(state: State, action: CancelOrderAction): State {
-    const {instrument, isBuy, remainingUnits, unitPrice} = action.payload.trade;
+    const {instrument, isBuy, remainingUnits, unitPrice} = action.payload.order;
     const availableFunds = new Map(state.availableFunds);
     if(isBuy){
         const current = availableFunds.get(instrument.asset2) as number;

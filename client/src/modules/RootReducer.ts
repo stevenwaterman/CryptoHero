@@ -7,9 +7,10 @@ import {withdrawModalInputReducer} from "./modals/withdraw/input/WithdrawModalIn
 import {depositModalInputReducer} from "./modals/deposit/input/DepositModalInputReducer";
 import {blotterReducer} from "./components/blotter/BlotterReducer";
 import {modalVisibilityReducer} from "./modals/ModalVisibilityReducer";
-import {viewTradeModalReducer} from "./modals/viewTrade/ViewTradeModalReducer";
+import {viewOrderModalReducer} from "./modals/viewOrder/ViewOrderModalReducer";
 import {chartReducer} from "./components/chart/ChartReducer";
 import {totalFundsModalReducer} from "./modals/totalFunds/TotalFundsModalReducer";
+import {accountReducer} from "./global/AccountReducer";
 
 export default combineReducers({
     modalVisibility: modalVisibilityReducer,
@@ -17,6 +18,7 @@ export default combineReducers({
     funds: availableFundsReducer,
     blotter: blotterReducer,
     chart: chartReducer,
+    account: accountReducer,
 
     tradeModal: tradeModalReducer,
     tradeModalInput: tradeModalInputReducer,
@@ -24,6 +26,6 @@ export default combineReducers({
     withdrawModalInput: withdrawModalInputReducer,
     depositModalInput: depositModalInputReducer,
 
-    viewTradeModal: viewTradeModalReducer,
+    viewOrderModal: viewOrderModalReducer,
     totalFundsModal: totalFundsModalReducer
 })

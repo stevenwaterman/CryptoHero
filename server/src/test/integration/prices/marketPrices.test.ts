@@ -23,10 +23,10 @@ test("Happy Path", done => {
     acc2.adjustAssets(Asset.BTC, new Big("100"));
     acc2.adjustAssets(Asset.LTC, new Big("100"));
 
-    const buy1 = new Order(acc1, TradeDirection.BUY, Instrument.GBPBTC, new Big("20"), new Big("1.5"));
-    const sell1 = new Order(acc2, TradeDirection.SELL, Instrument.GBPBTC, Big("20"), new Big("1.5"));
-    const buy2 = new Order(acc1, TradeDirection.BUY, Instrument.GBPLTC, new Big("10"), new Big("1.6"));
-    const sell2 = new Order(acc2, TradeDirection.SELL, Instrument.GBPLTC, new Big("10"), new Big("1.6"));
+    const buy1 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("20"), new Big("1.5"));
+    const sell1 = new Order(acc2, TradeDirection.SELL, Instrument.BTCGBP, Big("20"), new Big("1.5"));
+    const buy2 = new Order(acc1, TradeDirection.BUY, Instrument.LTCGBP, new Big("10"), new Big("1.6"));
+    const sell2 = new Order(acc2, TradeDirection.SELL, Instrument.LTCGBP, new Big("10"), new Big("1.6"));
 
     G.BROKER.placeOrder(buy1);
     G.BROKER.placeOrder(sell1);
@@ -34,8 +34,8 @@ test("Happy Path", done => {
     G.BROKER.placeOrder(sell2);
 
     const expected = {
-        "GBPBTC": new Big("1.5").toString(),
-        "GBPLTC": new Big("1.6").toString()
+        "BTCGBP": new Big("1.5").toString(),
+        "LTCGBP": new Big("1.6").toString()
     };
 
     request.get(url, (error, response, body) => {

@@ -9,9 +9,9 @@ export default class Order {
     readonly unitPrice: number;
 
     readonly remainingUnits: number;
-    readonly averagePrice: number;
+    readonly averagePrice: number | null;
 
-    constructor(id: string, time: Date, instrument: Instrument, isBuy: boolean, units: number, price: number, remaining: number, averagePrice: number) {
+    constructor(id: string, time: Date, instrument: Instrument, isBuy: boolean, units: number, price: number, remaining: number, averagePrice: number | null) {
         this.id = id;
         this.time = time;
         this.instrument = instrument;

@@ -2,12 +2,12 @@ import Asset from "./asset";
 import {List, Map, Set} from "immutable";
 
 export default class Instrument {
-    static readonly GBPBTC = new Instrument(Asset.GBP, Asset.BTC);
-    static readonly GBPLTC = new Instrument(Asset.GBP, Asset.LTC);
+    static readonly BTCGBP = new Instrument(Asset.BTC, Asset.GBP);
+    static readonly LTCGBP = new Instrument(Asset.LTC, Asset.GBP);
 
     static readonly ALL: Set<Instrument> = Set([
-        Instrument.GBPBTC,
-        Instrument.GBPLTC
+        Instrument.BTCGBP,
+        Instrument.LTCGBP
     ]);
     static readonly MAP: Map<string, Instrument> = Instrument.ALL.toMap().mapKeys((inst) => inst.name);
     static readonly NAMES: List<string> = Instrument.MAP.keySeq().sort((a, b) => a.localeCompare(b)).toList();

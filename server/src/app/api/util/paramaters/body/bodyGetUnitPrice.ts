@@ -5,7 +5,7 @@ import SER from "../../serialisation/SER";
 import respond from "../../serialisation/respond";
 
 export function bodyGetUnitPrice(broker: Broker, req: Request, res: Response): Big | null {
-    const priceString: string | undefined = req.body["unit price"];
+    const priceString: string | undefined = req.body["unitPrice"];
 
     if (priceString == null) {
         respond(res, 400, "missing body parameter: unit price", SER.NO);

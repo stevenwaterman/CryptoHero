@@ -44,7 +44,7 @@ function placeOrder(broker: Broker, req: Request, res: Response): void {
     try {
         broker.placeOrder(order);
     } catch (error) {
-        return respond(res, 400, error, SER.ERROR);
+        return respond(res, 400, error, SER.NO);
     }
 
     respond(res, 200, order, SER.ORDER);

@@ -1,5 +1,5 @@
 import Instrument from "../../../models/Instrument";
-import ShowViewTradeModalAction from "../viewTrade/ShowViewTradeModalAction";
+import ShowViewOrderModalAction from "../viewOrder/ShowViewOrderModalAction";
 import Order from "../../../models/Order";
 import ShowTotalFundsModalAction from "./ShowTotalFundsModalAction";
 
