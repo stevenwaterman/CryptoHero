@@ -14,7 +14,7 @@ import Requirements from "../util/requirements";
 setup();
 
 function getUrl(accountId: string): string {
-    return `${G.API}trades/list/account/${accountId}`;
+    return `${G.API}orders/list/account/${accountId}`;
 }
 
 test("Happy Path", done => {
@@ -33,6 +33,7 @@ test("Happy Path", done => {
 
     request.get(getUrl(acc1.id), (error, response, body) => {
         expect(error).toBeFalsy();
+        console.log(response.body);
         expect(response.statusCode).toEqual(200);
         done();
     });

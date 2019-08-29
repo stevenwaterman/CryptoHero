@@ -1,5 +1,5 @@
 import Broker from "../../brokers/broker";
-import {Request, RequestHandler, Response} from "express";
+import {RequestHandler, Request, Response} from "express";
 
 export function withBroker<T>(
     broker: Broker,

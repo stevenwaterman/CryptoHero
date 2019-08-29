@@ -187,6 +187,26 @@ describe("includes", () => {
     });
 });
 
+describe("deleteFirstIf", () => {
+    test("nothing happens with empty list", () => {
+        expect(() => {list.deleteFirstIf(() => true)}).not.toThrow();
+    });
+
+    test("can successfully delete an item", ()=> {
+        list.push(1,2);
+        list.deleteFirstIf(it => it === 1);
+        expect(list.includes(1)).toBeFalsy();
+        expect(list.includes(2)).toBeTruthy();
+    });
+
+    test("can successfully not delete an item", ()=> {
+        list.push(1,2);
+        list.deleteFirstIf(it => it === 2);
+        expect(list.includes(1)).toBeTruthy();
+        expect(list.includes(2)).toBeTruthy();
+    });
+});
+
 describe("min", () => {
     test("undefined when list is empty", () => {
         expect(list.min()).toBeUndefined();

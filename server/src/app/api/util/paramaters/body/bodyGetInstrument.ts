@@ -1,20 +1,20 @@
 import {Request, Response} from "express";
 import Broker from "../../../../brokers/broker";
 import Instrument from "../../../../trading/instrument";
+import SER from "../../serialisation/SER";
+import respond from "../../serialisation/respond";
 
 export function bodyGetInstrument(broker: Broker, req: Request, res: Response): Instrument | null {
     const instrumentString: string | undefined = req.body["instrument"];
 
     if (instrumentString == null) {
-        res.status(400);
-        res.send("missing body parameter: instrument");
+        respond(res, 400, "missing body parameter: instrument", SER.NO);
         return null
     }
 
     const instrument: Instrument | undefined = Instrument.MAP.get(instrumentString);
     if (instrument == null) {
-        res.status(404);
-        res.send(`instrument ${instrument} not found`);
+        respond(res, 404, `instrument ${instrument} not found`, SER.NO);
         return null
     }
     return instrument

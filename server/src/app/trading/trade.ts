@@ -4,7 +4,7 @@ import Account from "./account";
 import {REGISTRY} from "../registry";
 
 /**
- * Stores information about a tradeModal that has been mde in the exchange
+ * Stores information about a trade that has been mde in the exchange
  */
 export default class Trade {
     id = uuidv4();

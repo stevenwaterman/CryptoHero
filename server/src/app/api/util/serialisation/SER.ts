@@ -8,10 +8,11 @@ import TradeDirection from "../../../trading/tradeDirection";
 import PriceAggregate, {PriceAggregateElement} from "../../../brokers/priceAggregate";
 import {OrderState} from "../../../trading/orderState";
 
-export type Serialisable = string | number | {[k: string]: Serialisable | Array<Serialisable>};
+type InnerSerialisable = null | string | number | {[k: string]: InnerSerialisable | Array<InnerSerialisable>};
+export type Serialisable = InnerSerialisable | Array<InnerSerialisable>
 
 export default class SER {
-    static NO<T extends Serialisable | Array<Serialisable>>(serialisable: T): T {
+    static NO<T extends Serialisable>(serialisable: T): T {
         return serialisable;
     }
 
@@ -19,11 +20,15 @@ export default class SER {
         return error.message;
     }
 
-    static BIG(big: Big): Serialisable {
-        return big.toString();
+    static BIG(big: Big | null): InnerSerialisable {
+        if(big == null){
+            return null;
+        } else {
+            return big.toString();
+        }
     }
 
-    static MAP<K, V>(map: Map<K, V>, keyFunc: (k: K) => string, valFunc: (v: V) => any): Serialisable {
+    static MAP<K, V>(map: Map<K, V>, keyFunc: (k: K) => string, valFunc: (v: V) => any): InnerSerialisable {
         return map
             .mapKeys(keyFunc)
             .map(valFunc)
@@ -32,8 +37,8 @@ export default class SER {
 
     static MAPFUNC<K, V>(
         keyFunc: (k: K) => string,
-        valFunc: (v: V) => Serialisable
-    ): (map: Map<K, V>) => Serialisable {
+        valFunc: (v: V) => InnerSerialisable
+    ): (map: Map<K, V>) => InnerSerialisable {
         return (map: Map<K, V>) => SER.MAP(map, keyFunc, valFunc);
     }
 
@@ -49,7 +54,7 @@ export default class SER {
         return account.id;
     }
 
-    static ARRAY<S, T extends Serialisable>(array: Array<S>, func: (s: S) => T): Array<T> {
+    static ARRAY<S, T extends InnerSerialisable>(array: Array<S>, func: (s: S) => T): Array<T> {
         return array.map(func);
     }
 
@@ -57,7 +62,7 @@ export default class SER {
         return instrument.name;
     }
 
-    static ARRAYFUNC<S, T extends Serialisable>(func: (s: S) => T): (arr: Array<S>) => Array<T> {
+    static ARRAYFUNC<S, T extends InnerSerialisable>(func: (s: S) => T): (arr: Array<S>) => Array<T> {
         return (arr: Array<S>) => SER.ARRAY(arr, func);
     }
 
@@ -70,13 +75,13 @@ export default class SER {
             instrument,
             originalUnits,
             state,
-            timestamp: {getTime},
+            timestamp,
             unitPrice
         }: Order
-    ): Serialisable {
+    ): InnerSerialisable {
         return {
             "id": id,
-            "time": getTime(),
+            "time": timestamp.getTime(),
             "instrument": SER.INSTRUMENT(instrument),
             "state": SER.ORDER_STATE(state),
             "direction": SER.DIRECTION(direction),
@@ -87,21 +92,21 @@ export default class SER {
         };
     }
 
-    static PRICE_AGGREGATE({buy, sell}: PriceAggregate): Serialisable {
+    static PRICE_AGGREGATE({buy, sell}: PriceAggregate): InnerSerialisable {
         return {
             "buy": SER.ARRAY(buy, SER.PRICE_AGGREGATE_ELEMENT),
             "sell": SER.ARRAY(sell, SER.PRICE_AGGREGATE_ELEMENT)
         }
     }
 
-    private static PRICE_AGGREGATE_ELEMENT(element: PriceAggregateElement): Serialisable {
+    private static PRICE_AGGREGATE_ELEMENT(element: PriceAggregateElement): InnerSerialisable {
         return {
             "unit price": SER.BIG(element.unitPrice),
             "units": SER.BIG(element.units)
         }
     }
 
-    private static ORDER_STATE(state: OrderState): Serialisable {
+    private static ORDER_STATE(state: OrderState): InnerSerialisable {
         return state.name
     }
 }

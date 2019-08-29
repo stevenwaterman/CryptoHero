@@ -8,6 +8,7 @@ import {setup} from "../util/setup";
 import Big from "big.js";
 import {G} from "../util/global";
 import Requirements from "../util/requirements";
+import {OrderState} from "../../../app/trading/orderState";
 
 setup();
 
@@ -23,15 +24,19 @@ test("Happy Path", done => {
 
     const expected = {
         "id": order.id,
-        "account": order.account.id,
+        "average price": null,
+        "instrument": Instrument.GBPBTC.name,
+        "remaining units": new Big("20").toString(),
+        "state": OrderState.PENDING.name,
         "direction": order.direction.name,
-        "timestamp": order.timestamp.getTime(),
+        "time": order.timestamp.getTime(),
         "units": order.originalUnits.toString(),
         "unit price": order.unitPrice.toString()
     };
 
     request.get(getUrl(order), (error, response, body) => {
         expect(error).toBeFalsy();
+        console.log(response.body);
         expect(response.statusCode).toEqual(200);
 
         const json = JSON.parse(body);

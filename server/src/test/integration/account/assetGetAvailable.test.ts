@@ -24,12 +24,10 @@ test("Happy Path", done => {
 
     request.get(getUrl(account.id, Asset.BTC.name), (error, response, body) => {
         expect(error).toBeFalsy();
+        console.log(response.body);
         expect(response.statusCode).toEqual(200);
         const json = JSON.parse(body);
-
-        const expected = {
-            "amount": new Big("60").toString()
-        };
+        const expected = new Big("60").toString()
         expect(json).toEqual(expected);
         done();
     });

@@ -84,7 +84,13 @@ export default class Order {
     readonly getExpectedAmount = () =>
         this.getAmountSoFar().plus(this.getFutureExpectedAmount());
 
-    readonly getAveragePrice = () =>
-        this.getAmountSoFar().div(this.getCompletedUnits());
+    readonly getAveragePrice: () => Big | null = () => {
+        const completed = this.getCompletedUnits();
+        if (completed.eq(new Big("0"))) {
+            return null;
+        } else {
+            return this.getAmountSoFar().div(completed);
+        }
+    }
 }
 

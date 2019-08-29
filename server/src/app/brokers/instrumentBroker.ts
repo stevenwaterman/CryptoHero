@@ -23,7 +23,7 @@ export default class InstrumentBroker {
     }
 
     /**
-     * Performs a tradeModal on two matched orders. Adjusts the units of the two orders.
+     * Performs a trade on two matched orders. Adjusts the units of the two orders.
      * @param order The new order. Must be defined + not null
      * @param matched The old order from the book. Must be define + not null
      * @returns {Big} The price that the trade executed at
@@ -45,7 +45,7 @@ export default class InstrumentBroker {
     }
 
     /**
-     * Tells you whether a tradeModal can be done between two orders.
+     * Tells you whether a trade can be done between two orders.
      * One of the orders must be a buy, the other must be a sell.
      */
     private static tradePossible(order: Order, matched: Order): boolean {
@@ -70,24 +70,42 @@ export default class InstrumentBroker {
     }
 
     private static updatePositionOnPlaceOrder(
-        {account, spentAsset: assetToLock, originallyLocked: amountToLock}: Order
+        {account, spentAsset, gainedAsset, originalExpectedAmount, direction, originallyLocked: amountToLock}: Order
     ): void {
-        const position = account.getAvailableAssets(assetToLock);
-        if (position.lt(amountToLock)) {
-            throw `Account cannot afford ${amountToLock}${assetToLock.name}, only has ${position}`;
+        const spentAssetPosition = account.getAvailableAssets(spentAsset);
+        if (spentAssetPosition.lt(amountToLock)) {
+            throw `Account cannot afford ${amountToLock}${spentAsset.name}, only has ${spentAssetPosition}`;
         }
 
+        if(direction === TradeDirection.SELL && originalExpectedAmount.lt(new Big("0"))){
+            //Selling at negative price
+            const gainedAssetPosition = account.getAvailableAssets(gainedAsset);
+            const gainedAssetSpend = new Big("0").sub(originalExpectedAmount);
+            if (gainedAssetPosition.lt(gainedAssetSpend)) {
+                throw `Account cannot afford ${gainedAssetSpend}${gainedAsset.name}, only has ${gainedAssetPosition}`;
+            }
+            account.adjustAssets(gainedAsset, originalExpectedAmount);
+        }
+
+
         const negativeAdjustment = new Big("0").minus(amountToLock);
-        account.adjustAssets(assetToLock, negativeAdjustment);
+        account.adjustAssets(spentAsset, negativeAdjustment);
     }
 
     private static updatePositionOnCancelOrder(
-        {account, spentAsset: assetToUnlock, originallyLocked, ...rest}: Order
+        {account, spentAsset,gainedAsset,originalExpectedAmount, direction,originallyLocked, ...rest}: Order
     ): void {
 
         const fractionRemaining: Big = rest.getRemainingFraction();
-        const amountToUnlock: Big = originallyLocked.mul(fractionRemaining);
-        account.adjustAssets(assetToUnlock, amountToUnlock);
+        const amountOfSpentAssetToUnlock: Big = originallyLocked.mul(fractionRemaining);
+        account.adjustAssets(spentAsset, amountOfSpentAssetToUnlock);
+
+        if(direction === TradeDirection.SELL && originalExpectedAmount.lt(new Big("0"))){
+            //Selling at negative price
+            const amountOfGainedAssetToUnlock: Big = originalExpectedAmount.mul(fractionRemaining);
+            const negative = new Big("0").sub(amountOfGainedAssetToUnlock);
+            account.adjustAssets(gainedAsset, negative);
+        }
     }
 
     private static updatePositionOnBuy(
@@ -114,12 +132,23 @@ export default class InstrumentBroker {
     }
 
     private static updatePositionOnSell(
-        {account, gainedAsset}: Order,
+        {account, gainedAsset, unitPrice, spentAsset}: Order,
         actualUnits: Big,
         actualUnitPrice: Big
     ): void {
-        const gainedAmount = actualUnits.mul(actualUnitPrice);
-        account.adjustAssets(gainedAsset, gainedAmount);
+        if(actualUnitPrice.gt(new Big("0"))){
+            //Selling for positive price, no assets were locked
+            const gainedAmount = actualUnits.mul(actualUnitPrice);
+            account.adjustAssets(gainedAsset, gainedAmount);
+        } else if(actualUnitPrice.lt(new Big("0"))){
+            //Selling for negative price, if they sold for more than expect then some refund needed
+            const expectedGain = actualUnits.mul(unitPrice); //Negative number
+            const actualGain = actualUnits.mul(actualUnitPrice); //Negative number, higher (closer to 0) than expectedGain
+            const refundDue = expectedGain.minus(actualGain); // (-e) - (-a) = +delta
+            account.adjustAssets(gainedAsset, refundDue);
+        } else{
+            //Selling for 0, so no need to adjust assets
+        }
     }
 
     /**
@@ -192,7 +221,7 @@ export default class InstrumentBroker {
      */
     private makeTrades(order: Order): void {
         let match = this.getPotentialOrderMatch(order);
-        while (match != null && InstrumentBroker.tradePossible(order, match)) {
+        while (order.state === OrderState.PENDING && match != null && InstrumentBroker.tradePossible(order, match)) {
             this.lastPrice = InstrumentBroker.makeTrade(order, match);
             this.clearCompletedOrders();
             match = this.getPotentialOrderMatch(order);

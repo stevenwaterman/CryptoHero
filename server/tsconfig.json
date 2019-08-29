@@ -22,11 +22,9 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
+    "sourceMap": true,
     "jsx": "preserve"
   },
-  "files": [
-    "./type.d.ts"
-  ],
   "include": [
     "src"
   ]

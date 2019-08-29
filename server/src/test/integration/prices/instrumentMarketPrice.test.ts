@@ -30,12 +30,11 @@ test("Happy Path", done => {
     G.BROKER.placeOrder(buy1);
     G.BROKER.placeOrder(sell1);
 
-    const expected = {
-        "unit price": new Big("1.5").toString(),
-    };
+    const expected = new Big("1.5").toString();
 
     request.get(getUrl(Instrument.GBPBTC.name), (error, response, body) => {
         expect(error).toBeFalsy();
+        console.log(response.body);
         expect(response.statusCode).toEqual(200);
         const json = JSON.parse(body);
         expect(json).toEqual(expected);

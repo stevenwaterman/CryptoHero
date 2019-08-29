@@ -4,13 +4,19 @@ import Order from "../../../app/trading/order";
 import {Big} from "big.js";
 import TradeDirection from "../../../app/trading/tradeDirection";
 import Instrument from "../../../app/trading/instrument";
+import {REGISTRY} from "../../../app/registry";
+import Asset from "../../../app/trading/asset";
+import MockDate from "mockdate";
 
 let acc1: Account;
 let acc2: Account;
-
 beforeEach(() => {
+    REGISTRY.clear();
     acc1 = new Account();
     acc2 = new Account();
+    [acc1, acc2].forEach(acc => {
+        Asset.ALL.forEach(it => acc.adjustAssets(it, new Big("1000")));
+    });
 });
 
 describe("buyComparator", () => {

@@ -11,6 +11,7 @@ import {bodyGetUnitPrice} from "../util/paramaters/body/bodyGetUnitPrice";
 import {urlGetOrder} from "../util/paramaters/url/urlGetOrder";
 import SER from "../util/serialisation/SER";
 import {bodyGetAccount} from "../util/paramaters/body/bodyGetAccount";
+import respond from "../util/serialisation/respond";
 
 export function setupOrdersEndpoints(server: BitcoinExchangeServer): void {
     const app = server.app;
@@ -43,31 +44,28 @@ function placeOrder(broker: Broker, req: Request, res: Response): void {
     try {
         broker.placeOrder(order);
     } catch (error) {
-        return res.respond(400, error, SER.ERROR);
+        return respond(res, 400, error, SER.ERROR);
     }
 
-    res.respond(200, order, SER.ORDER);
+    respond(res, 200, order, SER.ORDER);
 }
 
 function listOrders(broker: Broker, req: Request, res: Response): void {
     const account = urlGetAccount(broker, req, res);
     if (account == null) return;
-    res.respond(200, account.orders, SER.ARRAYFUNC(SER.ORDER));
+    respond(res, 200, account.orders, SER.ARRAYFUNC(SER.ORDER));
 }
 
 function cancelOrder(broker: Broker, req: Request, res: Response): void {
     const order = urlGetOrder(broker, req, res);
     if (order == null) return;
 
-    const instrument = bodyGetInstrument(broker, req, res);
-    if (instrument == null) return;
-
     broker.cancelOrder(order);
-    res.respond(200, "Successful", SER.NO);
+    respond(res, 200, "Successful", SER.NO);
 }
 
 function viewOrder(broker: Broker, req: Request, res: Response): void {
     const order = urlGetOrder(broker, req, res);
     if (order == null) return;
-    res.respond(200, order, SER.ORDER);
+    respond(res, 200, order, SER.ORDER);
 }

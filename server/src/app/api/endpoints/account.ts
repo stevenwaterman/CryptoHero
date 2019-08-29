@@ -10,6 +10,7 @@ import {urlGetAsset} from "../util/paramaters/url/urlGetAsset";
 import {bodyGetUnits} from "../util/paramaters/body/bodyGetUnits";
 import Account from "../../trading/account";
 import SER from "../util/serialisation/SER";
+import respond from "../util/serialisation/respond";
 
 
 export function setupAccountsEndpoints(server: BitcoinExchangeServer): void {
@@ -26,7 +27,7 @@ export function setupAccountsEndpoints(server: BitcoinExchangeServer): void {
 
 function createAccount(broker: Broker, req: Request, res: Response): void {
     const account = new Account();
-    res.respond(200, account, SER.ACCOUNT);
+    respond(res, 200, account, SER.ACCOUNT);
 }
 
 function getAllAvailableAssets(broker: Broker, req: Request, res: Response): void {
@@ -34,7 +35,7 @@ function getAllAvailableAssets(broker: Broker, req: Request, res: Response): voi
     if (account == null) return;
 
     const assets: Map<Asset, Big> = account.getAllAvailableAssets();
-    res.respond(200, assets, SER.MAPFUNC(SER.ASSET, SER.BIG));
+    respond(res, 200, assets, SER.MAPFUNC(SER.ASSET, SER.BIG));
 }
 
 function getOneAvailableAsset(broker: Broker, req: Request, res: Response): void {
@@ -45,7 +46,7 @@ function getOneAvailableAsset(broker: Broker, req: Request, res: Response): void
     if (asset == null) return;
 
     const amount: Big = account.getAvailableAssets(asset);
-    res.respond(200, amount, SER.BIG);
+    respond(res, 200, amount, SER.BIG);
 }
 
 function depositAsset(broker: Broker, req: Request, res: Response): void {
@@ -59,11 +60,11 @@ function depositAsset(broker: Broker, req: Request, res: Response): void {
     if (units == null) return;
     if (units.lte(new Big("0"))) {
         const out = `Amount must be positive, was ${units}`;
-        return res.respond(400, out, SER.NO.bind(SER));
+        return respond(res, 400, out, SER.NO);
     }
 
     account.adjustAssets(asset, units);
-    return res.respond(200, "Successful", SER.NO.bind(SER));
+    return respond(res, 200, "Successful", SER.NO);
 }
 
 function withdrawAsset(broker: Broker, req: Request, res: Response): void {
@@ -78,12 +79,11 @@ function withdrawAsset(broker: Broker, req: Request, res: Response): void {
 
     const available = account.getAvailableAssets(asset);
     if (available.lt(units)) {
-        res.status(400);
-        res.send("Invalid funds");
+        respond(res, 400, "Invalid Funds", SER.NO);
         return;
     }
 
     const negative = new Big("0").minus(units);
     account.adjustAssets(asset, negative);
-    res.respond(200, "Successful", SER.NO.bind(SER));
+    respond(res, 200, "Successful", SER.NO);
 }

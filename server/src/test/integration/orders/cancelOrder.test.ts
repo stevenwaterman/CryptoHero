@@ -23,9 +23,10 @@ test("Happy Path", done => {
 
     request.post(getUrl(order.id), (error, response, body) => {
         expect(error).toBeFalsy();
+        console.log(response.body);
         expect(response.statusCode).toEqual(200);
 
-        expect(body).toEqual("Successful");
+        expect(body).toEqual("\"Successful\"");
         //TODO check that it's actually deleted
         done();
     });
@@ -63,5 +64,4 @@ const defaultParams = {
 
 new Requirements(defaultParams, testRunner)
     .invalidWhen("order", "1", 404)
-    .invalidWhen("instrument", "abc", 404)
     .execute();

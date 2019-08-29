@@ -1,13 +1,14 @@
 import {Request, Response} from "express";
 import Broker from "../../../../brokers/broker";
 import Big from "big.js";
+import SER from "../../serialisation/SER";
+import respond from "../../serialisation/respond";
 
 export function bodyGetUnits(broker: Broker, req: Request, res: Response): Big | null {
     const unitString: string | undefined = req.body["units"];
 
     if (unitString == null) {
-        res.status(400);
-        res.send("missing body parameter: units");
+        respond(res, 400, "missing body parameter: units", SER.NO);
         return null
     }
 
@@ -15,14 +16,12 @@ export function bodyGetUnits(broker: Broker, req: Request, res: Response): Big |
     try {
         units = new Big(unitString);
     } catch {
-        res.status(400);
-        res.send(`units ${unitString} is not a number`);
+        respond(res, 400, `units ${unitString} is not a number`, SER.NO);
         return null;
     }
 
     if (units.lte(new Big("0"))) {
-        res.status(400);
-        res.send(`units must be positive, was ${units.toString()}`);
+        respond(res, 400, `units must be positive, was ${units.toString()}`, SER.NO);
         return null;
     }
     return units;
