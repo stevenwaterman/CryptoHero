@@ -8,6 +8,8 @@ import Big from "big.js";
 import {setup} from "../util/setup";
 import {G} from "../util/global";
 import Requirements from "../util/requirements";
+import {REGISTRY} from "../../../app/registry";
+import {OrderState} from "../../../app/trading/orderState";
 
 setup();
 
@@ -26,8 +28,9 @@ test("Happy Path", done => {
         console.log(response.body);
         expect(response.statusCode).toEqual(200);
 
-        expect(body).toEqual("\"Successful\"");
-        //TODO check that it's actually deleted
+        const json = JSON.parse(body);
+        expect(json).toEqual("Successful");
+        expect(account.orders[0].state).toEqual(OrderState.CANCELLED);
         done();
     });
 });

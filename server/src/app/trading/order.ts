@@ -56,7 +56,6 @@ export default class Order {
         this.originallyLocked = direction.originallyLocked(this);
 
         REGISTRY.registerOrder(this);
-        account.orders.push(this);
     }
 
     readonly getCompletedUnits = () =>

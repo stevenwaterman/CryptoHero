@@ -6,6 +6,7 @@ import Order from "../trading/order";
 import TradeDirection from "../trading/tradeDirection";
 import PriceAggregate, {PriceAggregateElement} from "./priceAggregate";
 import {OrderState} from "../trading/orderState";
+import account from "../trading/account";
 
 
 /**
@@ -172,16 +173,13 @@ export default class InstrumentBroker {
      * @param order Should be a defined, non-null Order object. Otherwise, will throw error.
      */
     place(order: Order): void {
-        const validDirections = [TradeDirection.BUY, TradeDirection.SELL];
-        if (!validDirections.includes(order.direction))
-            throw `Unrecognised TradeDirection: ${order.direction}`;
-
         this.selfTradeGuard(order);
         InstrumentBroker.updatePositionOnPlaceOrder(order);
         this.makeTrades(order);
         if (order.getRemainingUnits().gt(new Big("0"))) {
             this.pushOrder(order);
         }
+        order.account.orders.push(order);
     }
 
     cancel(order: Order): void {

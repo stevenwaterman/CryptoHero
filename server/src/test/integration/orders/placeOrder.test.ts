@@ -7,6 +7,7 @@ import Big from "big.js";
 import {setup} from "../util/setup";
 import {G} from "../util/global";
 import Requirements from "../util/requirements";
+import Order from "../../../app/trading/order";
 
 setup();
 const url = G.API + "orders/place";
@@ -29,11 +30,36 @@ test("Happy Path", done => {
     request.post(url, options, (error, response, body) => {
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(200);
-        //TODO check it's actually laced
+        expect(account.orders).toHaveLength(1);
         done();
     });
 });
-//TODO test against self-trading
+
+test("cannot self-trade", done => {
+    const account = new Account();
+    account.adjustAssets(Asset.BTC, new Big("100"));
+    account.adjustAssets(Asset.GBP, new Big("100"));
+    G.BROKER.placeOrder(new Order(account, TradeDirection.BUY, Instrument.GBPBTC, new Big("1"), new Big("1")));
+
+    const options = {
+        "json": true,
+        "body": {
+            "account": account.id,
+            "instrument": Instrument.GBPBTC.name,
+            "direction": TradeDirection.SELL.name,
+            "units": new Big("1").toString(),
+            "unit price": new Big("1").toString()
+        }
+    };
+
+    request.post(url, options, (error, response) => {
+        expect(error).toBeFalsy();
+        expect(response.statusCode).toEqual(400);
+        expect(account.orders).toHaveLength(1);
+        done();
+    });
+});
+
 test("Not enough funds", done => {
     const account = new Account();
     account.adjustAssets(Asset.BTC, new Big("5"));
@@ -52,7 +78,7 @@ test("Not enough funds", done => {
     request.post(url, options, (error, response) => {
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(400);
-        //TODO check it's not placed
+        expect(account.orders).toHaveLength(0);
         done();
     });
 });

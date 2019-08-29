@@ -28,13 +28,27 @@ test("Happy Path", done => {
     G.BROKER.placeOrder(buy);
     G.BROKER.placeOrder(sell);
 
-    //TODO check that it actually works
-
+    const averagePrice = buy.getAveragePrice();
+    const expected = [
+        {
+            "id": buy.id,
+            "time": buy.timestamp.getTime(),
+            "instrument": buy.instrument.name,
+            "state": buy.state.name,
+            "direction": buy.direction.name,
+            "units": buy.originalUnits.toString(),
+            "unit price": buy.unitPrice.toString(),
+            "remaining units": buy.getRemainingUnits().toString(),
+            "average price": averagePrice == null ? null : averagePrice.toString()
+        }
+    ];
 
     request.get(getUrl(acc1.id), (error, response, body) => {
         expect(error).toBeFalsy();
         console.log(response.body);
         expect(response.statusCode).toEqual(200);
+        const json = JSON.parse(body);
+        expect(json).toEqual(expected);
         done();
     });
 });

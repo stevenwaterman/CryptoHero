@@ -20,6 +20,6 @@ export default class Instrument {
         this.toAsset = toAsset;
         this.fromAsset = fromAsset;
 
-        this.name = `${this.toAsset.name}${this.fromAsset.name}`;
+        this.name = `${this.toAsset.name}/${this.fromAsset.name}`;
     }
 }

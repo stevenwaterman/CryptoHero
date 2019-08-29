@@ -79,7 +79,7 @@ function withdrawAsset(broker: Broker, req: Request, res: Response): void {
 
     const available = account.getAvailableAssets(asset);
     if (available.lt(units)) {
-        respond(res, 400, "Invalid Funds", SER.NO);
+        respond(res, 400, "Insufficient Funds", SER.NO);
         return;
     }
 

@@ -12,8 +12,6 @@ function getUrl(accountId: string, assetName: string): string {
     return `${G.API}account/${accountId}/assets/${assetName}/withdraw`;
 }
 
-//TODO when not enough money
-
 test("Happy Path", done => {
     const account = new Account();
     account.adjustAssets(Asset.BTC, new Big("120"));
@@ -32,6 +30,28 @@ test("Happy Path", done => {
         expect(body).toEqual(expected);
 
         expect(account.getAvailableAssets(Asset.BTC)).toEqual(new Big("20"));
+        done();
+    });
+});
+
+test("Not enough money", done => {
+    const account = new Account();
+    account.adjustAssets(Asset.BTC, new Big("0"));
+
+    const options = {
+        "json": true,
+        "body": {
+            "units": new Big("100")
+        }
+    };
+
+    request.post(getUrl(account.id, Asset.BTC.name), options, (error, response, body) => {
+        expect(error).toBeFalsy();
+        expect(response.statusCode).toEqual(400);
+        const expected = "Insufficient Funds";
+        expect(body).toEqual(expected);
+
+        expect(account.getAvailableAssets(Asset.BTC)).toEqual(new Big("0"));
         done();
     });
 });
