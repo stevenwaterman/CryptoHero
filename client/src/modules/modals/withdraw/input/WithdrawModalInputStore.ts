@@ -21,7 +21,7 @@ export default interface WithdrawModalInputStore {
 }
 
 export const initialWithdrawModalInputStore: WithdrawModalInputStore = {
-    asset: "LTCGBPNA",
+    asset: "NA",
 
     unitsText: "0",
     units: 0,

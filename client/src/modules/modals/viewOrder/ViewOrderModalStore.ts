@@ -8,12 +8,13 @@ export default interface ViewOrderModalStore {
 
 export const initialViewTradeModalStore: ViewOrderModalStore = {
     order: new Order(
-        "",
+        "NA",
         new Date(),
-        new Instrument("LTCGBPNA", "LTCGBPNA"),
+        new Instrument("NA", "NA"),
         true,
         1,
         1,
+        "NA",
         1,
         1
     )

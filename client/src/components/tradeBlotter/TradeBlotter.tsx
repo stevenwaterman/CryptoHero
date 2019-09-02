@@ -15,10 +15,11 @@ export default class TradeBlotter extends React.PureComponent<ChartCardProps> {
                             <Card.Title className="text-center my-0"><b>Trades</b></Card.Title>
                         </Col>
                         <Col xs="auto">
-                            <ToggleButtonGroup name="tradeType" type="radio" value={this.props.pendingSelected}
+                            <ToggleButtonGroup name="tradeType" type="radio" value={this.props.showState}
                                                onChange={this.props.onSetCategory}>
-                                <ToggleButton value={true}>Pending</ToggleButton>
-                                <ToggleButton value={false}>Completed</ToggleButton>
+                                <ToggleButton value={"pending"}>Pending</ToggleButton>
+                                <ToggleButton value={"complete"}>Completed</ToggleButton>
+                                <ToggleButton value={"cancelled"}>Cancelled</ToggleButton>
                             </ToggleButtonGroup>
                         </Col>
                     </Row>
@@ -30,6 +31,7 @@ export default class TradeBlotter extends React.PureComponent<ChartCardProps> {
                             <th scope="col">Time</th>
                             <th scope="col">Units</th>
                             <th scope="col">Unit Price</th>
+                            <th scope="col">Progress</th>
                         </tr>
                         </thead>
                         <tbody className="table-hover">

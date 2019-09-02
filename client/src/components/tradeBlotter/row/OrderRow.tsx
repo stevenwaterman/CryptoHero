@@ -20,6 +20,7 @@ export default class OrderRow extends React.PureComponent<OrderRowProps> {
                 <td>{this.props.order.time.toLocaleString()}</td>
                 <td>{formatMoney(this.props.order.units, 5, true, true)}</td>
                 <td>{formatMoney(this.props.order.unitPrice, 5, true, true)}</td>
+                <td>{formatMoney(100 - 100 * this.props.order.remainingUnits / this.props.order.units, 0, false, false)}%</td>
             </tr>
         );
     }

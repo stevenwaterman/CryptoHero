@@ -9,15 +9,6 @@ import {REGISTRY} from "../../app/registry";
 import InstrumentBroker from "../../app/brokers/instrumentBroker";
 import Asset from "../../app/trading/asset";
 
-export class ExpectedPending {
-    readonly buy: Array<ExpectedOrder>;
-    readonly sell: Array<ExpectedOrder>;
-
-    constructor(buy: Array<ExpectedOrder>, sell: Array<ExpectedOrder>) {
-        this.buy = buy;
-        this.sell = sell;
-    }
-}
 
 export class ExpectedAccount {
     readonly id: string;

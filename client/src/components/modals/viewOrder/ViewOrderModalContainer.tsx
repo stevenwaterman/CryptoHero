@@ -26,7 +26,7 @@ export type ViewTradeModalProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onClickCancel: fireNP(dispatch, createCancelOrderAction),
+        onClickCancel: async () => await dispatch(createCancelOrderAction()),
         onHide: fireNP(dispatch, createHideViewTradeModalAction)
     }
 }

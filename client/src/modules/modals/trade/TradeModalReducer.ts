@@ -12,21 +12,14 @@ export function tradeModalReducer(
     switch (action.type) {
         case ShowTradeModalType:
             return startTrade(state, action as ShowTradeModalAction);
-        case ConfirmTradeType:
-            return confirmTrade(state, action as ConfirmTradeAction);
         default:
             return state;
     }
 }
 
-function confirmTrade(state: State, action: ConfirmTradeAction): State {
-    return state;
-}
-
 function startTrade(state: State, action: ShowTradeModalAction): State {
     const {instrument, buying} = action.payload;
     return {
-        ...state,
         instrument: instrument,
         buying: buying
     }

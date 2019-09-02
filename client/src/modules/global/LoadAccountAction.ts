@@ -26,7 +26,7 @@ export const createLoadAction = (accountId: string): ThunkAction<Promise<void>, 
 
         const accountState: any = await response.json();
 
-        const orders: Array<Order> = accountState.orders;
+        const orders: Array<Order> = accountState.orders.map((it: any) => Order.create(it));
         const funds: Map<string, number> = new Map(
             Object.entries(accountState.funds).map(([asset, price]) =>
                 [asset,

@@ -26,7 +26,7 @@ export type DepositModalProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onConfirm: fireNP(dispatch, createConfirmDepositAction),
+        onConfirm: () => dispatch(createConfirmDepositAction()),
         onHide: fireNP(dispatch, createHideDepositModalAction)
     }
 }

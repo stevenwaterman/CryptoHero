@@ -1,22 +1,27 @@
 import {State} from "../../RootStore";
 import Order from "../../../models/Order";
-
-interface IPayload {
-    order: Order
-}
+import {ThunkAction, ThunkDispatch} from "redux-thunk";
+import {Action} from "redux";
+import {createLoadAction} from "../../global/LoadAccountAction";
 
 export const CancelOrderType: string = "CANCEL_ORDER";
 
 export default interface CancelOrderAction {
     type: typeof CancelOrderType,
-    payload: IPayload
 }
 
-export function createCancelOrderAction(state: State): CancelOrderAction {
-    return {
-        type: CancelOrderType,
-        payload: {
-            order: state.viewOrderModal.order
-        }
+export const createCancelOrderAction = (): ThunkAction<Promise<void>, State, void, Action<any>> => {
+    return async (dispatch: ThunkDispatch<State, void, Action<any>>, getState: () => State): Promise<void> => {
+        const state = getState();
+        await fetch(`http://localhost:4000/api/orders/${state.viewOrderModal.order.id}/cancel`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        await dispatch(createLoadAction(state.account.selectedId));
+        dispatch({
+            type: CancelOrderType
+        })
     }
-}
+};

@@ -27,7 +27,7 @@ export type WithdrawModalProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
-        onConfirm: fireNP(dispatch, createConfirmWithdrawAction),
+        onConfirm: () => dispatch(createConfirmWithdrawAction()),
         onHide: fireNP(dispatch, createHideWithdrawModalAction)
     }
 }
