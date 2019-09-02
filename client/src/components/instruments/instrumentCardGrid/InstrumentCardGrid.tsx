@@ -18,7 +18,7 @@ function generateOneColumn(instrument: Instrument, isOnLeft: boolean): ELEMENT {
     )
 }
 
-export default class InstrumentCardGrid extends React.PureComponent<InstrumentCardGridProps> {
+export default class InstrumentCardGrid extends React.Component<InstrumentCardGridProps> {
     render(): ELEMENT {
         return (
             <Row className="mt-3">{generateColumns(this.props)}</Row>

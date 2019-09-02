@@ -291,7 +291,7 @@ export default class InstrumentBroker {
                 last.units = last.units.plus(order.getRemainingUnits());
                 return acc;
             } else {
-                acc.push(new PriceAggregateElement(order.unitPrice, order.getRemainingUnits()));
+                acc.push(new PriceAggregateElement(order.unitPrice, last.units.plus(order.getRemainingUnits())));
                 return acc;
             }
         };

@@ -3,7 +3,7 @@ import {formatMoney} from "../../../../util/FormatMoney";
 import React from "react";
 import {TradeDescriptionLineProps} from "./TradeDescriptionLineContainer";
 
-export default class TradeDescriptionLine extends React.PureComponent<TradeDescriptionLineProps> {
+export default class TradeDescriptionLine extends React.Component<TradeDescriptionLineProps> {
     render(): ELEMENT {
         if (this.props.units <= 0) {
             return <p className="text-center"><b>Increase {this.buySellString()} Amount</b></p>;

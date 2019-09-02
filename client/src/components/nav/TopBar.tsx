@@ -4,7 +4,7 @@ import {Button, Form, Navbar} from "react-bootstrap";
 import {TopBarProps} from "./TopBarContainer";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
-export default class TopBar extends React.PureComponent<TopBarProps> {
+export default class TopBar extends React.Component<TopBarProps> {
     render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
         return (
             <Navbar bg="primary" variant="dark" className="mb-4">

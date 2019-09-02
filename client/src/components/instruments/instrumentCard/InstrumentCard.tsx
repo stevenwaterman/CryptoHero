@@ -4,7 +4,7 @@ import {InstrumentCardProps} from "./InstrumentCardContainer";
 import {formatMoney} from "../../../util/FormatMoney";
 import {Button, Card, Col, Row} from "react-bootstrap";
 
-export default class InstrumentCard extends React.PureComponent<InstrumentCardProps> {
+export default class InstrumentCard extends React.Component<InstrumentCardProps> {
     render(): ELEMENT {
         return (
             <Card

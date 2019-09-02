@@ -15,7 +15,7 @@ function buySellString(buying: boolean): string {
     return buying ? "Buy" : "Sell";
 }
 
-export default class TradeModal extends React.PureComponent<TradeModalProps> {
+export default class TradeModal extends React.Component<TradeModalProps> {
     render(): ELEMENT {
         return (
             <Modal show={this.props.show} onHide={this.props.onHide}>

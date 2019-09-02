@@ -13,7 +13,7 @@ function getClass(buying: boolean): string {
     else return "table-danger";
 }
 
-export default class OrderRow extends React.PureComponent<OrderRowProps> {
+export default class OrderRow extends React.Component<OrderRowProps> {
     render(): ELEMENT {
         return (
             <tr className={getClass(this.props.order.isBuy)} onClick={() => this.props.onClick(this.props.order)}>

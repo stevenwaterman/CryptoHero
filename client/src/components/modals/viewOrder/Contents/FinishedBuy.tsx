@@ -4,7 +4,7 @@ import React from "react";
 import {ELEMENT} from "../../../../modules/RootStore";
 import {ViewTradeModalProps} from "../ViewOrderModalContainer";
 
-export default class FinishedBuy extends React.PureComponent<ViewTradeModalProps> {
+export default class FinishedBuy extends React.Component<ViewTradeModalProps> {
     render(): ELEMENT {
         const {averagePrice, id, instrument, remainingUnits, time, unitPrice, units} = this.props.trade;
         let average = averagePrice == null ? 0 : averagePrice;

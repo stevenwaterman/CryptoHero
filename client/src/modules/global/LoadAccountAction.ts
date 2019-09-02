@@ -7,6 +7,8 @@ import Order from "../../models/Order";
 import {createSetOrdersAction} from "../components/blotter/SetOrdersAction";
 import {Action} from "redux";
 import {createSetSelectedAccountAction} from "./SetSelectedAccountAction";
+import {createSetOrderDepthAction} from "../components/chart/SetOrderDepthDataAction";
+import OrderDepthData, {InstrumentOrderDepthData} from "../../models/OrderDepthData";
 
 export const LoadAccountType = "LOAD_ACCOUNT";
 
@@ -52,8 +54,19 @@ async function inner(accountId: string, dispatch: ThunkDispatch<State, void, Act
         )
     );
 
+    const orderDepth = new OrderDepthData(
+        Object.entries(accountState.orderDepth)
+            .map(([instrument, priceAggregate]: [any, any]) =>
+                [
+                    Instrument.fromName(instrument),
+                    InstrumentOrderDepthData.fromServer(priceAggregate)
+                ]
+            )
+    );
+
     dispatch(createSetAvailableFundsAction(state, funds));
     dispatch(createSetPricesAction(state, prices));
     dispatch(createSetOrdersAction(state, orders));
+    dispatch(createSetOrderDepthAction(state, orderDepth));
     dispatch(createSetSelectedAccountAction(state, accountId));
 }

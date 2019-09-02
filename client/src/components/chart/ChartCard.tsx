@@ -2,8 +2,18 @@ import React from "react";
 import {ChartCardProps} from "./ChartCardContainer";
 import {ELEMENT} from "../../modules/RootStore";
 import {Card, Col, Row, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
+import DepthChartContainer from "./depth/DepthChartContainer";
 
-export default class ChartCard extends React.PureComponent<ChartCardProps> {
+function chart(showHistorical: boolean): ELEMENT {
+    if(showHistorical){
+        //TODO
+        return <DepthChartContainer/>
+    } else{
+        return <DepthChartContainer/>
+    }
+}
+
+export default class ChartCard extends React.Component<ChartCardProps> {
     render(): ELEMENT {
         return (
             <Card>
@@ -22,7 +32,7 @@ export default class ChartCard extends React.PureComponent<ChartCardProps> {
                     </Row>
                 </Card.Header>
                 <Card.Body>
-                    <img alt="order depth chart" className="img-fluid" src="https://i.imgur.com/mu8gmwt.png"/>
+                    {chart(this.props.showHistorical)}
                 </Card.Body>
             </Card>
         )

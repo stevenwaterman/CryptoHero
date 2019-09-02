@@ -5,7 +5,7 @@ import OrderRow from "./row/OrderRow";
 import {Card, Col, Row, Table, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
 import Order from "../../models/Order";
 
-export default class TradeBlotter extends React.PureComponent<ChartCardProps> {
+export default class TradeBlotter extends React.Component<ChartCardProps> {
     render(): ELEMENT {
         return (
             <Card className="mt-3" id="trades">

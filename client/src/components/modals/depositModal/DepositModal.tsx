@@ -6,7 +6,7 @@ import AssetSelectorContainer from "./DepositAssetSelectorContainer";
 import {Button, Col, Form, Modal} from "react-bootstrap";
 import DepositDescriptionLine from "./descriptionLine/DepositDescriptionLineContainer";
 
-export default class DepositModal extends React.PureComponent<DepositModalProps> {
+export default class DepositModal extends React.Component<DepositModalProps> {
     render(): ELEMENT {
         return (
             <Modal show={this.props.show} onHide={this.props.onHide}>

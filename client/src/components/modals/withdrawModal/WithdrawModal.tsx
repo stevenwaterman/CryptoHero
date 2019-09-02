@@ -7,7 +7,7 @@ import WithdrawAssetSelectorContainer from "./WithdrawAssetSelectorContainer";
 import {Button, Col, Form, Modal} from "react-bootstrap";
 import WithdrawDescriptionLine from "./descriptionLine/WithdrawDescriptionLineContainer";
 
-export default class WithdrawModal extends React.PureComponent<WithdrawModalProps> {
+export default class WithdrawModal extends React.Component<WithdrawModalProps> {
     render(): ELEMENT {
         return (
             <Modal show={this.props.show} onHide={this.props.onHide}>

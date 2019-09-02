@@ -2,7 +2,7 @@ import React from "react";
 import {SelectedInstrumentProps} from "./SelectedInstrumentContainer";
 import {ELEMENT} from "../../modules/RootStore";
 
-export default class SelectedInstrument extends React.PureComponent<SelectedInstrumentProps> {
+export default class SelectedInstrument extends React.Component<SelectedInstrumentProps> {
     render(): ELEMENT {
         return (
             <div className="text-center pb-2">

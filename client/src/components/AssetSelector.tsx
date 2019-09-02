@@ -8,7 +8,7 @@ interface AssetSelectorProps {
     selectedAsset: string
 }
 
-export default class AssetSelector extends React.PureComponent<AssetSelectorProps> {
+export default class AssetSelector extends React.Component<AssetSelectorProps> {
     render(): ELEMENT {
         return (
             <FormControl as="select" value={this.props.selectedAsset} onChange={event => {

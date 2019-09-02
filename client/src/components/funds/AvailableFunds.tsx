@@ -39,7 +39,7 @@ function generateOneColumn(asset: string, price: number): ELEMENT {
     )
 }
 
-export default class AvailableFunds extends React.PureComponent<AvailableFundsProps> {
+export default class AvailableFunds extends React.Component<AvailableFundsProps> {
     render(): ELEMENT {
         return (
             <Card>
