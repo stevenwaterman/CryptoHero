@@ -7,12 +7,13 @@ import {createShowTotalFundsModalAction} from "../../modules/modals/totalFunds/S
 import {createShowWithdrawModalAction} from "../../modules/modals/withdraw/ShowWithdrawModalAction";
 import {createShowDepositModalAction} from "../../modules/modals/deposit/ShowDepositModalAction";
 import {CreateAccountAction, createCreateAccountAction} from "../../modules/global/CreateAccountAction";
-import {createLoadAction, LoadAccountAction} from "../../modules/global/LoadAccountAction";
+import {createLoadAction, createReloadAction, LoadAccountAction} from "../../modules/global/LoadAccountAction";
 
 type Actions = CreateAccountAction | LoadAccountAction;
 
 interface DispatchProps {
     createAccount: () => void
+    reload: () => void
     selectAccount: (accountId: string) => void
 }
 
@@ -28,6 +29,7 @@ export type TopBarProps = DispatchProps & StateProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
+        reload: async () => await dispatch(createReloadAction()),
         createAccount: async () => await dispatch(createCreateAccountAction()),
         selectAccount: async (accountId: string) => await dispatch(createLoadAction(accountId))
     }

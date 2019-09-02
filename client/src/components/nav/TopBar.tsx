@@ -2,6 +2,7 @@ import React from "react";
 import "./NavBar.css";
 import {Button, Form, Navbar} from "react-bootstrap";
 import {TopBarProps} from "./TopBarContainer";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 export default class TopBar extends React.PureComponent<TopBarProps> {
     render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
@@ -21,7 +22,10 @@ export default class TopBar extends React.PureComponent<TopBarProps> {
                         {this.props.accounts.map(id => <option key={id} value={id}>{id}</option>)}
                     </Form.Control>
                     <Button onClick={this.props.createAccount}>
-                        <span className="addAccount text-light">+</span>
+                        <FontAwesomeIcon icon="user-plus"/>
+                    </Button>
+                    <Button onClick={this.props.reload}>
+                        <FontAwesomeIcon icon="sync-alt"/>
                     </Button>
                 </Form>
             </Navbar>

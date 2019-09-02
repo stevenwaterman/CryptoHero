@@ -17,6 +17,7 @@ interface DispatchProps {
 
 export interface StateProps {
     availableFunds: Map<string, number>,
+    canWithdraw: boolean
 }
 
 interface OwnProps {
@@ -33,7 +34,14 @@ function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): Di
 }
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
+    let canWithdraw = false;
+    state.funds.availableFunds.forEach((amount, asset) => {
+        if(amount > 0){
+            canWithdraw = true;
+        }
+    });
     return {
+        canWithdraw: canWithdraw,
         availableFunds: state.funds.availableFunds
     }
 }

@@ -52,7 +52,7 @@ export default class AvailableFunds extends React.PureComponent<AvailableFundsPr
                 <Button variant="primary" onClick={() => this.props.onClickTotalFunds()}>Total Funds</Button>
                 <Row className="pt-2">
                     <Col sm={true}>
-                        <Button variant="primary" block={true} className="pr-sm-1" onClick={this.props.onClickWithdraw}>
+                        <Button disabled={!this.props.canWithdraw} variant="primary" block={true} className="pr-sm-1" onClick={this.props.onClickWithdraw}>
                             Withdraw
                         </Button>
                     </Col>

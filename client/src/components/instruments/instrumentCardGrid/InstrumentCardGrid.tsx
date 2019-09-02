@@ -5,22 +5,15 @@ import {InstrumentCardGridProps} from "./InstrumentCardGridContainer";
 import Instrument from "../../../models/Instrument";
 import {Col, Row} from "react-bootstrap";
 
-function generateColumns({instrumentPrices, selectedInstrument}: InstrumentCardGridProps): Array<any> {
-    const entries: Array<any> = [];
-    let i = 0;
-    instrumentPrices.forEach((price: number, instrument: Instrument) => {
-        const selected = instrument.name === selectedInstrument.name;
-        entries.push( generateOneColumn(instrument, price, selected, i % 2 === 0));
-        i++;
-    });
-    return entries;
+function generateColumns({instruments}: InstrumentCardGridProps): Array<any> {
+    return instruments.map((it, index) => generateOneColumn(it, index % 2 === 0))
 }
 
-function generateOneColumn(instrument: Instrument, price: number, selected: boolean, isOnLeft: boolean): ELEMENT {
+function generateOneColumn(instrument: Instrument, isOnLeft: boolean): ELEMENT {
     const zeroPaddingSide = isOnLeft ? "r" : "l";
     return (
         <Col md="6" key={instrument.name} className={`p${zeroPaddingSide}-md-0`}>
-            <InstrumentCardContainer instrument={instrument} price={price} selected={selected}/>
+            <InstrumentCardContainer instrument={instrument}/>
         </Col>
     )
 }

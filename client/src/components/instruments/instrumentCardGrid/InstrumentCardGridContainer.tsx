@@ -7,8 +7,7 @@ interface DispatchProps {
 }
 
 export interface StateProps {
-    instrumentPrices: Map<Instrument, number>,
-    selectedInstrument: Instrument
+    instruments: Array<Instrument>,
 }
 
 interface OwnProps {
@@ -18,8 +17,7 @@ export type InstrumentCardGridProps = StateProps & DispatchProps & OwnProps
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
-        instrumentPrices: state.instruments.prices,
-        selectedInstrument: state.instruments.selectedInstrument
+        instruments: Array.from(state.instruments.prices.keys())
     }
 }
 

@@ -17,6 +17,9 @@ interface DispatchProps {
 export interface StateProps {
     showState: string,
     orders: Array<Order>
+    canSelectPending: boolean,
+    canSelectComplete: boolean,
+    canSelectCancelled: boolean,
 }
 
 interface OwnProps {
@@ -34,14 +37,22 @@ function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): Di
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     const showState = state.blotter.showState;
     const selectedInstrument = state.instruments.selectedInstrument.name;
-    const filtered = state.blotter.orders
+    const correctInstrument = state.blotter.orders
         .filter((order: Order) =>
-            order.instrument.name === selectedInstrument &&
-            order.state === showState
+            order.instrument.name === selectedInstrument
         );
+    const correctState = correctInstrument.filter(it => it.state === showState);
+
+    const canSelectCancelled = correctInstrument.find(it => it.state === "cancelled") != null;
+    const canSelectPending = correctInstrument.find(it => it.state === "pending") != null;
+    const canSelectComplete = correctInstrument.find(it => it.state === "complete") != null;
+
     return {
         showState: state.blotter.showState,
-        orders: filtered
+        orders: correctState,
+        canSelectCancelled: canSelectCancelled,
+        canSelectComplete: canSelectComplete,
+        canSelectPending: canSelectPending
     }
 }
 
