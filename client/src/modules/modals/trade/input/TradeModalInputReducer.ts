@@ -9,10 +9,7 @@ import TradeModalResetPriceTextAction, {TradeModalResetPriceTextType} from "./re
 import TradeModalResetPercentTextAction, {TradeModalResetPercentTextType} from "./resetText/TradeModalResetPercentTextAction";
 import TradeModalResetUnitsTextAction, {TradeModalResetUnitsTextType} from "./resetText/TradeModalResetUnitsTextAction";
 import {formatInput, formatPercent} from "../../../../util/FormatMoney";
-import TradeModalInputStore, {
-    initialTradeModalInputStore,
-    TradeModalInputActions
-} from "./TradeModalInputStore";
+import TradeModalInputStore, {initialTradeModalInputStore, TradeModalInputActions} from "./TradeModalInputStore";
 
 type State = TradeModalInputStore
 type Actions = TradeModalInputActions

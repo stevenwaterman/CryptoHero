@@ -10,7 +10,7 @@ export default interface InstrumentStore {
 
 export const initialInstrumentStore: InstrumentStore = {
     prices: new Map(),
-    selectedInstrument: new Instrument("LTCGBPNA", "LTCGBPNA")
+    selectedInstrument: new Instrument("NA", "NA")
 };
 
 export type InstrumentActions = InstrumentSelectionAction | SetInstrumentPriceAction | SetPricesAction

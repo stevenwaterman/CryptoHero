@@ -1,8 +1,6 @@
 import {connect} from "react-redux";
-import {Store} from "redux"
 import {State} from "../../../modules/RootStore";
 import DepositModal from "./DepositModal";
-import {ThunkDispatch} from "redux-thunk";
 import ConfirmDepositAction, {createConfirmDepositAction} from "../../../modules/components/availableFunds/ConfirmDepositAction";
 import HideDepositModalAction, {createHideDepositModalAction} from "../../../modules/modals/deposit/HideDepositModalAction";
 import {fireNP, ThunkDsp} from "../../../util/Thunker";

@@ -1,14 +1,10 @@
 import WithdrawModalSetAssetAction from "./value/WithdrawModalSetAssetAction";
 import WithdrawModalSetPercentAction from "./value/WithdrawModalSetPercentAction";
-import WithdrawModalResetPercentTextAction
-    from "./resetText/WithdrawModalResetPercentTextAction";
+import WithdrawModalResetPercentTextAction from "./resetText/WithdrawModalResetPercentTextAction";
 import WithdrawModalSetUnitsAction from "./value/WithdrawModalSetUnitsAction";
-import WithdrawModalSetPercentTextAction
-    from "./text/WithdrawModalSetPercentTextAction";
-import WithdrawModalSetUnitsTextAction
-    from "./text/WithdrawModalSetUnitsTextAction";
-import WithdrawModalResetUnitsTextAction
-    from "./resetText/WithdrawModalResetUnitsTextAction";
+import WithdrawModalSetPercentTextAction from "./text/WithdrawModalSetPercentTextAction";
+import WithdrawModalSetUnitsTextAction from "./text/WithdrawModalSetUnitsTextAction";
+import WithdrawModalResetUnitsTextAction from "./resetText/WithdrawModalResetUnitsTextAction";
 
 export default interface WithdrawModalInputStore {
     readonly asset: string,

@@ -1,10 +1,7 @@
 import {connect} from "react-redux";
 import {State} from "../../modules/RootStore";
-import {ThunkDispatch} from "redux-thunk";
-import ChartSetTypeAction, {createChartSetTypeAction} from "../../modules/components/chart/ChartSetTypeAction";
-import {fire, ThunkDsp} from "../../util/Thunker";
-import {createLoadAction, LoadAccountAction} from "../../modules/global/LoadAccountAction";
-import {bindActionCreators} from "redux";
+import {ThunkDsp} from "../../util/Thunker";
+import {LoadAccountAction} from "../../modules/global/LoadAccountAction";
 import App from "./App";
 import {createCreateAccountAction} from "../../modules/global/CreateAccountAction";
 

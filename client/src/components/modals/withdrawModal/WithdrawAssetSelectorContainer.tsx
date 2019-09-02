@@ -1,6 +1,5 @@
 import {connect} from "react-redux";
 import {State} from "../../../modules/RootStore";
-import {ThunkDispatch} from "redux-thunk";
 import AssetSelector from "../../AssetSelector";
 import WithdrawModalSetAssetAction, {createWithdrawModalSetAssetAction} from "../../../modules/modals/withdraw/input/value/WithdrawModalSetAssetAction";
 import {fire, ThunkDsp} from "../../../util/Thunker";

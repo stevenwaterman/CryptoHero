@@ -3,12 +3,9 @@ import TradeModalSetPercentAction from "./value/TradeModalSetPercentAction";
 import TradeModalSetPercentTextAction from "./text/TradeModalSetPercentTextAction";
 import TradeModalSetUnitsAction from "./value/TradeModalSetUnitsAction";
 import TradeModalSetUnitsTextAction from "./text/TradeModalSetUnitsTextAction";
-import TradeModalResetPriceTextAction
-    from "./resetText/TradeModalResetPriceTextAction";
-import TradeModalResetUnitsTextAction
-    from "./resetText/TradeModalResetUnitsTextAction";
-import TradeModalResetPercentTextAction
-    from "./resetText/TradeModalResetPercentTextAction";
+import TradeModalResetPriceTextAction from "./resetText/TradeModalResetPriceTextAction";
+import TradeModalResetUnitsTextAction from "./resetText/TradeModalResetUnitsTextAction";
+import TradeModalResetPercentTextAction from "./resetText/TradeModalResetPercentTextAction";
 import TradeModalSetPriceTextAction from "./text/TradeModalSetPriceTextAction";
 import ShowTradeModalAction from "../ShowTradeModalAction";
 

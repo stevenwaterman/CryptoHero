@@ -1,7 +1,6 @@
 import {connect} from "react-redux";
 import {State} from "../../modules/RootStore";
 import AvailableFunds from "./AvailableFunds";
-import {ThunkDispatch} from "redux-thunk";
 import ShowWithdrawModalAction, {createShowWithdrawModalAction} from "../../modules/modals/withdraw/ShowWithdrawModalAction";
 import ShowDepositModalAction, {createShowDepositModalAction} from "../../modules/modals/deposit/ShowDepositModalAction";
 import ShowTotalFundsModalAction, {createShowTotalFundsModalAction} from "../../modules/modals/totalFunds/ShowTotalFundsModalAction";
@@ -36,7 +35,7 @@ function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): Di
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     let canWithdraw = false;
     state.funds.availableFunds.forEach((amount, asset) => {
-        if(amount > 0){
+        if (amount > 0) {
             canWithdraw = true;
         }
     });

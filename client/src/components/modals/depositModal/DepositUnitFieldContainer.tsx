@@ -1,6 +1,5 @@
 import {connect} from "react-redux";
 import {State} from "../../../modules/RootStore";
-import {ThunkDispatch} from "redux-thunk"
 import NumberField from "../../NumberField";
 import {fire, fireNP, ThunkDsp} from "../../../util/Thunker";
 import DepositModalSetUnitsAction, {createDepositModalSetUnitsAction} from "../../../modules/modals/deposit/input/DepositModalSetUnitsAction";

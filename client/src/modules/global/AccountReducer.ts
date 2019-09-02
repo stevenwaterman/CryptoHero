@@ -1,5 +1,4 @@
 import AccountStore, {AccountActions, initialAccountStore} from "./AccountStore";
-import {LoadAccountAction, LoadAccountType} from "./LoadAccountAction";
 import {CreateAccountAction, CreateAccountType} from "./CreateAccountAction";
 import SetSelectedAccountAction, {SetSelectedAccountType} from "./SetSelectedAccountAction";
 

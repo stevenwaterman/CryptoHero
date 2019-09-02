@@ -1,6 +1,3 @@
-import Instrument from "../../../models/Instrument";
-import ShowViewOrderModalAction from "../viewOrder/ShowViewOrderModalAction";
-import Order from "../../../models/Order";
 import ShowTotalFundsModalAction from "./ShowTotalFundsModalAction";
 
 export default interface TotalFundsModalStore {

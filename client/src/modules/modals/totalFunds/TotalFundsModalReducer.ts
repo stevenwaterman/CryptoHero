@@ -1,8 +1,4 @@
-import TotalFundsModalStore, {
-    initialTotalFundsModalStore,
-    TotalFundsModalActions
-} from "./TotalFundsModalStore";
-import TotalFundsModal from "../../../components/modals/funds/TotalFundsModal";
+import TotalFundsModalStore, {initialTotalFundsModalStore, TotalFundsModalActions} from "./TotalFundsModalStore";
 import ShowTotalFundsModalAction, {ShowTotalFundsModalType} from "./ShowTotalFundsModalAction";
 
 type State = TotalFundsModalStore

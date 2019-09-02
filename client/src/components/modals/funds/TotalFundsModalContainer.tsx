@@ -1,9 +1,7 @@
 import {connect} from "react-redux";
 import {State} from "../../../modules/RootStore";
 import TotalFundsModal from "./TotalFundsModal";
-import {Store} from "redux";
 import HideTotalFundsModalAction, {createHideTotalFundsModalAction} from "../../../modules/modals/totalFunds/HideTotalFundsModalAction";
-import {ThunkDispatch} from "redux-thunk";
 import {fireNP, ThunkDsp} from "../../../util/Thunker";
 
 type Actions = HideTotalFundsModalAction

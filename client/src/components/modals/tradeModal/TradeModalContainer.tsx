@@ -1,11 +1,9 @@
 import {connect} from "react-redux";
-import {Dispatch} from "redux"
 import {State} from "../../../modules/RootStore";
 import TradeModal from "./TradeModal";
-import {fireNP, firePromiseNP, ThunkDsp} from "../../../util/Thunker";
+import {fireNP, ThunkDsp} from "../../../util/Thunker";
 import ConfirmTradeAction, {createConfirmTradeAction} from "../../../modules/modals/trade/ConfirmTradeAction";
 import HideTradeModalAction, {createHideTradeModalAction} from "../../../modules/modals/trade/HideTradeModalAction";
-import {createLoadAction} from "../../../modules/global/LoadAccountAction";
 
 type Actions = ConfirmTradeAction | HideTradeModalAction
 

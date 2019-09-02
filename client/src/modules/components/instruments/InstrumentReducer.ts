@@ -26,8 +26,8 @@ export function instrumentReducer(
 function setPrices(state: State, action: SetPricesAction): State {
     let selected: Instrument = state.selectedInstrument;
     const newInstruments = Array.from(action.payload.prices.keys());
-    if(!newInstruments.map(it=>it.name).includes(selected.name)){
-        if(newInstruments.length > 0){
+    if (!newInstruments.map(it => it.name).includes(selected.name)) {
+        if (newInstruments.length > 0) {
             selected = newInstruments[0];
         } else {
             selected = new Instrument("NA", "NA");

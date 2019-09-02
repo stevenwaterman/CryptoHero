@@ -18,12 +18,12 @@ export default class ViewOrderModal extends React.Component<ViewTradeModalProps>
                 {
                     remainingUnits === 0 ?
                         (isBuy ?
-                                <FinishedBuy {...this.props}/> :
-                                <FinishedSell {...this.props}/>)
+                            <FinishedBuy {...this.props}/> :
+                            <FinishedSell {...this.props}/>)
                         :
                         (isBuy ?
-                                <PendingBuy {...this.props}/> :
-                                <PendingSell {...this.props}/>)
+                            <PendingBuy {...this.props}/> :
+                            <PendingSell {...this.props}/>)
                 }
             </Modal>
         );

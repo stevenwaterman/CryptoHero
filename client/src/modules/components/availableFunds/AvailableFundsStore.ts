@@ -1,6 +1,5 @@
 import ConfirmDepositAction from "./ConfirmDepositAction";
 import ConfirmWithdrawAction from "./ConfirmWithdrawAction";
-import ShowTotalFundsModalAction from "../../modals/totalFunds/ShowTotalFundsModalAction";
 import CancelOrderAction from "../blotter/CancelOrderAction";
 import SetAvailableFundsAction from "./SetAvailableFundsAction";
 

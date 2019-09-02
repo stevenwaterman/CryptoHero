@@ -1,7 +1,6 @@
 import {connect} from "react-redux";
 import {State} from "../../../../modules/RootStore";
 import NumberField from "../../../NumberField";
-import {ThunkDispatch} from "redux-thunk"
 import TradeModalSetPercentAction, {createTradeModalSetPercentAction} from "../../../../modules/modals/trade/input/value/TradeModalSetPercentAction";
 import TradeModalResetPercentTextAction, {createTradeModalResetPercentTextAction} from "../../../../modules/modals/trade/input/resetText/TradeModalResetPercentTextAction";
 import TradeModalSetPercentTextAction, {createTradeModalSetPercentTextAction} from "../../../../modules/modals/trade/input/text/TradeModalSetPercentTextAction";

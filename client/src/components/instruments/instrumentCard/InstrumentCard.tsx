@@ -19,11 +19,13 @@ export default class InstrumentCard extends React.PureComponent<InstrumentCardPr
                 </Card.Text>
                 <Row className="mb-1 mx-0">
                     <Col className="px-1">
-                        <Button disabled={!this.props.canBuy} variant="success" block={true} size="sm" className="pl-1 pb-1"
+                        <Button disabled={!this.props.canBuy} variant="success" block={true} size="sm"
+                                className="pl-1 pb-1"
                                 onClick={() => this.props.onTradeClick([true, this.props.instrument])}>Buy</Button>
                     </Col>
                     <Col className="px-1">
-                        <Button disabled={!this.props.canSell} variant="danger" block={true} size="sm" className="pr-1 pb-1"
+                        <Button disabled={!this.props.canSell} variant="danger" block={true} size="sm"
+                                className="pr-1 pb-1"
                                 onClick={() => this.props.onTradeClick([false, this.props.instrument])}>Sell</Button>
                     </Col>
                 </Row>

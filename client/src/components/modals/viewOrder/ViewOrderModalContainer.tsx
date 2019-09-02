@@ -1,7 +1,6 @@
 import {connect} from "react-redux";
 import {State} from "../../../modules/RootStore";
 import ViewOrderModal from "./ViewOrderModal";
-import {ThunkDispatch} from "redux-thunk";
 import HideViewOrderModalAction, {createHideViewTradeModalAction} from "../../../modules/modals/viewOrder/HideViewOrderModalAction";
 import CancelOrderAction, {createCancelOrderAction} from "../../../modules/components/blotter/CancelOrderAction";
 import Order from "../../../models/Order";

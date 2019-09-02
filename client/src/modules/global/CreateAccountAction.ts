@@ -5,7 +5,7 @@ import {createLoadAction} from "./LoadAccountAction";
 
 export const CreateAccountType = "CREATE_ACCOUNT";
 
-export interface CreateAccountAction{
+export interface CreateAccountAction {
     type: typeof CreateAccountType,
     payload: {
         accountId: string

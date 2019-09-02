@@ -1,7 +1,6 @@
 import {connect} from "react-redux";
 import {State} from "../../modules/RootStore";
 import ChartCard from "./ChartCard";
-import {ThunkDispatch} from "redux-thunk";
 import ChartSetTypeAction, {createChartSetTypeAction} from "../../modules/components/chart/ChartSetTypeAction";
 import {fire, ThunkDsp} from "../../util/Thunker";
 

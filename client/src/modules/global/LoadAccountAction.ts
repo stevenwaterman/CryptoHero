@@ -30,7 +30,7 @@ export const createReloadAction = (): ThunkAction<Promise<void>, State, void, Ac
     }
 };
 
-async function inner(accountId: string, dispatch: ThunkDispatch<State, void, Action<any>>, state: State): Promise<void>{
+async function inner(accountId: string, dispatch: ThunkDispatch<State, void, Action<any>>, state: State): Promise<void> {
     const response: Response = await fetch(`http://localhost:4000/api/account/${state.account.selectedId}/state`, {
         method: "GET",
         headers: {},

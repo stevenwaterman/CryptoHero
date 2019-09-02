@@ -1,11 +1,7 @@
 import {connect} from "react-redux";
-import Instrument from "../../models/Instrument";
 import {State} from "../../modules/RootStore";
 import TopBar from "./TopBar";
-import {fireNP, ThunkDsp} from "../../util/Thunker";
-import {createShowTotalFundsModalAction} from "../../modules/modals/totalFunds/ShowTotalFundsModalAction";
-import {createShowWithdrawModalAction} from "../../modules/modals/withdraw/ShowWithdrawModalAction";
-import {createShowDepositModalAction} from "../../modules/modals/deposit/ShowDepositModalAction";
+import {ThunkDsp} from "../../util/Thunker";
 import {CreateAccountAction, createCreateAccountAction} from "../../modules/global/CreateAccountAction";
 import {createLoadAction, createReloadAction, LoadAccountAction} from "../../modules/global/LoadAccountAction";
 

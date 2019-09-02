@@ -1,7 +1,6 @@
 import {connect} from "react-redux";
 import {State} from "../../modules/RootStore";
 import TradeBlotter from "./TradeBlotter";
-import {ThunkDispatch} from "redux-thunk";
 import Order from "../../models/Order";
 import BlotterSetCategoryAction, {createBlotterSetCategoryAction} from "../../modules/components/blotter/BlotterSetCategoryAction";
 import ShowViewOrderModalAction, {createShowViewOrderModalAction} from "../../modules/modals/viewOrder/ShowViewOrderModalAction";

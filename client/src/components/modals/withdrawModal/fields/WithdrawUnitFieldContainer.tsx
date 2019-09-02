@@ -1,6 +1,5 @@
 import {connect} from "react-redux";
 import {State} from "../../../../modules/RootStore";
-import {ThunkDispatch} from "redux-thunk"
 import NumberField from "../../../NumberField";
 import WithdrawModalSetUnitsAction, {createWithdrawModalSetUnitsAction} from "../../../../modules/modals/withdraw/input/value/WithdrawModalSetUnitsAction";
 import WithdrawModalResetUnitsTextAction, {createWithdrawModalResetUnitsTextAction} from "../../../../modules/modals/withdraw/input/resetText/WithdrawModalResetUnitsTextAction";

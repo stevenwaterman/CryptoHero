@@ -1,7 +1,4 @@
-import ModalVisibilityStore, {
-    initialModalVisibilityStore,
-    ModalVisibilityActions
-} from "./ModalVisibilityStore";
+import ModalVisibilityStore, {initialModalVisibilityStore, ModalVisibilityActions} from "./ModalVisibilityStore";
 import ShowTotalFundsModalAction, {ShowTotalFundsModalType} from "./totalFunds/ShowTotalFundsModalAction";
 import ShowWithdrawModalAction, {ShowWithdrawModalType} from "./withdraw/ShowWithdrawModalAction";
 import ShowDepositModalAction, {ShowDepositModalType} from "./deposit/ShowDepositModalAction";
@@ -12,9 +9,9 @@ import {HideWithdrawModalType} from "./withdraw/HideWithdrawModalAction";
 import {HideTotalFundsModalType} from "./totalFunds/HideTotalFundsModalAction";
 import {HideViewTradeModalType} from "./viewOrder/HideViewOrderModalAction";
 import {HideTradeModalType} from "./trade/HideTradeModalAction";
-import ConfirmTradeAction, {ConfirmTradeType} from "./trade/ConfirmTradeAction";
+import {ConfirmTradeType} from "./trade/ConfirmTradeAction";
 import {ConfirmDepositType} from "../components/availableFunds/ConfirmDepositAction";
-import ConfirmWithdrawAction, {ConfirmWithdrawType} from "../components/availableFunds/ConfirmWithdrawAction";
+import {ConfirmWithdrawType} from "../components/availableFunds/ConfirmWithdrawAction";
 import {CancelOrderType} from "../components/blotter/CancelOrderAction";
 
 type State = ModalVisibilityStore

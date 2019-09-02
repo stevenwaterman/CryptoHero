@@ -1,7 +1,5 @@
 import BlotterSetCategoryAction, {BlotterSetCategoryType} from "./BlotterSetCategoryAction";
 import BlotterStore, {BlotterActions, initialBlotterStore} from "./BlotterStore";
-import CancelOrderAction, {CancelOrderType} from "./CancelOrderAction";
-import ConfirmTradeAction, {ConfirmTradeType} from "../../modals/trade/ConfirmTradeAction";
 import SetOrdersAction, {SetOrdersType} from "./SetOrdersAction";
 
 type StateSlice = BlotterStore

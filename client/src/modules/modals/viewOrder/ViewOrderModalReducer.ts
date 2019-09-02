@@ -1,7 +1,4 @@
-import ViewOrderModalStore, {
-    initialViewTradeModalStore,
-    ViewTradeModalActions
-} from "./ViewOrderModalStore";
+import ViewOrderModalStore, {initialViewTradeModalStore, ViewTradeModalActions} from "./ViewOrderModalStore";
 import ShowViewOrderModalAction, {ShowViewOrderModalType} from "./ShowViewOrderModalAction";
 
 type State = ViewOrderModalStore

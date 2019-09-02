@@ -2,7 +2,6 @@ import {connect} from "react-redux";
 import TradeModalSetPriceAction, {createTradeModalSetPriceAction,} from "../../../../modules/modals/trade/input/value/TradeModalSetPriceAction";
 import {State} from "../../../../modules/RootStore";
 import NumberField from "../../../NumberField";
-import {ThunkDispatch} from "redux-thunk"
 import TradeModalSetPriceTextAction, {createTradeModalSetPriceTextAction,} from "../../../../modules/modals/trade/input/text/TradeModalSetPriceTextAction";
 import TradeModalResetPriceTextAction, {createTradeModalResetPriceTextAction,} from "../../../../modules/modals/trade/input/resetText/TradeModalResetPriceTextAction";
 import {fire, fireNP, ThunkDsp} from "../../../../util/Thunker";

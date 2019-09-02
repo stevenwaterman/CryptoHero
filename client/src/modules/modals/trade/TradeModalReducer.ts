@@ -1,6 +1,5 @@
 import TradeModalStore, {initialTradeModalStore, TradeModalActions} from "./TradeModalStore";
 import ShowTradeModalAction, {ShowTradeModalType} from "./ShowTradeModalAction";
-import ConfirmTradeAction, {ConfirmTradeType} from "./ConfirmTradeAction";
 
 type State = TradeModalStore
 type Actions = TradeModalActions
