@@ -3,6 +3,7 @@ import * as React from "react";
 import {Component} from "react";
 import * as d3 from "d3";
 import {ELEMENT} from "../../../modules/RootStore";
+import "./DepthChart.css"
 
 function getX(d: [number, number]): number {
     return d[0];
@@ -31,12 +32,9 @@ function reshapeData(data: Array<[number, number]>): Array<[number, number]> {
 }
 
 export default class DepthChart extends Component<DepthChartProps> {
-    private getContainerWidth(): number {
-        return +d3.select('#DepthChart').style('width').slice(0, -2)
-    };
-
+    private readonly width = 500;
     private readonly height = 500;
-    private readonly margin = {top: 20, right: 20, bottom: 20, left: 50};
+    private readonly margin = {top: 0, right: 10, bottom: 40, left: 40};
 
     private svg: any;
     private xScale: SCALE;
@@ -47,15 +45,21 @@ export default class DepthChart extends Component<DepthChartProps> {
 
     componentDidMount(): void {
         this.svg = d3.select("#DepthChart")
+
+            .append("div").classed("svg-container", true)
+
             .append("svg")
-            .attr("height", this.height)
-            .attr("width", "100%")
+
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", `0 0 ${this.width} ${this.height}`)
+            .classed("svg-content-responsive", true)
+
             .append("g")
             .attr("transform",
                 `translate(${this.margin.left},${this.margin.right})`);
 
         this.xScale = d3.scaleLinear()
-            .range([0, this.getContainerWidth() - this.margin.left - this.margin.right]);
+            .range([0, this.width - this.margin.left - this.margin.right]);
         this.xAxis = d3.axisBottom(this.xScale!);
         this.svg.append("g")
             .attr("class", "xAxis")
@@ -96,7 +100,6 @@ export default class DepthChart extends Component<DepthChartProps> {
         buyPlot.enter()
             .append("path")
             .attr("class", "buyLine")
-            .merge(buyPlot)
             .transition()
             .duration(1000)
             .attr("d", d3.line()
@@ -114,7 +117,6 @@ export default class DepthChart extends Component<DepthChartProps> {
         sellPlot.enter()
             .append("path")
             .attr("class", "sellLine")
-            .merge(sellPlot)
             .transition()
             .duration(1000)
             .attr("d", d3.line()
@@ -128,7 +130,6 @@ export default class DepthChart extends Component<DepthChartProps> {
 
     render(): ELEMENT {
         if (this.mounted) {
-            this.xScale = this.xScale!.range([0, this.getContainerWidth() - this.margin.left - this.margin.right]);
             this.changeData();
         }
 
