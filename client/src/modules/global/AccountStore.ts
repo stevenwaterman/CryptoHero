@@ -1,11 +1,15 @@
-import {SetAccountAction} from "./SetAccountAction";
+import {LoadAccountAction} from "./LoadAccountAction";
+import {CreateAccountAction} from "./CreateAccountAction";
+import SetSelectedAccountAction from "./SetSelectedAccountAction";
 
 export default interface AccountStore {
-    readonly id: string;
+    readonly selectedId: string;
+    readonly accounts: Array<string>;
 }
 
 export const initialAccountStore: AccountStore = {
-    id: "not set"
+    selectedId: "",
+    accounts: []
 };
 
-export type AccountActions = SetAccountAction
+export type AccountActions = SetSelectedAccountAction | CreateAccountAction

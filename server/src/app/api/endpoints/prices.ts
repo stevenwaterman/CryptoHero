@@ -2,13 +2,9 @@ import {Request, Response} from "express";
 import BitcoinExchangeServer from "../bitcoinExchangeServer";
 import Broker from "../../brokers/broker";
 import {withBroker} from "../util/withBroker";
-import PriceAggregate from "../../brokers/priceAggregate";
-import Instrument from "../../trading/instrument";
-import {Map} from "immutable";
 import SER from "../util/serialisation/SER";
-import Big from "big.js";
 import {urlGetInstrument} from "../util/paramaters/url/urlGetInstrument";
-import respond from "../util/serialisation/respond";
+import {respond} from "../util/serialisation/respond";
 
 export function setupPriceEndpoints(server: BitcoinExchangeServer): void {
     const app = server.app;
@@ -22,8 +18,7 @@ export function setupPriceEndpoints(server: BitcoinExchangeServer): void {
 }
 
 function aggregatePrices(broker: Broker, req: Request, res: Response): void {
-    const serialiser = SER.MAPFUNC(SER.INSTRUMENT, SER.PRICE_AGGREGATE);
-    respond(res, 200, broker.getAggregatePrices(), serialiser);
+    respond(res, 200, broker.getAggregatePrices(), SER.MAPFUNC(SER.INSTRUMENT, SER.PRICE_AGGREGATE));
 }
 
 function instrumentAggregatePrice(broker: Broker, req: Request, res: Response): void {
@@ -35,8 +30,7 @@ function instrumentAggregatePrice(broker: Broker, req: Request, res: Response): 
 }
 
 function marketPrices(broker: Broker, req: Request, res: Response): void {
-    const serialiser = SER.MAPFUNC(SER.INSTRUMENT, SER.BIG);
-    respond(res, 200, broker.getMarketPrices(), serialiser)
+    respond(res, 200, broker.getMarketPrices(), SER.MAPFUNC(SER.INSTRUMENT, SER.BIG))
 }
 
 function instrumentMarketPrice(broker: Broker, req: Request, res: Response): void {

@@ -3,11 +3,12 @@ import {State} from "../../modules/RootStore";
 import {ThunkDispatch} from "redux-thunk";
 import ChartSetTypeAction, {createChartSetTypeAction} from "../../modules/components/chart/ChartSetTypeAction";
 import {fire, ThunkDsp} from "../../util/Thunker";
-import {createAccountAction, SetAccountAction} from "../../modules/global/SetAccountAction";
+import {createLoadAction, LoadAccountAction} from "../../modules/global/LoadAccountAction";
 import {bindActionCreators} from "redux";
 import App from "./App";
+import {createCreateAccountAction} from "../../modules/global/CreateAccountAction";
 
-type Actions = SetAccountAction
+type Actions = LoadAccountAction
 
 interface DispatchProps {
     createAccount: () => void,
@@ -24,7 +25,7 @@ export type AppProps = StateProps & DispatchProps & OwnProps
 function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         createAccount: async () => {
-            await dispatch(createAccountAction())
+            await dispatch(createCreateAccountAction())
         }
     }
 }

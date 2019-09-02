@@ -11,7 +11,7 @@ import {bodyGetUnitPrice} from "../util/paramaters/body/bodyGetUnitPrice";
 import {urlGetOrder} from "../util/paramaters/url/urlGetOrder";
 import SER from "../util/serialisation/SER";
 import {bodyGetAccount} from "../util/paramaters/body/bodyGetAccount";
-import respond from "../util/serialisation/respond";
+import {respond, respondNoSer} from "../util/serialisation/respond";
 
 export function setupOrdersEndpoints(server: BitcoinExchangeServer): void {
     const app = server.app;
@@ -44,7 +44,7 @@ function placeOrder(broker: Broker, req: Request, res: Response): void {
     try {
         broker.placeOrder(order);
     } catch (error) {
-        return respond(res, 400, error, SER.NO);
+        return respondNoSer(res, 400, error);
     }
 
     respond(res, 200, order, SER.ORDER);
@@ -61,7 +61,7 @@ function cancelOrder(broker: Broker, req: Request, res: Response): void {
     if (order == null) return;
 
     broker.cancelOrder(order);
-    respond(res, 200, "Successful", SER.NO);
+    respondNoSer(res, 200, "Successful");
 }
 
 function viewOrder(broker: Broker, req: Request, res: Response): void {

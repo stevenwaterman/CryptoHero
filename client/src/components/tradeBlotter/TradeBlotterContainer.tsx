@@ -33,9 +33,15 @@ function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): Di
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     const showPending = state.blotter.showPending;
-    const relevant = showPending ? state.blotter.pending : state.blotter.completed;
-    const selectedInstrument = state.instruments.selectedInstrument;
-    const filtered = relevant.filter((trade: Order) => trade.instrument.name === selectedInstrument.name);
+    const selectedInstrument = state.instruments.selectedInstrument.name;
+    const filtered = state.blotter.orders
+        .filter((order: Order) =>
+            order.instrument.name === selectedInstrument &&
+            (
+                (showPending && order.remainingUnits !== 0) ||
+                (!showPending && order.remainingUnits === 0)
+            )
+        );
     return {
         pendingSelected: state.blotter.showPending,
         orders: filtered

@@ -13,14 +13,16 @@ export default class TopBar extends React.PureComponent<TopBarProps> {
                     </h4>
                 </Navbar.Brand>
                 <Form className="form-inline">
-                    <Form.Control as="select" disabled={true} value={this.props.accountId}>
-                        <option>{this.props.accountId}</option>
-                        <option>Account 2</option>
-                        <option>Account 3</option>
-                        <option>Account 4</option>
-                        <option>Account 5</option>
+                    <Form.Control as="select" value={this.props.selectedId} onChange={event => {
+                        const selectedId = event.currentTarget.value;
+                        if (selectedId != null)
+                            this.props.selectAccount(selectedId)
+                    }}>
+                        {this.props.accounts.map(id => <option key={id} value={id}>{id}</option>)}
                     </Form.Control>
-                    <Button><span className="addAccount text-light">+</span></Button>
+                    <Button onClick={this.props.createAccount}>
+                        <span className="addAccount text-light">+</span>
+                    </Button>
                 </Form>
             </Navbar>
         )

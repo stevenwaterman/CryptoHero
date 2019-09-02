@@ -1,15 +1,22 @@
 import AccountStore, {AccountActions, initialAccountStore} from "./AccountStore";
-import RootStore from "../RootStore";
-import {createAccountAction, SetAccountAction, SetAccountType} from "./SetAccountAction";
+import {LoadAccountAction, LoadAccountType} from "./LoadAccountAction";
+import {CreateAccountAction, CreateAccountType} from "./CreateAccountAction";
+import SetSelectedAccountAction, {SetSelectedAccountType} from "./SetSelectedAccountAction";
 
 type StateSlice = AccountStore
 type Actions = AccountActions
 
-function setAccount(state: StateSlice, action: SetAccountAction): StateSlice {
-    console.log("setting account");
+function createAccount(state: StateSlice, action: CreateAccountAction): StateSlice {
+    return {
+        selectedId: action.payload.accountId,
+        accounts: state.accounts.concat(action.payload.accountId)
+    };
+}
+
+function setAccount(state: StateSlice, action: SetSelectedAccountAction): StateSlice {
     return {
         ...state,
-        id: action.payload.accountId
+        selectedId: action.payload.selectedAccountId
     };
 }
 
@@ -18,8 +25,10 @@ export function accountReducer(
     action: Actions
 ): StateSlice {
     switch (action.type) {
-        case SetAccountType:
-            return setAccount(state, action as SetAccountAction);
+        case CreateAccountType:
+            return createAccount(state, action as CreateAccountAction);
+        case SetSelectedAccountType:
+            return setAccount(state, action as SetSelectedAccountAction);
         default:
             return state;
     }

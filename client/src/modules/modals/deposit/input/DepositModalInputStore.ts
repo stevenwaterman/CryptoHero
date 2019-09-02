@@ -11,7 +11,7 @@ export default interface DepositModalInputStore {
 }
 
 export const initialDepositModalInputStore: DepositModalInputStore = {
-    asset: "GBP",
+    asset: "LTCGBPNA",
 
     unitsText: "0",
     units: 0,

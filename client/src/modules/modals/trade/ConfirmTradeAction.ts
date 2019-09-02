@@ -3,10 +3,11 @@ import Order from "../../../models/Order";
 import {ThunkDsp} from "../../../util/Thunker";
 import Instrument from "../../../models/Instrument";
 import {ThunkAction, ThunkDispatch} from "redux-thunk";
-import {SetAccountAction, SetAccountType} from "../../global/SetAccountAction";
+import {LoadAccountAction, LoadAccountType} from "../../global/LoadAccountAction";
+import {Action} from "redux";
 
 interface IPayload {
-    newTrade: Order
+    newOrder: Order
 }
 
 export const ConfirmTradeType: string = "TRADE_CONFIRM";
@@ -16,9 +17,8 @@ export default interface ConfirmTradeAction {
     payload: IPayload
 }
 
-export const createConfirmTradeAction = (): ThunkAction<Promise<void>, State, void, ConfirmTradeAction> => {
-    return async (dispatch: ThunkDispatch<void, State, ConfirmTradeAction>, getState: () => State): Promise<void> => {
-        console.log("Promise returned");
+export const createConfirmTradeAction = (): ThunkAction<Promise<void>, State, void, Action<any>> => {
+    return async (dispatch: ThunkDispatch<void, State, Action<any>>, getState: () => State): Promise<void> => {
         const state = getState();
         const response: Response = await fetch("http://localhost:4000/api/orders/place", {
             method: "POST",
@@ -26,20 +26,16 @@ export const createConfirmTradeAction = (): ThunkAction<Promise<void>, State, vo
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                account: state.account.id,
+                account: state.account.selectedId,
                 direction: state.tradeModal.buying ? "buy" : "sell",
                 instrument: state.tradeModal.instrument.name,
                 units: state.tradeModalInput.units,
                 unitPrice: state.tradeModalInput.price,
             })
         });
-        console.log("Got Response");
-        console.log(response);
         const json: any = await response.json();
-        console.log("Got JSON");
-        console.log(json);
         const price = json["unit price"];
-        const [asset1, asset2] = json.split("/");
+        const instrument = Instrument.fromName(json.instrument);
         const isBuy = json.direction === "buy";
         const action = {
             type: ConfirmTradeType,
@@ -47,7 +43,7 @@ export const createConfirmTradeAction = (): ThunkAction<Promise<void>, State, vo
                 newTrade: new Order(
                     json.accountId as string,
                     new Date(json.time as number),
-                    new Instrument(asset1, asset2),
+                    instrument,
                     isBuy,
                     json.units,
                     price,
@@ -56,8 +52,6 @@ export const createConfirmTradeAction = (): ThunkAction<Promise<void>, State, vo
                 )
             }
         };
-        console.log("Created Action");
-        console.log(action);
         dispatch(action);
     }
 };

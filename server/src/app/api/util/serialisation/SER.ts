@@ -12,19 +12,11 @@ type InnerSerialisable = null | string | number | {[k: string]: InnerSerialisabl
 export type Serialisable = InnerSerialisable | Array<InnerSerialisable>
 
 export default class SER {
-    static NO<T extends Serialisable>(serialisable: T): T {
-        return serialisable;
-    }
-
-    static ERROR(error: Error): string {
-        return error.message;
-    }
-
     static BIG(big: Big | null): InnerSerialisable {
         if(big == null){
             return null;
         } else {
-            return big.toString();
+            return big.toFixed(5);
         }
     }
 

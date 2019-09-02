@@ -9,7 +9,7 @@ export default interface TradeModalStore {
 
 export const initialTradeModalStore: TradeModalStore = {
     buying: true,
-    instrument: new Instrument("GBP", "BTC"),
+    instrument: new Instrument("LTCGBPNA", "LTCGBPNA"),
 };
 
 export type TradeModalActions =

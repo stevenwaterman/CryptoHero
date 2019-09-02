@@ -13,15 +13,31 @@ export default interface ShowTotalFundsModalAction {
 }
 
 export function createShowTotalFundsModalAction(state: State): ShowTotalFundsModalAction {
-    const totalFunds: Map<string, number> = new Map(state.funds.availableFunds);
-    const pendingOrders: Array<Order> = state.blotter.pending;
-    pendingOrders.forEach(({instrument, isBuy, remainingUnits, unitPrice}) => {
-        const lockedAsset = isBuy ? instrument.asset2 : instrument.asset1;
-        const lockedAmount = isBuy ? remainingUnits * unitPrice : remainingUnits;
-        const currentTotal = totalFunds.get(lockedAsset) as number;
-        const newTotal = currentTotal + lockedAmount;
-        totalFunds.set(lockedAsset, newTotal)
-    });
+    const totalFunds: Map<string, number> =
+        state.blotter.orders
+            .reduce((funds: Map<string, number>, order: Order) => {
+                const asset1Amount = order.remainingUnits;
+                const asset2Amount = order.remainingUnits * order.unitPrice;
+
+                if (order.isBuy) {
+                    if (asset2Amount > 0) {
+                        const asset2Current = funds.get(order.instrument.asset2) as number;
+                        const asset2New = asset2Current + asset2Amount;
+                        funds.set(order.instrument.asset2, asset2New);
+                    }
+                } else {
+                    const asset1Current = funds.get(order.instrument.asset1) as number;
+                    const asset1New = asset1Current + asset1Amount;
+                    funds.set(order.instrument.asset1, asset1New);
+                    if (asset2Amount < 0) {
+                        const asset2Current = funds.get(order.instrument.asset2) as number;
+                        const asset2New = asset2Current - asset2Amount;
+                        funds.set(order.instrument.asset2, asset2New);
+                    }
+                }
+
+                return funds;
+            }, state.funds.availableFunds);
 
     return {
         type: ShowTotalFundsModalType,

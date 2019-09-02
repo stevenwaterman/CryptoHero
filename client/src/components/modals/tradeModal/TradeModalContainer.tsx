@@ -5,7 +5,7 @@ import TradeModal from "./TradeModal";
 import {fireNP, firePromiseNP, ThunkDsp} from "../../../util/Thunker";
 import ConfirmTradeAction, {createConfirmTradeAction} from "../../../modules/modals/trade/ConfirmTradeAction";
 import HideTradeModalAction, {createHideTradeModalAction} from "../../../modules/modals/trade/HideTradeModalAction";
-import {createAccountAction} from "../../../modules/global/SetAccountAction";
+import {createLoadAction} from "../../../modules/global/LoadAccountAction";
 
 type Actions = ConfirmTradeAction | HideTradeModalAction
 

@@ -13,7 +13,7 @@ export default interface SetInstrumentPriceAction {
     payload: IPayload
 }
 
-export function createSetPriceAction(state: State, [instrument, newPrice]: [Instrument, number]): SetInstrumentPriceAction {
+export function createSetInstrumentPriceAction(state: State, [instrument, newPrice]: [Instrument, number]): SetInstrumentPriceAction {
     return {
         type: SetInstrumentPriceType,
         payload: {

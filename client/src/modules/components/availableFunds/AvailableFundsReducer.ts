@@ -2,11 +2,37 @@ import ConfirmDepositAction, {ConfirmDepositType} from "./ConfirmDepositAction";
 import AvailableFundsStore, {FundsActions, initialFundsStore} from "./AvailableFundsStore";
 import ConfirmWithdrawAction, {ConfirmWithdrawType} from "./ConfirmWithdrawAction";
 import CancelOrderAction, {CancelOrderType} from "../blotter/CancelOrderAction";
+import SetAvailableFundsAction, {SetAvailableFundsType} from "./SetAvailableFundsAction";
 
-type State = AvailableFundsStore
+type StateSlice = AvailableFundsStore
 type Actions = FundsActions
 
-function cancelOrder(state: State, action: CancelOrderAction): State {
+export function availableFundsReducer(
+    state: StateSlice = initialFundsStore,
+    action: Actions
+): StateSlice {
+    switch (action.type) {
+        case ConfirmDepositType:
+            return deposit(state, action as ConfirmDepositAction);
+        case ConfirmWithdrawType:
+            return withdraw(state, action as ConfirmWithdrawAction);
+        case CancelOrderType:
+            return cancelOrder(state, action as CancelOrderAction);
+        case SetAvailableFundsType:
+            return setAvailableFunds(state, action as SetAvailableFundsAction);
+        default:
+            return state;
+    }
+}
+
+function setAvailableFunds(state: StateSlice, action: SetAvailableFundsAction): StateSlice {
+    return {
+        ...state,
+        availableFunds: action.payload.funds
+    };
+}
+
+function cancelOrder(state: StateSlice, action: CancelOrderAction): StateSlice {
     const {instrument, isBuy, remainingUnits, unitPrice} = action.payload.order;
     const availableFunds = new Map(state.availableFunds);
     if(isBuy){
@@ -24,28 +50,12 @@ function cancelOrder(state: State, action: CancelOrderAction): State {
     }
 }
 
-export function availableFundsReducer(
-    state: State = initialFundsStore,
-    action: Actions
-): State {
-    switch (action.type) {
-        case ConfirmDepositType:
-            return deposit(state, action as ConfirmDepositAction);
-        case ConfirmWithdrawType:
-            return withdraw(state, action as ConfirmWithdrawAction);
-        case CancelOrderType:
-            return cancelOrder(state, action as CancelOrderAction);
-        default:
-            return state;
-    }
-}
-
 function adjustAsset(funds: Map<string, number>, asset: string, add: number): void {
     const current: number = funds.get(asset) as number;
     funds.set(asset, current + add);
 }
 
-function withdraw(state: State, action: ConfirmWithdrawAction): State {
+function withdraw(state: StateSlice, action: ConfirmWithdrawAction): StateSlice {
     const {asset, units} = action.payload;
 
     const newFunds: Map<string, number> = new Map(state.availableFunds);
@@ -57,7 +67,7 @@ function withdraw(state: State, action: ConfirmWithdrawAction): State {
     });
 }
 
-function deposit(state: State, action: ConfirmDepositAction): State {
+function deposit(state: StateSlice, action: ConfirmDepositAction): StateSlice {
     const {asset, units} = action.payload;
 
     const newFunds: Map<string, number> = new Map(state.availableFunds);

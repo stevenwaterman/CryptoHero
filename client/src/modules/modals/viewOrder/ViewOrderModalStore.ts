@@ -8,14 +8,14 @@ export default interface ViewOrderModalStore {
 
 export const initialViewTradeModalStore: ViewOrderModalStore = {
     order: new Order(
-        "6a3ef434-26cb-40d5-9844-ca189a83c177",
+        "",
         new Date(),
-        new Instrument("BTC", "GBP"),
+        new Instrument("LTCGBPNA", "LTCGBPNA"),
         true,
-        100000,
-        1.523,
-        68000,
-        1.514
+        1,
+        1,
+        1,
+        1
     )
 };
 

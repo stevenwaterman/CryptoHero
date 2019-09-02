@@ -3,19 +3,19 @@ import Broker from "../../../../brokers/broker";
 import Account from "../../../../trading/account";
 import {REGISTRY} from "../../../../registry";
 import SER from "../../serialisation/SER";
-import respond from "../../serialisation/respond";
+import {respondNoSer} from "../../serialisation/respond";
 
 export function urlGetAccount(broker: Broker, req: Request, res: Response): Account | null {
     const accountId: string | undefined = req.params["account"];
 
     if (accountId == null) {
-        respond(res, 400, "missing url parameter: account", SER.NO);
+        respondNoSer(res, 400, "missing url parameter: account");
         return null
     }
 
     const account: Account | undefined = REGISTRY.getAccount(accountId);
     if (account == null) {
-        respond(res, 404, `account id ${accountId} not found`, SER.NO);
+        respondNoSer(res, 404, `account id ${accountId} not found`);
         return null
     }
     return account

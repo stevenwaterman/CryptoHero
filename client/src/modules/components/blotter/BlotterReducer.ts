@@ -2,14 +2,15 @@ import BlotterSetCategoryAction, {BlotterSetCategoryType} from "./BlotterSetCate
 import BlotterStore, {BlotterActions, initialBlotterStore} from "./BlotterStore";
 import CancelOrderAction, {CancelOrderType} from "./CancelOrderAction";
 import ConfirmTradeAction, {ConfirmTradeType} from "../../modals/trade/ConfirmTradeAction";
+import SetOrdersAction, {SetOrdersType} from "./SetOrdersAction";
 
-type State = BlotterStore
+type StateSlice = BlotterStore
 type Actions = BlotterActions
 
 export function blotterReducer(
-    state: State = initialBlotterStore,
+    state: StateSlice = initialBlotterStore,
     action: Actions
-): State {
+): StateSlice {
     switch (action.type) {
         case BlotterSetCategoryType:
             return setCategory(state, action as BlotterSetCategoryAction);
@@ -17,29 +18,37 @@ export function blotterReducer(
             return cancelOrder(state, action as CancelOrderAction);
         case ConfirmTradeType:
             return confirmTrade(state, action as ConfirmTradeAction);
+        case SetOrdersType:
+            return setOrders(state, action as SetOrdersAction);
         default:
             return state;
     }
 }
 
-function confirmTrade(state: State, action: ConfirmTradeAction): State {
+function setOrders(state: StateSlice, action: SetOrdersAction): StateSlice {
     return {
         ...state,
-        pending: state.pending.concat(action.payload.newTrade)
+        orders: action.payload.orders
     };
 }
 
-function setCategory(state: State, action: BlotterSetCategoryAction): State {
+function confirmTrade(state: StateSlice, action: ConfirmTradeAction): StateSlice {
+    return {
+        ...state,
+        orders: state.orders.concat(action.payload.newOrder)
+    };
+}
+
+function setCategory(state: StateSlice, action: BlotterSetCategoryAction): StateSlice {
     return ({
         ...state,
         showPending: action.payload.pendingSelected,
     });
 }
 
-function cancelOrder(state: State, action: CancelOrderAction): State {
-    const newPending = state.pending.filter(it => it.id !== action.payload.order.id);
+function cancelOrder(state: StateSlice, action: CancelOrderAction): StateSlice {
     return ({
         ...state,
-        pending: newPending
+        orders: state.orders.filter(it => it.id !== action.payload.order.id)
     });
 }
