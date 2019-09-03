@@ -33,7 +33,7 @@ function reshapeData(data: Array<[number, number]>): Array<[number, number]> {
 
 export default class DepthChart extends Component<DepthChartProps> {
     private readonly width = 500;
-    private readonly height = 500;
+    private readonly height = 250;
     private readonly margin = {top: 0, right: 10, bottom: 40, left: 40};
 
     private svg: any;
@@ -43,20 +43,18 @@ export default class DepthChart extends Component<DepthChartProps> {
     private xAxis: AXIS;
     private yAxis: AXIS;
 
+    private readonly buys: Array<[number, number]> = [];
+    private readonly sells: Array<[number, number]> = [];
+
     componentDidMount(): void {
         this.svg = d3.select("#DepthChart")
-
             .append("div").classed("svg-container", true)
-
             .append("svg")
-
             .attr("preserveAspectRatio", "xMinYMin meet")
             .attr("viewBox", `0 0 ${this.width} ${this.height}`)
             .classed("svg-content-responsive", true)
-
             .append("g")
-            .attr("transform",
-                `translate(${this.margin.left},${this.margin.right})`);
+            .attr("transform", `translate(${this.margin.left},${this.margin.right})`);
 
         this.xScale = d3.scaleLinear()
             .range([0, this.width - this.margin.left - this.margin.right]);
@@ -65,12 +63,25 @@ export default class DepthChart extends Component<DepthChartProps> {
             .attr("class", "xAxis")
             .attr("transform", `translate(0,${this.height - this.margin.top - this.margin.bottom})`);
 
-
         this.yScale = d3.scaleLinear()
             .range([0, this.height - this.margin.top - this.margin.bottom]);
         this.yAxis = d3.axisLeft(this.yScale!);
         this.svg.append("g")
             .attr("class", "yAxis");
+
+        this.svg.append("path")
+            .data([this.buys])
+            .attr("class", "buyLine")
+            .attr("fill", "none")
+            .attr("stroke", "green")
+            .attr("stroke-width", 2.5);
+
+        this.svg.append("path")
+            .data([this.sells])
+            .attr("class", "sellLine")
+            .attr("fill", "none")
+            .attr("stroke", "red")
+            .attr("stroke-width", 2.5);
 
         this.mounted = true;
     }
@@ -78,7 +89,10 @@ export default class DepthChart extends Component<DepthChartProps> {
     private changeData(): void {
         const buys = this.props.data.buys;
         const sells = this.props.data.sells;
-        const all = buys.concat(sells);
+
+        this.buys.splice(0, Infinity, ...reshapeData(buys));
+        this.sells.splice(0, Infinity, ...reshapeData(sells));
+        const all = this.buys.concat(this.sells);
 
         const xDomain = d3.extent(all.map(getX)) as [number, number];
         const yDomain = d3.extent(all.map(getY)) as [number, number];
@@ -93,39 +107,20 @@ export default class DepthChart extends Component<DepthChartProps> {
             .duration(1000)
             .call(this.yAxis as any);
 
-        // noinspection TypeScriptValidateJSTypes
-        const buyPlot = this.svg.selectAll(".buyLine")
-            .data([reshapeData(buys)], getX);
-
-        buyPlot.enter()
-            .append("path")
-            .attr("class", "buyLine")
-            .transition()
-            .duration(1000)
+        this.svg.selectAll(".buyLine")
+            .data([this.buys], getX)
+            .transition().duration(1000)
             .attr("d", d3.line()
                 .x(d => this.xScale!(getX(d)))
                 .y(d => this.yScale!(getY(d)))
-            )
-            .attr("fill", "none")
-            .attr("stroke", "green")
-            .attr("stroke-width", 2.5);
-
-        // noinspection TypeScriptValidateJSTypes
-        const sellPlot = this.svg.selectAll(".sellLine")
-            .data([reshapeData(sells)], getX);
-
-        sellPlot.enter()
-            .append("path")
-            .attr("class", "sellLine")
-            .transition()
-            .duration(1000)
+            );
+        this.svg.selectAll(".sellLine")
+            .data([this.sells], getX)
+            .transition().duration(1000)
             .attr("d", d3.line()
-                .x(d => this.xScale!(getX(d)))
-                .y(d => this.yScale!(getY(d)))
-            )
-            .attr("fill", "none")
-            .attr("stroke", "red")
-            .attr("stroke-width", 2.5);
+            .x(d => this.xScale!(getX(d)))
+            .y(d => this.yScale!(getY(d)))
+        );
     }
 
     render(): ELEMENT {

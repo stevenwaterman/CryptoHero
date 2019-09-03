@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
 import {State} from "../../modules/RootStore";
 import {ThunkDsp} from "../../util/Thunker";
-import {LoadAccountAction} from "../../modules/global/LoadAccountAction";
+import {createReloadAction, LoadAccountAction} from "../../modules/global/LoadAccountAction";
 import App from "./App";
 import {createCreateAccountAction} from "../../modules/global/CreateAccountAction";
 
@@ -9,6 +9,7 @@ type Actions = LoadAccountAction
 
 interface DispatchProps {
     createAccount: () => void,
+    reload: () => void,
 }
 
 export interface StateProps {
@@ -23,6 +24,9 @@ function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): Di
     return {
         createAccount: async () => {
             await dispatch(createCreateAccountAction())
+        },
+        reload: async () => {
+            await dispatch(createReloadAction())
         }
     }
 }

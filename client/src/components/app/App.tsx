@@ -20,6 +20,10 @@ import {AppProps} from "./AppContainer";
 export default class App extends React.Component<AppProps> {
     componentDidMount(): void {
         this.props.createAccount();
+
+        setInterval(() => {
+            this.props.reload()
+        }, 1000);
     }
 
     render(): ELEMENT {
