@@ -4,6 +4,8 @@ import Asset from "./asset";
 import * as Immutable from "immutable";
 import {REGISTRY} from "../registry";
 import Order from "./order";
+import Room from "../websockets/Room";
+import * as AccountPayloads from "../websockets/AccountPayloads"
 
 export default class Account {
     id: string = uuidv4();
@@ -15,17 +17,48 @@ export default class Account {
         Asset.ALL.map((asset: Asset) => [asset, Big("0")])
     );
 
-    readonly orders: Array<Order> = [];
+    private readonly orders: Array<Order> = [];
+
+    getOrders(): Array<Order>{
+        return this.orders;
+    }
+
+    addOrder(order: Order): void{
+        this.orders.push(order);
+
+        order.tradeAddedRoom.join(payload => this.changedOrderRoom.fire({
+            self: this,
+            changedOrder: payload.self
+        }));
+        order.cancelledRoom.join(payload => this.changedOrderRoom.fire({
+            self: this,
+            changedOrder: payload.self
+        }));
+        this.newOrderRoom.fire({
+            self: this,
+            newOrder: order
+        });
+    }
+
+    readonly newOrderRoom = new Room<AccountPayloads.NewOrder>();
+    readonly changedOrderRoom = new Room<AccountPayloads.OrderChanged>();
+    readonly availableFundsRoom = new Room<AccountPayloads.FundsChanged>();
 
     constructor() {
         REGISTRY.registerAccount(this);
     }
 
     adjustAssets(asset: Asset, addUnits: Big): void {
+        const newAmount = this.getAvailableAssets(asset).plus(addUnits);
         this.availableAssets.set(
             asset,
-            this.getAvailableAssets(asset).plus(addUnits)
+            newAmount
         );
+        this.availableFundsRoom.fire({
+            self: this,
+            asset: asset,
+            newAmount: newAmount
+        })
     }
 
     getAllAvailableAssets(): Immutable.Map<Asset, Big> {
@@ -37,6 +70,6 @@ export default class Account {
     }
 
     getAvailableAssets(asset: Asset): Big {
-        return <Big>this.availableAssets.get(asset);
+        return this.availableAssets.get(asset) as Big;
     }
 }

@@ -7,6 +7,8 @@ import Instrument from "./instrument";
 import Trade from "./trade";
 import {OrderState} from "./orderState";
 import Asset from "./asset";
+import Room from "../websockets/Room";
+import * as OrderPayloads from "../websockets/OrderPayloads"
 
 /**
  * Stores information about an order that should be placed on the exchange
@@ -28,8 +30,36 @@ export default class Order {
     readonly gainedAsset: Asset;
     readonly originallyLocked: Big;
 
-    state: OrderState = OrderState.PENDING;
-    readonly trades: Array<Trade> = [];
+    private state: OrderState = OrderState.PENDING;
+    private readonly trades: Array<Trade> = [];
+
+    readonly tradeAddedRoom = new Room<OrderPayloads.TradeAdded>();
+    readonly cancelledRoom = new Room<OrderPayloads.Cancelled>();
+
+    addTrade(trade: Trade): void{
+        this.trades.push(trade);
+
+        const remaining = this.getRemainingUnits();
+        if(remaining.eq(new Big("0"))){
+            this.state = OrderState.COMPLETE;
+        }
+
+        this.tradeAddedRoom.fire({
+            self: this,
+            newTrade: trade
+        })
+    }
+
+    getState(): OrderState{
+        return this.state;
+    }
+
+    cancel(): void{
+        this.state = OrderState.CANCELLED;
+        this.cancelledRoom.fire({
+            self: this
+        })
+    }
 
     constructor(
         account: Account,

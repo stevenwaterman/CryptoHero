@@ -12,7 +12,10 @@ import AppContainer from "./components/app/AppContainer";
 import {IconDefinition, library} from "@fortawesome/fontawesome";
 import {faSyncAlt, faUserPlus} from "@fortawesome/free-solid-svg-icons";
 
+import {initSocket} from "./WebSockets";
+
 library.add(...[faSyncAlt, faUserPlus] as Array<IconDefinition>);
+initSocket();
 
 ReactDOM.render(
     <Provider store={RootStore}>

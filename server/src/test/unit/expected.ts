@@ -65,6 +65,6 @@ export class ExpectedTrade {
 }
 
 export function expectOrders(account: Account, ...orders: Array<ExpectedOrder>): void {
-    expect(account.orders).toHaveLength(orders.length);
-    expect(account.orders).toMatchObject(orders);
+    expect(account.getOrders()).toHaveLength(orders.length);
+    expect(account.getOrders()).toMatchObject(orders);
 }

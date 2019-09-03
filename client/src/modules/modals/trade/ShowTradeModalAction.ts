@@ -15,7 +15,7 @@ export default interface ShowTradeModalAction {
 }
 
 export function createShowTradeModalAction(state: State, [buying, instrument]: [boolean, Instrument]): ShowTradeModalAction {
-    const price: number = state.instruments.prices.get(instrument) as number;
+    const price: number = state.instruments.prices.get(instrument.name) as number;
     return {
         type: ShowTradeModalType,
         payload: {

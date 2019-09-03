@@ -24,7 +24,6 @@ describe("buyComparator", () => {
     let order2: Order;
     let order3: Order;
     let order4: Order;
-    let order5: Order;
 
     beforeEach(() => {
         order1 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("100"), new Big("1.14"));
@@ -33,10 +32,8 @@ describe("buyComparator", () => {
         order3 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("100"), new Big("1.14"));
         order3.timestamp.setTime(order1.timestamp.getTime() + 1000);
 
-        order4 = {...order1};
-
-        order5 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("200"), new Big("1.14"));
-        order5.timestamp.setTime(order1.timestamp.getTime());
+        order4 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("200"), new Big("1.14"));
+        order4.timestamp.setTime(order1.timestamp.getTime());
     });
 
     test("different prices, higher price comes first", () => {
@@ -51,11 +48,10 @@ describe("buyComparator", () => {
 
     test("same price, timestamp, and id returns 0", () => {
         expect(buyComparator(order1, order1)).toEqual(0);
-        expect(buyComparator(order1, order4)).toEqual(0);
     });
 
     test("same price and timestamp, different account, does not return 0", () => {
-        expect(buyComparator(order4, order5)).not.toEqual(0);
+        expect(buyComparator(order4, order4)).not.toEqual(0);
     });
 });
 
@@ -64,7 +60,6 @@ describe("sellComparator", () => {
     let order2: Order;
     let order3: Order;
     let order4: Order;
-    let order5: Order;
 
     beforeEach(() => {
         order1 = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, new Big("100"), new Big("1.14"));
@@ -73,10 +68,8 @@ describe("sellComparator", () => {
         order3 = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, new Big("100"), new Big("1.14"));
         order3.timestamp.setTime(order1.timestamp.getTime() + 1000);
 
-        order4 = {...order1};
-
-        order5 = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, new Big("200"), new Big("1.14"));
-        order5.timestamp.setTime(order1.timestamp.getTime());
+        order4 = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, new Big("200"), new Big("1.14"));
+        order4.timestamp.setTime(order1.timestamp.getTime());
     });
 
     test("different prices, lower price comes first", () => {
@@ -91,10 +84,9 @@ describe("sellComparator", () => {
 
     test("same price, timestamp, and id returns 0", () => {
         expect(sellComparator(order1, order1)).toEqual(0);
-        expect(sellComparator(order1, order4)).toEqual(0);
     });
 
     test("same price and timestamp, different id, does not return 0", () => {
-        expect(sellComparator(order4, order5)).not.toEqual(0);
+        expect(sellComparator(order4, order4)).not.toEqual(0);
     });
 });

@@ -16,14 +16,12 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/es/Col";
 import TopBarContainer from "../nav/TopBarContainer";
 import {AppProps} from "./AppContainer";
+import SocketReceiver from "../socketReceiver/SocketReceiverContainer";
+import SocketReceiverContainer from "../socketReceiver/SocketReceiverContainer";
 
 export default class App extends React.Component<AppProps> {
     componentDidMount(): void {
         this.props.createAccount();
-
-        setInterval(() => {
-            this.props.reload()
-        }, 1000);
     }
 
     render(): ELEMENT {
@@ -48,6 +46,8 @@ export default class App extends React.Component<AppProps> {
                 <WithdrawModalContainer/>
                 <DepositModalContainer/>
                 <ViewTradeModalContainer/>
+
+                <SocketReceiverContainer/>
             </>
         )
     }

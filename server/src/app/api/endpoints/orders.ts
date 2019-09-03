@@ -19,9 +19,6 @@ export function setupOrdersEndpoints(server: BitcoinExchangeServer): void {
 
     app.post("/api/orders/place", withBroker(broker, placeOrder));
     app.post("/api/orders/:order/cancel", withBroker(broker, cancelOrder));
-
-    app.get("/api/orders/:order/view", withBroker(broker, viewOrder));
-    app.get("/api/orders/list/account/:account", withBroker(broker, listOrders));
 }
 
 function placeOrder(broker: Broker, req: Request, res: Response): void {
@@ -50,22 +47,10 @@ function placeOrder(broker: Broker, req: Request, res: Response): void {
     respond(res, 200, order, SER.ORDER);
 }
 
-function listOrders(broker: Broker, req: Request, res: Response): void {
-    const account = urlGetAccount(broker, req, res);
-    if (account == null) return;
-    respond(res, 200, account.orders, SER.ARRAYFUNC(SER.ORDER));
-}
-
 function cancelOrder(broker: Broker, req: Request, res: Response): void {
     const order = urlGetOrder(broker, req, res);
     if (order == null) return;
 
     broker.cancelOrder(order);
     respondNoSer(res, 200, "Successful");
-}
-
-function viewOrder(broker: Broker, req: Request, res: Response): void {
-    const order = urlGetOrder(broker, req, res);
-    if (order == null) return;
-    respond(res, 200, order, SER.ORDER);
 }

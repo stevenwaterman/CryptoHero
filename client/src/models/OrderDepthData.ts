@@ -1,16 +1,14 @@
-import Instrument from "./Instrument";
-
-const toTuple: (it: any) => [number, number] =
-    (it: any) => [
+const toPoint: (it: any) => OrderDepthPoint =
+    (it: any) => new OrderDepthPoint(
         Number.parseFloat(it["unit price"]),
         Number.parseFloat(it.units)
-    ];
+    );
 
 export class InstrumentOrderDepthData {
-    readonly buys: Array<[number, number]>;
-    readonly sells: Array<[number, number]>;
+    readonly buys: Array<OrderDepthPoint>;
+    readonly sells: Array<OrderDepthPoint>;
 
-    constructor(buys: Array<[number, number]>, sells: Array<[number, number]>) {
+    constructor(buys: Array<OrderDepthPoint>, sells: Array<OrderDepthPoint>) {
         this.buys = buys;
         this.sells = sells;
     }
@@ -19,14 +17,18 @@ export class InstrumentOrderDepthData {
         const buys: Array<any> = priceAggregate.buy;
         const sells: Array<any> = priceAggregate.sell;
 
-        return new InstrumentOrderDepthData(buys.map(toTuple), sells.map(toTuple));
+        return new InstrumentOrderDepthData(buys.map(toPoint), sells.map(toPoint));
     }
 }
 
-export default class OrderDepthData {
-    readonly data: Map<string, InstrumentOrderDepthData>;
+export type OrderDepthData = Map<string, InstrumentOrderDepthData>;
 
-    constructor(data: Array<[Instrument, InstrumentOrderDepthData]>) {
-        this.data = new Map(data.map(([instrument, data]) => [instrument.name, data]));
+export class OrderDepthPoint{
+    price: number;
+    volume: number;
+
+    constructor(price: number, volume: number) {
+        this.price = price;
+        this.volume = volume;
     }
 }

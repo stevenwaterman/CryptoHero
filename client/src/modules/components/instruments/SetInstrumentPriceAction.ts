@@ -3,7 +3,8 @@ import {State} from "../../RootStore";
 
 interface IPayload {
     instrument: Instrument,
-    newPrice: number
+    newPrice: number,
+    time: number,
 }
 
 export const SetInstrumentPriceType: string = "SET_INSTRUMENT_PRICE";
@@ -13,12 +14,13 @@ export default interface SetInstrumentPriceAction {
     payload: IPayload
 }
 
-export function createSetInstrumentPriceAction(state: State, [instrument, newPrice]: [Instrument, number]): SetInstrumentPriceAction {
+export function createSetInstrumentPriceAction(instrument: Instrument, newPrice: number, time: number): SetInstrumentPriceAction {
     return {
         type: SetInstrumentPriceType,
         payload: {
             instrument: instrument,
-            newPrice: newPrice
+            newPrice: newPrice,
+            time: time,
         }
     }
 }

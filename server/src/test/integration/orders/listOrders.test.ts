@@ -34,7 +34,7 @@ test("Happy Path", done => {
             "id": buy.id,
             "time": buy.timestamp.getTime(),
             "instrument": buy.instrument.name,
-            "state": buy.state.name,
+            "state": buy.getState().name,
             "direction": buy.direction.name,
             "units": buy.originalUnits.toString(),
             "unit price": buy.unitPrice.toString(),

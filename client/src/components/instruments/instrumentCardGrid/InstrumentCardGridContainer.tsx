@@ -17,7 +17,7 @@ export type InstrumentCardGridProps = StateProps & DispatchProps & OwnProps
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
-        instruments: Array.from(state.instruments.prices.keys())
+        instruments: state.instruments.instrumentList
     }
 }
 

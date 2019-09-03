@@ -9,7 +9,6 @@ type Actions = LoadAccountAction
 
 interface DispatchProps {
     createAccount: () => void,
-    reload: () => void,
 }
 
 export interface StateProps {
@@ -25,9 +24,6 @@ function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): Di
         createAccount: async () => {
             await dispatch(createCreateAccountAction())
         },
-        reload: async () => {
-            await dispatch(createReloadAction())
-        }
     }
 }
 

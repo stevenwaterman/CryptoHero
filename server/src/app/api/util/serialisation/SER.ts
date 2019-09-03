@@ -67,7 +67,7 @@ export default class SER {
             id,
             instrument,
             originalUnits,
-            state,
+            getState,
             timestamp,
             unitPrice
         }: Order
@@ -76,7 +76,7 @@ export default class SER {
             "id": id,
             "time": timestamp.getTime(),
             "instrument": SER.INSTRUMENT(instrument),
-            "state": SER.ORDER_STATE(state),
+            "state": SER.ORDER_STATE(getState()),
             "direction": SER.DIRECTION(direction),
             "units": SER.BIG(originalUnits),
             "unit price": SER.BIG(unitPrice),
@@ -92,7 +92,7 @@ export default class SER {
         }
     }
 
-    private static PRICE_AGGREGATE_ELEMENT(element: PriceAggregateElement): InnerSerialisable {
+    static PRICE_AGGREGATE_ELEMENT(element: PriceAggregateElement): InnerSerialisable {
         return {
             "unit price": SER.BIG(element.unitPrice),
             "units": SER.BIG(element.units)

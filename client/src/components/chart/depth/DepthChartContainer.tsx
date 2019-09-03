@@ -19,7 +19,7 @@ export type DepthChartProps = StateProps & DispatchProps & OwnProps
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     const orderDepth = state.chart.orderDepth;
     const instrument = state.instruments.selectedInstrument;
-    let instrumentOrderDepthData = orderDepth.data.get(instrument.name);
+    let instrumentOrderDepthData = orderDepth.get(instrument.name);
     if(instrumentOrderDepthData == null){
         instrumentOrderDepthData = new InstrumentOrderDepthData([],[]);
     }

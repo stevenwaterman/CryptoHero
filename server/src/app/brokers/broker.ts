@@ -8,7 +8,7 @@ import PricePoint from "./PricePoint";
 
 export default class Broker {
     private readonly instrumentBrokers: Immutable.Map<Instrument, InstrumentBroker> = Immutable.Map(
-        Instrument.ALL.map(it => [it, new InstrumentBroker()])
+        Instrument.ALL.map(instrument => [instrument, new InstrumentBroker(instrument)])
     );
 
     constructor() {

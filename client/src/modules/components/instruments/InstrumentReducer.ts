@@ -3,6 +3,7 @@ import InstrumentSelectionAction, {InstrumentSelectionType} from "./InstrumentSe
 import SetInstrumentPriceAction, {SetInstrumentPriceType} from "./SetInstrumentPriceAction";
 import Instrument from "../../../models/Instrument";
 import SetPricesAction, {SetPricesType} from "./SetPricesAction";
+import {act} from "react-dom/test-utils";
 
 type State = InstrumentStore
 type Actions = InstrumentActions
@@ -15,7 +16,7 @@ export function instrumentReducer(
         case InstrumentSelectionType:
             return instrumentSelection(state, action as InstrumentSelectionAction);
         case SetInstrumentPriceType:
-            return instrumentPrices(state, action as SetInstrumentPriceAction);
+            return instrumentPrice(state, action as SetInstrumentPriceAction);
         case SetPricesType:
             return setPrices(state, action as SetPricesAction);
         default:
@@ -25,7 +26,7 @@ export function instrumentReducer(
 
 function setPrices(state: State, action: SetPricesAction): State {
     let selected: Instrument = state.selectedInstrument;
-    const newInstruments = Array.from(action.payload.prices.keys());
+    const newInstruments: Array<Instrument> = Array.from(action.payload.prices.keys());
     if (!newInstruments.map(it => it.name).includes(selected.name)) {
         if (newInstruments.length > 0) {
             selected = newInstruments[0];
@@ -33,10 +34,12 @@ function setPrices(state: State, action: SetPricesAction): State {
             selected = new Instrument("NA", "NA");
         }
     }
+    const prices: Array<[string, number]> = Array.from(action.payload.prices).map(([instrument, price]) => [instrument.name, price]);
 
     return {
         selectedInstrument: selected,
-        prices: action.payload.prices
+        prices: new Map(prices),
+        instrumentList: newInstruments,
     };
 }
 
@@ -48,10 +51,10 @@ function instrumentSelection(state: State, action: InstrumentSelectionAction): S
     }
 }
 
-function instrumentPrices(state: State, action: SetInstrumentPriceAction): State {
+function instrumentPrice(state: State, action: SetInstrumentPriceAction): State {
     const {instrument, newPrice} = action.payload;
     const newPrices = new Map(state.prices);
-    newPrices.set(instrument, newPrice);
+    newPrices.set(instrument.name, newPrice);
     return {
         ...state,
         prices: newPrices,

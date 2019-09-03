@@ -65,7 +65,14 @@ export default class PriceChart extends Component<PriceChartProps> {
     }
 
     private changeData(): void {
-        const data = this.props.historicalData.data;
+        const data: Array<[number, number]> = this.props.priceHistory.data;
+        if(data.some(it=>!Number.isFinite(it[0]))){
+            console.log("here");
+            console.log("here");
+            console.log("here");
+            console.log("here");
+            console.log("here");
+        }
         this.data.splice(0, Infinity, ...data);
 
         const yDomain = d3.extent(data.map(getY)) as [number, number];
@@ -85,7 +92,7 @@ export default class PriceChart extends Component<PriceChartProps> {
             .call(this.yAxis as any);
 
         this.svg.selectAll(".line")
-            .data([this.data], getX)
+            .data([this.data])
             //.transition().duration(1000)
             .attr("d", d3.line()
                 .x(d => this.xScale!(getX(d)))

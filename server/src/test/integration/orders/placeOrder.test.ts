@@ -30,7 +30,7 @@ test("Happy Path", done => {
     request.post(url, options, (error, response, body) => {
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(200);
-        expect(account.orders).toHaveLength(1);
+        expect(account.getOrders()).toHaveLength(1);
         done();
     });
 });
@@ -55,7 +55,7 @@ test("cannot self-trade", done => {
     request.post(url, options, (error, response) => {
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(400);
-        expect(account.orders).toHaveLength(1);
+        expect(account.getOrders()).toHaveLength(1);
         done();
     });
 });
@@ -78,7 +78,7 @@ test("Not enough funds", done => {
     request.post(url, options, (error, response) => {
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(400);
-        expect(account.orders).toHaveLength(0);
+        expect(account.getOrders()).toHaveLength(0);
         done();
     });
 });

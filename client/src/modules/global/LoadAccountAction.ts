@@ -8,9 +8,9 @@ import {createSetOrdersAction} from "../components/blotter/SetOrdersAction";
 import {Action} from "redux";
 import {createSetSelectedAccountAction} from "./SetSelectedAccountAction";
 import {createSetOrderDepthDataAction} from "../components/chart/SetOrderDepthDataAction";
-import OrderDepthData, {InstrumentOrderDepthData} from "../../models/OrderDepthData";
-import HistoricalPriceData, {InstrumentHistoricalPriceData} from "../../models/HistoricalPriceData";
-import {createSetHistoricalPricesDataAction} from "../components/chart/SetHistoricalPricesDataAction";
+import {createSetPriceHistoryAction} from "../components/chart/SetPriceHistoryAction";
+import {InstrumentOrderDepthData, OrderDepthData} from "../../models/OrderDepthData";
+import {InstrumentPriceHistory, PriceHistory} from "../../models/PriceHistory";
 
 export const LoadAccountType = "LOAD_ACCOUNT";
 
@@ -56,22 +56,22 @@ async function inner(accountId: string, dispatch: ThunkDispatch<State, void, Act
         )
     );
 
-    const orderDepth = new OrderDepthData(
+    const orderDepth: OrderDepthData = new Map(
         Object.entries(accountState.orderDepth)
             .map(([instrument, priceAggregate]: [string, any]) =>
                 [
-                    Instrument.fromName(instrument),
+                    instrument,
                     InstrumentOrderDepthData.fromServer(priceAggregate)
                 ]
             )
     );
 
-    const historicalPrices = new HistoricalPriceData(
-        Object.entries(accountState.historicalPrices)
+    const priceHistory: PriceHistory = new Map(
+        Object.entries(accountState.priceHistory)
             .map(([instrument, priceHistory]: [string, any]) =>
                 [
-                    Instrument.fromName(instrument),
-                    InstrumentHistoricalPriceData.fromServer(priceHistory)
+                    instrument,
+                    InstrumentPriceHistory.fromServer(priceHistory)
                 ]
             )
     );
@@ -80,6 +80,6 @@ async function inner(accountId: string, dispatch: ThunkDispatch<State, void, Act
     dispatch(createSetPricesAction(state, prices));
     dispatch(createSetOrdersAction(state, orders));
     dispatch(createSetOrderDepthDataAction(state, orderDepth));
-    dispatch(createSetHistoricalPricesDataAction(state, historicalPrices));
+    dispatch(createSetPriceHistoryAction(state, priceHistory));
     dispatch(createSetSelectedAccountAction(state, accountId));
 }

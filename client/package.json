@@ -25,6 +25,7 @@
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "socket.io-client": "^2.2.0",
     "typescript": "3.5.3"
   },
   "scripts": {
@@ -52,6 +53,7 @@
     "@types/react-redux": "^7.1.2",
     "@types/redux-logger": "^3.0.7",
     "@types/redux-thunk": "^2.1.0",
+    "@types/socket.io-client": "^1.4.32",
     "css-loader": "^3.2.0",
     "redux-devtools": "^3.5.0",
     "style-loader": "^1.0.0"

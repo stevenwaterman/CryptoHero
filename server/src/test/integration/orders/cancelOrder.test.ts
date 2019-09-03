@@ -30,7 +30,7 @@ test("Happy Path", done => {
 
         const json = JSON.parse(body);
         expect(json).toEqual("Successful");
-        expect(account.orders[0].state).toEqual(OrderState.CANCELLED);
+        expect(account.getOrders()[0].getState()).toEqual(OrderState.CANCELLED);
         done();
     });
 });

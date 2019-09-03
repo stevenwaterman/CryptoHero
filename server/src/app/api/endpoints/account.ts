@@ -24,8 +24,6 @@ export function setupAccountsEndpoints(server: BitcoinExchangeServer): void {
     app.post("/api/account/create", withBroker(broker, createAccount));
     app.get("/api/account/:account/state", withBroker(broker, getAccountState));
 
-    app.get("/api/account/:account/assets/available", withBroker(broker, getAllAvailableAssets));
-    app.get("/api/account/:account/assets/:asset/available", withBroker(broker, getOneAvailableAsset));
     app.post("/api/account/:account/assets/:asset/deposit", withBroker(broker, depositAsset));
     app.post("/api/account/:account/assets/:asset/withdraw", withBroker(broker, withdrawAsset));
 }
@@ -36,10 +34,10 @@ function getAccountState(broker: Broker, req: Request, res: Response): void {
 
     const availableFunds: Map<Asset, Big> = account.getAllAvailableAssets();
     const marketPrices: Map<Instrument, Big> = broker.getMarketPrices();
-    const orders: Array<Order> = account.orders;
+    const orders: Array<Order> = account.getOrders();
 
     const aggregateData: Map<Instrument, PriceAggregate> = broker.getAggregatePrices();
-    const historicalData: Map<Instrument, Array<PricePoint>> = broker.getPriceHistory();
+    const priceHistory: Map<Instrument, Array<PricePoint>> = broker.getPriceHistory();
 
     const out = {
         account: SER.ACCOUNT(account),
@@ -47,7 +45,7 @@ function getAccountState(broker: Broker, req: Request, res: Response): void {
         prices: SER.MAP(marketPrices, SER.INSTRUMENT, SER.BIG),
         orders: SER.ARRAY(orders, SER.ORDER),
         orderDepth: SER.MAP(aggregateData, SER.INSTRUMENT, SER.PRICE_AGGREGATE),
-        historicalPrices: SER.MAP(historicalData, SER.INSTRUMENT, SER.ARRAYFUNC(SER.PRICE_POINT))
+        priceHistory: SER.MAP(priceHistory, SER.INSTRUMENT, SER.ARRAYFUNC(SER.PRICE_POINT))
     };
 
     respondNoSer(res, 200, out);
@@ -56,25 +54,6 @@ function getAccountState(broker: Broker, req: Request, res: Response): void {
 function createAccount(broker: Broker, req: Request, res: Response): void {
     const account = new Account();
     respond(res, 200, account, SER.ACCOUNT);
-}
-
-function getAllAvailableAssets(broker: Broker, req: Request, res: Response): void {
-    const account = urlGetAccount(broker, req, res);
-    if (account == null) return;
-
-    const assets: Map<Asset, Big> = account.getAllAvailableAssets();
-    respond(res, 200, assets, SER.MAPFUNC(SER.ASSET, SER.BIG));
-}
-
-function getOneAvailableAsset(broker: Broker, req: Request, res: Response): void {
-    const account = urlGetAccount(broker, req, res);
-    if (account == null) return;
-
-    const asset = urlGetAsset(broker, req, res);
-    if (asset == null) return;
-
-    const amount: Big = account.getAvailableAssets(asset);
-    respond(res, 200, amount, SER.BIG);
 }
 
 function depositAsset(broker: Broker, req: Request, res: Response): void {

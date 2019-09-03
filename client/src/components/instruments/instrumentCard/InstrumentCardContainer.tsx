@@ -37,7 +37,7 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
         canBuy: state.funds.availableFunds.get(ownProps.instrument.asset2) as number > 0,
         canSell: state.funds.availableFunds.get(ownProps.instrument.asset1) as number > 0,
-        price: state.instruments.prices.get(ownProps.instrument) as number,
+        price: state.instruments.prices.get(ownProps.instrument.name) as number,
         selected: state.instruments.selectedInstrument.name === ownProps.instrument.name
 
     }

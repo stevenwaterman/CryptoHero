@@ -1,19 +1,21 @@
 import ChartSetTypeAction from "./ChartSetTypeAction";
-import OrderDepthData from "../../../models/OrderDepthData";
 import SetOrderDepthDataAction from "./SetOrderDepthDataAction";
-import HistoricalPriceData from "../../../models/HistoricalPriceData";
-import SetHistoricalPricesDataAction from "./SetHistoricalPricesDataAction";
+import SetPriceHistoryAction from "./SetPriceHistoryAction";
+import {PriceHistory, InstrumentPriceHistory} from "../../../models/PriceHistory";
+import SetInstrumentPriceAction from "../instruments/SetInstrumentPriceAction";
+import OrderDepthDeltaAction from "./OrderDepthDeltaAction";
+import {OrderDepthData} from "../../../models/OrderDepthData";
 
 export default interface ChartStore {
     readonly showHistorical: boolean;
     readonly orderDepth: OrderDepthData;
-    readonly historicalPrices: HistoricalPriceData;
+    readonly priceHistory: PriceHistory;
 }
 
 export const initialChartStore: ChartStore = {
     showHistorical: true,
-    orderDepth: new OrderDepthData([]),
-    historicalPrices: new HistoricalPriceData([]),
+    orderDepth: new Map(),
+    priceHistory: new Map(),
 };
 
-export type ChartActions = ChartSetTypeAction | SetOrderDepthDataAction | SetHistoricalPricesDataAction
+export type ChartActions = ChartSetTypeAction | SetOrderDepthDataAction | SetPriceHistoryAction | SetInstrumentPriceAction | OrderDepthDeltaAction

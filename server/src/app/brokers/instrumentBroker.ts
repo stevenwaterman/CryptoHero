@@ -6,14 +6,21 @@ import Order from "../trading/order";
 import TradeDirection from "../trading/tradeDirection";
 import PriceAggregate, {PriceAggregateElement} from "./priceAggregate";
 import {OrderState} from "../trading/orderState";
-import account from "../trading/account";
 import PricePoint from "./PricePoint";
+import Instrument from "../trading/instrument";
+import MarketPriceRoom from "../websockets/MarketPriceRoom";
+import AggregatePriceRoom from "../websockets/AggregatePriceRoom";
 
 
 /**
  * The matcher accepts orders and matches them to create trades
  */
 export default class InstrumentBroker {
+    constructor(instrument: Instrument) {
+        this.instrument = instrument;
+    }
+
+    readonly instrument: Instrument;
     private readonly buys: SortedList<Order> = new SortedList(buyComparator);
     private readonly sells: SortedList<Order> = new SortedList(sellComparator);
     private lastPrice: Big = new Big("0");
@@ -34,17 +41,15 @@ export default class InstrumentBroker {
     private static makeTrade(
         order: Order,
         matched: Order
-    ): Big {
+    ): Trade {
         const [buy, sell] = InstrumentBroker.sortOrders(order, matched);
         const unitPrice = matched.unitPrice;
         const units = InstrumentBroker.getUnitsTraded(order, matched);
         const trade = new Trade(buy.account, sell.account, units, unitPrice);
-        buy.trades.push(trade);
-        sell.trades.push(trade);
-        InstrumentBroker.updateStateIfComplete(order);
-        InstrumentBroker.updateStateIfComplete(matched);
+        buy.addTrade(trade);
+        sell.addTrade(trade);
         InstrumentBroker.updatePositionOnTrade(buy, sell, units, unitPrice);
-        return unitPrice;
+        return trade;
     }
 
     /**
@@ -80,7 +85,7 @@ export default class InstrumentBroker {
             throw `Account cannot afford ${amountToLock}${spentAsset.name}, only has ${spentAssetPosition}`;
         }
 
-        if(direction === TradeDirection.SELL && originalExpectedAmount.lt(new Big("0"))){
+        if (direction === TradeDirection.SELL && originalExpectedAmount.lt(new Big("0"))) {
             //Selling at negative price
             const gainedAssetPosition = account.getAvailableAssets(gainedAsset);
             const gainedAssetSpend = new Big("0").sub(originalExpectedAmount);
@@ -96,14 +101,14 @@ export default class InstrumentBroker {
     }
 
     private static updatePositionOnCancelOrder(
-        {account, spentAsset,gainedAsset,originalExpectedAmount, direction,originallyLocked, ...rest}: Order
+        {account, spentAsset, gainedAsset, originalExpectedAmount, direction, originallyLocked, ...rest}: Order
     ): void {
 
         const fractionRemaining: Big = rest.getRemainingFraction();
         const amountOfSpentAssetToUnlock: Big = originallyLocked.mul(fractionRemaining);
         account.adjustAssets(spentAsset, amountOfSpentAssetToUnlock);
 
-        if(direction === TradeDirection.SELL && originalExpectedAmount.lt(new Big("0"))){
+        if (direction === TradeDirection.SELL && originalExpectedAmount.lt(new Big("0"))) {
             //Selling at negative price
             const amountOfGainedAssetToUnlock: Big = originalExpectedAmount.mul(fractionRemaining);
             const negative = new Big("0").sub(amountOfGainedAssetToUnlock);
@@ -139,17 +144,17 @@ export default class InstrumentBroker {
         actualUnits: Big,
         actualUnitPrice: Big
     ): void {
-        if(actualUnitPrice.gt(new Big("0"))){
+        if (actualUnitPrice.gt(new Big("0"))) {
             //Selling for positive price, no assets were locked
             const gainedAmount = actualUnits.mul(actualUnitPrice);
             account.adjustAssets(gainedAsset, gainedAmount);
-        } else if(actualUnitPrice.lt(new Big("0"))){
+        } else if (actualUnitPrice.lt(new Big("0"))) {
             //Selling for negative price, if they sold for more than expect then some refund needed
             const expectedGain = actualUnits.mul(unitPrice); //Negative number
             const actualGain = actualUnits.mul(actualUnitPrice); //Negative number, higher (closer to 0) than expectedGain
             const refundDue = expectedGain.minus(actualGain); // (-e) - (-a) = +delta
             account.adjustAssets(gainedAsset, refundDue);
-        } else{
+        } else {
             //Selling for 0, so no need to adjust assets
         }
     }
@@ -169,7 +174,7 @@ export default class InstrumentBroker {
         }
     }
 
-    getPriceHistory(): Array<PricePoint>{
+    getPriceHistory(): Array<PricePoint> {
         return this.priceHistory;
     }
 
@@ -185,7 +190,7 @@ export default class InstrumentBroker {
         if (order.getRemainingUnits().gt(new Big("0"))) {
             this.pushOrder(order);
         }
-        order.account.orders.push(order);
+        order.account.addOrder(order);
     }
 
     cancel(order: Order): void {
@@ -201,7 +206,7 @@ export default class InstrumentBroker {
      * Checks the first order on the buy and sell lists and removes them if there's no units left
      */
     private clearCompletedOrders(): void {
-        const shouldDelete = (order: Order) => order.state === OrderState.COMPLETE;
+        const shouldDelete = (order: Order) => order.getState() === OrderState.COMPLETE;
         this.buys.deleteFirstIf(shouldDelete);
         this.sells.deleteFirstIf(shouldDelete);
     }
@@ -224,25 +229,83 @@ export default class InstrumentBroker {
      * @param order Must be
      */
     private makeTrades(order: Order): void {
+        const aggregateBuyDelta: Array<PriceAggregateElement> = [];
+        const aggregateSellDelta: Array<PriceAggregateElement> = [];
+
         let match = this.getPotentialOrderMatch(order);
-        while (order.state === OrderState.PENDING && match != null && InstrumentBroker.tradePossible(order, match)) {
-            this.lastPrice = InstrumentBroker.makeTrade(order, match);
-            this.priceHistory.push(new PricePoint(new Date().getTime(), this.lastPrice));
+        let traded = false;
+        while (
+            order.getState() === OrderState.PENDING &&
+            match != null &&
+            InstrumentBroker.tradePossible(order, match)
+            ) {
+            const trade = InstrumentBroker.makeTrade(order, match);
+            this.lastPrice = trade.unitPrice;
+
+            const time = new Date().getTime();
+            this.priceHistory.push(new PricePoint(time, trade.unitPrice));
+
+            const buy = order.direction === TradeDirection.BUY ? order : match;
+            const sell = order.direction === TradeDirection.BUY ? match : order;
+            aggregateBuyDelta.push(new PriceAggregateElement(buy.unitPrice, new Big("0").minus(trade.units)));
+            aggregateSellDelta.push(new PriceAggregateElement(sell.unitPrice, new Big("0").minus(trade.units)));
+
             this.clearCompletedOrders();
             match = this.getPotentialOrderMatch(order);
+            traded = true;
+        }
+
+        //Notify rooms
+        if (traded) {
+            const pricePoint = this.priceHistory[this.priceHistory.length - 1];
+            MarketPriceRoom.fire({
+                instrument: this.instrument,
+                time: pricePoint.time,
+                newPrice: pricePoint.price
+            });
+
+            const reducer = (prev: Array<PriceAggregateElement>, curr: PriceAggregateElement) => {
+                const idx: number = prev.findIndex(it => it.unitPrice.eq(curr.unitPrice));
+                if(idx === -1){
+                    prev.push(curr);
+                    return prev;
+                }
+
+                const element: PriceAggregateElement = prev[idx];
+                const newElement = new PriceAggregateElement(curr.unitPrice, curr.units.plus(element.units));
+                prev.splice(idx, 1, newElement);
+                return prev;
+            };
+
+            if(order.getState() === OrderState.PENDING){
+                const orderDelta = new PriceAggregateElement(order.unitPrice, order.getRemainingUnits());
+                if(order.direction === TradeDirection.BUY){
+                    aggregateBuyDelta.push(orderDelta)
+                } else {
+                    aggregateSellDelta.push(orderDelta)
+                }
+            }
+
+            const combinedBuys = aggregateBuyDelta.reduce(reducer, []);
+            const combinedSells = aggregateSellDelta.reduce(reducer, []);
+            const combined = new PriceAggregate(combinedBuys, combinedSells);
+            AggregatePriceRoom.fire({
+                instrument: this.instrument,
+                delta: combined
+            })
         }
     }
 
     private cancelBuy(order: Order): void {
         if (!this.buys.includes(order)) throw "Order was not pending";
-        order.state = OrderState.CANCELLED;
+        order.cancel();
         this.buys.delete(order);
         InstrumentBroker.updatePositionOnCancelOrder(order);
     }
 
     private cancelSell(order: Order): void {
         if (!this.sells.includes(order)) throw "Order was not pending";
-        order.state = OrderState.CANCELLED;
+        order.cancel();
         this.sells.delete(order);
         InstrumentBroker.updatePositionOnCancelOrder(order);
     }
@@ -309,12 +372,5 @@ export default class InstrumentBroker {
     clear(): void {
         this.buys.underlying().length = 0;
         this.sells.underlying().length = 0;
-    }
-
-    private static updateStateIfComplete(order: Order): void {
-        const remaining = order.getRemainingUnits();
-        if(remaining.eq(new Big("0"))){
-            order.state = OrderState.COMPLETE;
-        }
     }
 }
