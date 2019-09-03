@@ -7,20 +7,21 @@ import Order from "../../../trading/order";
 import TradeDirection from "../../../trading/tradeDirection";
 import PriceAggregate, {PriceAggregateElement} from "../../../brokers/priceAggregate";
 import {OrderState} from "../../../trading/orderState";
+import PricePoint from "../../../brokers/PricePoint";
 
-type InnerSerialisable = null | string | number | {[k: string]: InnerSerialisable | Array<InnerSerialisable>};
+type InnerSerialisable = null | string | number | { [k: string]: InnerSerialisable | Array<InnerSerialisable>};
 export type Serialisable = InnerSerialisable | Array<InnerSerialisable>
 
 export default class SER {
     static BIG(big: Big | null): InnerSerialisable {
-        if(big == null){
+        if (big == null) {
             return null;
         } else {
             return big.toFixed(5);
         }
     }
 
-    static MAP<K, V>(map: Map<K, V>, keyFunc: (k: K) => string, valFunc: (v: V) => any): InnerSerialisable {
+    static MAP<K, V>(map: Map<K, V>, keyFunc: (k: K) => string, valFunc: (v: V) => any): Serialisable {
         return map
             .mapKeys(keyFunc)
             .map(valFunc)
@@ -29,8 +30,8 @@ export default class SER {
 
     static MAPFUNC<K, V>(
         keyFunc: (k: K) => string,
-        valFunc: (v: V) => InnerSerialisable
-    ): (map: Map<K, V>) => InnerSerialisable {
+        valFunc: (v: V) => Serialisable
+    ): (map: Map<K, V>) => Serialisable {
         return (map: Map<K, V>) => SER.MAP(map, keyFunc, valFunc);
     }
 
@@ -100,6 +101,17 @@ export default class SER {
 
     private static ORDER_STATE(state: OrderState): InnerSerialisable {
         return state.name
+    }
+
+    static NO<T extends Serialisable>(t: T): T {
+        return t;
+    }
+
+    static PRICE_POINT(pricePoint: PricePoint): InnerSerialisable {
+        return {
+            time: pricePoint.time,
+            price: SER.BIG(pricePoint.price)
+        }
     }
 }
 

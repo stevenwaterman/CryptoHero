@@ -3,15 +3,7 @@ import {ChartCardProps} from "./ChartCardContainer";
 import {ELEMENT} from "../../modules/RootStore";
 import {Card, Col, Row, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
 import DepthChartContainer from "./depth/DepthChartContainer";
-
-function chart(showHistorical: boolean): ELEMENT {
-    if(showHistorical){
-        //TODO
-        return <DepthChartContainer/>
-    } else{
-        return <DepthChartContainer/>
-    }
-}
+import PriceChartContainer from "./price/PriceChartContainer";
 
 export default class ChartCard extends React.Component<ChartCardProps> {
     render(): ELEMENT {
@@ -32,7 +24,8 @@ export default class ChartCard extends React.Component<ChartCardProps> {
                     </Row>
                 </Card.Header>
                 <Card.Body>
-                    {chart(this.props.showHistorical)}
+                    <PriceChartContainer/>
+                    <DepthChartContainer/>
                 </Card.Body>
             </Card>
         )

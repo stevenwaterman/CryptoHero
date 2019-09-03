@@ -12,9 +12,11 @@ export function setupPriceEndpoints(server: BitcoinExchangeServer): void {
 
     app.get("/api/prices/aggregate", withBroker(broker, aggregatePrices));
     app.get("/api/prices/market", withBroker(broker, marketPrices));
+    app.get("/api/prices/historical", withBroker(broker, historicalPrices));
 
     app.get("/api/prices/:instrument/aggregate", withBroker(broker, instrumentAggregatePrice));
     app.get("/api/prices/:instrument/market", withBroker(broker, instrumentMarketPrice));
+    app.get("/api/prices/:instrument/historical", withBroker(broker, instrumentHistoricalPrice));
 }
 
 function aggregatePrices(broker: Broker, req: Request, res: Response): void {
@@ -33,10 +35,22 @@ function marketPrices(broker: Broker, req: Request, res: Response): void {
     respond(res, 200, broker.getMarketPrices(), SER.MAPFUNC(SER.INSTRUMENT, SER.BIG))
 }
 
+function historicalPrices(broker: Broker, req: Request, res: Response): void {
+    respond(res, 200, broker.getPriceHistory(), SER.MAPFUNC(SER.INSTRUMENT, SER.ARRAYFUNC(SER.PRICE_POINT)))
+}
+
 function instrumentMarketPrice(broker: Broker, req: Request, res: Response): void {
     const instrument = urlGetInstrument(broker, req, res);
     if (instrument == null) return;
 
     const iBroker = broker.getIBroker(instrument);
     respond(res, 200, iBroker.getMarketPrice(), SER.BIG)
+}
+
+function instrumentHistoricalPrice(broker: Broker, req: Request, res: Response): void {
+    const instrument = urlGetInstrument(broker, req, res);
+    if (instrument == null) return;
+
+    const iBroker = broker.getIBroker(instrument);
+    respond(res, 200, iBroker.getPriceHistory(), SER.ARRAYFUNC(SER.PRICE_POINT));
 }

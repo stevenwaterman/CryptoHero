@@ -14,6 +14,7 @@ import Instrument from "../../trading/instrument";
 import Order from "../../trading/order";
 import {respond, respondNoSer} from "../util/serialisation/respond";
 import PriceAggregate from "../../brokers/priceAggregate";
+import PricePoint from "../../brokers/PricePoint";
 
 
 export function setupAccountsEndpoints(server: BitcoinExchangeServer): void {
@@ -38,13 +39,15 @@ function getAccountState(broker: Broker, req: Request, res: Response): void {
     const orders: Array<Order> = account.orders;
 
     const aggregateData: Map<Instrument, PriceAggregate> = broker.getAggregatePrices();
+    const historicalData: Map<Instrument, Array<PricePoint>> = broker.getPriceHistory();
 
     const out = {
         account: SER.ACCOUNT(account),
         funds: SER.MAP(availableFunds, SER.ASSET, SER.BIG),
         prices: SER.MAP(marketPrices, SER.INSTRUMENT, SER.BIG),
         orders: SER.ARRAY(orders, SER.ORDER),
-        orderDepth: SER.MAP(aggregateData, SER.INSTRUMENT, SER.PRICE_AGGREGATE)
+        orderDepth: SER.MAP(aggregateData, SER.INSTRUMENT, SER.PRICE_AGGREGATE),
+        historicalPrices: SER.MAP(historicalData, SER.INSTRUMENT, SER.ARRAYFUNC(SER.PRICE_POINT))
     };
 
     respondNoSer(res, 200, out);

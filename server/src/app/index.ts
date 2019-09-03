@@ -2,7 +2,6 @@ import BitcoinExchangeServer from "./api/bitcoinExchangeServer";
 import Account from "./trading/account";
 import Asset from "./trading/asset";
 import TradeDirection from "./trading/tradeDirection";
-import order from "./trading/order";
 import Order from "./trading/order";
 import Instrument from "./trading/instrument";
 import Big from "big.js";
@@ -19,31 +18,42 @@ process.on('exit', () => {
     console.log("Server shut down");
 });
 
-
-const acc1 = new Account();
-const acc2 = new Account();
-const acc3 = new Account();
-const acc4 = new Account();
+//TODO remove
+const buyer = new Account();
+const seller = new Account();
 const instruments = Instrument.ALL.toArray();
-const accounts = [acc1, acc2, acc3, acc4];
-    accounts.forEach(acc => {
+const accounts = [buyer, seller];
+accounts.forEach(acc => {
     Asset.ALL.forEach(asset => {
         acc.adjustAssets(asset, new Big("1e10"));
     });
-});//TODO remove
+});
+let midPoint = 10;
 setInterval(() => {
-    const account = accounts[Math.floor(Math.random()*accounts.length)];
-    const instrument = instruments[Math.floor(Math.random()*instruments.length)];
-    const units = new Big(Math.random()*100);
-    const price = new Big((Math.random() + Math.random() + Math.random() + Math.random())*100);
+    midPoint += 0.0001;
+    const instrument = instruments[Math.floor(Math.random() * instruments.length)];
 
-    const aggregate = server.broker.getAggregatePrices().get(instrument) as PriceAggregate;
-    const buys = aggregate.buy.reduce((prev, curr) => prev.plus(curr.units), new Big("0"));
-    const sells = aggregate.sell.reduce((prev, curr) => prev.plus(curr.units), new Big("0"));
-    let direction = buys.gt(sells) ? TradeDirection.SELL : TradeDirection.BUY;
+    const direction = Math.round(Math.random()) === 0 ? TradeDirection.BUY : TradeDirection.SELL;
+    const units = new Big(Math.random() * 100);
+    const price = new Big( midPoint + gaussRand() + (direction === TradeDirection.BUY ? -2 : 2));
+
+    let account;
+    if (direction == TradeDirection.BUY) {
+        account = buyer;
+    } else {
+        account = seller;
+    }
 
     try {
         const order = new Order(account, direction, instrument, units, price);
         server.broker.placeOrder(order);
-    } catch(ignore){}
-}, 200);
+    } catch (ignore) {
+    }
+}, 20);
+
+function gaussRand(): number {
+    let u = 0, v = 0;
+    while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+    while (v === 0) v = Math.random();
+    return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+}

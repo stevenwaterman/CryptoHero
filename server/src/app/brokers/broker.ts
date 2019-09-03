@@ -4,6 +4,7 @@ import {Big} from "big.js";
 import Order from "../trading/order";
 import * as Immutable from "immutable";
 import PriceAggregate from "./priceAggregate";
+import PricePoint from "./PricePoint";
 
 export default class Broker {
     private readonly instrumentBrokers: Immutable.Map<Instrument, InstrumentBroker> = Immutable.Map(
@@ -14,11 +15,15 @@ export default class Broker {
     }
 
     getAggregatePrices(): Immutable.Map<Instrument, PriceAggregate> {
-        return this.instrumentBrokers.map((iBroker) => iBroker.getAggregatePrices());
+        return this.instrumentBrokers.map(iBroker => iBroker.getAggregatePrices());
     }
 
     getMarketPrices(): Immutable.Map<Instrument, Big> {
-        return this.instrumentBrokers.map((iBroker) => iBroker.getMarketPrice());
+        return this.instrumentBrokers.map(iBroker => iBroker.getMarketPrice());
+    }
+
+    getPriceHistory(): Immutable.Map<Instrument, Array<PricePoint>> {
+        return this.instrumentBrokers.map(iBroker => iBroker.getPriceHistory())
     }
 
     /**

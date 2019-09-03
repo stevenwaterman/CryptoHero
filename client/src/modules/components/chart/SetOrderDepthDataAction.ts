@@ -11,7 +11,7 @@ export default interface SetOrderDepthDataAction {
     }
 }
 
-export function createSetOrderDepthAction(state: State, orderDepthData: OrderDepthData): SetOrderDepthDataAction {
+export function createSetOrderDepthDataAction(state: State, orderDepthData: OrderDepthData): SetOrderDepthDataAction {
     return {
         type: SetOrderDepthDataType,
         payload: {

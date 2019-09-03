@@ -7,6 +7,7 @@ import TradeDirection from "../trading/tradeDirection";
 import PriceAggregate, {PriceAggregateElement} from "./priceAggregate";
 import {OrderState} from "../trading/orderState";
 import account from "../trading/account";
+import PricePoint from "./PricePoint";
 
 
 /**
@@ -16,6 +17,7 @@ export default class InstrumentBroker {
     private readonly buys: SortedList<Order> = new SortedList(buyComparator);
     private readonly sells: SortedList<Order> = new SortedList(sellComparator);
     private lastPrice: Big = new Big("0");
+    private priceHistory: Array<PricePoint> = [];
 
     private static sortOrders(order: Order, matched: Order): [Order, Order] {
         const buy = order.direction === TradeDirection.BUY ? order : matched;
@@ -167,6 +169,10 @@ export default class InstrumentBroker {
         }
     }
 
+    getPriceHistory(): Array<PricePoint>{
+        return this.priceHistory;
+    }
+
     /**
      * Matches the order param with orders from the book until no more can be made
      * then adds the order to the book if it has any remaining quantity.
@@ -221,6 +227,7 @@ export default class InstrumentBroker {
         let match = this.getPotentialOrderMatch(order);
         while (order.state === OrderState.PENDING && match != null && InstrumentBroker.tradePossible(order, match)) {
             this.lastPrice = InstrumentBroker.makeTrade(order, match);
+            this.priceHistory.push(new PricePoint(new Date().getTime(), this.lastPrice));
             this.clearCompletedOrders();
             match = this.getPotentialOrderMatch(order);
         }

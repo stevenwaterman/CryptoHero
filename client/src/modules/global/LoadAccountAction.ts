@@ -7,8 +7,10 @@ import Order from "../../models/Order";
 import {createSetOrdersAction} from "../components/blotter/SetOrdersAction";
 import {Action} from "redux";
 import {createSetSelectedAccountAction} from "./SetSelectedAccountAction";
-import {createSetOrderDepthAction} from "../components/chart/SetOrderDepthDataAction";
+import {createSetOrderDepthDataAction} from "../components/chart/SetOrderDepthDataAction";
 import OrderDepthData, {InstrumentOrderDepthData} from "../../models/OrderDepthData";
+import HistoricalPriceData, {InstrumentHistoricalPriceData} from "../../models/HistoricalPriceData";
+import {createSetHistoricalPricesDataAction} from "../components/chart/SetHistoricalPricesDataAction";
 
 export const LoadAccountType = "LOAD_ACCOUNT";
 
@@ -56,7 +58,7 @@ async function inner(accountId: string, dispatch: ThunkDispatch<State, void, Act
 
     const orderDepth = new OrderDepthData(
         Object.entries(accountState.orderDepth)
-            .map(([instrument, priceAggregate]: [any, any]) =>
+            .map(([instrument, priceAggregate]: [string, any]) =>
                 [
                     Instrument.fromName(instrument),
                     InstrumentOrderDepthData.fromServer(priceAggregate)
@@ -64,9 +66,20 @@ async function inner(accountId: string, dispatch: ThunkDispatch<State, void, Act
             )
     );
 
+    const historicalPrices = new HistoricalPriceData(
+        Object.entries(accountState.historicalPrices)
+            .map(([instrument, priceHistory]: [string, any]) =>
+                [
+                    Instrument.fromName(instrument),
+                    InstrumentHistoricalPriceData.fromServer(priceHistory)
+                ]
+            )
+    );
+
     dispatch(createSetAvailableFundsAction(state, funds));
     dispatch(createSetPricesAction(state, prices));
     dispatch(createSetOrdersAction(state, orders));
-    dispatch(createSetOrderDepthAction(state, orderDepth));
+    dispatch(createSetOrderDepthDataAction(state, orderDepth));
+    dispatch(createSetHistoricalPricesDataAction(state, historicalPrices));
     dispatch(createSetSelectedAccountAction(state, accountId));
 }

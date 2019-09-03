@@ -7,7 +7,8 @@ interface DispatchProps {
 }
 
 export interface StateProps {
-    data: InstrumentOrderDepthData;
+    depthData: InstrumentOrderDepthData;
+    hide: boolean;
 }
 
 interface OwnProps {
@@ -23,7 +24,8 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
         instrumentOrderDepthData = new InstrumentOrderDepthData([],[]);
     }
     return {
-        data: instrumentOrderDepthData
+        depthData: instrumentOrderDepthData,
+        hide: state.chart.showHistorical
     }
 }
 
