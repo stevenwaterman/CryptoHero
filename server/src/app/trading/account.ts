@@ -19,21 +19,26 @@ export default class Account {
 
     private readonly orders: Array<Order> = [];
 
-    getOrders(): Array<Order>{
+    getOrders(): Array<Order> {
         return this.orders;
     }
 
-    addOrder(order: Order): void{
+    addOrder(order: Order): void {
         this.orders.push(order);
 
-        order.tradeAddedRoom.join(payload => this.changedOrderRoom.fire({
-            self: this,
+        const changedOrderRoom = this.changedOrderRoom;
+        const self = this;
+        order.tradeAddedRoom.join(payload => changedOrderRoom.fire({
+                self: self,
+                changedOrder: payload.self
+            })
+        );
+
+        order.cancelledRoom.join(payload => changedOrderRoom.fire({
+            self: self,
             changedOrder: payload.self
         }));
-        order.cancelledRoom.join(payload => this.changedOrderRoom.fire({
-            self: this,
-            changedOrder: payload.self
-        }));
+
         this.newOrderRoom.fire({
             self: this,
             newOrder: order

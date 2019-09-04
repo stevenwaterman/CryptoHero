@@ -301,6 +301,18 @@ export default class InstrumentBroker {
         order.cancel();
         this.buys.delete(order);
         InstrumentBroker.updatePositionOnCancelOrder(order);
+
+        const newAggregate = this.getAggregatePrices();
+        const current = newAggregate.buy.find(it => it.unitPrice.eq(order.unitPrice));
+        let updatedElement: PriceAggregateElement =
+            current == null ?
+                new PriceAggregateElement(order.unitPrice, new Big("0")) :
+                current;
+
+        AggregatePriceRoom.fire({
+            instrument: this.instrument,
+            delta: new PriceAggregate([updatedElement], [])
+        });
     }
 
     private cancelSell(order: Order): void {
@@ -308,6 +320,18 @@ export default class InstrumentBroker {
         order.cancel();
         this.sells.delete(order);
         InstrumentBroker.updatePositionOnCancelOrder(order);
+
+        const newAggregate = this.getAggregatePrices();
+        const current = newAggregate.buy.find(it => it.unitPrice.eq(order.unitPrice));
+        let updatedElement: PriceAggregateElement =
+            current == null ?
+                new PriceAggregateElement(order.unitPrice, new Big("0")) :
+                current;
+
+        AggregatePriceRoom.fire({
+            instrument: this.instrument,
+            delta: new PriceAggregate([], [updatedElement])
+        });
     }
 
     private selfTradeGuard(order: Order): void {

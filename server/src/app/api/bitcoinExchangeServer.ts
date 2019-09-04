@@ -9,12 +9,14 @@ import socketIO, {Socket} from "socket.io";
 import MarketPriceRoom, {MarketPricePayload} from "../websockets/MarketPriceRoom";
 import SER from "./util/serialisation/SER";
 import AggregatePriceRoom, {AggregatePricePayload} from "../websockets/AggregatePriceRoom";
+import {REGISTRY} from "../registry";
+import Account from "../trading/account";
 
 
 export default class BitcoinExchangeServer {
     readonly app: Express = express();
     private server: http.Server = new http.Server(this.app);
-    private io = socketIO(this.server);
+    private io = socketIO(this.server, {origins: "http://localhost:3000"});
 
     readonly broker: Broker = new Broker();
 
@@ -51,7 +53,42 @@ export default class BitcoinExchangeServer {
         });
 
         this.io.on("connection", (socket: Socket) => {
+            socket.on("account listener start", (accountId: string) => {
+                const account: Account | undefined = REGISTRY.getAccount(accountId);
+                if(account == null){
+                    socket.emit("error", "invalid account id");
+                }
+                else {
+                    const id1 = account.changedOrderRoom.join(payload => {
+                        socket.emit("update order", SER.ORDER(payload.changedOrder));
+                    });
 
+                    const id2 = account.newOrderRoom.join(payload => {
+                        socket.emit("update order", SER.ORDER(payload.newOrder));
+                    });
+
+                    const id3 = account.availableFundsRoom.join(payload => {
+                        socket.emit("update funds", {
+                            asset: SER.ASSET(payload.asset),
+                            newAmount: SER.BIG(payload.newAmount)
+                        });
+                    });
+
+                    socket.emit("account listener id", [id1, id2, id3])
+                }
+            });
+
+            socket.on("account listener stop", (accountId: string, listenerId: [string, string, string]) => {
+                const account: Account | undefined = REGISTRY.getAccount(accountId);
+                if(account == null){
+                    socket.emit("error", "invalid account id");
+                }
+                else {
+                    account.changedOrderRoom.leave(listenerId[0]);
+                    account.newOrderRoom.leave(listenerId[1]);
+                    account.availableFundsRoom.leave(listenerId[2]);
+                }
+            })
         });
 
         setupAccountsEndpoints(this);

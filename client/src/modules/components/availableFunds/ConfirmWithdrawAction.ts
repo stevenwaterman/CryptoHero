@@ -24,7 +24,5 @@ export const createConfirmWithdrawAction = (): ThunkAction<Promise<void>, State,
         dispatch({
             type: ConfirmWithdrawType
         });
-
-        await dispatch(createLoadAction(state.account.selectedId));
     }
 };

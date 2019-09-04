@@ -25,7 +25,6 @@ export const createConfirmTradeAction = (): ThunkAction<Promise<void>, State, vo
                 unitPrice: state.tradeModalInput.price,
             })
         });
-        await dispatch(createLoadAction(state.account.selectedId));
         dispatch({
             type: ConfirmTradeType
         })

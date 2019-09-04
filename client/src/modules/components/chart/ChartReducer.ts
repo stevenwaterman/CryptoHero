@@ -37,7 +37,7 @@ function orderDepthDelta(state: State, action: OrderDepthDeltaAction): State {
 
     const oldOrderDepth: OrderDepth = state.orderDepth;
     const oldIOrderDepth: IOrderDepth | undefined = oldOrderDepth.get(instrument.name);
-    if(oldIOrderDepth == null) return state;
+    if (oldIOrderDepth == null) return state;
 
     const oldBuys: DirectionalOrderDepth = oldIOrderDepth.buys;
     const oldSells: DirectionalOrderDepth = oldIOrderDepth.sells;
@@ -48,30 +48,38 @@ function orderDepthDelta(state: State, action: OrderDepthDeltaAction): State {
 
     const newBuys = oldBuys.slice();
     buyDelta.forEach(newBuy => {
-        const currentIdx = newBuys.findIndex(check => check.price === newBuy.price );
-        if(currentIdx === -1 && newBuy.volume !== 0){
-            newBuys.push(newBuy);
-        } else if (newBuy.volume === 0){
-            newBuys.splice(currentIdx, 1);
+        const currentIdx = newBuys.findIndex(check => check.price === newBuy.price);
+        if (currentIdx === -1) {
+            if (newBuy.volume > 0) {
+                newBuys.push(newBuy);
+            }
         } else {
-            newBuys.splice(currentIdx, 1, new OrderDepthPoint(newBuy.price, newBuy.volume));
+            if (newBuy.volume > 0) {
+                newBuys.splice(currentIdx, 1, new OrderDepthPoint(newBuy.price, newBuy.volume));
+            } else {
+                newBuys.splice(currentIdx, 1);
+            }
         }
     });
 
     const newSells = oldSells.slice();
     sellDelta.forEach(newSell => {
-        const currentIdx = newSells.findIndex(check => check.price === newSell.price );
-        if(currentIdx === -1 && newSell.volume !== 0){
-            newSells.push(newSell);
-        } else if (newSell.volume === 0){
-            newSells.splice(currentIdx, 1);
+        const currentIdx = newSells.findIndex(check => check.price === newSell.price);
+        if (currentIdx === -1) {
+            if (newSell.volume > 0) {
+                sellDelta.push(newSell);
+            }
         } else {
-            newSells.splice(currentIdx, 1, new OrderDepthPoint(newSell.price, newSell.volume))
+            if (newSell.volume > 0) {
+                sellDelta.splice(currentIdx, 1, new OrderDepthPoint(newSell.price, newSell.volume));
+            } else {
+                sellDelta.splice(currentIdx, 1);
+            }
         }
     });
 
-    newBuys.sort((a,b) => b.price - a.price);
-    newSells.sort((a,b) => a.price - b.price);
+    newBuys.sort((a, b) => b.price - a.price);
+    newSells.sort((a, b) => a.price - b.price);
 
     const newIOrderDepth: IOrderDepth = new IOrderDepth(newBuys, newSells);
     const newOrderDepth: OrderDepth = new Map(oldOrderDepth);
@@ -108,7 +116,7 @@ function appendPriceHistory(state: State, action: SetInstrumentPriceAction): Sta
     const history: PriceHistory = state.priceHistory;
 
     const iHistory: IPriceHistory | undefined = history.get(instrument.name);
-    if(iHistory == null) return state;
+    if (iHistory == null) return state;
 
     const newIHistory: IPriceHistory = iHistory.concat(new HistoricalPricePoint(time, newPrice));
     const newHistory: PriceHistory = new Map(history);

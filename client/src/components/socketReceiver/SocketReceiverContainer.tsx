@@ -1,17 +1,25 @@
 import {connect} from "react-redux";
-import SocketReceiver from "./SocketReceiver";
+import SocketManager from "./SocketManager";
 import Instrument from "../../models/Instrument";
 import {State} from "../../modules/RootStore";
 import {ThunkDsp} from "../../util/Thunker";
 import SetInstrumentPriceAction, {createSetInstrumentPriceAction} from "../../modules/components/instruments/SetInstrumentPriceAction";
 import OrderDepthDeltaAction, {createOrderDepthDeltaAction} from "../../modules/components/chart/OrderDepthDeltaAction";
 import {IOrderDepth, OrderDepth} from "../../models/OrderDepth";
+import SetAccountListenerIdAction, {createSetAccountListenerIdAction} from "../../modules/global/SetAccountListenerIdAction";
+import SetAvailableFundsAction, {createSetAvailableFundsAction} from "../../modules/components/availableFunds/SetAvailableFundsAction";
+import SetAssetFundsAction, {createSetAssetFundsAction} from "../../modules/components/availableFunds/SetAssetFundsAction";
+import Order from "../../models/Order";
+import UpdateOrderAction, {createUpdateOrderAction} from "../../modules/components/blotter/updateOrderAction";
 
-type Actions = SetInstrumentPriceAction | OrderDepthDeltaAction;
+type Actions = SetInstrumentPriceAction | OrderDepthDeltaAction | SetAccountListenerIdAction | SetAssetFundsAction | UpdateOrderAction;
 
 interface DispatchProps {
     setInstrumentPrice: (instrument: Instrument, newPrice: number, time: number) => void,
     orderDepthDelta: (instrument: Instrument, delta: IOrderDepth) => void,
+    setAccountListenerId: (accountListenerId: [string, string, string]) => void,
+    setAssetFunds: (asset: string, newAmount: number) => void,
+    updateOrder: (order: Order) => void,
 }
 
 interface StateProps {
@@ -25,7 +33,10 @@ export type SocketReceiverProps = DispatchProps & StateProps & OwnProps
 function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
         setInstrumentPrice: (instrument, newPrice, time) => dispatch(createSetInstrumentPriceAction(instrument, newPrice, time)),
-        orderDepthDelta: (instrument, delta) => dispatch(createOrderDepthDeltaAction(instrument, delta))
+        orderDepthDelta: (instrument, delta) => dispatch(createOrderDepthDeltaAction(instrument, delta)),
+        setAccountListenerId: (id) => dispatch(createSetAccountListenerIdAction(id)),
+        setAssetFunds: (asset, newFunds) => dispatch(createSetAssetFundsAction(asset, newFunds)),
+        updateOrder: (order) => dispatch(createUpdateOrderAction(order)),
     }
 }
 
@@ -37,4 +48,4 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(SocketReceiver)
+)(SocketManager)

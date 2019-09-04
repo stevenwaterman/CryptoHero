@@ -18,7 +18,6 @@ export const createCancelOrderAction = (): ThunkAction<Promise<void>, State, voi
                 "Content-Type": "application/json"
             }
         });
-        await dispatch(createLoadAction(state.account.selectedId));
         dispatch({
             type: CancelOrderType
         })

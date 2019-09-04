@@ -25,7 +25,5 @@ export const createConfirmDepositAction = (): ThunkAction<Promise<void>, State, 
         dispatch({
             type: ConfirmDepositType
         });
-
-        await dispatch(createLoadAction(state.account.selectedId));
     }
 };
