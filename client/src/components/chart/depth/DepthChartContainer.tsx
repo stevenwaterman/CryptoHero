@@ -1,4 +1,4 @@
-import {InstrumentOrderDepthData} from "../../../models/OrderDepthData";
+import {IOrderDepth} from "../../../models/OrderDepth";
 import {State} from "../../../modules/RootStore";
 import {connect} from "react-redux";
 import DepthChart from "./DepthChart";
@@ -7,7 +7,7 @@ interface DispatchProps {
 }
 
 export interface StateProps {
-    depthData: InstrumentOrderDepthData;
+    depthData: IOrderDepth;
     hide: boolean;
 }
 
@@ -21,7 +21,7 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     const instrument = state.instruments.selectedInstrument;
     let instrumentOrderDepthData = orderDepth.get(instrument.name);
     if(instrumentOrderDepthData == null){
-        instrumentOrderDepthData = new InstrumentOrderDepthData([],[]);
+        instrumentOrderDepthData = new IOrderDepth([],[]);
     }
     return {
         depthData: instrumentOrderDepthData,

@@ -4,13 +4,14 @@ import {Component} from "react";
 import * as d3 from "d3";
 import {ELEMENT} from "../../../modules/RootStore";
 import "./PriceChart.css"
+import {HistoricalPricePoint, IPriceHistory, PriceHistory} from "../../../models/PriceHistory";
 
-function getX(d: [number, number]): number {
-    return d[0];
+function getX(p: HistoricalPricePoint): number {
+    return p.time;
 }
 
-function getY(d: [number, number]): number {
-    return d[1];
+function getY(p: HistoricalPricePoint): number {
+    return p.price;
 }
 
 type AXIS = d3.Axis<number | { valueOf(): number }> | undefined;
@@ -29,7 +30,7 @@ export default class PriceChart extends Component<PriceChartProps> {
     private xAxis: AXIS;
     private yAxis: AXIS;
 
-    private readonly data: Array<[number, number]> = [];
+    private readonly data: IPriceHistory = [];
 
     componentDidMount(): void {
         this.svg = d3.select("#PriceChart")
@@ -55,7 +56,7 @@ export default class PriceChart extends Component<PriceChartProps> {
             .attr("class", "yAxis");
 
         this.svg.append("path")
-            .data([this.data])
+            .data(this.data)
             .attr("class", "line")
             .attr("fill", "none")
             .attr("stroke", "black")
@@ -65,20 +66,13 @@ export default class PriceChart extends Component<PriceChartProps> {
     }
 
     private changeData(): void {
-        const data: Array<[number, number]> = this.props.priceHistory.data;
-        if(data.some(it=>!Number.isFinite(it[0]))){
-            console.log("here");
-            console.log("here");
-            console.log("here");
-            console.log("here");
-            console.log("here");
-        }
+        const data: IPriceHistory = this.props.priceHistory;
         this.data.splice(0, Infinity, ...data);
 
         const yDomain = d3.extent(data.map(getY)) as [number, number];
         if(data.length > 0) {
-            const xMin = data[0][0];
-            const xMax = data[data.length - 1][0];
+            const xMin = data[0].time;
+            const xMax = data[data.length - 1].time;
             this.xScale!.domain([xMin, xMax]);
         }
 
@@ -92,11 +86,11 @@ export default class PriceChart extends Component<PriceChartProps> {
             .call(this.yAxis as any);
 
         this.svg.selectAll(".line")
-            .data([this.data])
+            .data(this.data)
             //.transition().duration(1000)
             .attr("d", d3.line()
-                .x(d => this.xScale!(getX(d)))
-                .y(d => this.yScale!(getY(d)))
+                .x(d => this.xScale!(d[0]))
+                .y(d => this.yScale!(d[1]))
             );
     }
 

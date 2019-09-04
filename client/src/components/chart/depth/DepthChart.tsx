@@ -4,7 +4,7 @@ import {Component} from "react";
 import * as d3 from "d3";
 import {ELEMENT} from "../../../modules/RootStore";
 import "./DepthChart.css"
-import {OrderDepthPoint} from "../../../models/OrderDepthData";
+import {OrderDepthPoint} from "../../../models/OrderDepth";
 
 function getX(p: [number, number]): number {
     return p[0];
@@ -17,8 +17,8 @@ function getY(p: [number,number]): number {
 type AXIS = d3.Axis<number | { valueOf(): number }> | undefined;
 type SCALE = d3.ScaleLinear<number, number> | undefined;
 
-function reshapeData(data: Array<OrderDepthPoint>): Array<[number, number]> {
-    const shaped: Array<OrderDepthPoint> = data.flatMap((point, index) => {
+function reshapeData(data: DirectionalOrderDepth): Array<[number, number]> {
+    const shaped: DirectionalOrderDepth = data.flatMap((point, index) => {
         const next: OrderDepthPoint | undefined = data[index + 1];
         if (next == null) {
             return new OrderDepthPoint(point.price, point.volume);
@@ -88,8 +88,8 @@ export default class DepthChart extends Component<DepthChartProps> {
     }
 
     private changeData(): void {
-        const buys: Array<OrderDepthPoint> = this.props.depthData.buys;
-        const sells: Array<OrderDepthPoint> = this.props.depthData.sells;
+        const buys: DirectionalOrderDepth = this.props.depthData.buys;
+        const sells: DirectionalOrderDepth = this.props.depthData.sells;
 
         this.buys.splice(0, Infinity, ...reshapeData(buys));
         this.sells.splice(0, Infinity, ...reshapeData(sells));

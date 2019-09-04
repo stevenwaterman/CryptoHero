@@ -1,15 +1,15 @@
-import {InstrumentOrderDepthData} from "../../../models/OrderDepthData";
+import {IOrderDepth} from "../../../models/OrderDepth";
 import {State} from "../../../modules/RootStore";
 import {connect} from "react-redux";
 import PriceChart from "./PriceChart";
-import {InstrumentPriceHistory, PriceHistory} from "../../../models/PriceHistory";
 import Instrument from "../../../models/Instrument";
+import {IPriceHistory, PriceHistory} from "../../../models/PriceHistory";
 
 interface DispatchProps {
 }
 
 export interface StateProps {
-    priceHistory: InstrumentPriceHistory;
+    priceHistory: IPriceHistory;
     hide: boolean;
 }
 
@@ -23,7 +23,7 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     const instrument: Instrument = state.instruments.selectedInstrument;
     let instrumentData = priceHistory.get(instrument.name);
     if(instrumentData == null){
-        instrumentData = new InstrumentPriceHistory([]);
+        instrumentData = [];
     }
     return {
         priceHistory: instrumentData,

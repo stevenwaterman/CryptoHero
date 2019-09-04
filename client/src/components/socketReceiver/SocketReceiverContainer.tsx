@@ -5,13 +5,13 @@ import {State} from "../../modules/RootStore";
 import {ThunkDsp} from "../../util/Thunker";
 import SetInstrumentPriceAction, {createSetInstrumentPriceAction} from "../../modules/components/instruments/SetInstrumentPriceAction";
 import OrderDepthDeltaAction, {createOrderDepthDeltaAction} from "../../modules/components/chart/OrderDepthDeltaAction";
-import {InstrumentOrderDepthData, OrderDepthData} from "../../models/OrderDepthData";
+import {IOrderDepth, OrderDepth} from "../../models/OrderDepth";
 
 type Actions = SetInstrumentPriceAction | OrderDepthDeltaAction;
 
 interface DispatchProps {
     setInstrumentPrice: (instrument: Instrument, newPrice: number, time: number) => void,
-    orderDepthDelta: (instrument: Instrument, delta: InstrumentOrderDepthData) => void,
+    orderDepthDelta: (instrument: Instrument, delta: IOrderDepth) => void,
 }
 
 interface StateProps {

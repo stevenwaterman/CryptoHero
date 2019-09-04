@@ -49,7 +49,7 @@ setInterval(() => {
         server.broker.placeOrder(order);
     } catch (ignore) {
     }
-}, 200);
+}, 10);
 
 function gaussRand(): number {
     let u = 0, v = 0;

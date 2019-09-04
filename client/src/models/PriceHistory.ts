@@ -1,16 +1,20 @@
-import Instrument from "./Instrument";
-
-export class InstrumentPriceHistory {
-    readonly data: Array<[number, number]>;
-
-    constructor(data: Array<[number, number]>) {
-        this.data = data;
-    }
-
-    static fromServer(serverData: Array<any>): InstrumentPriceHistory {
-        const data: Array<[number, number]> = serverData.map(it => [it.time, Number.parseFloat(it.price)]);
-        return new InstrumentPriceHistory(data);
-    }
+export function createIPriceHistory(serverData: Array<any>): IPriceHistory {
+    return serverData.map(
+        it => new HistoricalPricePoint(it.time, Number.parseFloat(it.price)
+            )
+    );
 }
 
-export type PriceHistory = Map<string, InstrumentPriceHistory>;
+export type IPriceHistory = Array<HistoricalPricePoint>;
+
+export type PriceHistory = Map<string, IPriceHistory>;
+
+export class HistoricalPricePoint {
+    time: number;
+    price: number;
+
+    constructor(time: number, price: number) {
+        this.time = time;
+        this.price = price;
+    }
+}

@@ -3,7 +3,7 @@ import {SocketReceiverProps} from "./SocketReceiverContainer";
 import {ELEMENT} from "../../modules/RootStore";
 import {getSocket} from "../../WebSockets";
 import Instrument from "../../models/Instrument";
-import {InstrumentOrderDepthData} from "../../models/OrderDepthData";
+import {IOrderDepth} from "../../models/OrderDepth";
 
 export default class SocketReceiver extends React.Component<SocketReceiverProps> {
     componentDidMount(): void {
@@ -15,12 +15,14 @@ export default class SocketReceiver extends React.Component<SocketReceiverProps>
             const time: number = data.time;
             const price: number = Number.parseFloat(data.price);
             setInstrumentPrice(instrument, price, time);
+            console.log("market price");
         });
 
         socket.on("order depth", (data: any) => {
             const instrument = Instrument.fromName(data.instrument);
-            const delta = InstrumentOrderDepthData.fromServer(data.delta);
-            orderDepthDelta(instrument, delta)
+            const delta = IOrderDepth.fromServer(data.delta);
+            orderDepthDelta(instrument, delta);
+            console.log("Order Depth");
         });
     }
 

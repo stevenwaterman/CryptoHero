@@ -9,8 +9,8 @@ import {Action} from "redux";
 import {createSetSelectedAccountAction} from "./SetSelectedAccountAction";
 import {createSetOrderDepthDataAction} from "../components/chart/SetOrderDepthDataAction";
 import {createSetPriceHistoryAction} from "../components/chart/SetPriceHistoryAction";
-import {InstrumentOrderDepthData, OrderDepthData} from "../../models/OrderDepthData";
-import {InstrumentPriceHistory, PriceHistory} from "../../models/PriceHistory";
+import {IOrderDepth, OrderDepth} from "../../models/OrderDepth";
+import {createIPriceHistory, PriceHistory} from "../../models/PriceHistory";
 
 export const LoadAccountType = "LOAD_ACCOUNT";
 
@@ -56,12 +56,12 @@ async function inner(accountId: string, dispatch: ThunkDispatch<State, void, Act
         )
     );
 
-    const orderDepth: OrderDepthData = new Map(
+    const orderDepth: OrderDepth = new Map(
         Object.entries(accountState.orderDepth)
             .map(([instrument, priceAggregate]: [string, any]) =>
                 [
                     instrument,
-                    InstrumentOrderDepthData.fromServer(priceAggregate)
+                    IOrderDepth.fromServer(priceAggregate)
                 ]
             )
     );
@@ -71,7 +71,7 @@ async function inner(accountId: string, dispatch: ThunkDispatch<State, void, Act
             .map(([instrument, priceHistory]: [string, any]) =>
                 [
                     instrument,
-                    InstrumentPriceHistory.fromServer(priceHistory)
+                    createIPriceHistory(priceHistory)
                 ]
             )
     );
