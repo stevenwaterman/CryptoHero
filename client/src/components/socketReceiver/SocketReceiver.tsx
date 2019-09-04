@@ -15,14 +15,12 @@ export default class SocketReceiver extends React.Component<SocketReceiverProps>
             const time: number = data.time;
             const price: number = Number.parseFloat(data.price);
             setInstrumentPrice(instrument, price, time);
-            console.log("market price");
         });
 
         socket.on("order depth", (data: any) => {
             const instrument = Instrument.fromName(data.instrument);
             const delta = IOrderDepth.fromServer(data.delta);
             orderDepthDelta(instrument, delta);
-            console.log("Order Depth");
         });
     }
 

@@ -59,29 +59,18 @@ export default class SER {
         return (arr: Array<S>) => SER.ARRAY(arr, func);
     }
 
-    static ORDER(
-        {
-            direction,
-            getAveragePrice,
-            getRemainingUnits,
-            id,
-            instrument,
-            originalUnits,
-            getState,
-            timestamp,
-            unitPrice
-        }: Order
+    static ORDER(order: Order
     ): InnerSerialisable {
         return {
-            "id": id,
-            "time": timestamp.getTime(),
-            "instrument": SER.INSTRUMENT(instrument),
-            "state": SER.ORDER_STATE(getState()),
-            "direction": SER.DIRECTION(direction),
-            "units": SER.BIG(originalUnits),
-            "unit price": SER.BIG(unitPrice),
-            "remaining units": SER.BIG(getRemainingUnits()),
-            "average price": SER.BIG(getAveragePrice())
+            "id": order.id,
+            "time": order.timestamp.getTime(),
+            "instrument": SER.INSTRUMENT(order.instrument),
+            "state": SER.ORDER_STATE(order.getState()),
+            "direction": SER.DIRECTION(order.direction),
+            "units": SER.BIG(order.originalUnits),
+            "unit price": SER.BIG(order.unitPrice),
+            "remaining units": SER.BIG(order.getRemainingUnits()),
+            "average price": SER.BIG(order.getAveragePrice())
         };
     }
 

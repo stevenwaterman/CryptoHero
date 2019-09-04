@@ -18,6 +18,10 @@ type AXIS = d3.Axis<number | { valueOf(): number }> | undefined;
 type XSCALE = d3.ScaleTime<number, number> | undefined;
 type YSCALE = d3.ScaleLinear<number, number> | undefined;
 
+function reshapeData(data: IPriceHistory): Array<[number, number]> {
+    return data.map(it => [it.time, it.price])
+}
+
 export default class PriceChart extends Component<PriceChartProps> {
     private readonly width = 500;
     private readonly height = 250;
@@ -30,7 +34,7 @@ export default class PriceChart extends Component<PriceChartProps> {
     private xAxis: AXIS;
     private yAxis: AXIS;
 
-    private readonly data: IPriceHistory = [];
+    private readonly data: Array<[number, number]> = [];
 
     componentDidMount(): void {
         this.svg = d3.select("#PriceChart")
@@ -56,7 +60,7 @@ export default class PriceChart extends Component<PriceChartProps> {
             .attr("class", "yAxis");
 
         this.svg.append("path")
-            .data(this.data)
+            .data([this.data])
             .attr("class", "line")
             .attr("fill", "none")
             .attr("stroke", "black")
@@ -67,7 +71,7 @@ export default class PriceChart extends Component<PriceChartProps> {
 
     private changeData(): void {
         const data: IPriceHistory = this.props.priceHistory;
-        this.data.splice(0, Infinity, ...data);
+        this.data.splice(0, Infinity, ...reshapeData(data));
 
         const yDomain = d3.extent(data.map(getY)) as [number, number];
         if(data.length > 0) {
@@ -86,8 +90,7 @@ export default class PriceChart extends Component<PriceChartProps> {
             .call(this.yAxis as any);
 
         this.svg.selectAll(".line")
-            .data(this.data)
-            //.transition().duration(1000)
+            .data([this.data])
             .attr("d", d3.line()
                 .x(d => this.xScale!(d[0]))
                 .y(d => this.yScale!(d[1]))

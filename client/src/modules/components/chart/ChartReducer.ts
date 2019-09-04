@@ -46,27 +46,34 @@ function orderDepthDelta(state: State, action: OrderDepthDeltaAction): State {
     const buyDelta: DirectionalOrderDepth = delta.buys;
     const sellDelta: DirectionalOrderDepth = delta.sells;
 
-    const reducer: (prev: DirectionalOrderDepth, curr: OrderDepthPoint) => (OrderDepthPoint[]) = (prev: DirectionalOrderDepth, curr: OrderDepthPoint) => {
-        const idx: number = prev.findIndex(it => it.price === curr.price);
-        if(idx === -1){
-            return prev.concat(curr);
+    const newBuys = oldBuys.slice();
+    buyDelta.forEach(newBuy => {
+        const currentIdx = newBuys.findIndex(check => check.price === newBuy.price );
+        if(currentIdx === -1 && newBuy.volume !== 0){
+            newBuys.push(newBuy);
+        } else if (newBuy.volume === 0){
+            newBuys.splice(currentIdx, 1);
+        } else {
+            newBuys.splice(currentIdx, 1, new OrderDepthPoint(newBuy.price, newBuy.volume));
         }
-        const old = prev[idx];
-        const newVolume = curr.volume + old.volume;
-        if(newVolume === 0) return prev;
-        const newElement: OrderDepthPoint = new OrderDepthPoint(curr.price, newVolume);
-        const newArray = prev.slice();
-        newArray[idx] = newElement;
-        return newArray;
-    };
+    });
 
-    const allBuys: DirectionalOrderDepth = buyDelta.concat(...oldBuys);
-    const reducedBuys: DirectionalOrderDepth = allBuys.reduce(reducer, []);
+    const newSells = oldSells.slice();
+    sellDelta.forEach(newSell => {
+        const currentIdx = newSells.findIndex(check => check.price === newSell.price );
+        if(currentIdx === -1 && newSell.volume !== 0){
+            newSells.push(newSell);
+        } else if (newSell.volume === 0){
+            newSells.splice(currentIdx, 1);
+        } else {
+            newSells.splice(currentIdx, 1, new OrderDepthPoint(newSell.price, newSell.volume))
+        }
+    });
 
-    const allSells: DirectionalOrderDepth = sellDelta.concat(...oldSells);
-    const combinedSells: DirectionalOrderDepth = allSells.reduce(reducer, []);
+    newBuys.sort((a,b) => b.price - a.price);
+    newSells.sort((a,b) => a.price - b.price);
 
-    const newIOrderDepth: IOrderDepth = new IOrderDepth(reducedBuys, combinedSells);
+    const newIOrderDepth: IOrderDepth = new IOrderDepth(newBuys, newSells);
     const newOrderDepth: OrderDepth = new Map(oldOrderDepth);
     newOrderDepth.set(instrument.name, newIOrderDepth);
 

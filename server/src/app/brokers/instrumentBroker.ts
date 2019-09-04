@@ -10,6 +10,7 @@ import PricePoint from "./PricePoint";
 import Instrument from "../trading/instrument";
 import MarketPriceRoom from "../websockets/MarketPriceRoom";
 import AggregatePriceRoom from "../websockets/AggregatePriceRoom";
+import SER from "../api/util/serialisation/SER";
 
 
 /**
@@ -229,8 +230,7 @@ export default class InstrumentBroker {
      * @param order Must be
      */
     private makeTrades(order: Order): void {
-        const aggregateBuyDelta: Array<PriceAggregateElement> = [];
-        const aggregateSellDelta: Array<PriceAggregateElement> = [];
+        const matchPrices: Array<Big> = [];
 
         let match = this.getPotentialOrderMatch(order);
         let traded = false;
@@ -245,10 +245,7 @@ export default class InstrumentBroker {
             const time = new Date().getTime();
             this.priceHistory.push(new PricePoint(time, trade.unitPrice));
 
-            const buy = order.direction === TradeDirection.BUY ? order : match;
-            const sell = order.direction === TradeDirection.BUY ? match : order;
-            aggregateBuyDelta.push(new PriceAggregateElement(buy.unitPrice, new Big("0").minus(trade.units)));
-            aggregateSellDelta.push(new PriceAggregateElement(sell.unitPrice, new Big("0").minus(trade.units)));
+            matchPrices.push(match.unitPrice);
 
             this.clearCompletedOrders();
             match = this.getPotentialOrderMatch(order);
@@ -263,37 +260,40 @@ export default class InstrumentBroker {
                 time: pricePoint.time,
                 newPrice: pricePoint.price
             });
-
-            const reducer = (prev: Array<PriceAggregateElement>, curr: PriceAggregateElement) => {
-                const idx: number = prev.findIndex(it => it.unitPrice.eq(curr.unitPrice));
-                if(idx === -1){
-                    prev.push(curr);
-                    return prev;
-                }
-
-                const element: PriceAggregateElement = prev[idx];
-                const newElement = new PriceAggregateElement(curr.unitPrice, curr.units.plus(element.units));
-                prev.splice(idx, 1, newElement);
-                return prev;
-            };
-
-            if(order.getState() === OrderState.PENDING){
-                const orderDelta = new PriceAggregateElement(order.unitPrice, order.getRemainingUnits());
-                if(order.direction === TradeDirection.BUY){
-                    aggregateBuyDelta.push(orderDelta)
-                } else {
-                    aggregateSellDelta.push(orderDelta)
-                }
-            }
-
-            const combinedBuys = aggregateBuyDelta.reduce(reducer, []);
-            const combinedSells = aggregateSellDelta.reduce(reducer, []);
-            const combined = new PriceAggregate(combinedBuys, combinedSells);
-            AggregatePriceRoom.fire({
-                instrument: this.instrument,
-                delta: combined
-            })
         }
+
+        const newAggregate = this.getAggregatePrices();
+        const matchAggregate: Array<PriceAggregateElement> = order.direction === TradeDirection.BUY ? newAggregate.sell : newAggregate.buy;
+        const orderAggregate: Array<PriceAggregateElement> = order.direction === TradeDirection.BUY ? newAggregate.buy : newAggregate.sell;
+
+        const mappedMatchAggregate: Map<string, Big> = new Map(matchAggregate.map(it => [it.unitPrice.toString(), it.units]));
+
+        const uniqueMatchDelta: Array<Big> = Array.from(new Set(matchPrices));
+        const newMatchVolumes: Array<PriceAggregateElement> = uniqueMatchDelta.map(price => {
+            let units = mappedMatchAggregate.get(price.toString());
+            if(units == null) units = new Big("0");
+            return new PriceAggregateElement(price, units);
+        });
+
+        const orderPrice = order.unitPrice;
+        let orderUnits = order.getRemainingUnits();
+        let oldOrderUnits = orderAggregate.find(it => it.unitPrice.eq(orderPrice));
+        if(oldOrderUnits != null){
+            orderUnits = orderUnits.plus(oldOrderUnits.units);
+        }
+        const orderDirectionDelta: Array<PriceAggregateElement> = [new PriceAggregateElement(orderPrice, orderUnits)];
+
+        let combined: PriceAggregate;
+        if(order.direction === TradeDirection.BUY){
+            combined = new PriceAggregate(orderDirectionDelta, newMatchVolumes);
+        } else {
+            combined = new PriceAggregate(newMatchVolumes, orderDirectionDelta);
+        }
+
+        AggregatePriceRoom.fire({
+            instrument: this.instrument,
+            delta: combined
+        })
     }
 
     private cancelBuy(order: Order): void {
@@ -352,17 +352,17 @@ export default class InstrumentBroker {
     private aggregateOrders(orders: Array<Order>): Array<PriceAggregateElement> {
         const reducer = (acc: Array<PriceAggregateElement>, order: Order) => {
             if (acc.length === 0) {
-                acc.push(new PriceAggregateElement(order.unitPrice, order.getRemainingUnits()));
-                return acc;
+                const newElement = new PriceAggregateElement(order.unitPrice, order.getRemainingUnits());
+                return acc.concat(newElement);
             }
 
-            const last = acc[acc.length - 1];
+            const last: PriceAggregateElement = acc[acc.length - 1];
             if (order.unitPrice.eq(last.unitPrice)) {
-                last.units = last.units.plus(order.getRemainingUnits());
-                return acc;
+                const newLast = new PriceAggregateElement(last.unitPrice, last.units.plus(order.getRemainingUnits()));
+                return acc.slice(0, -1).concat(newLast);
             } else {
-                acc.push(new PriceAggregateElement(order.unitPrice, last.units.plus(order.getRemainingUnits())));
-                return acc;
+                const newLast = new PriceAggregateElement(order.unitPrice, order.getRemainingUnits());
+                return acc.concat(newLast);
             }
         };
 

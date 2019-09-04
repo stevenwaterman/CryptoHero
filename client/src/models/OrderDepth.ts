@@ -26,8 +26,8 @@ export type OrderDepth = Map<string, IOrderDepth>;
 export type DirectionalOrderDepth = Array<OrderDepthPoint>;
 
 export class OrderDepthPoint{
-    price: number;
-    volume: number;
+    readonly price: number;
+    readonly volume: number;
 
     constructor(price: number, volume: number) {
         this.price = price;

@@ -17,8 +17,8 @@ process.on('exit', () => {
     server.shutdown();
     console.log("Server shut down");
 });
-
 //TODO remove
+
 const buyer = new Account();
 const seller = new Account();
 const instruments = Instrument.ALL.toArray();
@@ -31,25 +31,25 @@ accounts.forEach(acc => {
 let midPoint = 10;
 setInterval(() => {
     midPoint += 0.0001;
-    const instrument = instruments[Math.floor(Math.random() * instruments.length)];
+    Instrument.ALL.forEach(instrument => {
+        const direction = Math.round(Math.random()) === 0 ? TradeDirection.BUY : TradeDirection.SELL;
+        const units = new Big(Math.random() * 100);
+        const price = new Big( midPoint + gaussRand() + (direction === TradeDirection.BUY ? -0.2 : 0.2));
 
-    const direction = Math.round(Math.random()) === 0 ? TradeDirection.BUY : TradeDirection.SELL;
-    const units = new Big(Math.random() * 100);
-    const price = new Big( midPoint + gaussRand() + (direction === TradeDirection.BUY ? -2 : 2));
+        let account;
+        if (direction == TradeDirection.BUY) {
+            account = buyer;
+        } else {
+            account = seller;
+        }
 
-    let account;
-    if (direction == TradeDirection.BUY) {
-        account = buyer;
-    } else {
-        account = seller;
-    }
-
-    try {
-        const order = new Order(account, direction, instrument, units, price);
-        server.broker.placeOrder(order);
-    } catch (ignore) {
-    }
-}, 10);
+        try {
+            const order = new Order(account, direction, instrument, units, price);
+            server.broker.placeOrder(order);
+        } catch (ignore) {
+        }
+    })
+}, 250);
 
 function gaussRand(): number {
     let u = 0, v = 0;

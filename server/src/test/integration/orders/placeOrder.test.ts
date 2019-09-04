@@ -14,7 +14,7 @@ const url = G.API + "orders/place";
 
 test("Happy Path", done => {
     const account = new Account();
-    account.adjustAssets(Asset.BTC, new Big("100"));
+    account.adjustAssets(Asset.GBP, new Big("100"));
 
     const options = {
         "json": true,
@@ -23,12 +23,13 @@ test("Happy Path", done => {
             "instrument": Instrument.BTCGBP.name,
             "direction": TradeDirection.BUY.name,
             "units": new Big("20").toString(),
-            "unit price": new Big("1").toString()
+            "unitPrice": new Big("1").toString()
         }
     };
 
     request.post(url, options, (error, response, body) => {
         expect(error).toBeFalsy();
+        console.log(body);
         expect(response.statusCode).toEqual(200);
         expect(account.getOrders()).toHaveLength(1);
         done();
@@ -48,7 +49,7 @@ test("cannot self-trade", done => {
             "instrument": Instrument.BTCGBP.name,
             "direction": TradeDirection.SELL.name,
             "units": new Big("1").toString(),
-            "unit price": new Big("1").toString()
+            "unitPrice": new Big("1").toString()
         }
     };
 
@@ -71,7 +72,7 @@ test("Not enough funds", done => {
             "instrument": Instrument.BTCGBP.name,
             "direction": TradeDirection.BUY.name,
             "units": new Big("20").toString(),
-            "unit price": new Big("1").toString()
+            "unitPrice": new Big("1").toString()
         }
     };
 
@@ -98,7 +99,7 @@ const testRunner = (name: string, params: any, expectedStatus: number) => {
                 "instrument": params.instrument,
                 "direction": params.direction,
                 "units": params.units,
-                "unit price": params.price
+                "unitPrice": params.price
             }
         };
 

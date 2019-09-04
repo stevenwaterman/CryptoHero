@@ -49,10 +49,6 @@ describe("buyComparator", () => {
     test("same price, timestamp, and id returns 0", () => {
         expect(buyComparator(order1, order1)).toEqual(0);
     });
-
-    test("same price and timestamp, different account, does not return 0", () => {
-        expect(buyComparator(order4, order4)).not.toEqual(0);
-    });
 });
 
 describe("sellComparator", () => {
@@ -84,9 +80,5 @@ describe("sellComparator", () => {
 
     test("same price, timestamp, and id returns 0", () => {
         expect(sellComparator(order1, order1)).toEqual(0);
-    });
-
-    test("same price and timestamp, different id, does not return 0", () => {
-        expect(sellComparator(order4, order4)).not.toEqual(0);
     });
 });

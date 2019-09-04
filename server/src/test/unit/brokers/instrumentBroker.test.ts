@@ -16,10 +16,10 @@ import {REGISTRY} from "../../../app/registry";
 import InstrumentBroker from "../../../app/brokers/instrumentBroker";
 import MockDate from "mockdate";
 
-function placeBuy(account: Account, units: Big, price: Big): ExpectedOrder {
+function placeBuy(account: Account, price: Big, units: Big): ExpectedOrder {
     return placeOrder(TradeDirection.BUY, account, units, price);
 }
-function placeSell(account: Account, units: Big, price: Big): ExpectedOrder {
+function placeSell(account: Account, price: Big, units: Big): ExpectedOrder {
     return placeOrder(TradeDirection.SELL, account, units, price)
 }
 function placeOrder(direction: TradeDirection, account: Account, units: Big, price: Big): ExpectedOrder {
@@ -87,14 +87,14 @@ describe("adding orders", () => {
     });
 
     test("can't add a buy order that they can't afford", () => {
-        acc1.adjustAssets(Asset.BTC, new Big("-900"));
+        acc1.adjustAssets(iBroker.instrument.fromAsset, new Big("-900"));
         expect(() => {
             iBroker.place(buyOrder);
         }).toThrow();
     });
 
     test("can't add a sell order that they can't afford", () => {
-        acc1.adjustAssets(Asset.GBP, new Big("-950"));
+        acc1.adjustAssets(iBroker.instrument.toAsset, new Big("-950"));
         expect(() => {
             iBroker.place(sellOrder);
         }).toThrow();
@@ -116,20 +116,20 @@ describe("matching orders", () => {
 
     test("Two Buys", () => {
         const o1 = placeBuy(acc1, new Big("1"), new Big("1"));
-        const o2 = placeBuy(acc2, new Big("1"), new Big("1.1"));
+        const o2 = placeBuy(acc2, new Big("1.1"), new Big("1"));
         expectOrders(acc1, o1);
         expectOrders(acc2, o2);
     });
 
     test("Two Sells", () => {
         const o1 = placeSell(acc1, new Big("1"), new Big("1"));
-        const o2 = placeSell(acc2, new Big("1"), new Big("1.1"));
+        const o2 = placeSell(acc2, new Big("1.1"), new Big("1"));
         expectOrders(acc1, o1);
         expectOrders(acc2, o2);
     });
 
     test("Order happens at best price for second person (buy first)", () => {
-        const o1 = placeBuy(acc1, new Big("1"), new Big("1.1"));
+        const o1 = placeBuy(acc1, new Big("1.1"), new Big("1"));
         const o2 = placeSell(acc2, new Big("1"), new Big("1"));
         const trade = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1.1"));
         o1.trades.push(trade);
@@ -142,7 +142,7 @@ describe("matching orders", () => {
 
     test("Order happens at best price for second person (sell first)", () => {
         const o1 = placeSell(acc1, new Big("1"), new Big("1"));
-        const o2 = placeBuy(acc2, new Big("1"), new Big("1.1"));
+        const o2 = placeBuy(acc2, new Big("1.1"), new Big("1"));
         const trade = new ExpectedTrade(acc2, acc1, new Big("1"), new Big("1"));
         o1.trades.push(trade);
         o2.trades.push(trade);
@@ -217,7 +217,7 @@ describe("matching orders", () => {
     });
 
     test("Partial trade", () => {
-        const o1 = placeBuy(acc1, new Big("2"), new Big("1"));
+        const o1 = placeBuy(acc1, new Big("1"), new Big("2"));
         const o2 = placeSell(acc2, new Big("1"), new Big("1"));
         const trade = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
         o1.trades.push(trade);
@@ -228,9 +228,9 @@ describe("matching orders", () => {
     });
 
     test("Multiple partial trades (large buy first)", () => {
-        const o1 = placeBuy(acc1, new Big("2"), new Big("1.1"));
+        const o1 = placeBuy(acc1, new Big("1.1"), new Big("2"));
         const o2 = placeSell(acc2, new Big("1"), new Big("1"));
-        const o3 = placeSell(acc3, new Big("1"), new Big("1.1"));
+        const o3 = placeSell(acc3, new Big("1.1"), new Big("1"));
         const trade1 = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1.1"));
         const trade2 = new ExpectedTrade(acc1, acc3, new Big("1"), new Big("1.1"));
         o1.trades.push(trade1, trade2);
@@ -245,9 +245,9 @@ describe("matching orders", () => {
     });
 
     test("Multiple partial trades (small buys first)", () => {
-        const o1 = placeBuy(acc1, new Big("1"), new Big("1.1"));
-        const o2 = placeBuy(acc2, new Big("2"), new Big("1"));
-        const o3 = placeSell(acc3, new Big("3"), new Big("1"));
+        const o1 = placeBuy(acc1, new Big("1.1"), new Big("1"));
+        const o2 = placeBuy(acc2, new Big("1"), new Big("2"));
+        const o3 = placeSell(acc3, new Big("1"), new Big("3"));
         const trade1 = new ExpectedTrade(acc1, acc3, new Big("1"), new Big("1.1"));
         const trade2 = new ExpectedTrade(acc2, acc3, new Big("2"), new Big("1"));
         o1.trades.push(trade1);
@@ -263,7 +263,7 @@ describe("matching orders", () => {
 
     test("Better buy prices go to front of queue", () => {
         const o1 = placeBuy(acc1, new Big("1"), new Big("1"));
-        const o2 = placeBuy(acc2, new Big("1"), new Big("2"));
+        const o2 = placeBuy(acc2, new Big("2"), new Big("1"));
         const o3 = placeSell(acc3, new Big("1"), new Big("1"));
         const trade = new ExpectedTrade(acc2, acc3, new Big("1"), new Big("2"));
         o2.trades.push(trade);
@@ -277,8 +277,8 @@ describe("matching orders", () => {
 
     test("Better sell prices go to front of queue", () => {
         const o1 = placeSell(acc1, new Big("1"), new Big("1"));
-        const o2 = placeSell(acc2, new Big("1"), new Big("2"));
-        const o3 = placeBuy(acc3, new Big("1"), new Big("2"));
+        const o2 = placeSell(acc2, new Big("2"), new Big("1"));
+        const o3 = placeBuy(acc3, new Big("2"), new Big("1"));
         const trade = new ExpectedTrade(acc3, acc1, new Big("1"), new Big("1"));
         o1.trades.push(trade);
         o3.trades.push(trade);
@@ -327,32 +327,32 @@ describe("matching orders", () => {
 describe("position updated after order", () => {
     test("BUY 1x1", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
-        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(new Big("1000"));
-        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(new Big("999"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1000"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("999"));
     });
 
     test("SELL 1x1", () => {
         placeSell(acc1, new Big("1"), new Big("1"));
-        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(new Big("999"));
-        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(new Big("1000"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("999"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1000"));
     });
 
     test("BUY 2.5x2.5", () => {
         placeBuy(acc1, new Big("2.5"), new Big("2.5"));
-        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(new Big("1000"));
-        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(new Big("993.75"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1000"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("993.75"));
     });
 
     test("SELL 2.5x2.5", () => {
         placeSell(acc1, new Big("2.5"), new Big("2.5"));
-        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(new Big("997.5"));
-        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(new Big("1000"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("997.5"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1000"));
     });
 
     test("SELL negative price", () => {
-        placeSell(acc1, new Big("1"), new Big("-1"));
-        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(new Big("999"));
-        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(new Big("999"));
+        placeSell(acc1, new Big("-1"), new Big("1"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("999"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("999"));
     })
 });
 
@@ -360,64 +360,64 @@ describe("position updated after trade", () => {
     test("1x1", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
         placeSell(acc2, new Big("1"), new Big("1"));
-        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(new Big("1001"));
-        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(new Big("999"));
-        expect(acc2.getAvailableAssets(Asset.GBP)).toEqual(new Big("999"));
-        expect(acc2.getAvailableAssets(Asset.BTC)).toEqual(new Big("1001"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1001"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("999"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("999"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1001"));
     });
 
     test("2x2", () => {
         placeBuy(acc1, new Big("2"), new Big("2"));
         placeSell(acc2, new Big("2"), new Big("2"));
-        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(new Big("1002"));
-        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(new Big("996"));
-        expect(acc2.getAvailableAssets(Asset.GBP)).toEqual(new Big("998"));
-        expect(acc2.getAvailableAssets(Asset.BTC)).toEqual(new Big("1004"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1002"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("996"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("998"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1004"));
     });
 
     test("2.5x2", () => {
-        placeBuy(acc1, new Big("2.5"), new Big("2"));
-        placeSell(acc2, new Big("2.5"), new Big("2"));
-        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(new Big("1002.5"));
-        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(new Big("995"));
-        expect(acc2.getAvailableAssets(Asset.GBP)).toEqual(new Big("997.5"));
-        expect(acc2.getAvailableAssets(Asset.BTC)).toEqual(new Big("1005"));
+        placeBuy(acc1, new Big("2"), new Big("2.5"));
+        placeSell(acc2, new Big("2"), new Big("2.5"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1002.5"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("995"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("997.5"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1005"));
     });
 
     test("2x2.5", () => {
-        placeBuy(acc1, new Big("2"), new Big("2.5"));
-        placeSell(acc2, new Big("2"), new Big("2.5"));
-        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(new Big("1002"));
-        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(new Big("995"));
-        expect(acc2.getAvailableAssets(Asset.GBP)).toEqual(new Big("998"));
-        expect(acc2.getAvailableAssets(Asset.BTC)).toEqual(new Big("1005"));
+        placeBuy(acc1, new Big("2.5"), new Big("2"));
+        placeSell(acc2, new Big("2.5"), new Big("2"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1002"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("995"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("998"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1005"));
     });
 
     test("2.5x2.5", () => {
         placeBuy(acc1, new Big("2.5"), new Big("2.5"));
         placeSell(acc2, new Big("2.5"), new Big("2.5"));
-        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(new Big("1002.5"));
-        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(new Big("993.75"));
-        expect(acc2.getAvailableAssets(Asset.GBP)).toEqual(new Big("997.5"));
-        expect(acc2.getAvailableAssets(Asset.BTC)).toEqual(new Big("1006.25"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1002.5"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("993.75"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("997.5"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1006.25"));
     });
 
     test("2x-1.5", () => {
-        placeBuy(acc1, new Big("2"), new Big("-1.5"));
-        placeSell(acc2, new Big("2"), new Big("-1.5"));
-        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(new Big("1002"));
-        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(new Big("1003"));
-        expect(acc2.getAvailableAssets(Asset.GBP)).toEqual(new Big("998"));
-        expect(acc2.getAvailableAssets(Asset.BTC)).toEqual(new Big("997"));
+        placeBuy(acc1, new Big("-1.5"), new Big("2"));
+        placeSell(acc2, new Big("-1.5"), new Big("2"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1002"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1003"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("998"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("997"));
     });
 
     test("different prices", () => {
-        placeBuy(acc1, new Big("1"), new Big("2"));
+        placeBuy(acc1, new Big("2"), new Big("1"));
         placeSell(acc2, new Big("1"), new Big("1"));
-        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(new Big("1001"));
-        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(new Big("998"));
-        expect(acc2.getAvailableAssets(Asset.GBP)).toEqual(new Big("999"));
-        expect(acc2.getAvailableAssets(Asset.BTC)).toEqual(new Big("1002"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1001"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("998"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("999"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1002"));
     });
 });
 
@@ -450,11 +450,11 @@ describe("Cancel order", () => {
 
 
     test("Unlocks the assets", () => {
-        const before = (acc1.getAvailableAssets(Asset.BTC));
+        const before = (acc1.getAvailableAssets(iBroker.instrument.fromAsset));
         const order = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1"));
         iBroker.place(order);
         iBroker.cancel(order);
-        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(before);
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(before);
     });
 });
 
@@ -491,7 +491,7 @@ describe("Price aggregate", () => {
 
     test("Two buys at different prices", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
-        placeBuy(acc1, new Big("2"), new Big("3"));
+        placeBuy(acc1, new Big("3"), new Big("2"));
         const expected = new PriceAggregate([
             new PriceAggregateElement(new Big("3"), new Big("2")),
             new PriceAggregateElement(new Big("1"), new Big("1"))
@@ -501,7 +501,7 @@ describe("Price aggregate", () => {
 
     test("Two buys at same price", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
-        placeBuy(acc1, new Big("2"), new Big("1"));
+        placeBuy(acc1, new Big("1"), new Big("2"));
         const expected = new PriceAggregate([
             new PriceAggregateElement(new Big("1"), new Big("3"))
         ], []);
@@ -510,7 +510,7 @@ describe("Price aggregate", () => {
 
     test("Two Sells at different prices", () => {
         placeSell(acc1, new Big("1"), new Big("1"));
-        placeSell(acc1, new Big("2"), new Big("3"));
+        placeSell(acc1, new Big("3"), new Big("2"));
         const expected = new PriceAggregate([], [
             new PriceAggregateElement(new Big("1"), new Big("1")),
             new PriceAggregateElement(new Big("3"), new Big("2"))
@@ -520,7 +520,7 @@ describe("Price aggregate", () => {
 
     test("Two Sells at same price", () => {
         placeSell(acc1, new Big("1"), new Big("1"));
-        placeSell(acc1, new Big("2"), new Big("1"));
+        placeSell(acc1, new Big("1"), new Big("2"));
         const expected = new PriceAggregate([], [
             new PriceAggregateElement(new Big("1"), new Big("3"))
         ]);
@@ -529,7 +529,7 @@ describe("Price aggregate", () => {
 
     test("One buy one sell (not overlapping)", () => {
         placeBuy(acc1, new Big("1"), new Big("1"));
-        placeSell(acc2, new Big("1"), new Big("2"));
+        placeSell(acc2, new Big("2"), new Big("1"));
         const expected = new PriceAggregate(
             [new PriceAggregateElement(new Big("1"), new Big("1"))],
             [new PriceAggregateElement(new Big("2"), new Big("1"))]
@@ -551,21 +551,21 @@ describe("Price aggregate", () => {
 describe("Market prices", () => {
     test("After 0 trades", () => {
         expect(iBroker.getMarketPrice()).toEqual(new Big("0"));
-        placeBuy(acc1, new Big("1"), new Big("2"));
+        placeBuy(acc1, new Big("2"), new Big("1"));
         expect(iBroker.getMarketPrice()).toEqual(new Big("0"));
     });
 
     test("After 1 trade", () => {
         placeBuy(acc1, new Big("2"), new Big("2"));
-        placeSell(acc2, new Big("3"), new Big("1"));
+        placeSell(acc2, new Big("1"), new Big("3"));
         expect(iBroker.getMarketPrice()).toEqual(new Big("2"));
     });
 
     test("After 2 trades", () => {
-        placeBuy(acc1, new Big("1"), new Big("3"));
-        placeSell(acc2, new Big("1"), new Big("3"));
-        placeBuy(acc1, new Big("1"), new Big("5"));
-        placeSell(acc2, new Big("1"), new Big("5"));
+        placeBuy(acc1, new Big("3"), new Big("1"));
+        placeSell(acc2, new Big("3"), new Big("1"));
+        placeBuy(acc1, new Big("5"), new Big("1"));
+        placeSell(acc2, new Big("5"), new Big("1"));
         expect(iBroker.getMarketPrice()).toEqual(new Big("5"));
     })
 });

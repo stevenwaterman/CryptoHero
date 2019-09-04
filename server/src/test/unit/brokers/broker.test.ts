@@ -122,17 +122,17 @@ describe("position should update", () => {
         placeSell(Instrument.BTCGBP, acc2, new Big("1"), new Big("1"));
         placeSell(Instrument.LTCGBP, acc3, new Big("1"), new Big("1"));
 
-        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(new Big("1002"));
-        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(new Big("999"));
-        expect(acc1.getAvailableAssets(Asset.LTC)).toEqual(new Big("999"));
+        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(new Big("998"));
+        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(new Big("1001"));
+        expect(acc1.getAvailableAssets(Asset.LTC)).toEqual(new Big("1001"));
 
-        expect(acc2.getAvailableAssets(Asset.GBP)).toEqual(new Big("999"));
-        expect(acc2.getAvailableAssets(Asset.BTC)).toEqual(new Big("1001"));
+        expect(acc2.getAvailableAssets(Asset.GBP)).toEqual(new Big("1001"));
+        expect(acc2.getAvailableAssets(Asset.BTC)).toEqual(new Big("999"));
         expect(acc2.getAvailableAssets(Asset.LTC)).toEqual(new Big("1000"));
 
-        expect(acc3.getAvailableAssets(Asset.GBP)).toEqual(new Big("999"));
+        expect(acc3.getAvailableAssets(Asset.GBP)).toEqual(new Big("1001"));
         expect(acc3.getAvailableAssets(Asset.BTC)).toEqual(new Big("1000"));
-        expect(acc3.getAvailableAssets(Asset.LTC)).toEqual(new Big("1001"));
+        expect(acc3.getAvailableAssets(Asset.LTC)).toEqual(new Big("999"));
     });
 });
 
