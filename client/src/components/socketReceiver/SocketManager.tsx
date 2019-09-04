@@ -1,5 +1,5 @@
 import React from "react";
-import {SocketReceiverProps} from "./SocketReceiverContainer";
+import {SocketReceiverProps} from "./SocketManagerContainer";
 import {ELEMENT} from "../../modules/RootStore";
 import {getSocket} from "../../WebSockets";
 import Instrument from "../../models/Instrument";

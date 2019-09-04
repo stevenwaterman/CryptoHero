@@ -67,7 +67,7 @@ function orderDepthDelta(state: State, action: OrderDepthDeltaAction): State {
         const currentIdx = newSells.findIndex(check => check.price === newSell.price);
         if (currentIdx === -1) {
             if (newSell.volume > 0) {
-                sellDelta.push(newSell);
+                newSells.push(newSell);
             }
         } else {
             if (newSell.volume > 0) {

@@ -16,8 +16,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/es/Col";
 import TopBarContainer from "../nav/TopBarContainer";
 import {AppProps} from "./AppContainer";
-import SocketReceiver from "../socketReceiver/SocketReceiverContainer";
-import SocketReceiverContainer from "../socketReceiver/SocketReceiverContainer";
+import SocketReceiver from "../socketReceiver/SocketManagerContainer";
+import SocketReceiverContainer from "../socketReceiver/SocketManagerContainer";
 
 export default class App extends React.Component<AppProps> {
     componentDidMount(): void {

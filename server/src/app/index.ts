@@ -18,7 +18,7 @@ process.on('exit', () => {
     console.log("Server shut down");
 });
 //TODO remove
-
+/*
 const buyer = new Account();
 const seller = new Account();
 const instruments = Instrument.ALL.toArray();
@@ -57,3 +57,4 @@ function gaussRand(): number {
     while (v === 0) v = Math.random();
     return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 }
+*/
