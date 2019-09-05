@@ -28,13 +28,17 @@ accounts.forEach(acc => {
     });
 });
 const instruments = Array.from(Instrument.ALL);
+const targets = new Map(instruments.map(it => [it, Big(Math.random() * 100)]));
 setInterval(() => {
     const marketPrices = server.broker.getMarketPrices();
     const instrument = instruments[Math.floor(Math.random() * instruments.length)];
     const direction: TradeDirection = Math.round(Math.random()) === 0 ? TradeDirection.BUY : TradeDirection.SELL;
     const units: Big = Big(Math.random() * 100);
-    const midPoint = marketPrices.get(instrument) as Big;
-    const price: Big = midPoint.plus(gaussRand() * 0.2).plus(direction === TradeDirection.BUY ? -0.1 : 0.1);
+    const market = marketPrices.get(instrument) as Big;
+    const target = targets.get(instrument) as Big;
+    const elastic = target.sub(market).mul("0.1");
+    const base = market.plus(elastic);
+    const price: Big = base.plus(gaussRand() * 0.2).plus(direction === TradeDirection.BUY ? -0.1 : 0.1);
 
     let account;
     if (direction == TradeDirection.BUY) {
@@ -53,9 +57,9 @@ setInterval(() => {
         .filter(it =>
             it.getState() === OrderState.PENDING &&
             it.instrument.name === instrument.name &&
-            it.unitPrice.sub(midPoint).abs().gt(1)
+            it.unitPrice.sub(base).abs().gt(market.plus(5).mul("0.1"))
         ).forEach(it => server.broker.cancelOrder(it));
-}, 1);
+}, 50);
 
 function gaussRand(): number {
     let u = 0, v = 0;

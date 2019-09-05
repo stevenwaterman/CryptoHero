@@ -50,6 +50,7 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
         state.blotter.orders.filter(it =>
             it.instrument.name === state.tradeModal.instrument.name &&
             it.isBuy !== state.tradeModal.buying &&
+            it.state === "pending" &&
             (
                 (it.isBuy && it.unitPrice.gte(state.tradeModalInput.price)) ||
                 (!it.isBuy && it.unitPrice.lte(state.tradeModalInput.price))
