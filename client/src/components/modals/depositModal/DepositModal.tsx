@@ -32,6 +32,7 @@ export default class DepositModal extends React.Component<DepositModalProps> {
                                 </Col>
                                 <Col sm="auto" className="mt-2 mt-sm-0">
                                     <UnitFieldContainer step={0.00001}/>
+                                    <input type="text" name="StackOverflow1370021" value="Fix IE bug" hidden={true}/>
                                 </Col>
                             </Form.Row>
                         </Form.Group>

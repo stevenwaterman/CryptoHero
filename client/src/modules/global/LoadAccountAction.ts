@@ -36,7 +36,7 @@ export const createReloadAction = (): ThunkAction<Promise<void>, State, void, Ac
 };
 
 async function inner(accountId: string, dispatch: ThunkDispatch<State, void, Action<any>>, state: State): Promise<void> {
-    const response: Response = await fetch(`http://localhost:4000/api/account/${state.account.selectedId}/state`, {
+    const response: Response = await fetch(`http://localhost:4000/api/account/${accountId}/state`, {
         method: "GET",
         headers: {},
     });
@@ -77,10 +77,10 @@ async function inner(accountId: string, dispatch: ThunkDispatch<State, void, Act
             )
     );
 
+    dispatch(createSetSelectedAccountAction(state, accountId));
     dispatch(createSetAvailableFundsAction(state, funds));
     dispatch(createSetPricesAction(state, prices));
     dispatch(createSetOrdersAction(state, orders));
     dispatch(createSetOrderDepthDataAction(state, orderDepth));
     dispatch(createSetPriceHistoryAction(state, priceHistory));
-    dispatch(createSetSelectedAccountAction(state, accountId));
 }
