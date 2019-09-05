@@ -8,10 +8,7 @@ export default class TradeDescriptionLine extends React.Component<TradeDescripti
         if (this.props.selfTrade != null) {
             return <p className="text-center">
                 <b>
-                    {this.otherBuySellString()}
-                    exists at
-                    {formatMoney(this.props.selfTrade, 5, true, false)}
-                    . Would cause self-trade
+                    {this.otherBuySellString()} exists at {formatMoney(this.props.selfTrade, 5, true, false)}. Would cause self-trade!
                 </b>
             </p>
         }

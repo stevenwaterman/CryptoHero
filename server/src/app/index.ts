@@ -55,7 +55,7 @@ setInterval(() => {
             it.instrument.name === instrument.name &&
             it.unitPrice.sub(midPoint).abs().gt(1)
         ).forEach(it => server.broker.cancelOrder(it));
-}, 50);
+}, 1);
 
 function gaussRand(): number {
     let u = 0, v = 0;
