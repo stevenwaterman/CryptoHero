@@ -16,7 +16,7 @@ interface DispatchProps {
 }
 
 export interface StateProps {
-    availableFunds: Map<string, Big>,
+    availableFunds: Array<[string, Big]>,
     canWithdraw: boolean
 }
 
@@ -40,9 +40,11 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
             canWithdraw = true;
         }
     });
+    const funds: Array<[string, Big]> = Array.from(state.funds.availableFunds);
+    funds.sort((a,b) => a[0].localeCompare(b[0]));
     return {
         canWithdraw: canWithdraw,
-        availableFunds: state.funds.availableFunds
+        availableFunds: funds
     }
 }
 

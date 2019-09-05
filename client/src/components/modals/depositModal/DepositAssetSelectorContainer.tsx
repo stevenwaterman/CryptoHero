@@ -25,7 +25,7 @@ function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): Di
 }
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
-    const assets = Array.from(state.funds.availableFunds.keys());
+    const assets = Array.from(state.funds.availableFunds.keys()).sort((a,b) => a.localeCompare(b));
     return {
         selectedAsset: state.depositModalInput.asset,
         assets: assets

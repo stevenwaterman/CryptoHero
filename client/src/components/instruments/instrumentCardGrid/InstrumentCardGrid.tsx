@@ -6,7 +6,8 @@ import Instrument from "../../../models/Instrument";
 import {Col, Row} from "react-bootstrap";
 
 function generateColumns({instruments}: InstrumentCardGridProps): Array<any> {
-    return instruments.map((it, index) => generateOneColumn(it, index % 2 === 0))
+    return instruments
+        .map((it, index) => generateOneColumn(it, index % 2 === 0));
 }
 
 function generateOneColumn(instrument: Instrument, isOnLeft: boolean): ELEMENT {
@@ -20,8 +21,10 @@ function generateOneColumn(instrument: Instrument, isOnLeft: boolean): ELEMENT {
 
 export default class InstrumentCardGrid extends React.Component<InstrumentCardGridProps> {
     render(): ELEMENT {
-        return (
-            <Row className="mt-3">{generateColumns(this.props)}</Row>
-        )
+        return <>
+            <div className="mx-auto mt-3">
+                <Row>{generateColumns(this.props)}</Row>
+            </div>
+        </>
     }
 }

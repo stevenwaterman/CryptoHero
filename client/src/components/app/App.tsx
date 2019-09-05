@@ -27,28 +27,30 @@ export default class App extends React.Component<AppProps> {
     render(): ELEMENT {
         return (
             <>
-                <TopBarContainer/>
-                <Container fluid={true} hidden={this.props.loading}>
-                    <Row>
-                        <Col sm="4">
-                            <AvailableFundsContainer/>
-                            <InstrumentCardGridContainer/>
-                        </Col>
-                        <Col sm="8" className="col-sm-8 my-3 my-sm-0">
-                            <SelectedInstrumentContainer/>
-                            <ChartCardContainer/>
-                            <TradeBlotterContainer/>
-                        </Col>
-                    </Row>
-                </Container>
-                <LoadingPlaceholderContainer/>
-                <TradeModalContainer/>
-                <TotalFundsModalContainer/>
-                <WithdrawModalContainer/>
-                <DepositModalContainer/>
-                <ViewTradeModalContainer/>
+                <div className="fitScreen">
+                    <TopBarContainer/>
+                    <Container fluid={true} hidden={this.props.loading}>
+                        <Row className="row-eq-height">
+                            <Col sm="4">
+                                <AvailableFundsContainer/>
+                                <InstrumentCardGridContainer/>
+                            </Col>
+                            <Col sm="8" className="my-3 my-sm-0">
+                                <SelectedInstrumentContainer/>
+                                <ChartCardContainer/>
+                                <TradeBlotterContainer/>
+                            </Col>
+                        </Row>
+                    </Container>
+                    <LoadingPlaceholderContainer/>
+                    <TradeModalContainer/>
+                    <TotalFundsModalContainer/>
+                    <WithdrawModalContainer/>
+                    <DepositModalContainer/>
+                    <ViewTradeModalContainer/>
 
-                <SocketReceiverContainer/>
+                    <SocketReceiverContainer/>
+                </div>
             </>
         )
     }

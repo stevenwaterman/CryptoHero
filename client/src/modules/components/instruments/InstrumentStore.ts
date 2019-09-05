@@ -12,7 +12,7 @@ export default interface InstrumentStore {
 
 export const initialInstrumentStore: InstrumentStore = {
     prices: new Map(),
-    selectedInstrument: new Instrument("NA", "NA"),
+    selectedInstrument: new Instrument("BCH", "BTC"),
     instrumentList: [],
 };
 

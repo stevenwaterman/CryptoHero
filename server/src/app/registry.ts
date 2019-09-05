@@ -3,7 +3,7 @@ import Order from "./trading/order";
 import Trade from "./trading/trade";
 
 class Registry {
-    private readonly accounts: Map<string, Account> = new Map<string, Account>();
+    readonly accounts: Map<string, Account> = new Map<string, Account>();
     private readonly orders: Map<string, Order> = new Map<string, Order>();
     private readonly trades: Map<string, Trade> = new Map<string, Trade>();
 

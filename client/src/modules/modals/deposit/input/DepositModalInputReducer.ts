@@ -36,7 +36,7 @@ export function depositModalInputReducer(
 
 function startDeposit(state: State, action: ShowDepositModalAction): State {
     return {
-        asset: "GBP", units: Big(0), unitsText: formatInput(Big(0))
+        asset: "BCH", units: Big(0), unitsText: formatInput(Big(0))
     }
 }
 

@@ -23,7 +23,7 @@ export default class ChartCard extends React.Component<ChartCardProps> {
                         </Col>
                     </Row>
                 </Card.Header>
-                <Card.Body>
+                <Card.Body className="p-1">
                     <PriceChartContainer/>
                     <DepthChartContainer/>
                 </Card.Body>

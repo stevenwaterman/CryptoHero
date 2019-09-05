@@ -9,21 +9,23 @@ import FinishedSell from "./Contents/FinishedSell";
 
 export default class ViewOrderModal extends React.Component<ViewTradeModalProps> {
     render(): ELEMENT {
-        const {isBuy, remainingUnits} = this.props.trade;
+        const {isBuy, state} = this.props.trade;
         return (
             <Modal show={this.props.show} onHide={this.props.onHide}>
                 <Modal.Header>
                     <Modal.Title><b>Order Info</b></Modal.Title>
                 </Modal.Header>
                 {
-                    remainingUnits.eq(0) ?
-                        (isBuy ?
-                            <FinishedBuy {...this.props}/> :
-                            <FinishedSell {...this.props}/>)
-                        :
-                        (isBuy ?
-                            <PendingBuy {...this.props}/> :
-                            <PendingSell {...this.props}/>)
+                    state === "pending" ?
+                        (
+                            isBuy ?
+                                <PendingBuy {...this.props}/> :
+                                <PendingSell {...this.props}/>
+                        ) : (
+                            isBuy ?
+                                <FinishedBuy {...this.props}/> :
+                                <FinishedSell {...this.props}/>
+                        )
                 }
             </Modal>
         );

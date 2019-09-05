@@ -13,8 +13,8 @@ export default class InstrumentCard extends React.Component<InstrumentCardProps>
                 className="text-center pt-1"
                 onClick={() => this.props.onCardClick(this.props.instrument)}
             >
-                <Card.Title><b> {this.props.instrument.name} </b></Card.Title>
-                <Card.Text>
+                <Card.Title className="mb-1"><b> {this.props.instrument.name} </b></Card.Title>
+                <Card.Text className="mb-1">
                     {formatMoney(this.props.price, 5, true, false)}
                 </Card.Text>
                 <Row className="mb-1 mx-0">

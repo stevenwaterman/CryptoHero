@@ -7,11 +7,13 @@ import SetOrdersAction from "./SetOrdersAction";
 export default interface BlotterStore {
     readonly orders: Array<Order>;
     readonly showState: string;
+    readonly currentPage: number;
 }
 
 export const initialBlotterStore: BlotterStore = {
     orders: [],
     showState: "pending",
+    currentPage: 1,
 };
 
 export type BlotterActions = BlotterSetCategoryAction | CancelOrderAction | ConfirmTradeAction | SetOrdersAction

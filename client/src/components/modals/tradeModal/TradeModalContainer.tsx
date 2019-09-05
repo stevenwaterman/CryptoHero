@@ -54,7 +54,7 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
                 (it.isBuy && it.unitPrice.gte(state.tradeModalInput.price)) ||
                 (!it.isBuy && it.unitPrice.lte(state.tradeModalInput.price))
             )
-        ).length > 0;
+        ).length === 0;
 
     return {
         show: state.modalVisibility.tradeVisible,

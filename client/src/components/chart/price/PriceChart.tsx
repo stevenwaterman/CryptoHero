@@ -17,8 +17,8 @@ function reshapeData(data: IPriceHistory): Array<[number, number]> {
 
 export default class PriceChart extends Component<PriceChartProps> {
     private readonly width = 500;
-    private readonly height = 250;
-    private readonly margin = {top: 0, right: 10, bottom: 40, left: 40};
+    private readonly height = 150;
+    private readonly margin = {top: 0, right: 10, bottom: 30, left: 35};
 
     private svg: any;
     private xScale: XSCALE;

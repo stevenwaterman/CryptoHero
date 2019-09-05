@@ -2,6 +2,7 @@ import BlotterSetCategoryAction, {BlotterSetCategoryType} from "./BlotterSetCate
 import BlotterStore, {BlotterActions, initialBlotterStore} from "./BlotterStore";
 import SetOrdersAction, {SetOrdersType} from "./SetOrdersAction";
 import UpdateOrderAction, {UpdateOrderType} from "./updateOrderAction";
+import SetBlotterPageAction, {SetBlotterPageType} from "./SetBlotterPageAction";
 
 type StateSlice = BlotterStore
 type Actions = BlotterActions
@@ -16,10 +17,20 @@ function updateOrder(state: StateSlice, action: UpdateOrderAction): StateSlice {
     }
     newOrders.sort((a, b) => a.time.getTime() - b.time.getTime());
 
+    let newPage = state.currentPage;
+
     return {
         ...state,
-        orders: newOrders
+        orders: newOrders,
+        currentPage: newPage
     }
+}
+
+function setPage(state: StateSlice, action: SetBlotterPageAction): StateSlice {
+    return {
+        ...state,
+        currentPage: action.payload.newPage
+    };
 }
 
 export function blotterReducer(
@@ -33,6 +44,8 @@ export function blotterReducer(
             return setOrders(state, action as SetOrdersAction);
         case UpdateOrderType:
             return updateOrder(state, action as UpdateOrderAction);
+        case SetBlotterPageType:
+            return setPage(state, action as SetBlotterPageAction);
         default:
             return state;
     }

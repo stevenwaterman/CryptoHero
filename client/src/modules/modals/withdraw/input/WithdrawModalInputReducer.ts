@@ -45,7 +45,7 @@ export function withdrawModalInputReducer(
 
 function startWithdraw(state: State, action: ShowWithdrawModalAction): State {
     return {
-        asset: "GBP",
+        asset: "BCH",
         percent: Big(0),
         percentText: formatPercent(Big(0)),
         units: Big(0),

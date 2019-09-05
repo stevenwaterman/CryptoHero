@@ -44,8 +44,8 @@ function reshapeData(data: DirectionalOrderDepth): Array<[number, number]> {
 
 export default class DepthChart extends Component<DepthChartProps> {
     private readonly width = 500;
-    private readonly height = 250;
-    private readonly margin = {top: 0, right: 10, bottom: 40, left: 60};
+    private readonly height = 150;
+    private readonly margin = {top: 0, right: 10, bottom: 30, left: 50};
 
     private svg: any;
     private xScale: SCALE;

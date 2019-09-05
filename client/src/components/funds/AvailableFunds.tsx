@@ -10,9 +10,9 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Big from "big.js";
 
-function generateColumns(funds: Map<string, Big>): Array<any> {
+function generateColumns(funds: Array<[string, Big]>): Array<any> {
     const columns: Array<any> = [];
-    funds.forEach((price: Big, asset: string) => columns.push(generateOneColumn(asset, price)));
+    funds.forEach(([asset, price]) => columns.push(generateOneColumn(asset, price)));
     return columns
 }
 
@@ -52,14 +52,14 @@ export default class AvailableFunds extends React.Component<AvailableFundsProps>
                 </Row>
                 <Button variant="primary" onClick={() => this.props.onClickTotalFunds()}>Total Funds</Button>
                 <Row className="pt-2">
-                    <Col sm={true}>
-                        <Button disabled={!this.props.canWithdraw} variant="primary" block={true} className="pr-sm-1"
+                    <Col md={true} className="mb-2 mb-md-0 pr-md-1">
+                        <Button disabled={!this.props.canWithdraw} variant="primary" block={true}
                                 onClick={this.props.onClickWithdraw}>
                             Withdraw
                         </Button>
                     </Col>
-                    <Col sm={true}>
-                        <Button variant="primary" block={true} className="pl-sm-1" onClick={this.props.onClickDeposit}>
+                    <Col md={true} className="pl-md-1">
+                        <Button variant="primary" block={true} onClick={this.props.onClickDeposit}>
                             Deposit
                         </Button>
                     </Col>

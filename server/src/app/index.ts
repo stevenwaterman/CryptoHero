@@ -27,34 +27,34 @@ accounts.forEach(acc => {
         acc.adjustAssets(asset, Big("1e10"));
     });
 });
+const instruments = Array.from(Instrument.ALL);
 setInterval(() => {
     const marketPrices = server.broker.getMarketPrices();
-    Instrument.ALL.forEach(instrument => {
-        const direction: TradeDirection = Math.round(Math.random()) === 0 ? TradeDirection.BUY : TradeDirection.SELL;
-        const units: Big = Big(Math.random() * 100);
-        const midPoint = marketPrices.get(instrument) as Big;
-        const price: Big = midPoint.plus(gaussRand()).plus(direction === TradeDirection.BUY ? -1 : 1);
+    const instrument = instruments[Math.floor(Math.random() * instruments.length)];
+    const direction: TradeDirection = Math.round(Math.random()) === 0 ? TradeDirection.BUY : TradeDirection.SELL;
+    const units: Big = Big(Math.random() * 100);
+    const midPoint = marketPrices.get(instrument) as Big;
+    const price: Big = midPoint.plus(gaussRand() * 0.2).plus(direction === TradeDirection.BUY ? -0.1 : 0.1);
 
-        let account;
-        if (direction == TradeDirection.BUY) {
-            account = buyer;
-        } else {
-            account = seller;
-        }
+    let account;
+    if (direction == TradeDirection.BUY) {
+        account = buyer;
+    } else {
+        account = seller;
+    }
 
-        try {
-            const order = new Order(account, direction, instrument, units, price);
-            server.broker.placeOrder(order);
-        } catch (ignore) {
-        }
+    try {
+        const order = new Order(account, direction, instrument, units, price);
+        server.broker.placeOrder(order);
+    } catch (ignore) {
+    }
 
-        account.getOrders()
-            .filter(it =>
-                it.getState() === OrderState.PENDING &&
-                it.instrument.name === instrument.name &&
-                it.unitPrice.sub(midPoint).abs().gt(40)
-            ).forEach(it => server.broker.cancelOrder(it));
-    })
+    account.getOrders()
+        .filter(it =>
+            it.getState() === OrderState.PENDING &&
+            it.instrument.name === instrument.name &&
+            it.unitPrice.sub(midPoint).abs().gt(1)
+        ).forEach(it => server.broker.cancelOrder(it));
 }, 50);
 
 function gaussRand(): number {

@@ -43,7 +43,7 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
             if (curr.unitPrice.lt(best.unitPrice)) return curr;
         }
         return best;
-    });
+    }, undefined);
 
     let selfTradePrice: Big | null = selfTradeOrder == null ? null : selfTradeOrder.unitPrice;
 
