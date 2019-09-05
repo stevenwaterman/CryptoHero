@@ -14,7 +14,7 @@ const url = G.API + "orders/place";
 
 test("Happy Path", done => {
     const account = new Account();
-    account.adjustAssets(Asset.GBP, new Big("100"));
+    account.adjustAssets(Asset.GBP, Big(100));
 
     const options = {
         "json": true,
@@ -22,8 +22,8 @@ test("Happy Path", done => {
             "account": account.id,
             "instrument": Instrument.BTCGBP.name,
             "direction": TradeDirection.BUY.name,
-            "units": new Big("20").toString(),
-            "unitPrice": new Big("1").toString()
+            "units": Big(20).toString(),
+            "unitPrice": Big(1).toString()
         }
     };
 
@@ -38,9 +38,9 @@ test("Happy Path", done => {
 
 test("cannot self-trade", done => {
     const account = new Account();
-    account.adjustAssets(Asset.BTC, new Big("100"));
-    account.adjustAssets(Asset.GBP, new Big("100"));
-    G.BROKER.placeOrder(new Order(account, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1")));
+    account.adjustAssets(Asset.BTC, Big(100));
+    account.adjustAssets(Asset.GBP, Big(100));
+    G.BROKER.placeOrder(new Order(account, TradeDirection.BUY, Instrument.BTCGBP, Big(1), Big(1)));
 
     const options = {
         "json": true,
@@ -48,8 +48,8 @@ test("cannot self-trade", done => {
             "account": account.id,
             "instrument": Instrument.BTCGBP.name,
             "direction": TradeDirection.SELL.name,
-            "units": new Big("1").toString(),
-            "unitPrice": new Big("1").toString()
+            "units": Big(1).toString(),
+            "unitPrice": Big(1).toString()
         }
     };
 
@@ -63,7 +63,7 @@ test("cannot self-trade", done => {
 
 test("Not enough funds", done => {
     const account = new Account();
-    account.adjustAssets(Asset.BTC, new Big("5"));
+    account.adjustAssets(Asset.BTC, Big(5));
 
     const options = {
         "json": true,
@@ -71,8 +71,8 @@ test("Not enough funds", done => {
             "account": account.id,
             "instrument": Instrument.BTCGBP.name,
             "direction": TradeDirection.BUY.name,
-            "units": new Big("20").toString(),
-            "unitPrice": new Big("1").toString()
+            "units": Big(20).toString(),
+            "unitPrice": Big(1).toString()
         }
     };
 
@@ -87,7 +87,7 @@ test("Not enough funds", done => {
 const testRunner = (name: string, params: any, expectedStatus: number) => {
     test(name, done => {
         const account = new Account();
-        account.adjustAssets(Asset.BTC, new Big("100"));
+        account.adjustAssets(Asset.BTC, Big(100));
         if (params.account == null) {
             params.account = account.id;
         }
@@ -114,8 +114,8 @@ const testRunner = (name: string, params: any, expectedStatus: number) => {
 const defaultParams = {
     "instrument": Instrument.BTCGBP.name,
     "direction": TradeDirection.BUY.name,
-    "units": new Big("20").toString(),
-    "price": new Big("1").toString()
+    "units": Big(20).toString(),
+    "price": Big(1).toString()
 };
 
 new Requirements(defaultParams, testRunner)

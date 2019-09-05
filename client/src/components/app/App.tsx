@@ -16,8 +16,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/es/Col";
 import TopBarContainer from "../nav/TopBarContainer";
 import {AppProps} from "./AppContainer";
-import SocketReceiver from "../socketReceiver/SocketManagerContainer";
 import SocketReceiverContainer from "../socketReceiver/SocketManagerContainer";
+import LoadingPlaceholderContainer from "../loadingPlaceholder/LoadingPlaceholderContainer";
 
 export default class App extends React.Component<AppProps> {
     componentDidMount(): void {
@@ -28,7 +28,7 @@ export default class App extends React.Component<AppProps> {
         return (
             <>
                 <TopBarContainer/>
-                <Container fluid={true}>
+                <Container fluid={true} hidden={this.props.loading}>
                     <Row>
                         <Col sm="4">
                             <AvailableFundsContainer/>
@@ -41,6 +41,7 @@ export default class App extends React.Component<AppProps> {
                         </Col>
                     </Row>
                 </Container>
+                <LoadingPlaceholderContainer/>
                 <TradeModalContainer/>
                 <TotalFundsModalContainer/>
                 <WithdrawModalContainer/>

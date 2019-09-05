@@ -14,7 +14,7 @@ export default class Account {
      * The amount left to place on new orders
      */
     private readonly availableAssets: Map<Asset, Big> = new Map<Asset, Big>(
-        Asset.ALL.map((asset: Asset) => [asset, Big("0")])
+        Asset.ALL.map((asset: Asset) => [asset, Big(0)])
     );
 
     private readonly orders: Array<Order> = [];

@@ -31,7 +31,7 @@ function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): Di
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
-        canConfirm: state.depositModalInput.units > 0,
+        canConfirm: state.depositModalInput.units.gt(0),
         show: state.modalVisibility.depositVisible
     }
 }

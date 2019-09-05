@@ -18,7 +18,7 @@ test("Happy Path", done => {
     const options = {
         "json": true,
         "body": {
-            "units": new Big("100").toString()
+            "units": Big(100).toString()
         }
     };
 
@@ -28,7 +28,7 @@ test("Happy Path", done => {
         const expected = "Successful";
         expect(body).toEqual(expected);
 
-        expect(account.getAvailableAssets(Asset.BTC)).toEqual(new Big("100"));
+        expect(account.getAvailableAssets(Asset.BTC)).toEqual(Big(100));
         done();
     });
 });
@@ -57,7 +57,7 @@ const testRunner = (name: string, params: any, expectedStatus: number) => {
 
 const defaultParams = {
     "asset": Asset.BTC.name,
-    "units": new Big("100").toString()
+    "units": Big(100).toString()
 };
 
 new Requirements(defaultParams, testRunner)

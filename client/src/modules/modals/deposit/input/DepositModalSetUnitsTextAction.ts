@@ -1,14 +1,12 @@
 import {State} from "../../../RootStore";
 
-interface IPayload {
-    newText: string,
-}
-
 export const DepositModalSetUnitsTextType: string = "DEPOSIT_SET_UNITS_TEXT";
 
 export default interface DepositModalSetUnitsTextAction {
     type: typeof DepositModalSetUnitsTextType
-    payload: IPayload
+    payload: {
+        newText: string,
+    }
 }
 
 export function createDepositModalSetUnitsTextAction(state: State, newText: string): DepositModalSetUnitsTextAction {

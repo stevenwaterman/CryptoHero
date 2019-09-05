@@ -5,20 +5,25 @@ import {State} from "../../modules/RootStore";
 import {ThunkDsp} from "../../util/Thunker";
 import SetInstrumentPriceAction, {createSetInstrumentPriceAction} from "../../modules/components/instruments/SetInstrumentPriceAction";
 import OrderDepthDeltaAction, {createOrderDepthDeltaAction} from "../../modules/components/chart/OrderDepthDeltaAction";
-import {IOrderDepth, OrderDepth} from "../../models/OrderDepth";
+import {IOrderDepth} from "../../models/OrderDepth";
 import SetAccountListenerIdAction, {createSetAccountListenerIdAction} from "../../modules/global/SetAccountListenerIdAction";
-import SetAvailableFundsAction, {createSetAvailableFundsAction} from "../../modules/components/availableFunds/SetAvailableFundsAction";
 import SetAssetFundsAction, {createSetAssetFundsAction} from "../../modules/components/availableFunds/SetAssetFundsAction";
 import Order from "../../models/Order";
 import UpdateOrderAction, {createUpdateOrderAction} from "../../modules/components/blotter/updateOrderAction";
+import Big from "big.js";
 
-type Actions = SetInstrumentPriceAction | OrderDepthDeltaAction | SetAccountListenerIdAction | SetAssetFundsAction | UpdateOrderAction;
+type Actions =
+    SetInstrumentPriceAction
+    | OrderDepthDeltaAction
+    | SetAccountListenerIdAction
+    | SetAssetFundsAction
+    | UpdateOrderAction;
 
 interface DispatchProps {
-    setInstrumentPrice: (instrument: Instrument, newPrice: number, time: number) => void,
+    setInstrumentPrice: (instrument: Instrument, newPrice: Big, time: number) => void,
     orderDepthDelta: (instrument: Instrument, delta: IOrderDepth) => void,
     setAccountListenerId: (accountListenerId: [string, string, string]) => void,
-    setAssetFunds: (asset: string, newAmount: number) => void,
+    setAssetFunds: (asset: string, newAmount: Big) => void,
     updateOrder: (order: Order) => void,
 }
 
@@ -41,8 +46,7 @@ function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): Di
 }
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
-    return {
-    }
+    return {}
 }
 
 export default connect(

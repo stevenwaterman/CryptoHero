@@ -10,6 +10,8 @@ import TradeModalResetPercentTextAction, {TradeModalResetPercentTextType} from "
 import TradeModalResetUnitsTextAction, {TradeModalResetUnitsTextType} from "./resetText/TradeModalResetUnitsTextAction";
 import {formatInput, formatPercent} from "../../../../util/FormatMoney";
 import TradeModalInputStore, {initialTradeModalInputStore, TradeModalInputActions} from "./TradeModalInputStore";
+import Big from "big.js";
+import {clampBig} from "../../../../util/Clamp";
 
 type State = TradeModalInputStore
 type Actions = TradeModalInputActions
@@ -48,8 +50,8 @@ function startTrade(state: State, action: ShowTradeModalAction): State {
     const {startPrice} = action.payload;
     return {
         price: startPrice,
-        units: 0,
-        percent: 0,
+        units: Big(0),
+        percent: Big(0),
         priceText: formatInput(startPrice),
         unitsText: "0.00000",
         percentText: "0.00"
@@ -58,15 +60,15 @@ function startTrade(state: State, action: ShowTradeModalAction): State {
 
 function setUnits(state: State, action: TradeModalSetUnitsAction): State {
     const {maxUnits, units} = action.payload;
-    let percent: number | null = null;
+    let percent: Big | null = null;
     let percentText = state.percentText;
     let unitsText = state.unitsText;
 
-    let actualUnits = Math.max(units, 0);
+    let actualUnits = clampBig(units, 0);
 
     if (maxUnits != null) {
-        actualUnits = Math.min(maxUnits, actualUnits);
-        percent = 100 * actualUnits / maxUnits;
+        actualUnits = clampBig(actualUnits, 0, maxUnits);
+        percent = actualUnits.div(maxUnits).mul(100);
         percentText = formatPercent(percent);
     }
 
@@ -74,33 +76,33 @@ function setUnits(state: State, action: TradeModalSetUnitsAction): State {
         unitsText = formatInput(actualUnits)
     }
 
-    return ({
+    return {
         ...state,
         units: actualUnits,
         unitsText: unitsText,
         percent: percent,
         percentText: percentText
-    });
+    };
 }
 
 function setPercent(state: State, action: TradeModalSetPercentAction): State {
     const {maxUnits, percent} = action.payload;
-    let actualPercent = Math.min(Math.max(percent, 0), 100);
+    let actualPercent = clampBig(percent, 0, 100);
     let percentText = state.percentText;
     if (actualPercent !== percent) {
         percentText = formatPercent(actualPercent);
     }
 
-    const units = actualPercent * maxUnits / 100;
+    const units = actualPercent.mul(maxUnits).div(100);
     const unitsText = formatInput(units);
 
-    return ({
+    return {
         ...state,
         unitsText: unitsText,
         units: units,
-        percent: actualPercent as number | null,
+        percent: actualPercent as Big | null,
         percentText: percentText
-    });
+    };
 }
 
 function setPrice(state: State, action: TradeModalSetPriceAction): State {
@@ -109,65 +111,65 @@ function setPrice(state: State, action: TradeModalSetPriceAction): State {
     //Units and percent go blank when setting price to be 0
 
     if (maxUnits != null) {
-        units = Math.min(maxUnits, units);
+        units = clampBig(units, null, maxUnits);
         unitsText = formatInput(units);
-        percent = 100 * units / maxUnits;
+        percent = units.div(maxUnits).mul(100);
         percentText = formatPercent(percent)
     } else {
         percent = null;
         percentText = "";
     }
 
-    return ({
+    return {
         ...state,
         price: price,
         percent: percent,
         percentText: percentText,
         units: units,
         unitsText: unitsText
-    });
+    };
 }
 
 function resetPriceText(state: State, action: TradeModalResetPriceTextAction): State {
-    return ({
+    return {
         ...state,
         priceText: formatInput(state.price)
-    })
+    }
 }
 
 function resetPercentText(state: State, action: TradeModalResetPercentTextAction): State {
-    const percentText = (state.percent == null) ? "" : formatPercent(state.percent);
+    const percentText = state.percent == null ? "" : formatPercent(state.percent);
 
-    return ({
+    return {
         ...state,
         percentText: percentText
-    });
+    };
 }
 
 function resetUnitsText(state: State, action: TradeModalResetUnitsTextAction): State {
-    return ({
+    return {
         ...state,
         unitsText: formatInput(state.units)
-    })
+    }
 }
 
 function setPriceText(state: State, action: TradeModalSetPriceTextAction): State {
-    return ({
+    return {
         ...state,
         priceText: action.payload.newText
-    })
+    }
 }
 
 function setUnitsText(state: State, action: TradeModalSetUnitsTextAction): State {
-    return ({
+    return {
         ...state,
         unitsText: action.payload.newText
-    });
+    };
 }
 
 function setPercentText(state: State, action: TradeModalSetPercentTextAction): State {
-    return ({
+    return {
         ...state,
         percentText: action.payload.newText
-    })
+    }
 }

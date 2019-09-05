@@ -4,22 +4,15 @@ import {Component} from "react";
 import * as d3 from "d3";
 import {ELEMENT} from "../../../modules/RootStore";
 import "./PriceChart.css"
-import {HistoricalPricePoint, IPriceHistory, PriceHistory} from "../../../models/PriceHistory";
-
-function getX(p: HistoricalPricePoint): number {
-    return p.time;
-}
-
-function getY(p: HistoricalPricePoint): number {
-    return p.price;
-}
-
+import {IPriceHistory} from "../../../models/PriceHistory";
+import {clamp} from "../../../util/Clamp";
 type AXIS = d3.Axis<number | { valueOf(): number }> | undefined;
 type XSCALE = d3.ScaleTime<number, number> | undefined;
 type YSCALE = d3.ScaleLinear<number, number> | undefined;
 
 function reshapeData(data: IPriceHistory): Array<[number, number]> {
-    return data.map(it => [it.time, it.price])
+    const destructed = data.filter((_, idx) => idx%(clamp(Math.round(data.length / 100), 1)) === 0);
+    return destructed.map(it => [Number.parseFloat(it.time.toString()), Number.parseFloat(it.price.toString())])
 }
 
 export default class PriceChart extends Component<PriceChartProps> {
@@ -69,24 +62,34 @@ export default class PriceChart extends Component<PriceChartProps> {
         this.mounted = true;
     }
 
+    render(): ELEMENT {
+        if (this.mounted && !this.props.hide) {
+            this.changeData();
+        }
+
+        return (
+            <div id="PriceChart" hidden={this.props.hide}/>
+        );
+    }
+
     private changeData(): void {
         const data: IPriceHistory = this.props.priceHistory;
         this.data.splice(0, Infinity, ...reshapeData(data));
 
-        const yDomain = d3.extent(data.map(getY)) as [number, number];
-        if(data.length > 0) {
+        const yDomain = d3.extent(data.map(it => Number.parseFloat(it.price.toString()))) as [number, number];
+        if (data.length > 0) {
             const xMin = data[0].time;
             const xMax = data[data.length - 1].time;
             this.xScale!.domain([xMin, xMax]);
         }
 
-        this.svg.selectAll(".xAxis").transition()
-            .duration(1000)
+        this.svg.selectAll(".xAxis")
+            //.transition().duration(1000)
             .call(this.xAxis as any);
 
         this.yScale!.domain(yDomain.reverse());
-        this.svg.selectAll(".yAxis").transition()
-            .duration(1000)
+        this.svg.selectAll(".yAxis")
+            //.transition().duration(1000)
             .call(this.yAxis as any);
 
         this.svg.selectAll(".line")
@@ -95,15 +98,5 @@ export default class PriceChart extends Component<PriceChartProps> {
                 .x(d => this.xScale!(d[0]))
                 .y(d => this.yScale!(d[1]))
             );
-    }
-
-    render(): ELEMENT {
-        if (this.mounted) {
-            this.changeData();
-        }
-
-        return (
-            <div id="PriceChart" hidden={this.props.hide}/>
-        );
     }
 }

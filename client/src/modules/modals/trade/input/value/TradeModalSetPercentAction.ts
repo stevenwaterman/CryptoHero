@@ -1,19 +1,18 @@
 import {maxTradeUnits} from "../../../../../util/MaxTradeUnits";
 import {State} from "../../../../RootStore";
-
-interface IPayload {
-    percent: number,
-    maxUnits: number,
-}
+import Big from "big.js";
 
 export const TradeModalSetPercentType: string = "TRADE_SET_PERCENT";
 
 export default interface TradeModalSetPercentAction {
     type: typeof TradeModalSetPercentType
-    payload: IPayload
+    payload: {
+        percent: Big,
+        maxUnits: Big,
+    }
 }
 
-export function createTradeModalSetPercentAction(state: State, newPercent: number): TradeModalSetPercentAction | null {
+export function createTradeModalSetPercentAction(state: State, newPercent: Big): TradeModalSetPercentAction | null {
     const maxUnits = maxTradeUnits(state);
     if (maxUnits === null) return null;
     return {

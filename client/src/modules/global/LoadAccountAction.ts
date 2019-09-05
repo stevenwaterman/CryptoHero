@@ -11,6 +11,7 @@ import {createSetOrderDepthDataAction} from "../components/chart/SetOrderDepthDa
 import {createSetPriceHistoryAction} from "../components/chart/SetPriceHistoryAction";
 import {IOrderDepth, OrderDepth} from "../../models/OrderDepth";
 import {createIPriceHistory, PriceHistory} from "../../models/PriceHistory";
+import Big, {BigSource} from "big.js";
 
 export const LoadAccountType = "LOAD_ACCOUNT";
 
@@ -43,16 +44,16 @@ async function inner(accountId: string, dispatch: ThunkDispatch<State, void, Act
     const accountState: any = await response.json();
 
     const orders: Array<Order> = accountState.orders.map((it: any) => Order.create(it));
-    const funds: Map<string, number> = new Map(
+    const funds: Map<string, Big> = new Map(
         Object.entries(accountState.funds).map(([asset, price]) =>
             [asset,
-                Number.parseFloat(price as string)]
+                Big(price as BigSource)]
         )
     );
-    const prices: Map<Instrument, number> = new Map(
+    const prices: Map<Instrument, Big> = new Map(
         Object.entries(accountState.prices).map(([instrumentName, price]) =>
             [Instrument.fromName(instrumentName),
-                Number.parseFloat(price as string)]
+                Big(price as BigSource)]
         )
     );
 

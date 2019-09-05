@@ -14,12 +14,12 @@ function getUrl(accountId: string, assetName: string): string {
 
 test("Happy Path", done => {
     const account = new Account();
-    account.adjustAssets(Asset.BTC, new Big("120"));
+    account.adjustAssets(Asset.BTC, Big(120));
 
     const options = {
         "json": true,
         "body": {
-            "units": new Big("100")
+            "units": Big(100)
         }
     };
 
@@ -29,19 +29,19 @@ test("Happy Path", done => {
         const expected = "Successful";
         expect(body).toEqual(expected);
 
-        expect(account.getAvailableAssets(Asset.BTC)).toEqual(new Big("20"));
+        expect(account.getAvailableAssets(Asset.BTC)).toEqual(Big(20));
         done();
     });
 });
 
 test("Not enough money", done => {
     const account = new Account();
-    account.adjustAssets(Asset.BTC, new Big("0"));
+    account.adjustAssets(Asset.BTC, Big(0));
 
     const options = {
         "json": true,
         "body": {
-            "units": new Big("100")
+            "units": Big(100)
         }
     };
 
@@ -51,25 +51,25 @@ test("Not enough money", done => {
         const expected = "Insufficient Funds";
         expect(body).toEqual(expected);
 
-        expect(account.getAvailableAssets(Asset.BTC)).toEqual(new Big("0"));
+        expect(account.getAvailableAssets(Asset.BTC)).toEqual(Big(0));
         done();
     });
 });
 
 test("Not enough funds", done => {
     const account = new Account();
-    account.adjustAssets(Asset.BTC, new Big("20"));
+    account.adjustAssets(Asset.BTC, Big(20));
     const options = {
         "json": true,
         "body": {
-            "units": new Big("100")
+            "units": Big(100)
         }
     };
 
     request.post(getUrl(account.id, Asset.BTC.name), options, (error, response) => {
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(400);
-        expect(account.getAvailableAssets(Asset.BTC)).toEqual(new Big("20"));
+        expect(account.getAvailableAssets(Asset.BTC)).toEqual(Big(20));
         done();
     });
 });
@@ -77,7 +77,7 @@ test("Not enough funds", done => {
 const testRunner = (name: string, params: any, expectedStatus: number) => {
     test(name, done => {
         const account = new Account();
-        account.adjustAssets(Asset.BTC, new Big("120"));
+        account.adjustAssets(Asset.BTC, Big(120));
         if (params.account == null) {
             params.account = account.id;
         }
@@ -99,7 +99,7 @@ const testRunner = (name: string, params: any, expectedStatus: number) => {
 
 const defaultParams = {
     "asset": Asset.BTC.name,
-    "units": new Big("100").toString()
+    "units": Big(100).toString()
 };
 
 new Requirements(defaultParams, testRunner)

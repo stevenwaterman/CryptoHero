@@ -2,13 +2,13 @@ import {connect} from "react-redux";
 import {State} from "../../modules/RootStore";
 import {ThunkDsp} from "../../util/Thunker";
 import {LoadAccountAction} from "../../modules/global/LoadAccountAction";
-import App from "./App";
+import LoadingPlaceholder from "./LoadingPlaceholder";
 import {createCreateAccountAction} from "../../modules/global/CreateAccountAction";
 
 type Actions = LoadAccountAction
 
 interface DispatchProps {
-    createAccount: () => void,
+    createAccount: () => void
 }
 
 export interface StateProps {
@@ -18,7 +18,7 @@ export interface StateProps {
 interface OwnProps {
 }
 
-export type AppProps = StateProps & DispatchProps & OwnProps
+export type LoadingPlaceholderProps = StateProps & DispatchProps & OwnProps
 
 function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): DispatchProps {
     return {
@@ -37,4 +37,4 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(App)
+)(LoadingPlaceholder)

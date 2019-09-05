@@ -1,19 +1,18 @@
 import {State} from "../../../../RootStore";
-
-interface IPayload {
-    percent: number,
-    maxWithdraw: number,
-}
+import Big from "big.js";
 
 export const WithdrawModalSetPercentType: string = "WITHDRAW_SET_PERCENT";
 
 export default interface WithdrawModalSetPercentAction {
     type: typeof WithdrawModalSetPercentType
-    payload: IPayload
+    payload: {
+        percent: Big,
+        maxWithdraw: Big,
+    }
 }
 
-export function createWithdrawModalSetPercentAction(state: State, newPercent: number): WithdrawModalSetPercentAction {
-    const max = state.funds.availableFunds.get(state.withdrawModalInput.asset) as number;
+export function createWithdrawModalSetPercentAction(state: State, newPercent: Big): WithdrawModalSetPercentAction {
+    const max = state.funds.availableFunds.get(state.withdrawModalInput.asset) as Big;
     return {
         type: WithdrawModalSetPercentType,
         payload: {

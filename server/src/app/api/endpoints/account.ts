@@ -65,7 +65,7 @@ function depositAsset(broker: Broker, req: Request, res: Response): void {
 
     const units = bodyGetUnits(broker, req, res);
     if (units == null) return;
-    if (units.lte(new Big("0"))) {
+    if (units.lte(0)) {
         const out = `Amount must be positive, was ${units}`;
         return respondNoSer(res, 400, out);
     }
@@ -90,7 +90,7 @@ function withdrawAsset(broker: Broker, req: Request, res: Response): void {
         return;
     }
 
-    const negative = new Big("0").minus(units);
+    const negative = Big(0).minus(units);
     account.adjustAssets(asset, negative);
     respondNoSer(res, 200, "Successful");
 }

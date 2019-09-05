@@ -1,14 +1,12 @@
 import {State} from "../../../../RootStore";
 
-interface IPayload {
-    newText: string,
-}
-
 export const TradeModalSetPriceTextType: string = "TRADE_SET_PRICE_TEXT";
 
 export default interface TradeModalSetPriceTextAction {
     type: typeof TradeModalSetPriceTextType
-    payload: IPayload
+    payload: {
+        newText: string,
+    }
 }
 
 export function createTradeModalSetPriceTextAction(state: State, newText: string): TradeModalSetPriceTextAction {

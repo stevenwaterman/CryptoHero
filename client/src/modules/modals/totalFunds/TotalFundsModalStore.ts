@@ -1,7 +1,8 @@
 import ShowTotalFundsModalAction from "./ShowTotalFundsModalAction";
+import Big from "big.js";
 
 export default interface TotalFundsModalStore {
-    readonly funds: Map<string, number>
+    readonly funds: Map<string, Big>
 }
 
 export const initialTotalFundsModalStore: TotalFundsModalStore = {

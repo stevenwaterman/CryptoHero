@@ -5,18 +5,19 @@ import WithdrawModalSetUnitsAction, {createWithdrawModalSetUnitsAction} from "..
 import WithdrawModalResetUnitsTextAction, {createWithdrawModalResetUnitsTextAction} from "../../../../modules/modals/withdraw/input/resetText/WithdrawModalResetUnitsTextAction";
 import WithdrawModalSetUnitsTextAction, {createWithdrawModalSetUnitsTextAction} from "../../../../modules/modals/withdraw/input/text/WithdrawModalSetUnitsTextAction";
 import {fire, fireNP, ThunkDsp} from "../../../../util/Thunker";
+import Big from "big.js";
 
 type Actions = WithdrawModalSetUnitsAction | WithdrawModalSetUnitsTextAction | WithdrawModalResetUnitsTextAction
 
 interface DispatchProps {
-    onValueChange: (newUnits: number) => void,
+    onValueChange: (newUnits: Big) => void,
     onTextChange: (newText: string) => void,
     onDone: () => void,
 }
 
 interface StateProps {
     text: string,
-    value: number,
+    value: Big,
     append: string,
 }
 

@@ -5,6 +5,7 @@ import InstrumentSelectionAction, {createInstrumentSelectionAction} from "../../
 import ShowTradeModalAction, {createShowTradeModalAction} from "../../../modules/modals/trade/ShowTradeModalAction";
 import {fire, ThunkDsp} from "../../../util/Thunker";
 import {State} from "../../../modules/RootStore";
+import Big from "big.js";
 
 type Actions = InstrumentSelectionAction | ShowTradeModalAction
 
@@ -15,7 +16,7 @@ interface DispatchProps {
 
 interface StateProps {
     selected: boolean,
-    price: number,
+    price: Big,
     canBuy: boolean,
     canSell: boolean
 }
@@ -35,9 +36,9 @@ function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): Di
 
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
-        canBuy: state.funds.availableFunds.get(ownProps.instrument.asset2) as number > 0,
-        canSell: state.funds.availableFunds.get(ownProps.instrument.asset1) as number > 0,
-        price: state.instruments.prices.get(ownProps.instrument.name) as number,
+        canBuy: (state.funds.availableFunds.get(ownProps.instrument.asset2) as Big).gt(0),
+        canSell: (state.funds.availableFunds.get(ownProps.instrument.asset1) as Big).gt(0),
+        price: state.instruments.prices.get(ownProps.instrument.name) as Big,
         selected: state.instruments.selectedInstrument.name === ownProps.instrument.name
 
     }

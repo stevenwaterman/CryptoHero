@@ -9,7 +9,7 @@ type Actions = BlotterActions
 function updateOrder(state: StateSlice, action: UpdateOrderAction): StateSlice {
     const newOrders = state.orders.slice();
     const idx: number = newOrders.findIndex(it => it.id === action.payload.order.id);
-    if(idx === -1){
+    if (idx === -1) {
         newOrders.push(action.payload.order);
     } else {
         newOrders.splice(idx, 1, action.payload.order)

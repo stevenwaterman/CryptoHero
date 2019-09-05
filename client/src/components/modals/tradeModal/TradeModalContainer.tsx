@@ -45,10 +45,21 @@ function target(state: State): string {
 
 // noinspection JSUnusedLocalSymbols
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
+    const canConfirm =
+        state.tradeModalInput.units.gt(0) &&
+        state.blotter.orders.filter(it =>
+            it.instrument.name === state.tradeModal.instrument.name &&
+            it.isBuy !== state.tradeModal.buying &&
+            (
+                (it.isBuy && it.unitPrice.gte(state.tradeModalInput.price)) ||
+                (!it.isBuy && it.unitPrice.lte(state.tradeModalInput.price))
+            )
+        ).length > 0;
+
     return {
         show: state.modalVisibility.tradeVisible,
         buying: state.tradeModal.buying,
-        canConfirm: state.tradeModalInput.units > 0,
+        canConfirm: canConfirm,
         asset1: state.tradeModal.instrument.asset1,
         sourceAsset: source(state),
         targetAsset: target(state),

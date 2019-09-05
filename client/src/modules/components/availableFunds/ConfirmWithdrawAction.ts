@@ -1,7 +1,6 @@
 import {State} from "../../RootStore";
 import {ThunkAction, ThunkDispatch} from "redux-thunk";
 import {Action} from "redux";
-import {createLoadAction} from "../../global/LoadAccountAction";
 
 export const ConfirmWithdrawType: string = "CONFIRM_WITHDRAW";
 

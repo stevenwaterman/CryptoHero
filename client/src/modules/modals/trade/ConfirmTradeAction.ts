@@ -1,6 +1,5 @@
 import {State} from "../../RootStore";
 import {ThunkAction, ThunkDispatch} from "redux-thunk";
-import {createLoadAction} from "../../global/LoadAccountAction";
 import {Action} from "redux";
 
 export const ConfirmTradeType: string = "TRADE_CONFIRM";

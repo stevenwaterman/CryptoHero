@@ -1,7 +1,9 @@
+import Big from "big.js";
+
 const toOrderDepthPoint: (it: any) => OrderDepthPoint =
     (it: any) => new OrderDepthPoint(
-        Number.parseFloat(it["unit price"]),
-        Number.parseFloat(it.units)
+        Big(it["unit price"]),
+        Big(it.units)
     );
 
 export class IOrderDepth {
@@ -25,11 +27,11 @@ export type OrderDepth = Map<string, IOrderDepth>;
 
 export type DirectionalOrderDepth = Array<OrderDepthPoint>;
 
-export class OrderDepthPoint{
-    readonly price: number;
-    readonly volume: number;
+export class OrderDepthPoint {
+    readonly price: Big;
+    readonly volume: Big;
 
-    constructor(price: number, volume: number) {
+    constructor(price: Big, volume: Big) {
         this.price = price;
         this.volume = volume;
     }

@@ -34,7 +34,7 @@ function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): Di
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     return {
         show: state.modalVisibility.withdrawVisible,
-        canConfirm: state.withdrawModalInput.units > 0
+        canConfirm: state.withdrawModalInput.units.gt(0)
     }
 }
 

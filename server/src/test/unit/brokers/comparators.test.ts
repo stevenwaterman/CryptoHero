@@ -15,7 +15,7 @@ beforeEach(() => {
     acc1 = new Account();
     acc2 = new Account();
     [acc1, acc2].forEach(acc => {
-        Asset.ALL.forEach(it => acc.adjustAssets(it, new Big("1000")));
+        Asset.ALL.forEach(it => acc.adjustAssets(it, Big(1000)));
     });
 });
 
@@ -26,13 +26,13 @@ describe("buyComparator", () => {
     let order4: Order;
 
     beforeEach(() => {
-        order1 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("100"), new Big("1.14"));
-        order2 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("100"), new Big("1.2"));
+        order1 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, Big(100), Big("1.14"));
+        order2 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, Big(100), Big("1.2"));
 
-        order3 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("100"), new Big("1.14"));
+        order3 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, Big(100), Big("1.14"));
         order3.timestamp.setTime(order1.timestamp.getTime() + 1000);
 
-        order4 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("200"), new Big("1.14"));
+        order4 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, Big(200), Big("1.14"));
         order4.timestamp.setTime(order1.timestamp.getTime());
     });
 
@@ -58,13 +58,13 @@ describe("sellComparator", () => {
     let order4: Order;
 
     beforeEach(() => {
-        order1 = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, new Big("100"), new Big("1.14"));
-        order2 = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, new Big("100"), new Big("1.2"));
+        order1 = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, Big(100), Big("1.14"));
+        order2 = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, Big(100), Big("1.2"));
 
-        order3 = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, new Big("100"), new Big("1.14"));
+        order3 = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, Big(100), Big("1.14"));
         order3.timestamp.setTime(order1.timestamp.getTime() + 1000);
 
-        order4 = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, new Big("200"), new Big("1.14"));
+        order4 = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, Big(200), Big("1.14"));
         order4.timestamp.setTime(order1.timestamp.getTime());
     });
 

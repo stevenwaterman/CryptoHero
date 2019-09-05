@@ -5,6 +5,7 @@ import WithdrawModalSetPercentAction, {createWithdrawModalSetPercentAction} from
 import WithdrawModalSetPercentTextAction, {createWithdrawModalSetPercentTextAction} from "../../../../modules/modals/withdraw/input/text/WithdrawModalSetPercentTextAction";
 import WithdrawModalResetPercentTextAction, {createWithdrawModalResetPercentTextAction} from "../../../../modules/modals/withdraw/input/resetText/WithdrawModalResetPercentTextAction";
 import {fire, fireNP, ThunkDsp} from "../../../../util/Thunker";
+import Big from "big.js";
 
 type Actions =
     WithdrawModalSetPercentAction
@@ -12,14 +13,14 @@ type Actions =
     | WithdrawModalResetPercentTextAction
 
 interface DispatchProps {
-    onValueChange: (newPercent: number) => void,
+    onValueChange: (newPercent: Big) => void,
     onTextChange: (newText: string) => void,
     onDone: () => void,
 }
 
 interface StateProps {
     text: string,
-    value: number | null,
+    value: Big | null,
     append: string,
 }
 

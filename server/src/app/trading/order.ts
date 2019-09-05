@@ -40,7 +40,7 @@ export default class Order {
         this.trades.push(trade);
 
         const remaining = this.getRemainingUnits();
-        if(remaining.eq(new Big("0"))){
+        if(remaining.eq(0)){
             this.state = OrderState.COMPLETE;
         }
 
@@ -68,7 +68,7 @@ export default class Order {
         originalUnits: Big,
         unitPrice: Big
     ) {
-        if (originalUnits.lte(new Big("0")))
+        if (originalUnits.lte(0))
             throw `Units must be more that 0. Actual: ${originalUnits}`;
 
         this.account = account;
@@ -92,7 +92,7 @@ export default class Order {
         this.trades.map(it => it.units)
             .reduce(
                 (a: Big, b: Big) => a.plus(b),
-                new Big("0")
+                Big(0)
             );
 
     readonly getRemainingUnits = () => this.originalUnits.sub(this.getCompletedUnits());
@@ -104,7 +104,7 @@ export default class Order {
             it => it.units.mul(it.unitPrice)
         ).reduce(
             (a, b) => a.plus(b),
-            new Big("0")
+            Big(0)
         );
 
     readonly getFutureExpectedAmount = () =>
@@ -115,7 +115,7 @@ export default class Order {
 
     readonly getAveragePrice: () => Big | null = () => {
         const completed = this.getCompletedUnits();
-        if (completed.eq(new Big("0"))) {
+        if (completed.eq(Big(0))) {
             return null;
         } else {
             return this.getAmountSoFar().div(completed);

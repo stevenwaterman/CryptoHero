@@ -5,18 +5,19 @@ import {fire, fireNP, ThunkDsp} from "../../../util/Thunker";
 import DepositModalSetUnitsAction, {createDepositModalSetUnitsAction} from "../../../modules/modals/deposit/input/DepositModalSetUnitsAction";
 import DepositModalResetUnitsTextAction, {createDepositModalResetUnitsTextAction} from "../../../modules/modals/deposit/input/DepositModalResetUnitsTextAction";
 import DepositModalSetUnitsTextAction, {createDepositModalSetUnitsTextAction} from "../../../modules/modals/deposit/input/DepositModalSetUnitsTextAction";
+import Big from "big.js";
 
 type Actions = DepositModalSetUnitsAction | DepositModalSetUnitsTextAction | DepositModalResetUnitsTextAction
 
 interface DispatchProps {
-    onValueChange: (newUnits: number) => void,
+    onValueChange: (newUnits: Big) => void,
     onTextChange: (newText: string) => void,
     onDone: () => void,
 }
 
 interface StateProps {
     text: string,
-    value: number,
+    value: Big,
     append: string,
 }
 

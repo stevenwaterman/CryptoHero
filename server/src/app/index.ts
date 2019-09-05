@@ -5,7 +5,7 @@ import TradeDirection from "./trading/tradeDirection";
 import Order from "./trading/order";
 import Instrument from "./trading/instrument";
 import Big from "big.js";
-import PriceAggregate from "./brokers/priceAggregate";
+import {OrderState} from "./trading/orderState";
 
 console.log("Launching Server");
 const server = new BitcoinExchangeServer();
@@ -18,23 +18,22 @@ process.on('exit', () => {
     console.log("Server shut down");
 });
 //TODO remove
-/*
+
 const buyer = new Account();
 const seller = new Account();
-const instruments = Instrument.ALL.toArray();
 const accounts = [buyer, seller];
 accounts.forEach(acc => {
     Asset.ALL.forEach(asset => {
-        acc.adjustAssets(asset, new Big("1e10"));
+        acc.adjustAssets(asset, Big("1e10"));
     });
 });
-let midPoint = 10;
 setInterval(() => {
-    midPoint += 0.0001;
+    const marketPrices = server.broker.getMarketPrices();
     Instrument.ALL.forEach(instrument => {
-        const direction = Math.round(Math.random()) === 0 ? TradeDirection.BUY : TradeDirection.SELL;
-        const units = new Big(Math.random() * 100);
-        const price = new Big( midPoint + gaussRand() + (direction === TradeDirection.BUY ? -0.2 : 0.2));
+        const direction: TradeDirection = Math.round(Math.random()) === 0 ? TradeDirection.BUY : TradeDirection.SELL;
+        const units: Big = Big(Math.random() * 100);
+        const midPoint = marketPrices.get(instrument) as Big;
+        const price: Big = midPoint.plus(gaussRand()).plus(direction === TradeDirection.BUY ? -1 : 1);
 
         let account;
         if (direction == TradeDirection.BUY) {
@@ -48,8 +47,15 @@ setInterval(() => {
             server.broker.placeOrder(order);
         } catch (ignore) {
         }
+
+        account.getOrders()
+            .filter(it =>
+                it.getState() === OrderState.PENDING &&
+                it.instrument.name === instrument.name &&
+                it.unitPrice.sub(midPoint).abs().gt(40)
+            ).forEach(it => server.broker.cancelOrder(it));
     })
-}, 250);
+}, 50);
 
 function gaussRand(): number {
     let u = 0, v = 0;
@@ -57,4 +63,3 @@ function gaussRand(): number {
     while (v === 0) v = Math.random();
     return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 }
-*/

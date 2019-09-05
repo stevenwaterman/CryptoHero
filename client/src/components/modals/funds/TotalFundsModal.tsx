@@ -5,14 +5,15 @@ import {TotalFundsModalProps} from "./TotalFundsModalContainer";
 import {Col, Modal, Row} from "react-bootstrap";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Big from "big.js";
 
-function generateColumns(funds: Map<string, number>): Array<any> {
+function generateColumns(funds: Map<string, Big>): Array<any> {
     const columns: Array<any> = [];
     funds.forEach((value, asset) => columns.push(generateOneColumn(asset, value)));
     return columns;
 }
 
-function generateOneColumn(asset: string, price: number): ELEMENT {
+function generateOneColumn(asset: string, price: Big): ELEMENT {
     return (
         <Col lg="6" key={asset}>
             <OverlayTrigger

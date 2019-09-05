@@ -1,21 +1,20 @@
 import Instrument from "../../../models/Instrument";
 import {State} from "../../RootStore";
-
-interface IPayload {
-    buying: boolean,
-    instrument: Instrument,
-    startPrice: number
-}
+import Big from "big.js";
 
 export const ShowTradeModalType: string = "SHOW_TRADE_MODAL";
 
 export default interface ShowTradeModalAction {
     type: typeof ShowTradeModalType
-    payload: IPayload
+    payload: {
+        buying: boolean,
+        instrument: Instrument,
+        startPrice: Big
+    }
 }
 
 export function createShowTradeModalAction(state: State, [buying, instrument]: [boolean, Instrument]): ShowTradeModalAction {
-    const price: number = state.instruments.prices.get(instrument.name) as number;
+    const price: Big = state.instruments.prices.get(instrument.name) as Big;
     return {
         type: ShowTradeModalType,
         payload: {

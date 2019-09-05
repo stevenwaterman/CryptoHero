@@ -24,7 +24,7 @@ export default class InstrumentBroker {
     readonly instrument: Instrument;
     private readonly buys: SortedList<Order> = new SortedList(buyComparator);
     private readonly sells: SortedList<Order> = new SortedList(sellComparator);
-    private lastPrice: Big = new Big("0");
+    private lastPrice: Big = Big(0);
     private priceHistory: Array<PricePoint> = [];
 
     private static sortOrders(order: Order, matched: Order): [Order, Order] {
@@ -86,10 +86,10 @@ export default class InstrumentBroker {
             throw `Account cannot afford ${amountToLock}${spentAsset.name}, only has ${spentAssetPosition}`;
         }
 
-        if (direction === TradeDirection.SELL && originalExpectedAmount.lt(new Big("0"))) {
+        if (direction === TradeDirection.SELL && originalExpectedAmount.lt(0)) {
             //Selling at negative price
             const gainedAssetPosition = account.getAvailableAssets(gainedAsset);
-            const gainedAssetSpend = new Big("0").sub(originalExpectedAmount);
+            const gainedAssetSpend = Big(0).sub(originalExpectedAmount);
             if (gainedAssetPosition.lt(gainedAssetSpend)) {
                 throw `Account cannot afford ${gainedAssetSpend}${gainedAsset.name}, only has ${gainedAssetPosition}`;
             }
@@ -97,7 +97,7 @@ export default class InstrumentBroker {
         }
 
 
-        const negativeAdjustment = new Big("0").minus(amountToLock);
+        const negativeAdjustment = Big(0).minus(amountToLock);
         account.adjustAssets(spentAsset, negativeAdjustment);
     }
 
@@ -109,10 +109,10 @@ export default class InstrumentBroker {
         const amountOfSpentAssetToUnlock: Big = originallyLocked.mul(fractionRemaining);
         account.adjustAssets(spentAsset, amountOfSpentAssetToUnlock);
 
-        if (direction === TradeDirection.SELL && originalExpectedAmount.lt(new Big("0"))) {
+        if (direction === TradeDirection.SELL && originalExpectedAmount.lt(0)) {
             //Selling at negative price
             const amountOfGainedAssetToUnlock: Big = originalExpectedAmount.mul(fractionRemaining);
-            const negative = new Big("0").sub(amountOfGainedAssetToUnlock);
+            const negative = Big(0).sub(amountOfGainedAssetToUnlock);
             account.adjustAssets(gainedAsset, negative);
         }
     }
@@ -145,11 +145,11 @@ export default class InstrumentBroker {
         actualUnits: Big,
         actualUnitPrice: Big
     ): void {
-        if (actualUnitPrice.gt(new Big("0"))) {
+        if (actualUnitPrice.gt(0)) {
             //Selling for positive price, no assets were locked
             const gainedAmount = actualUnits.mul(actualUnitPrice);
             account.adjustAssets(gainedAsset, gainedAmount);
-        } else if (actualUnitPrice.lt(new Big("0"))) {
+        } else if (actualUnitPrice.lt(0)) {
             //Selling for negative price, if they sold for more than expect then some refund needed
             const expectedGain = actualUnits.mul(unitPrice); //Negative number
             const actualGain = actualUnits.mul(actualUnitPrice); //Negative number, higher (closer to 0) than expectedGain
@@ -188,7 +188,7 @@ export default class InstrumentBroker {
         this.selfTradeGuard(order);
         InstrumentBroker.updatePositionOnPlaceOrder(order);
         this.makeTrades(order);
-        if (order.getRemainingUnits().gt(new Big("0"))) {
+        if (order.getRemainingUnits().gt(0)) {
             this.pushOrder(order);
         }
         order.account.addOrder(order);
@@ -271,7 +271,7 @@ export default class InstrumentBroker {
         const uniqueMatchDelta: Array<Big> = Array.from(new Set(matchPrices));
         const newMatchVolumes: Array<PriceAggregateElement> = uniqueMatchDelta.map(price => {
             let units = mappedMatchAggregate.get(price.toString());
-            if(units == null) units = new Big("0");
+            if(units == null) units = Big(0);
             return new PriceAggregateElement(price, units);
         });
 
@@ -306,7 +306,7 @@ export default class InstrumentBroker {
         const current = newAggregate.buy.find(it => it.unitPrice.eq(order.unitPrice));
         let updatedElement: PriceAggregateElement =
             current == null ?
-                new PriceAggregateElement(order.unitPrice, new Big("0")) :
+                new PriceAggregateElement(order.unitPrice, Big(0)) :
                 current;
 
         AggregatePriceRoom.fire({
@@ -325,7 +325,7 @@ export default class InstrumentBroker {
         const current = newAggregate.buy.find(it => it.unitPrice.eq(order.unitPrice));
         let updatedElement: PriceAggregateElement =
             current == null ?
-                new PriceAggregateElement(order.unitPrice, new Big("0")) :
+                new PriceAggregateElement(order.unitPrice, Big(0)) :
                 current;
 
         AggregatePriceRoom.fire({

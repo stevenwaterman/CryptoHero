@@ -5,18 +5,19 @@ import NumberField from "../../../NumberField";
 import TradeModalSetPriceTextAction, {createTradeModalSetPriceTextAction,} from "../../../../modules/modals/trade/input/text/TradeModalSetPriceTextAction";
 import TradeModalResetPriceTextAction, {createTradeModalResetPriceTextAction,} from "../../../../modules/modals/trade/input/resetText/TradeModalResetPriceTextAction";
 import {fire, fireNP, ThunkDsp} from "../../../../util/Thunker";
+import Big from "big.js";
 
 type Actions = TradeModalSetPriceAction | TradeModalSetPriceTextAction | TradeModalResetPriceTextAction
 
 interface DispatchProps {
-    onValueChange: (newPrice: number) => void,
+    onValueChange: (newPrice: Big) => void,
     onTextChange: (newText: string) => void,
     onDone: () => void,
 }
 
 interface StateProps {
     text: string,
-    value: number,
+    value: Big,
     append: string,
 }
 

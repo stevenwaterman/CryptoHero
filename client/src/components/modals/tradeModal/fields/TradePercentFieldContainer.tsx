@@ -5,18 +5,19 @@ import TradeModalSetPercentAction, {createTradeModalSetPercentAction} from "../.
 import TradeModalResetPercentTextAction, {createTradeModalResetPercentTextAction} from "../../../../modules/modals/trade/input/resetText/TradeModalResetPercentTextAction";
 import TradeModalSetPercentTextAction, {createTradeModalSetPercentTextAction} from "../../../../modules/modals/trade/input/text/TradeModalSetPercentTextAction";
 import {fire, fireNP, ThunkDsp} from "../../../../util/Thunker";
+import Big from "big.js";
 
 type Actions = TradeModalSetPercentAction | TradeModalSetPercentTextAction | TradeModalResetPercentTextAction
 
 interface DispatchProps {
-    onValueChange: (newPercent: number) => void,
+    onValueChange: (newPercent: Big) => void,
     onTextChange: (newText: string) => void,
     onDone: () => void,
 }
 
 interface StateProps {
     text: string,
-    value: number | null,
+    value: Big | null,
     append: string,
 }
 

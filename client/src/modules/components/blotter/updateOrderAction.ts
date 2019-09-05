@@ -1,4 +1,3 @@
-import {State} from "../../RootStore";
 import Order from "../../../models/Order";
 
 export const UpdateOrderType: string = "UPDATE_ORDER";

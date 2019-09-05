@@ -1,4 +1,3 @@
-import {IOrderDepth} from "../../../models/OrderDepth";
 import {State} from "../../../modules/RootStore";
 import {connect} from "react-redux";
 import PriceChart from "./PriceChart";
@@ -22,7 +21,7 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     const priceHistory: PriceHistory = state.chart.priceHistory;
     const instrument: Instrument = state.instruments.selectedInstrument;
     let instrumentData = priceHistory.get(instrument.name);
-    if(instrumentData == null){
+    if (instrumentData == null) {
         instrumentData = [];
     }
     return {

@@ -1,6 +1,7 @@
 import Instrument from "../../../models/Instrument";
 import ShowViewOrderModalAction from "./ShowViewOrderModalAction";
 import Order from "../../../models/Order";
+import Big from "big.js"
 
 export default interface ViewOrderModalStore {
     readonly order: Order
@@ -12,11 +13,11 @@ export const initialViewTradeModalStore: ViewOrderModalStore = {
         new Date(),
         new Instrument("NA", "NA"),
         true,
-        1,
-        1,
+        Big(1),
+        Big(1),
         "NA",
-        1,
-        1
+        Big(1),
+        Big(1)
     )
 };
 

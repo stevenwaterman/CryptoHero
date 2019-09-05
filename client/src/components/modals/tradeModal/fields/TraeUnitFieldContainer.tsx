@@ -5,18 +5,19 @@ import TradeModalSetUnitsTextAction, {createTradeModalSetUnitsTextAction,} from 
 import TradeModalSetUnitsAction, {createTradeModalSetUnitsAction,} from "../../../../modules/modals/trade/input/value/TradeModalSetUnitsAction";
 import TradeModalResetUnitsTextAction, {createTradeModalResetUnitsTextAction,} from "../../../../modules/modals/trade/input/resetText/TradeModalResetUnitsTextAction";
 import {fire, fireNP, ThunkDsp} from "../../../../util/Thunker";
+import Big from "big.js";
 
 type Actions = TradeModalSetUnitsAction | TradeModalSetUnitsTextAction | TradeModalResetUnitsTextAction
 
 interface DispatchProps {
-    onValueChange: (newUnits: number) => void,
+    onValueChange: (newUnits: Big) => void,
     onTextChange: (newText: string) => void,
     onDone: () => void,
 }
 
 interface StateProps {
     text: string,
-    value: number,
+    value: Big,
     append: string,
 }
 

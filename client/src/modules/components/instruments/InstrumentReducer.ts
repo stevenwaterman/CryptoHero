@@ -3,7 +3,7 @@ import InstrumentSelectionAction, {InstrumentSelectionType} from "./InstrumentSe
 import SetInstrumentPriceAction, {SetInstrumentPriceType} from "./SetInstrumentPriceAction";
 import Instrument from "../../../models/Instrument";
 import SetPricesAction, {SetPricesType} from "./SetPricesAction";
-import {act} from "react-dom/test-utils";
+import Big from "big.js";
 
 type State = InstrumentStore
 type Actions = InstrumentActions
@@ -34,7 +34,7 @@ function setPrices(state: State, action: SetPricesAction): State {
             selected = new Instrument("NA", "NA");
         }
     }
-    const prices: Array<[string, number]> = Array.from(action.payload.prices).map(([instrument, price]) => [instrument.name, price]);
+    const prices: Array<[string, Big]> = Array.from(action.payload.prices).map(([instrument, price]) => [instrument.name, price]);
 
     return {
         selectedInstrument: selected,

@@ -1,13 +1,14 @@
 import {ELEMENT, FORM_EVENT} from "../modules/RootStore";
 import React from "react";
 import {FormControl, InputGroup} from "react-bootstrap";
+import {Big} from "big.js";
 
 interface NumberFieldProps {
     text: string
-    value: number | null,
+    value: Big | null,
     step: number,
     append: string,
-    onValueChange: (newVal: number) => void,
+    onValueChange: (newVal: Big) => void,
     onTextChange: (newText: string) => void,
     onDone: () => void
 }
@@ -34,11 +35,11 @@ export default class NumberField extends React.Component<NumberFieldProps> {
 
     private handleEdit(event: FORM_EVENT): void {
         const text: string = event.currentTarget.value as string;
-        const newValue = Number.parseFloat(text);
-        const clean = isFinite(newValue);
         this.props.onTextChange(text);
-        if (clean) {
+        try {
+            const newValue = Big(text);
             this.props.onValueChange(newValue);
+        } catch (ignore) {
         }
     }
 }

@@ -1,5 +1,4 @@
 import {State} from "../../RootStore";
-import Order from "../../../models/Order";
 import {OrderDepth} from "../../../models/OrderDepth";
 
 export const SetOrderDepthDataType: string = "SET_ORDER_DEPTH_DATA";

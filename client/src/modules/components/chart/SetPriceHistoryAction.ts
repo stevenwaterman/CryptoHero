@@ -1,5 +1,4 @@
 import {State} from "../../RootStore";
-import Order from "../../../models/Order";
 import {PriceHistory} from "../../../models/PriceHistory";
 
 export const SetPriceHistoryType: string = "SET_PRICE_HISTORY";

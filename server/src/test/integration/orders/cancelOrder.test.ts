@@ -19,8 +19,8 @@ function getUrl(orderId: string): string {
 
 test("Happy Path", done => {
     const account = new Account();
-    account.adjustAssets(Asset.GBP, new Big("100"));
-    const order = new Order(account, TradeDirection.BUY, Instrument.BTCGBP, new Big("20"), new Big("1"));
+    account.adjustAssets(Asset.GBP, Big(100));
+    const order = new Order(account, TradeDirection.BUY, Instrument.BTCGBP, Big(20), Big(1));
     G.BROKER.placeOrder(order);
 
     request.post(getUrl(order.id), (error, response, body) => {
@@ -38,9 +38,9 @@ test("Happy Path", done => {
 const testRunner = (name: string, params: any, expectedStatus: number) => {
     test(name, done => {
         const account = new Account();
-        account.adjustAssets(Asset.GBP, new Big("100"));
+        account.adjustAssets(Asset.GBP, Big(100));
 
-        const order = new Order(account, TradeDirection.BUY, Instrument.BTCGBP, new Big("20"), new Big("1"));
+        const order = new Order(account, TradeDirection.BUY, Instrument.BTCGBP, Big(20), Big(1));
         G.BROKER.placeOrder(order);
         if (params.order == null) {
             params.order = order.id;

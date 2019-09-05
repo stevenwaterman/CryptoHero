@@ -18,29 +18,29 @@ let sell5: Order;
 
 beforeEach(() => {
     account = new Account();
-    buy1 = new Order(account, TradeDirection.BUY,Instrument.BTCGBP, new Big("1"), new Big("1"));
-    buy2 = new Order(account, TradeDirection.BUY,Instrument.BTCGBP, new Big("2"), new Big("2.5"));
-    buy3 = new Order(account, TradeDirection.BUY,Instrument.BTCGBP, new Big("2.5"), new Big("2"));
-    buy4 = new Order(account, TradeDirection.BUY, Instrument.BTCGBP,new Big("2.5"), new Big("2.5"));
-    buy5 = new Order(account, TradeDirection.BUY,Instrument.BTCGBP, new Big("2"), new Big("-2"));
-    sell1 = new Order(account, TradeDirection.SELL,Instrument.BTCGBP, new Big("1"), new Big("1"));
-    sell2 = new Order(account, TradeDirection.SELL,Instrument.BTCGBP, new Big("2"), new Big("2.5"));
-    sell3 = new Order(account, TradeDirection.SELL,Instrument.BTCGBP, new Big("2.5"), new Big("2"));
-    sell4 = new Order(account, TradeDirection.SELL,Instrument.BTCGBP, new Big("2.5"), new Big("2.5"));
-    sell5 = new Order(account, TradeDirection.SELL,Instrument.BTCGBP, new Big("2"), new Big("-2"));
+    buy1 = new Order(account, TradeDirection.BUY,Instrument.BTCGBP, Big(1), Big(1));
+    buy2 = new Order(account, TradeDirection.BUY,Instrument.BTCGBP, Big(2), Big("2.5"));
+    buy3 = new Order(account, TradeDirection.BUY,Instrument.BTCGBP, Big("2.5"), Big(2));
+    buy4 = new Order(account, TradeDirection.BUY, Instrument.BTCGBP,Big("2.5"), Big("2.5"));
+    buy5 = new Order(account, TradeDirection.BUY,Instrument.BTCGBP, Big(2), Big(-2));
+    sell1 = new Order(account, TradeDirection.SELL,Instrument.BTCGBP, Big(1), Big(1));
+    sell2 = new Order(account, TradeDirection.SELL,Instrument.BTCGBP, Big(2), Big("2.5"));
+    sell3 = new Order(account, TradeDirection.SELL,Instrument.BTCGBP, Big("2.5"), Big(2));
+    sell4 = new Order(account, TradeDirection.SELL,Instrument.BTCGBP, Big("2.5"), Big("2.5"));
+    sell5 = new Order(account, TradeDirection.SELL,Instrument.BTCGBP, Big(2), Big(-2));
 });
 
 describe("construct", () => {
     test("constructor should throw error if called with negative units", () => {
-        expect(() => new Order(account, TradeDirection.BUY,Instrument.BTCGBP, new Big("-100"), new Big("1.14"))).toThrow();
+        expect(() => new Order(account, TradeDirection.BUY,Instrument.BTCGBP, Big(-100), Big("1.14"))).toThrow();
     });
 
     test("constructor should throw error if called with zero units", () => {
-        expect(() => new Order(account, TradeDirection.BUY,Instrument.BTCGBP, new Big("0"), new Big("1.14"))).toThrow();
+        expect(() => new Order(account, TradeDirection.BUY,Instrument.BTCGBP, Big(0), Big("1.14"))).toThrow();
     });
 
     test("id is set and non-zero", () => {
-        expect(new Order(account, TradeDirection.BUY, Instrument.BTCGBP,new Big("1"), new Big("1")).id).toBeTruthy();
+        expect(new Order(account, TradeDirection.BUY, Instrument.BTCGBP,Big(1), Big(1)).id).toBeTruthy();
     });
 });
 

@@ -13,9 +13,14 @@ export default interface ChartStore {
 }
 
 export const initialChartStore: ChartStore = {
-    showHistorical: true,
+    showHistorical: false,
     orderDepth: new Map(),
     priceHistory: new Map(),
 };
 
-export type ChartActions = ChartSetTypeAction | SetOrderDepthDataAction | SetPriceHistoryAction | SetInstrumentPriceAction | OrderDepthDeltaAction
+export type ChartActions =
+    ChartSetTypeAction
+    | SetOrderDepthDataAction
+    | SetPriceHistoryAction
+    | SetInstrumentPriceAction
+    | OrderDepthDeltaAction

@@ -14,13 +14,13 @@ export function bodyGetUnits(broker: Broker, req: Request, res: Response): Big |
 
     let units: Big;
     try {
-        units = new Big(unitString);
+        units = Big(unitString);
     } catch {
         respondNoSer(res, 400, `units ${unitString} is not a number`);
         return null;
     }
 
-    if (units.lte(new Big("0"))) {
+    if (units.lte(0)) {
         respondNoSer(res, 400, `units must be positive, was ${units.toString()}`);
         return null;
     }

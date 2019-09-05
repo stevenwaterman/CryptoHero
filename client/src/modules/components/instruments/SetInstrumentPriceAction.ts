@@ -1,20 +1,18 @@
 import Instrument from "../../../models/Instrument";
-import {State} from "../../RootStore";
-
-interface IPayload {
-    instrument: Instrument,
-    newPrice: number,
-    time: number,
-}
+import Big from "big.js";
 
 export const SetInstrumentPriceType: string = "SET_INSTRUMENT_PRICE";
 
 export default interface SetInstrumentPriceAction {
     type: typeof SetInstrumentPriceType
-    payload: IPayload
+    payload: {
+        instrument: Instrument,
+        newPrice: Big,
+        time: number,
+    }
 }
 
-export function createSetInstrumentPriceAction(instrument: Instrument, newPrice: number, time: number): SetInstrumentPriceAction {
+export function createSetInstrumentPriceAction(instrument: Instrument, newPrice: Big, time: number): SetInstrumentPriceAction {
     return {
         type: SetInstrumentPriceType,
         payload: {

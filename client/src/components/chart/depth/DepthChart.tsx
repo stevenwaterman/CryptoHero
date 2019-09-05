@@ -5,12 +5,13 @@ import * as d3 from "d3";
 import {ELEMENT} from "../../../modules/RootStore";
 import "./DepthChart.css"
 import {DirectionalOrderDepth, OrderDepthPoint} from "../../../models/OrderDepth";
+import {clamp} from "../../../util/Clamp";
 
 function getX(p: [number, number]): number {
     return p[0];
 }
 
-function getY(p: [number,number]): number {
+function getY(p: [number, number]): number {
     return p[1];
 }
 
@@ -19,11 +20,11 @@ type SCALE = d3.ScaleLinear<number, number> | undefined;
 
 function reshapeData(data: DirectionalOrderDepth): Array<[number, number]> {
     const cumulative: DirectionalOrderDepth = data.reduce((acc: DirectionalOrderDepth, current: OrderDepthPoint) => {
-        if(acc.length === 0){
+        if (acc.length === 0) {
             return acc.concat(current);
         }
         const last: OrderDepthPoint = acc[acc.length - 1];
-        const next = new OrderDepthPoint(current.price, current.volume + last.volume);
+        const next = new OrderDepthPoint(current.price, current.volume.plus(last.volume));
         return acc.concat(next);
     }, []);
     const flattened: DirectionalOrderDepth = cumulative.flatMap((point, index) => {
@@ -37,7 +38,8 @@ function reshapeData(data: DirectionalOrderDepth): Array<[number, number]> {
             ]
         }
     });
-    return flattened.map(it => [it.price, it.volume])
+    const destructed = flattened.filter((_, idx) => idx%(clamp(Math.round(flattened.length / 100), 1)) === 0);
+    return destructed.map(it => [Number.parseFloat(it.price.toString()), Number.parseFloat(it.volume.toString())])
 }
 
 export default class DepthChart extends Component<DepthChartProps> {
@@ -95,6 +97,16 @@ export default class DepthChart extends Component<DepthChartProps> {
         this.mounted = true;
     }
 
+    render(): ELEMENT {
+        if (this.mounted && !this.props.hide) {
+            this.changeData();
+        }
+
+        return (
+            <div id="DepthChart" hidden={this.props.hide}/>
+        );
+    }
+
     private changeData(): void {
         const buys: DirectionalOrderDepth = this.props.depthData.buys;
         const sells: DirectionalOrderDepth = this.props.depthData.sells;
@@ -106,13 +118,13 @@ export default class DepthChart extends Component<DepthChartProps> {
         const yDomain = d3.extent(all.map(getY)) as [number, number];
 
         this.xScale!.domain(xDomain);
-        this.svg.selectAll(".xAxis").transition()
-            .duration(1000)
+        this.svg.selectAll(".xAxis")
+            .transition() .duration(1000)
             .call(this.xAxis as any);
 
         this.yScale!.domain([yDomain[1] * 1.1, 0]);
-        this.svg.selectAll(".yAxis").transition()
-            .duration(1000)
+        this.svg.selectAll(".yAxis")
+            .transition().duration(1000)
             .call(this.yAxis as any);
 
         this.svg.selectAll(".buyLine")
@@ -128,15 +140,5 @@ export default class DepthChart extends Component<DepthChartProps> {
                 .x(d => this.xScale!(d[0]))
                 .y(d => this.yScale!(d[1]))
             );
-    }
-
-    render(): ELEMENT {
-        if (this.mounted) {
-            this.changeData();
-        }
-
-        return (
-            <div id="DepthChart" hidden={this.props.hide}/>
-        );
     }
 }

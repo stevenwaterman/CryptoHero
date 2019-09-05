@@ -1,21 +1,29 @@
 import {State} from "../modules/RootStore";
+import Big from "big.js";
 
-export function maxTradeUnits(state: State, price: number | undefined = undefined): number | null {
+export function maxTradeUnits(state: State, price: Big | undefined = undefined): Big | null {
     const buying = state.tradeModal.buying;
     if (price == null) {
         price = state.tradeModalInput.price
     }
     const sourceAsset = source(state);
     const targetAsset = target(state);
-    const sourceFundsAvailable = state.funds.availableFunds.get(sourceAsset) as number;
-    const targetFundsAvailable = state.funds.availableFunds.get(targetAsset) as number;
+    const sourceFundsAvailable = state.funds.availableFunds.get(sourceAsset) as Big;
+    const targetFundsAvailable = state.funds.availableFunds.get(targetAsset) as Big;
 
     if (buying) {
-        if (price > 0) return sourceFundsAvailable / price;
+        if (price.gt(0)) return sourceFundsAvailable.div(price);
         else return null;
     } else {
-        if (price > 0) return sourceFundsAvailable;
-        else return Math.min(sourceFundsAvailable, targetFundsAvailable / (-price));
+        if (price.gt(0)) return sourceFundsAvailable;
+        const negativePrice = Big(0).sub(price);
+        const affordableTargetUnits = targetFundsAvailable.div(negativePrice);
+        const affordableSourceUnits = sourceFundsAvailable;
+        if (affordableSourceUnits.gt(affordableTargetUnits)) {
+            return affordableTargetUnits;
+        } else {
+            return affordableSourceUnits;
+        }
     }
 }
 

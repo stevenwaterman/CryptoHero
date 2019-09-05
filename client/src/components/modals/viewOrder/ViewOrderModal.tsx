@@ -16,7 +16,7 @@ export default class ViewOrderModal extends React.Component<ViewTradeModalProps>
                     <Modal.Title><b>Order Info</b></Modal.Title>
                 </Modal.Header>
                 {
-                    remainingUnits === 0 ?
+                    remainingUnits.eq(0) ?
                         (isBuy ?
                             <FinishedBuy {...this.props}/> :
                             <FinishedSell {...this.props}/>)

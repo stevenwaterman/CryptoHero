@@ -1,6 +1,3 @@
-import {State} from "../RootStore";
-import {getSocket} from "../../WebSockets";
-
 export const SetAccountListenerIdType: string = "SET_ACCOUNT_LISTENER_ID";
 
 export default interface SetAccountListenerIdAction {

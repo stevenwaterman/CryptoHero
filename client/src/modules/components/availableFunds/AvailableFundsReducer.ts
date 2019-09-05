@@ -1,13 +1,14 @@
 import AvailableFundsStore, {FundsActions, initialFundsStore} from "./AvailableFundsStore";
 import SetAvailableFundsAction, {SetAvailableFundsType} from "./SetAvailableFundsAction";
 import SetAssetFundsAction, {SetAssetFundsType} from "./SetAssetFundsAction";
+import Big from "big.js";
 
 type StateSlice = AvailableFundsStore
 type Actions = FundsActions
 
 function setAssetFunds(state: StateSlice, action: SetAssetFundsAction): StateSlice {
     const {asset, newAmount} = action.payload;
-    const newFunds: Map<string, number> = new Map(state.availableFunds);
+    const newFunds: Map<string, Big> = new Map(state.availableFunds);
     newFunds.set(asset, newAmount);
     return {
         ...state,

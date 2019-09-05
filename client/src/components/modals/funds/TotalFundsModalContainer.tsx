@@ -3,6 +3,7 @@ import {State} from "../../../modules/RootStore";
 import TotalFundsModal from "./TotalFundsModal";
 import HideTotalFundsModalAction, {createHideTotalFundsModalAction} from "../../../modules/modals/totalFunds/HideTotalFundsModalAction";
 import {fireNP, ThunkDsp} from "../../../util/Thunker";
+import Big from "big.js";
 
 type Actions = HideTotalFundsModalAction
 
@@ -11,7 +12,7 @@ interface DispatchProps {
 }
 
 interface StateProps {
-    totalFunds: Map<string, number>
+    totalFunds: Map<string, Big>
     show: boolean
 }
 

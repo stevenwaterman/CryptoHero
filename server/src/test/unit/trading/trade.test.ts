@@ -13,23 +13,23 @@ describe("constructor", () => {
 
     test("constructor throws for 0 units", () => {
         expect(() => {
-            new Trade(acc1, acc2, new Big("0"), new Big("1.14"));
+            new Trade(acc1, acc2, Big(0), Big("1.14"));
         }).toThrow();
     });
 
     test("constructor throws for negative units", () => {
         expect(() => {
-            new Trade(acc1, acc2, new Big("-100"), new Big("1.14"));
+            new Trade(acc1, acc2, Big("-100"), Big("1.14"));
         }).toThrow();
     });
 
     test("constructor does not throw for negative price", () => {
         expect(() => {
-            new Trade(acc1, acc2, new Big("100"), new Big("-1.14"));
+            new Trade(acc1, acc2, Big(100), Big("-1.14"));
         }).not.toThrow();
     });
 
     test("id is set and non-zero", () => {
-        expect(new Trade(acc1, acc2, new Big("1"), new Big("1")).id).toBeTruthy();
+        expect(new Trade(acc1, acc2, Big(1), Big(1)).id).toBeTruthy();
     });
 });

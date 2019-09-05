@@ -5,25 +5,26 @@ import WithdrawModalSetUnitsAction from "./value/WithdrawModalSetUnitsAction";
 import WithdrawModalSetPercentTextAction from "./text/WithdrawModalSetPercentTextAction";
 import WithdrawModalSetUnitsTextAction from "./text/WithdrawModalSetUnitsTextAction";
 import WithdrawModalResetUnitsTextAction from "./resetText/WithdrawModalResetUnitsTextAction";
+import Big from "big.js";
 
 export default interface WithdrawModalInputStore {
     readonly asset: string,
 
     readonly unitsText: string,
-    readonly units: number,
+    readonly units: Big,
 
     readonly percentText: string,
-    readonly percent: number,
+    readonly percent: Big,
 }
 
 export const initialWithdrawModalInputStore: WithdrawModalInputStore = {
     asset: "NA",
 
     unitsText: "0",
-    units: 0,
+    units: Big(0),
 
     percentText: "0",
-    percent: 0,
+    percent: Big(0),
 };
 
 export type WithdrawModalInputActions =

@@ -5,6 +5,7 @@ import {getSocket} from "../../WebSockets";
 import Instrument from "../../models/Instrument";
 import {IOrderDepth} from "../../models/OrderDepth";
 import Order from "../../models/Order";
+import Big from "big.js";
 
 export default class SocketManager extends React.Component<SocketReceiverProps> {
     componentDidMount(): void {
@@ -14,7 +15,7 @@ export default class SocketManager extends React.Component<SocketReceiverProps> 
         socket.on("market price", (data: any) => {
             const instrument: Instrument = Instrument.fromName(data.instrument);
             const time: number = data.time;
-            const price: number = Number.parseFloat(data.price);
+            const price: Big = Big(data.price);
             setInstrumentPrice(instrument, price, time);
         });
 
@@ -30,7 +31,7 @@ export default class SocketManager extends React.Component<SocketReceiverProps> 
 
         socket.on("update funds", (data: any) => {
             const asset = data.asset;
-            const newAmount = Number.parseFloat(data.newAmount);
+            const newAmount = Big(data.newAmount);
             setAssetFunds(asset, newAmount);
         });
 

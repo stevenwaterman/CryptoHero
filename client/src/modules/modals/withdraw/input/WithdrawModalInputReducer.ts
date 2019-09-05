@@ -10,8 +10,9 @@ import WithdrawModalInputStore, {
     initialWithdrawModalInputStore,
     WithdrawModalInputActions
 } from "./WithdrawModalInputStore";
-import {clamp} from "../../../../util/Clamp";
+import {clampBig} from "../../../../util/Clamp";
 import ShowWithdrawModalAction, {ShowWithdrawModalType} from "../ShowWithdrawModalAction";
+import Big from "big.js";
 
 type State = WithdrawModalInputStore
 type Actions = WithdrawModalInputActions
@@ -44,16 +45,20 @@ export function withdrawModalInputReducer(
 
 function startWithdraw(state: State, action: ShowWithdrawModalAction): State {
     return {
-        asset: "GBP", percent: 0, percentText: formatPercent(0), units: 0, unitsText: formatInput(0)
+        asset: "GBP",
+        percent: Big(0),
+        percentText: formatPercent(Big(0)),
+        units: Big(0),
+        unitsText: formatInput(Big(0))
     }
 }
 
 function setAsset(state: State, action: WithdrawModalSetAssetAction): State {
     const {maxWithdraw, newAsset} = action.payload;
 
-    const newUnits = clamp(state.units, 0, maxWithdraw);
+    const newUnits = clampBig(state.units, 0, maxWithdraw);
     const newUnitsText = formatInput(newUnits);
-    const newPercent = 100 * newUnits / maxWithdraw;
+    const newPercent = newUnits.div(maxWithdraw).mul(100);
     const newPercentText = formatPercent(newPercent);
 
     return {
@@ -68,9 +73,9 @@ function setAsset(state: State, action: WithdrawModalSetAssetAction): State {
 
 function setUnits(state: State, action: WithdrawModalSetUnitsAction): State {
     const {maxWithdraw, units} = action.payload;
-    const actualUnits = clamp(units, 0, maxWithdraw);
+    const actualUnits = clampBig(units, 0, maxWithdraw);
 
-    const percent = 100 * actualUnits / maxWithdraw;
+    const percent = actualUnits.div(maxWithdraw).mul(100);
     const percentText = formatPercent(percent);
 
     let unitsText = state.unitsText;
@@ -90,13 +95,13 @@ function setUnits(state: State, action: WithdrawModalSetUnitsAction): State {
 function setPercent(state: State, action: WithdrawModalSetPercentAction): State {
     const {maxWithdraw, percent} = action.payload;
 
-    let actualPercent = clamp(percent, 0, 100);
+    let actualPercent = clampBig(percent, 0, 100);
     let percentText = state.percentText;
     if (actualPercent !== percent) {
         percentText = formatPercent(actualPercent);
     }
 
-    const units = actualPercent * maxWithdraw / 100;
+    const units = actualPercent.mul(maxWithdraw).div(100);
     const unitsText = formatPercent(units);
 
     return {

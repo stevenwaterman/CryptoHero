@@ -13,9 +13,11 @@ import {IconDefinition, library} from "@fortawesome/fontawesome";
 import {faSyncAlt, faUserPlus} from "@fortawesome/free-solid-svg-icons";
 
 import {initSocket} from "./WebSockets";
+import Big from "big.js";
 
 library.add(...[faSyncAlt, faUserPlus] as Array<IconDefinition>);
 initSocket();
+Big.DP = 5;
 
 ReactDOM.render(
     <Provider store={RootStore}>

@@ -8,14 +8,15 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import Big from "big.js";
 
-function generateColumns(funds: Map<string, number>): Array<any> {
+function generateColumns(funds: Map<string, Big>): Array<any> {
     const columns: Array<any> = [];
-    funds.forEach((price: number, asset: string) => columns.push(generateOneColumn(asset, price)));
+    funds.forEach((price: Big, asset: string) => columns.push(generateOneColumn(asset, price)));
     return columns
 }
 
-function generateOneColumn(asset: string, price: number): ELEMENT {
+function generateOneColumn(asset: string, price: Big): ELEMENT {
     return (
         <Col lg="6" key={asset}>
             <OverlayTrigger

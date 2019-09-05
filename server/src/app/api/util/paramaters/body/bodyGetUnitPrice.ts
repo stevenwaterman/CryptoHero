@@ -13,7 +13,7 @@ export function bodyGetUnitPrice(broker: Broker, req: Request, res: Response): B
     }
 
     try {
-        return new Big(priceString);
+        return Big(priceString);
     } catch {
         respondNoSer(res, 400, `unit price ${priceString} not found`);
         return null;

@@ -34,9 +34,9 @@ Contains empty matcher and unit test file.
 │   │   │   ├── mockup.html - empty mockup wireframe
 │   │   ├── src
 │   │   │   ├── components
-|   │   │   │   ├── App.css - CSS specific to the App component
-|   │   │   │   ├── App.tsx - main component for the app
-|   │   │   │   ├── App.test.ts - tests specific to the App component
+|   │   │   │   ├── LoadingPlaceholder.css - CSS specific to the LoadingPlaceholder component
+|   │   │   │   ├── LoadingPlaceholder.tsxPlaceholder.tsx - main component for the app
+|   │   │   │   ├── LoadingPlaceholder.test.ts - tests specific to the LoadingPlaceholder component
 │   │   │   ├── reducers
 |   │   │   │   ├── ducks
 |   |   │   │   │   ├── example.ts - an example 'duck' which contains a related action type, reducer and action creator

@@ -14,7 +14,7 @@ export default class Trade {
     readonly unitPrice: Big;
 
     constructor(buyer: Account, seller: Account, units: Big, unitPrice: Big) {
-        if (units.lte(Big("0"))) {
+        if (units.lte(0)) {
             throw `Units must be > 0. Actual: ${units}`;
         }
 

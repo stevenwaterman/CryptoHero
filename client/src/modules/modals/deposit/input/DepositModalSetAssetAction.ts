@@ -1,14 +1,12 @@
 import {State} from "../../../RootStore";
 
-interface IPayload {
-    newAsset: string,
-}
-
 export const DepositModalSetAssetType: string = "DEPOSIT_SET_ASSET";
 
 export default interface DepositModalSetAssetAction {
     type: typeof DepositModalSetAssetType
-    payload: IPayload
+    payload: {
+        newAsset: string,
+    }
 }
 
 export function createDepositModalSetAssetAction(state: State, newAsset: string): DepositModalSetAssetAction {

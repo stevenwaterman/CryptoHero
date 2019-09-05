@@ -4,11 +4,12 @@ import DepositModalInputStore, {
     DepositModalInputActions,
     initialDepositModalInputStore
 } from "./DepositModalInputStore";
-import {clamp} from "../../../../util/Clamp";
+import {clampBig} from "../../../../util/Clamp";
 import ShowDepositModalAction, {ShowDepositModalType} from "../ShowDepositModalAction";
 import DepositModalSetUnitsTextAction, {DepositModalSetUnitsTextType} from "./DepositModalSetUnitsTextAction";
 import DepositModalResetUnitsTextAction, {DepositModalResetUnitsTextType} from "./DepositModalResetUnitsTextAction";
 import {formatInput} from "../../../../util/FormatMoney";
+import Big from "big.js";
 
 type State = DepositModalInputStore
 type Actions = DepositModalInputActions
@@ -35,7 +36,7 @@ export function depositModalInputReducer(
 
 function startDeposit(state: State, action: ShowDepositModalAction): State {
     return {
-        asset: "GBP", units: 0, unitsText: formatInput(0)
+        asset: "GBP", units: Big(0), unitsText: formatInput(Big(0))
     }
 }
 
@@ -50,7 +51,7 @@ function setAsset(state: State, action: DepositModalSetAssetAction): State {
 
 function setUnits(state: State, action: DepositModalSetUnitsAction): State {
     const {units} = action.payload;
-    const actualUnits = clamp(units, 0);
+    const actualUnits = clampBig(units, 0);
 
     let unitsText = state.unitsText;
     if (units !== actualUnits) {

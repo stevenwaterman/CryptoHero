@@ -1,14 +1,12 @@
 import {State} from "../../../../RootStore";
 
-interface IPayload {
-    newText: string,
-}
-
 export const WithdrawModalSetPercentTextType: string = "WITHDRAW_SET_PERCENT_TEXT";
 
 export default interface WithdrawModalSetPercentTextAction {
     type: typeof WithdrawModalSetPercentTextType
-    payload: IPayload
+    payload: {
+        newText: string,
+    }
 }
 
 export function createWithdrawModalSetPercentTextAction(state: State, newText: string): WithdrawModalSetPercentTextAction {

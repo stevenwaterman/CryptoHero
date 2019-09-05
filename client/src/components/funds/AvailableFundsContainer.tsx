@@ -5,6 +5,7 @@ import ShowWithdrawModalAction, {createShowWithdrawModalAction} from "../../modu
 import ShowDepositModalAction, {createShowDepositModalAction} from "../../modules/modals/deposit/ShowDepositModalAction";
 import ShowTotalFundsModalAction, {createShowTotalFundsModalAction} from "../../modules/modals/totalFunds/ShowTotalFundsModalAction";
 import {fireNP, ThunkDsp} from "../../util/Thunker";
+import Big from "big.js";
 
 type Actions = ShowTotalFundsModalAction | ShowWithdrawModalAction | ShowDepositModalAction
 
@@ -15,7 +16,7 @@ interface DispatchProps {
 }
 
 export interface StateProps {
-    availableFunds: Map<string, number>,
+    availableFunds: Map<string, Big>,
     canWithdraw: boolean
 }
 
@@ -35,7 +36,7 @@ function mapDispatchToProps(dispatch: ThunkDsp<Actions>, ownProps: OwnProps): Di
 function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     let canWithdraw = false;
     state.funds.availableFunds.forEach((amount, asset) => {
-        if (amount > 0) {
+        if (amount.gt(0)) {
             canWithdraw = true;
         }
     });

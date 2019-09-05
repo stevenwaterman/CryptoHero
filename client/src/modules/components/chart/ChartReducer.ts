@@ -43,18 +43,16 @@ function orderDepthDelta(state: State, action: OrderDepthDeltaAction): State {
     const oldSells: DirectionalOrderDepth = oldIOrderDepth.sells;
 
     const delta: IOrderDepth = action.payload.delta;
-    const buyDelta: DirectionalOrderDepth = delta.buys;
-    const sellDelta: DirectionalOrderDepth = delta.sells;
 
     const newBuys = oldBuys.slice();
-    buyDelta.forEach(newBuy => {
-        const currentIdx = newBuys.findIndex(check => check.price === newBuy.price);
+    delta.buys.forEach(newBuy => {
+        const currentIdx = newBuys.findIndex(check => check.price.eq(newBuy.price));
         if (currentIdx === -1) {
-            if (newBuy.volume > 0) {
+            if (newBuy.volume.gt(0)) {
                 newBuys.push(newBuy);
             }
         } else {
-            if (newBuy.volume > 0) {
+            if (newBuy.volume.gt(0)) {
                 newBuys.splice(currentIdx, 1, new OrderDepthPoint(newBuy.price, newBuy.volume));
             } else {
                 newBuys.splice(currentIdx, 1);
@@ -63,23 +61,23 @@ function orderDepthDelta(state: State, action: OrderDepthDeltaAction): State {
     });
 
     const newSells = oldSells.slice();
-    sellDelta.forEach(newSell => {
-        const currentIdx = newSells.findIndex(check => check.price === newSell.price);
+    delta.sells.forEach(newSell => {
+        const currentIdx = newSells.findIndex(check => check.price.eq(newSell.price));
         if (currentIdx === -1) {
-            if (newSell.volume > 0) {
+            if (newSell.volume.gt(0)) {
                 newSells.push(newSell);
             }
         } else {
-            if (newSell.volume > 0) {
-                sellDelta.splice(currentIdx, 1, new OrderDepthPoint(newSell.price, newSell.volume));
+            if (newSell.volume.gt(0)) {
+                newSells.splice(currentIdx, 1, new OrderDepthPoint(newSell.price, newSell.volume));
             } else {
-                sellDelta.splice(currentIdx, 1);
+                newSells.splice(currentIdx, 1);
             }
         }
     });
 
-    newBuys.sort((a, b) => b.price - a.price);
-    newSells.sort((a, b) => a.price - b.price);
+    newBuys.sort((a, b) => b.price.cmp(a.price));
+    newSells.sort((a, b) => a.price.cmp(b.price));
 
     const newIOrderDepth: IOrderDepth = new IOrderDepth(newBuys, newSells);
     const newOrderDepth: OrderDepth = new Map(oldOrderDepth);

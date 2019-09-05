@@ -20,8 +20,8 @@ function mapStateToProps(state: State, ownProps: OwnProps): StateProps {
     const orderDepth = state.chart.orderDepth;
     const instrument = state.instruments.selectedInstrument;
     let instrumentOrderDepthData = orderDepth.get(instrument.name);
-    if(instrumentOrderDepthData == null){
-        instrumentOrderDepthData = new IOrderDepth([],[]);
+    if (instrumentOrderDepthData == null) {
+        instrumentOrderDepthData = new IOrderDepth([], []);
     }
     return {
         depthData: instrumentOrderDepthData,

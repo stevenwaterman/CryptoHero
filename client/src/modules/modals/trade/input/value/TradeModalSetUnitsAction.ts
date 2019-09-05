@@ -1,19 +1,18 @@
 import {maxTradeUnits} from "../../../../../util/MaxTradeUnits";
 import {State} from "../../../../RootStore";
-
-interface IPayload {
-    units: number,
-    maxUnits: number | null,
-}
+import Big from "big.js";
 
 export const TradeModalSetUnitsType: string = "TRADE_SET_UNITS";
 
 export default interface TradeModalSetUnitsAction {
     type: typeof TradeModalSetUnitsType
-    payload: IPayload
+    payload: {
+        units: Big,
+        maxUnits: Big | null,
+    }
 }
 
-export function createTradeModalSetUnitsAction(state: State, newUnits: number): TradeModalSetUnitsAction {
+export function createTradeModalSetUnitsAction(state: State, newUnits: Big): TradeModalSetUnitsAction {
     const maxUnits = maxTradeUnits(state);
     return {
         type: TradeModalSetUnitsType,

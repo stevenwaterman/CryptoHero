@@ -41,7 +41,7 @@ beforeEach(() => {
     acc3 = new Account();
     acc4 = new Account();
     [acc1, acc2, acc3, acc4].forEach(acc => {
-        Asset.ALL.forEach(it => acc.adjustAssets(it, new Big("1000")));
+        Asset.ALL.forEach(it => acc.adjustAssets(it, Big(1000)));
     });
     MockDate.reset();
 });
@@ -61,23 +61,23 @@ describe("constructor", () => {
 describe("placing orders", () => {
     test("can place an order", () => {
         const inst = Instrument.BTCGBP;
-        const order: ExpectedOrder = placeBuy(inst, acc1, new Big("1"), new Big("1"));
+        const order: ExpectedOrder = placeBuy(inst, acc1, Big(1), Big(1));
         expectOrders(acc1, order);
     });
 
     test("place an order on multiple instruments", () => {
-        const o1 = placeBuy(Instrument.BTCGBP, acc1, new Big("1"), new Big("1"));
-        const o2 = placeSell(Instrument.LTCGBP, acc1, new Big("1"), new Big("1"));
+        const o1 = placeBuy(Instrument.BTCGBP, acc1, Big(1), Big(1));
+        const o2 = placeSell(Instrument.LTCGBP, acc1, Big(1), Big(1));
         expectOrders(acc1, o1, o2);
     });
 });
 
 describe("completing trades", () => {
     test("simple trade", () => {
-        const expectO1 = placeBuy(Instrument.BTCGBP, acc1, new Big("1"), new Big("1"));
-        const expectO2 = placeSell(Instrument.BTCGBP, acc2, new Big("1"), new Big("1"));
+        const expectO1 = placeBuy(Instrument.BTCGBP, acc1, Big(1), Big(1));
+        const expectO2 = placeSell(Instrument.BTCGBP, acc2, Big(1), Big(1));
 
-        const expectedTrade = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
+        const expectedTrade = new ExpectedTrade(acc1, acc2, Big(1), Big(1));
         expectO1.trades.push(expectedTrade);
         expectO1.state = OrderState.COMPLETE;
         expectO2.trades.push(expectedTrade);
@@ -88,14 +88,14 @@ describe("completing trades", () => {
     });
 
     test("multiple instruments", () => {
-        const o1 = placeBuy(Instrument.BTCGBP, acc1, new Big("1"), new Big("1"));
-        const o2 = placeSell(Instrument.LTCGBP, acc1, new Big("1"), new Big("1"));
+        const o1 = placeBuy(Instrument.BTCGBP, acc1, Big(1), Big(1));
+        const o2 = placeSell(Instrument.LTCGBP, acc1, Big(1), Big(1));
 
-        const o3 = placeSell(Instrument.BTCGBP, acc2, new Big("1"), new Big("1"));
-        const o4 = placeBuy(Instrument.LTCGBP, acc3, new Big("1"), new Big("1"));
+        const o3 = placeSell(Instrument.BTCGBP, acc2, Big(1), Big(1));
+        const o4 = placeBuy(Instrument.LTCGBP, acc3, Big(1), Big(1));
 
-        const BTCGBP = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
-        const LTCGBP = new ExpectedTrade(acc3, acc1, new Big("1"), new Big("1"));
+        const BTCGBP = new ExpectedTrade(acc1, acc2, Big(1), Big(1));
+        const LTCGBP = new ExpectedTrade(acc3, acc1, Big(1), Big(1));
 
         o1.trades.push(BTCGBP);
         o1.state = OrderState.COMPLETE;
@@ -117,31 +117,31 @@ describe("completing trades", () => {
 
 describe("position should update", () => {
     test("Works with trades in multiple instruments", () => {
-        placeBuy(Instrument.BTCGBP, acc1, new Big("1"), new Big("1"));
-        placeBuy(Instrument.LTCGBP, acc1, new Big("1"), new Big("1"));
-        placeSell(Instrument.BTCGBP, acc2, new Big("1"), new Big("1"));
-        placeSell(Instrument.LTCGBP, acc3, new Big("1"), new Big("1"));
+        placeBuy(Instrument.BTCGBP, acc1, Big(1), Big(1));
+        placeBuy(Instrument.LTCGBP, acc1, Big(1), Big(1));
+        placeSell(Instrument.BTCGBP, acc2, Big(1), Big(1));
+        placeSell(Instrument.LTCGBP, acc3, Big(1), Big(1));
 
-        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(new Big("998"));
-        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(new Big("1001"));
-        expect(acc1.getAvailableAssets(Asset.LTC)).toEqual(new Big("1001"));
+        expect(acc1.getAvailableAssets(Asset.GBP)).toEqual(Big(998));
+        expect(acc1.getAvailableAssets(Asset.BTC)).toEqual(Big(1001));
+        expect(acc1.getAvailableAssets(Asset.LTC)).toEqual(Big(1001));
 
-        expect(acc2.getAvailableAssets(Asset.GBP)).toEqual(new Big("1001"));
-        expect(acc2.getAvailableAssets(Asset.BTC)).toEqual(new Big("999"));
-        expect(acc2.getAvailableAssets(Asset.LTC)).toEqual(new Big("1000"));
+        expect(acc2.getAvailableAssets(Asset.GBP)).toEqual(Big(1001));
+        expect(acc2.getAvailableAssets(Asset.BTC)).toEqual(Big(999));
+        expect(acc2.getAvailableAssets(Asset.LTC)).toEqual(Big(1000));
 
-        expect(acc3.getAvailableAssets(Asset.GBP)).toEqual(new Big("1001"));
-        expect(acc3.getAvailableAssets(Asset.BTC)).toEqual(new Big("1000"));
-        expect(acc3.getAvailableAssets(Asset.LTC)).toEqual(new Big("999"));
+        expect(acc3.getAvailableAssets(Asset.GBP)).toEqual(Big(1001));
+        expect(acc3.getAvailableAssets(Asset.BTC)).toEqual(Big(1000));
+        expect(acc3.getAvailableAssets(Asset.LTC)).toEqual(Big(999));
     });
 });
 
 describe("cancelling order", () => {
     test("simple test", () => {
-        const order = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1"));
+        const order = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, Big(1), Big(1));
         broker.placeOrder(order);
 
-        const expected = new ExpectedOrder(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1"), OrderState.PENDING);
+        const expected = new ExpectedOrder(acc1, TradeDirection.BUY, Instrument.BTCGBP, Big(1), Big(1), OrderState.PENDING);
         expectOrders(acc1, expected);
 
         broker.cancelOrder(order);
@@ -150,14 +150,14 @@ describe("cancelling order", () => {
     });
 
     test("two instruments", () => {
-        const o1 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1"));
+        const o1 = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, Big(1), Big(1));
         broker.placeOrder(o1);
 
-        const o2 = new Order(acc1, TradeDirection.BUY, Instrument.LTCGBP, new Big("1"), new Big("1"));
+        const o2 = new Order(acc1, TradeDirection.BUY, Instrument.LTCGBP, Big(1), Big(1));
         broker.placeOrder(o2);
 
-        const expectO1 = new ExpectedOrder(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1"), OrderState.PENDING);
-        const expectO2 = new ExpectedOrder(acc1, TradeDirection.BUY, Instrument.LTCGBP, new Big("1"), new Big("1"), OrderState.PENDING);
+        const expectO1 = new ExpectedOrder(acc1, TradeDirection.BUY, Instrument.BTCGBP, Big(1), Big(1), OrderState.PENDING);
+        const expectO2 = new ExpectedOrder(acc1, TradeDirection.BUY, Instrument.LTCGBP, Big(1), Big(1), OrderState.PENDING);
         expectOrders(acc1, expectO1, expectO2);
 
         broker.cancelOrder(o1);
@@ -168,8 +168,8 @@ describe("cancelling order", () => {
 
 describe("Aggregate Prices", () => {
     test("Simple test", () => {
-        placeBuy(Instrument.BTCGBP, acc1, new Big("1"), new Big("1"));
-        const expectedBTC = new PriceAggregate([new PriceAggregateElement(new Big("1"), new Big("1"))], []);
+        placeBuy(Instrument.BTCGBP, acc1, Big(1), Big(1));
+        const expectedBTC = new PriceAggregate([new PriceAggregateElement(Big(1), Big(1))], []);
         const expectedLTC = new PriceAggregate([], []);
         const actual = broker.getAggregatePrices();
         expect(actual.get(Instrument.BTCGBP)).toEqual(expectedBTC);
@@ -177,9 +177,9 @@ describe("Aggregate Prices", () => {
     });
 
     test("Two instruments", () => {
-        placeBuy(Instrument.BTCGBP, acc1, new Big("1"), new Big("1"));
-        placeBuy(Instrument.LTCGBP, acc1, new Big("1"), new Big("1"));
-        const expected = new PriceAggregate([new PriceAggregateElement(new Big("1"), new Big("1"))], []);
+        placeBuy(Instrument.BTCGBP, acc1, Big(1), Big(1));
+        placeBuy(Instrument.LTCGBP, acc1, Big(1), Big(1));
+        const expected = new PriceAggregate([new PriceAggregateElement(Big(1), Big(1))], []);
         const actual = broker.getAggregatePrices();
         expect(actual.get(Instrument.BTCGBP)).toEqual(expected);
         expect(actual.get(Instrument.LTCGBP)).toEqual(expected);
@@ -189,23 +189,23 @@ describe("Aggregate Prices", () => {
 describe("Market Prices", () => {
     test("No trades", () => {
         const expected = Map().withMutations(map => {
-            map.set(Instrument.BTCGBP, new Big("0"));
-            map.set(Instrument.LTCGBP, new Big("0"));
+            map.set(Instrument.BTCGBP, Big(0));
+            map.set(Instrument.LTCGBP, Big(0));
         });
 
         expect(broker.getMarketPrices()).toEqual(expected);
     });
 
     test("With trades", () => {
-        placeBuy(Instrument.BTCGBP, acc1, new Big("1"), new Big("1"));
-        placeSell(Instrument.BTCGBP, acc2, new Big("1"), new Big("1"));
+        placeBuy(Instrument.BTCGBP, acc1, Big(1), Big(1));
+        placeSell(Instrument.BTCGBP, acc2, Big(1), Big(1));
 
-        placeBuy(Instrument.LTCGBP, acc1, new Big("2"), new Big("2"));
-        placeSell(Instrument.LTCGBP, acc2, new Big("2"), new Big("2"));
+        placeBuy(Instrument.LTCGBP, acc1, Big(2), Big(2));
+        placeSell(Instrument.LTCGBP, acc2, Big(2), Big(2));
 
         const expected = Map().withMutations(map => {
-            map.set(Instrument.BTCGBP, new Big("1"));
-            map.set(Instrument.LTCGBP, new Big("2"));
+            map.set(Instrument.BTCGBP, Big(1));
+            map.set(Instrument.LTCGBP, Big(2));
         });
 
         expect(broker.getMarketPrices()).toEqual(expected);

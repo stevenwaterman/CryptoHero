@@ -8,27 +8,28 @@ import TradeModalResetUnitsTextAction from "./resetText/TradeModalResetUnitsText
 import TradeModalResetPercentTextAction from "./resetText/TradeModalResetPercentTextAction";
 import TradeModalSetPriceTextAction from "./text/TradeModalSetPriceTextAction";
 import ShowTradeModalAction from "../ShowTradeModalAction";
+import Big from "big.js";
 
 export default interface TradeModalInputStore {
     readonly priceText: string,
-    readonly price: number,
+    readonly price: Big,
 
     readonly unitsText: string,
-    readonly units: number,
+    readonly units: Big,
 
     readonly percentText: string,
-    readonly percent: number | null,
+    readonly percent: Big | null,
 }
 
 export const initialTradeModalInputStore: TradeModalInputStore = {
     priceText: "0",
-    price: 0,
+    price: Big(0),
 
     unitsText: "0",
-    units: 0,
+    units: Big(0),
 
     percentText: "0",
-    percent: 0,
+    percent: Big(0),
 };
 
 export type TradeModalInputActions =

@@ -1,14 +1,12 @@
 import {State} from "../../../../RootStore";
 
-interface IPayload {
-    newText: string,
-}
-
 export const WithdrawModalSetUnitsTextType: string = "WITHDRAW_SET_UNITS_TEXT";
 
 export default interface WithdrawModalSetUnitsTextAction {
     type: typeof WithdrawModalSetUnitsTextType
-    payload: IPayload
+    payload: {
+        newText: string,
+    }
 }
 
 export function createWithdrawModalSetUnitsTextAction(state: State, newText: string): WithdrawModalSetUnitsTextAction {

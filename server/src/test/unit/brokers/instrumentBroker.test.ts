@@ -44,7 +44,7 @@ beforeEach(() => {
     acc3 = new Account();
     acc4 = new Account();
     [acc1, acc2, acc3, acc4].forEach(acc => {
-        Asset.ALL.forEach(it => acc.adjustAssets(it, new Big("1000")));
+        Asset.ALL.forEach(it => acc.adjustAssets(it, Big(1000)));
     });
     MockDate.reset();
 });
@@ -56,10 +56,10 @@ describe("adding orders", () => {
     let buyOrderNegPrice: Order;
 
     beforeEach(() => {
-        sellOrder = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, new Big("100"), new Big("1.14"));
-        sellOrderNegPrice = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, new Big("100"), new Big("-1.14"));
-        buyOrder = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("100"), new Big("1.14"));
-        buyOrderNegPrice = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("100"), new Big("-1.14"));
+        sellOrder = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, Big(100), Big("1.14"));
+        sellOrderNegPrice = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, Big(100), Big("-1.14"));
+        buyOrder = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, Big(100), Big("1.14"));
+        buyOrderNegPrice = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, Big(100), Big("-1.14"));
     });
 
     test("can add sell order", () => {
@@ -87,14 +87,14 @@ describe("adding orders", () => {
     });
 
     test("can't add a buy order that they can't afford", () => {
-        acc1.adjustAssets(iBroker.instrument.fromAsset, new Big("-900"));
+        acc1.adjustAssets(iBroker.instrument.fromAsset, Big(-900));
         expect(() => {
             iBroker.place(buyOrder);
         }).toThrow();
     });
 
     test("can't add a sell order that they can't afford", () => {
-        acc1.adjustAssets(iBroker.instrument.toAsset, new Big("-950"));
+        acc1.adjustAssets(iBroker.instrument.toAsset, Big(-950));
         expect(() => {
             iBroker.place(sellOrder);
         }).toThrow();
@@ -103,9 +103,9 @@ describe("adding orders", () => {
 
 describe("matching orders", () => {
     test("Simple Order", () => {
-        const o1 = placeBuy(acc1, new Big("1"), new Big("1"));
-        const o2 = placeSell(acc2, new Big("1"), new Big("1"));
-        const trade = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
+        const o1 = placeBuy(acc1, Big(1), Big(1));
+        const o2 = placeSell(acc2, Big(1), Big(1));
+        const trade = new ExpectedTrade(acc1, acc2, Big(1), Big(1));
         o1.trades.push(trade);
         o2.trades.push(trade);
         o1.state = OrderState.COMPLETE;
@@ -115,23 +115,23 @@ describe("matching orders", () => {
     });
 
     test("Two Buys", () => {
-        const o1 = placeBuy(acc1, new Big("1"), new Big("1"));
-        const o2 = placeBuy(acc2, new Big("1.1"), new Big("1"));
+        const o1 = placeBuy(acc1, Big(1), Big(1));
+        const o2 = placeBuy(acc2, Big("1.1"), Big(1));
         expectOrders(acc1, o1);
         expectOrders(acc2, o2);
     });
 
     test("Two Sells", () => {
-        const o1 = placeSell(acc1, new Big("1"), new Big("1"));
-        const o2 = placeSell(acc2, new Big("1.1"), new Big("1"));
+        const o1 = placeSell(acc1, Big(1), Big(1));
+        const o2 = placeSell(acc2, Big("1.1"), Big(1));
         expectOrders(acc1, o1);
         expectOrders(acc2, o2);
     });
 
     test("Order happens at best price for second person (buy first)", () => {
-        const o1 = placeBuy(acc1, new Big("1.1"), new Big("1"));
-        const o2 = placeSell(acc2, new Big("1"), new Big("1"));
-        const trade = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1.1"));
+        const o1 = placeBuy(acc1, Big("1.1"), Big(1));
+        const o2 = placeSell(acc2, Big(1), Big(1));
+        const trade = new ExpectedTrade(acc1, acc2, Big(1), Big("1.1"));
         o1.trades.push(trade);
         o2.trades.push(trade);
         o1.state = OrderState.COMPLETE;
@@ -141,9 +141,9 @@ describe("matching orders", () => {
     });
 
     test("Order happens at best price for second person (sell first)", () => {
-        const o1 = placeSell(acc1, new Big("1"), new Big("1"));
-        const o2 = placeBuy(acc2, new Big("1.1"), new Big("1"));
-        const trade = new ExpectedTrade(acc2, acc1, new Big("1"), new Big("1"));
+        const o1 = placeSell(acc1, Big(1), Big(1));
+        const o2 = placeBuy(acc2, Big("1.1"), Big(1));
+        const trade = new ExpectedTrade(acc2, acc1, Big(1), Big(1));
         o1.trades.push(trade);
         o2.trades.push(trade);
         o1.state = OrderState.COMPLETE;
@@ -153,12 +153,12 @@ describe("matching orders", () => {
     });
 
     test("Multiple Trades", () => {
-        const o1 = placeBuy(acc1, new Big("1"), new Big("1"));
-        const o2 = placeSell(acc2, new Big("1"), new Big("1"));
-        const o3 = placeBuy(acc3, new Big("1"), new Big("1"));
-        const o4 = placeSell(acc4, new Big("1"), new Big("1"));
-        const trade1 = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
-        const trade2 = new ExpectedTrade(acc3, acc4, new Big("1"), new Big("1"));
+        const o1 = placeBuy(acc1, Big(1), Big(1));
+        const o2 = placeSell(acc2, Big(1), Big(1));
+        const o3 = placeBuy(acc3, Big(1), Big(1));
+        const o4 = placeSell(acc4, Big(1), Big(1));
+        const trade1 = new ExpectedTrade(acc1, acc2, Big(1), Big(1));
+        const trade2 = new ExpectedTrade(acc3, acc4, Big(1), Big(1));
         o1.trades.push(trade1);
         o2.trades.push(trade1);
         o3.trades.push(trade2);
@@ -174,12 +174,12 @@ describe("matching orders", () => {
     });
 
     test("Multiple Trades on One Account", () => {
-        const o1 = placeBuy(acc1, new Big("1"), new Big("1"));
-        const o2 = placeSell(acc2, new Big("1"), new Big("1"));
-        const o3 = placeBuy(acc1, new Big("1"), new Big("1"));
-        const o4 = placeSell(acc3, new Big("1"), new Big("1"));
-        const trade1 = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
-        const trade2 = new ExpectedTrade(acc1, acc3, new Big("1"), new Big("1"));
+        const o1 = placeBuy(acc1, Big(1), Big(1));
+        const o2 = placeSell(acc2, Big(1), Big(1));
+        const o3 = placeBuy(acc1, Big(1), Big(1));
+        const o4 = placeSell(acc3, Big(1), Big(1));
+        const trade1 = new ExpectedTrade(acc1, acc2, Big(1), Big(1));
+        const trade2 = new ExpectedTrade(acc1, acc3, Big(1), Big(1));
         o1.trades.push(trade1);
         o2.trades.push(trade1);
         o3.trades.push(trade2);
@@ -194,13 +194,13 @@ describe("matching orders", () => {
     });
 
     test("Multiple trades on book by one account simultaneously", () => {
-        const o1 = placeBuy(acc1, new Big("1"), new Big("1"));
-        const o2 = placeBuy(acc1, new Big("1"), new Big("1"));
-        const o3 = placeSell(acc2, new Big("1"), new Big("1"));
-        const o4 = placeSell(acc3, new Big("1"), new Big("1"));
+        const o1 = placeBuy(acc1, Big(1), Big(1));
+        const o2 = placeBuy(acc1, Big(1), Big(1));
+        const o3 = placeSell(acc2, Big(1), Big(1));
+        const o4 = placeSell(acc3, Big(1), Big(1));
 
-        const trade1 = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
-        const trade2 = new ExpectedTrade(acc1, acc3, new Big("1"), new Big("1"));
+        const trade1 = new ExpectedTrade(acc1, acc2, Big(1), Big(1));
+        const trade2 = new ExpectedTrade(acc1, acc3, Big(1), Big(1));
         o1.trades.push(trade1);
         o1.state = OrderState.COMPLETE;
         o3.trades.push(trade1);
@@ -217,9 +217,9 @@ describe("matching orders", () => {
     });
 
     test("Partial trade", () => {
-        const o1 = placeBuy(acc1, new Big("1"), new Big("2"));
-        const o2 = placeSell(acc2, new Big("1"), new Big("1"));
-        const trade = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1"));
+        const o1 = placeBuy(acc1, Big(1), Big(2));
+        const o2 = placeSell(acc2, Big(1), Big(1));
+        const trade = new ExpectedTrade(acc1, acc2, Big(1), Big(1));
         o1.trades.push(trade);
         o2.trades.push(trade);
         o2.state = OrderState.COMPLETE;
@@ -228,11 +228,11 @@ describe("matching orders", () => {
     });
 
     test("Multiple partial trades (large buy first)", () => {
-        const o1 = placeBuy(acc1, new Big("1.1"), new Big("2"));
-        const o2 = placeSell(acc2, new Big("1"), new Big("1"));
-        const o3 = placeSell(acc3, new Big("1.1"), new Big("1"));
-        const trade1 = new ExpectedTrade(acc1, acc2, new Big("1"), new Big("1.1"));
-        const trade2 = new ExpectedTrade(acc1, acc3, new Big("1"), new Big("1.1"));
+        const o1 = placeBuy(acc1, Big("1.1"), Big(2));
+        const o2 = placeSell(acc2, Big(1), Big(1));
+        const o3 = placeSell(acc3, Big("1.1"), Big(1));
+        const trade1 = new ExpectedTrade(acc1, acc2, Big(1), Big("1.1"));
+        const trade2 = new ExpectedTrade(acc1, acc3, Big(1), Big("1.1"));
         o1.trades.push(trade1, trade2);
         o2.trades.push(trade1);
         o3.trades.push(trade2);
@@ -245,11 +245,11 @@ describe("matching orders", () => {
     });
 
     test("Multiple partial trades (small buys first)", () => {
-        const o1 = placeBuy(acc1, new Big("1.1"), new Big("1"));
-        const o2 = placeBuy(acc2, new Big("1"), new Big("2"));
-        const o3 = placeSell(acc3, new Big("1"), new Big("3"));
-        const trade1 = new ExpectedTrade(acc1, acc3, new Big("1"), new Big("1.1"));
-        const trade2 = new ExpectedTrade(acc2, acc3, new Big("2"), new Big("1"));
+        const o1 = placeBuy(acc1, Big("1.1"), Big(1));
+        const o2 = placeBuy(acc2, Big(1), Big(2));
+        const o3 = placeSell(acc3, Big(1), Big(3));
+        const trade1 = new ExpectedTrade(acc1, acc3, Big(1), Big("1.1"));
+        const trade2 = new ExpectedTrade(acc2, acc3, Big(2), Big(1));
         o1.trades.push(trade1);
         o2.trades.push(trade2);
         o3.trades.push(trade1, trade2);
@@ -262,10 +262,10 @@ describe("matching orders", () => {
     });
 
     test("Better buy prices go to front of queue", () => {
-        const o1 = placeBuy(acc1, new Big("1"), new Big("1"));
-        const o2 = placeBuy(acc2, new Big("2"), new Big("1"));
-        const o3 = placeSell(acc3, new Big("1"), new Big("1"));
-        const trade = new ExpectedTrade(acc2, acc3, new Big("1"), new Big("2"));
+        const o1 = placeBuy(acc1, Big(1), Big(1));
+        const o2 = placeBuy(acc2, Big(2), Big(1));
+        const o3 = placeSell(acc3, Big(1), Big(1));
+        const trade = new ExpectedTrade(acc2, acc3, Big(1), Big(2));
         o2.trades.push(trade);
         o3.trades.push(trade);
         o2.state = OrderState.COMPLETE;
@@ -276,10 +276,10 @@ describe("matching orders", () => {
     });
 
     test("Better sell prices go to front of queue", () => {
-        const o1 = placeSell(acc1, new Big("1"), new Big("1"));
-        const o2 = placeSell(acc2, new Big("2"), new Big("1"));
-        const o3 = placeBuy(acc3, new Big("2"), new Big("1"));
-        const trade = new ExpectedTrade(acc3, acc1, new Big("1"), new Big("1"));
+        const o1 = placeSell(acc1, Big(1), Big(1));
+        const o2 = placeSell(acc2, Big(2), Big(1));
+        const o3 = placeBuy(acc3, Big(2), Big(1));
+        const trade = new ExpectedTrade(acc3, acc1, Big(1), Big(1));
         o1.trades.push(trade);
         o3.trades.push(trade);
         o1.state = OrderState.COMPLETE;
@@ -290,13 +290,13 @@ describe("matching orders", () => {
     });
 
     test("Earlier buys get priority", () => {
-        const o1 = placeBuy(acc1, new Big("1"), new Big("1"));
-        const o2Actual = new Order(acc2, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1"));
+        const o1 = placeBuy(acc1, Big(1), Big(1));
+        const o2Actual = new Order(acc2, TradeDirection.BUY, Instrument.BTCGBP, Big(1), Big(1));
         o2Actual.timestamp.setTime(o2Actual.timestamp.getTime() - 1000);
         iBroker.place(o2Actual);
         const o2 = ExpectedOrder.create(o2Actual);
-        const o3 = placeSell(acc3, new Big("1"), new Big("1"));
-        const trade = new ExpectedTrade(acc2, acc3, new Big("1"), new Big("1"));
+        const o3 = placeSell(acc3, Big(1), Big(1));
+        const trade = new ExpectedTrade(acc2, acc3, Big(1), Big(1));
         o2.state = OrderState.COMPLETE;
         o2.trades.push(trade);
         o3.state = OrderState.COMPLETE;
@@ -307,13 +307,13 @@ describe("matching orders", () => {
     });
 
     test("Earlier sells get priority", () => {
-        const o1 = placeSell(acc1, new Big("1"), new Big("1"));
-        const o2Actual = new Order(acc2, TradeDirection.SELL, Instrument.BTCGBP, new Big("1"), new Big("1"));
+        const o1 = placeSell(acc1, Big(1), Big(1));
+        const o2Actual = new Order(acc2, TradeDirection.SELL, Instrument.BTCGBP, Big(1), Big(1));
         o2Actual.timestamp.setTime(o2Actual.timestamp.getTime() - 1000);
         iBroker.place(o2Actual);
         const o2 = ExpectedOrder.create(o2Actual);
-        const o3 = placeBuy(acc3, new Big("1"), new Big("1"));
-        const trade = new ExpectedTrade(acc3, acc2, new Big("1"), new Big("1"));
+        const o3 = placeBuy(acc3, Big(1), Big(1));
+        const trade = new ExpectedTrade(acc3, acc2, Big(1), Big(1));
         o2.trades.push(trade);
         o2.state = OrderState.COMPLETE;
         o3.trades.push(trade);
@@ -326,110 +326,110 @@ describe("matching orders", () => {
 
 describe("position updated after order", () => {
     test("BUY 1x1", () => {
-        placeBuy(acc1, new Big("1"), new Big("1"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1000"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("999"));
+        placeBuy(acc1, Big(1), Big(1));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big(1000));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(999));
     });
 
     test("SELL 1x1", () => {
-        placeSell(acc1, new Big("1"), new Big("1"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("999"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1000"));
+        placeSell(acc1, Big(1), Big(1));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big(999));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(1000));
     });
 
     test("BUY 2.5x2.5", () => {
-        placeBuy(acc1, new Big("2.5"), new Big("2.5"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1000"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("993.75"));
+        placeBuy(acc1, Big("2.5"), Big("2.5"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big(1000));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big("993.75"));
     });
 
     test("SELL 2.5x2.5", () => {
-        placeSell(acc1, new Big("2.5"), new Big("2.5"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("997.5"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1000"));
+        placeSell(acc1, Big("2.5"), Big("2.5"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big("997.5"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(1000));
     });
 
     test("SELL negative price", () => {
-        placeSell(acc1, new Big("-1"), new Big("1"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("999"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("999"));
+        placeSell(acc1, Big(-1), Big(1));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big(999));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(999));
     })
 });
 
 describe("position updated after trade", () => {
     test("1x1", () => {
-        placeBuy(acc1, new Big("1"), new Big("1"));
-        placeSell(acc2, new Big("1"), new Big("1"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1001"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("999"));
-        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("999"));
-        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1001"));
+        placeBuy(acc1, Big(1), Big(1));
+        placeSell(acc2, Big(1), Big(1));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big(1001));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(999));
+        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big(999));
+        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(1001));
     });
 
     test("2x2", () => {
-        placeBuy(acc1, new Big("2"), new Big("2"));
-        placeSell(acc2, new Big("2"), new Big("2"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1002"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("996"));
-        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("998"));
-        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1004"));
+        placeBuy(acc1, Big(2), Big(2));
+        placeSell(acc2, Big(2), Big(2));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big(1002));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(996));
+        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big(998));
+        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(1004));
     });
 
     test("2.5x2", () => {
-        placeBuy(acc1, new Big("2"), new Big("2.5"));
-        placeSell(acc2, new Big("2"), new Big("2.5"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1002.5"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("995"));
-        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("997.5"));
-        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1005"));
+        placeBuy(acc1, Big(2), Big("2.5"));
+        placeSell(acc2, Big(2), Big("2.5"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big("1002.5"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(995));
+        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big("997.5"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(1005));
     });
 
     test("2x2.5", () => {
-        placeBuy(acc1, new Big("2.5"), new Big("2"));
-        placeSell(acc2, new Big("2.5"), new Big("2"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1002"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("995"));
-        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("998"));
-        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1005"));
+        placeBuy(acc1, Big("2.5"), Big(2));
+        placeSell(acc2, Big("2.5"), Big(2));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big(1002));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(995));
+        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big(998));
+        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(1005));
     });
 
     test("2.5x2.5", () => {
-        placeBuy(acc1, new Big("2.5"), new Big("2.5"));
-        placeSell(acc2, new Big("2.5"), new Big("2.5"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1002.5"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("993.75"));
-        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("997.5"));
-        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1006.25"));
+        placeBuy(acc1, Big("2.5"), Big("2.5"));
+        placeSell(acc2, Big("2.5"), Big("2.5"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big("1002.5"));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big("993.75"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big("997.5"));
+        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big("1006.25"));
     });
 
     test("2x-1.5", () => {
-        placeBuy(acc1, new Big("-1.5"), new Big("2"));
-        placeSell(acc2, new Big("-1.5"), new Big("2"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1002"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1003"));
-        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("998"));
-        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("997"));
+        placeBuy(acc1, Big("-1.5"), Big(2));
+        placeSell(acc2, Big("-1.5"), Big(2));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big(1002));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(1003));
+        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big(998));
+        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(997));
     });
 
     test("different prices", () => {
-        placeBuy(acc1, new Big("2"), new Big("1"));
-        placeSell(acc2, new Big("1"), new Big("1"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("1001"));
-        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("998"));
-        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(new Big("999"));
-        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(new Big("1002"));
+        placeBuy(acc1, Big(2), Big(1));
+        placeSell(acc2, Big(1), Big(1));
+        expect(acc1.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big(1001));
+        expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(998));
+        expect(acc2.getAvailableAssets(iBroker.instrument.toAsset)).toEqual(Big(999));
+        expect(acc2.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(Big(1002));
     });
 });
 
 describe("Cancel order", () => {
     test("Throws if cancelling order that hasn't been placed", () => {
         expect(() => {
-            iBroker.cancel(new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1)")));
+            iBroker.cancel(new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, Big(1), Big(1)));
         }).toThrow();
     });
 
     test("Does not throw on valid call", () => {
-        const order = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1"));
+        const order = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, Big(1), Big(1));
         iBroker.place(order);
         expect(() => {
             iBroker.cancel(order);
@@ -437,11 +437,11 @@ describe("Cancel order", () => {
     });
 
     test("Prevents trades from being made with the cancelled order", () => {
-        const buy = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1"));
+        const buy = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, Big(1), Big(1));
         const o1 = ExpectedOrder.create(buy);
         iBroker.place(buy);
         iBroker.cancel(buy);
-        const o2 = placeSell(acc2, new Big("1"), new Big("1"));
+        const o2 = placeSell(acc2, Big(1), Big(1));
 
         o1.state = OrderState.CANCELLED;
         expectOrders(acc1, o1);
@@ -451,7 +451,7 @@ describe("Cancel order", () => {
 
     test("Unlocks the assets", () => {
         const before = (acc1.getAvailableAssets(iBroker.instrument.fromAsset));
-        const order = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1"));
+        const order = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, Big(1), Big(1));
         iBroker.place(order);
         iBroker.cancel(order);
         expect(acc1.getAvailableAssets(iBroker.instrument.fromAsset)).toEqual(before);
@@ -460,16 +460,16 @@ describe("Cancel order", () => {
 
 describe("Self-Order prevention", () => {
     test("Buy first", () => {
-        placeBuy(acc1, new Big("1"), new Big("1"));
-        const sell = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, new Big("1"), new Big("1"));
+        placeBuy(acc1, Big(1), Big(1));
+        const sell = new Order(acc1, TradeDirection.SELL, Instrument.BTCGBP, Big(1), Big(1));
         expect(() => {
             iBroker.place(sell);
         }).toThrow();
     });
 
     test("Sell first", () => {
-        placeSell(acc1, new Big("1"), new Big("1"));
-        const buy = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, new Big("1"), new Big("1"));
+        placeSell(acc1, Big(1), Big(1));
+        const buy = new Order(acc1, TradeDirection.BUY, Instrument.BTCGBP, Big(1), Big(1));
         expect(() => {
             iBroker.place(buy);
         }).toThrow();
@@ -478,70 +478,70 @@ describe("Self-Order prevention", () => {
 
 describe("Price aggregate", () => {
     test("Simple Buy", () => {
-        placeBuy(acc1, new Big("1"), new Big("1"));
-        const expected = new PriceAggregate([new PriceAggregateElement(new Big("1"), new Big("1"))], []);
+        placeBuy(acc1, Big(1), Big(1));
+        const expected = new PriceAggregate([new PriceAggregateElement(Big(1), Big(1))], []);
         expect(iBroker.getAggregatePrices()).toEqual(expected);
     });
 
     test("Simple Sell", () => {
-        placeSell(acc1, new Big("1"), new Big("1"));
-        const expected = new PriceAggregate([], [new PriceAggregateElement(new Big("1"), new Big("1"))]);
+        placeSell(acc1, Big(1), Big(1));
+        const expected = new PriceAggregate([], [new PriceAggregateElement(Big(1), Big(1))]);
         expect(iBroker.getAggregatePrices()).toEqual(expected);
     });
 
     test("Two buys at different prices", () => {
-        placeBuy(acc1, new Big("1"), new Big("1"));
-        placeBuy(acc1, new Big("3"), new Big("2"));
+        placeBuy(acc1, Big(1), Big(1));
+        placeBuy(acc1, Big(3), Big(2));
         const expected = new PriceAggregate([
-            new PriceAggregateElement(new Big("3"), new Big("2")),
-            new PriceAggregateElement(new Big("1"), new Big("1"))
+            new PriceAggregateElement(Big(3), Big(2)),
+            new PriceAggregateElement(Big(1), Big(1))
         ], []);
         expect(iBroker.getAggregatePrices()).toEqual(expected);
     });
 
     test("Two buys at same price", () => {
-        placeBuy(acc1, new Big("1"), new Big("1"));
-        placeBuy(acc1, new Big("1"), new Big("2"));
+        placeBuy(acc1, Big(1), Big(1));
+        placeBuy(acc1, Big(1), Big(2));
         const expected = new PriceAggregate([
-            new PriceAggregateElement(new Big("1"), new Big("3"))
+            new PriceAggregateElement(Big(1), Big(3))
         ], []);
         expect(iBroker.getAggregatePrices()).toEqual(expected);
     });
 
     test("Two Sells at different prices", () => {
-        placeSell(acc1, new Big("1"), new Big("1"));
-        placeSell(acc1, new Big("3"), new Big("2"));
+        placeSell(acc1, Big(1), Big(1));
+        placeSell(acc1, Big(3), Big(2));
         const expected = new PriceAggregate([], [
-            new PriceAggregateElement(new Big("1"), new Big("1")),
-            new PriceAggregateElement(new Big("3"), new Big("2"))
+            new PriceAggregateElement(Big(1), Big(1)),
+            new PriceAggregateElement(Big(3), Big(2))
         ]);
         expect(iBroker.getAggregatePrices()).toEqual(expected);
     });
 
     test("Two Sells at same price", () => {
-        placeSell(acc1, new Big("1"), new Big("1"));
-        placeSell(acc1, new Big("1"), new Big("2"));
+        placeSell(acc1, Big(1), Big(1));
+        placeSell(acc1, Big(1), Big(2));
         const expected = new PriceAggregate([], [
-            new PriceAggregateElement(new Big("1"), new Big("3"))
+            new PriceAggregateElement(Big(1), Big(3))
         ]);
         expect(iBroker.getAggregatePrices()).toEqual(expected);
     });
 
     test("One buy one sell (not overlapping)", () => {
-        placeBuy(acc1, new Big("1"), new Big("1"));
-        placeSell(acc2, new Big("2"), new Big("1"));
+        placeBuy(acc1, Big(1), Big(1));
+        placeSell(acc2, Big(2), Big(1));
         const expected = new PriceAggregate(
-            [new PriceAggregateElement(new Big("1"), new Big("1"))],
-            [new PriceAggregateElement(new Big("2"), new Big("1"))]
+            [new PriceAggregateElement(Big(1), Big(1))],
+            [new PriceAggregateElement(Big(2), Big(1))]
         );
         expect(iBroker.getAggregatePrices()).toEqual(expected);
     });
 
     test("Overlapping", () => {
-        placeBuy(acc1, new Big("2"), new Big("2"));
-        placeSell(acc2, new Big("1"), new Big("1"));
+        placeBuy(acc1, Big(2), Big(2));
+        placeSell(acc2, Big(1), Big(1));
         const expected = new PriceAggregate(
-            [new PriceAggregateElement(new Big("2"), new Big("1"))],
+            [new PriceAggregateElement(Big(2), Big(1))],
             []
         );
         expect(iBroker.getAggregatePrices()).toEqual(expected);
@@ -550,22 +550,22 @@ describe("Price aggregate", () => {
 
 describe("Market prices", () => {
     test("After 0 trades", () => {
-        expect(iBroker.getMarketPrice()).toEqual(new Big("0"));
-        placeBuy(acc1, new Big("2"), new Big("1"));
-        expect(iBroker.getMarketPrice()).toEqual(new Big("0"));
+        expect(iBroker.getMarketPrice()).toEqual(Big(0));
+        placeBuy(acc1, Big(2), Big(1));
+        expect(iBroker.getMarketPrice()).toEqual(Big(0));
     });
 
     test("After 1 trade", () => {
-        placeBuy(acc1, new Big("2"), new Big("2"));
-        placeSell(acc2, new Big("1"), new Big("3"));
-        expect(iBroker.getMarketPrice()).toEqual(new Big("2"));
+        placeBuy(acc1, Big(2), Big(2));
+        placeSell(acc2, Big(1), Big(3));
+        expect(iBroker.getMarketPrice()).toEqual(Big(2));
     });
 
     test("After 2 trades", () => {
-        placeBuy(acc1, new Big("3"), new Big("1"));
-        placeSell(acc2, new Big("3"), new Big("1"));
-        placeBuy(acc1, new Big("5"), new Big("1"));
-        placeSell(acc2, new Big("5"), new Big("1"));
-        expect(iBroker.getMarketPrice()).toEqual(new Big("5"));
+        placeBuy(acc1, Big(3), Big(1));
+        placeSell(acc2, Big(3), Big(1));
+        placeBuy(acc1, Big(5), Big(1));
+        placeSell(acc2, Big(5), Big(1));
+        expect(iBroker.getMarketPrice()).toEqual(Big(5));
     })
 });
